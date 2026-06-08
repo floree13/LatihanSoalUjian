@@ -1,0 +1,2788 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal Ujian</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7f6;
+      margin: 0;
+      padding: 20px 10px;
+    }
+    h1 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    .soal {
+      background: #ffffff;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 5px solid #42a5f5;
+    }
+    h3 {
+      color: #3f51b5;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .jawaban button {
+      color: #2a2a2a;
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #c5cae9;
+      background: #e8eaf6;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .jawaban button:hover:not(:disabled) {
+      background: #c5cae9;
+    }
+    .jawaban button.benar {
+      background-color: #dcf9dc;
+      border-color: #388e3c;
+      font-weight: bold;
+    }
+    .jawaban button.salah {
+      background-color: #ffcdd2;
+      border-color: #d32f2f;
+      opacity: 0.7;
+    }
+
+    .penjelasan-opsi {
+      background: #f3e5f5;
+      color: #4a148c;
+      padding: 10px;
+      margin-top: -5px;
+      margin-bottom: 15px;
+      border-radius: 0 0 8px 8px;
+      border-top: none;
+      border-left: 5px solid #7b1fa2;
+      font-size: 14px;
+      display: none;
+    }
+    .counter {
+      position: sticky;
+      bottom: 0;
+      background: #1a237e;
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 20px; }
+      .jawaban button { font-size: 14px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Latihan Soal Interaksi Manusia dan Komputer</h1>
+
+<div id="container"></div>
+
+<div class="counter">
+  ✅ Jawaban Benar: <span id="benar">0</span> |
+  ❌ Jawaban Salah: <span id="salah">0</span>
+</div>
+
+<script>
+  let totalBenar = 0;
+  let totalSalah = 0;
+  let answeredQuestions = new Set();
+
+  function updateCounter() {
+     document.getElementById("benar").textContent = totalBenar;
+    document.getElementById("salah").textContent = totalSalah;
+  }
+
+  function checkAnswer(button, questionNumber, isCorrect) {
+      if (answeredQuestions.has(questionNumber)) {
+          return;
+      }
+
+      const soalElement = button.closest('.soal');
+      const buttons = soalElement.querySelectorAll('.jawaban button');
+      
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (isCorrect) {
+          button.classList.add('benar');
+          totalBenar++;
+      } else {
+          button.classList.add('salah');
+          totalSalah++;
+          
+          buttons.forEach(btn => {
+              if (btn.getAttribute('data-iscorrect') === 'true') {
+                  btn.classList.add('benar');
+              }
+          });
+      }
+
+      const allRationales = soalElement.querySelectorAll('.penjelasan-opsi');
+      allRationales.forEach(rationaleDiv => {
+          rationaleDiv.style.display = 'block';
+      });
+
+      answeredQuestions.add(questionNumber);
+      updateCounter();
+  }
+
+  const soalList = [
+  {
+    "questionNumber": 1,
+    "question": "Apakah yang menjadi fokus utama dalam interaksi manusia dan komputer?",
+    "answerOptions": [
+      {
+        "text": "Perangkat keras komputer",
+        "isCorrect": false,
+        "rationale": "Perangkat keras hanya salah satu komponen fisik sistem, bukan fokus utama interaksi itu sendiri."
+      },
+      {
+        "text": "Antarmuka pengguna",
+        "isCorrect": true,
+        "rationale": "Fokus utama IMK adalah antarmuka yang menjadi jembatan interaksi antara manusia dan sistem komputer."
+      },
+      {
+        "text": "Sistem operasi",
+        "isCorrect": false,
+        "rationale": "Sistem operasi berfungsi mengelola sumber daya komputer, bukan titik utama interaksi pengguna."
+      },
+      {
+        "text": "Jaringan komputer",
+        "isCorrect": false,
+        "rationale": "Jaringan komputer berfokus pada komunikasi antarperangkat, bukan interaksi pengguna dengan sistem."
+      }
+    ]
+  },
+  {
+    "questionNumber": 2,
+    "question": "Komponen utama antarmuka manusia dan komputer meliputi?",
+    "answerOptions": [
+      {
+        "text": "Processor, memori, dan storage",
+        "isCorrect": false,
+        "rationale": "Ini merupakan komponen internal perangkat keras komputer saja."
+      },
+      {
+        "text": "Pengguna, komputer, dan lingkungan",
+        "isCorrect": true,
+        "rationale": "Tiga komponen utama yaitu pengguna (manusia), komputer (sistem), dan lingkungan tempat interaksi terjadi."
+      },
+      {
+        "text": "Keyboard, mouse, dan printer",
+        "isCorrect": false,
+        "rationale": "Ini adalah peranti masukan dan keluaran fisik, bukan seluruh komponen utama sistem interaksi."
+      },
+      {
+        "text": "Software, hardware, dan firmware",
+        "isCorrect": false,
+        "rationale": "Ini elemen-elemen penyusun sistem komputer, belum mencakup aspek manusia dan lingkungan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 3,
+    "question": "Salah satu tujuan mempelajari interaksi manusia dan komputer adalah untuk?",
+    "answerOptions": [
+      {
+        "text": "Menciptakan perangkat keras yang lebih cepat",
+        "isCorrect": false,
+        "rationale": "Meningkatkan kecepatan perangkat keras adalah ranah teknik komputer atau arsitektur komputer."
+      },
+      {
+        "text": "Meningkatkan keamanan jaringan",
+        "isCorrect": false,
+        "rationale": "Keamanan jaringan merupakan domain dari keamanan siber (cybersecurity)."
+      },
+      {
+        "text": "Merancang antarmuka yang mudah digunakan",
+        "isCorrect": true,
+        "rationale": "Tujuan utama IMK adalah menciptakan antarmuka yang efisien, efektif, dan memuaskan bagi pengguna."
+      },
+      {
+        "text": "Mengembangkan algoritma pemrograman",
+        "isCorrect": false,
+        "rationale": "Pengembangan algoritma komputasi adalah fokus utama dari ilmu komputer teori dan rekayasa perangkat lunak."
+      }
+    ]
+  },
+  {
+    "questionNumber": 4,
+    "question": "Apa yang dimaksud dengan 'antarmuka' dalam konteks IMK?",
+    "answerOptions": [
+      {
+        "text": "Bagian dalam komputer yang mengolah data",
+        "isCorrect": false,
+        "rationale": "Bagian internal yang mengolah data adalah prosesor atau CPU."
+      },
+      {
+        "text": "Media yang menghubungkan pengguna dengan sistem",
+        "isCorrect": true,
+        "rationale": "Antarmuka adalah media atau titik interaksi antara pengguna manusia dan sistem komputer."
+      },
+      {
+        "text": "Perangkat lunak pengolah kata",
+        "isCorrect": false,
+        "rationale": "Perangkat lunak pengolah kata (seperti MS Word) adalah aplikasi spesifik, bukan definisi antarmuka."
+      },
+      {
+        "text": "Jaringan komunikasi antar komputer",
+        "isCorrect": false,
+        "rationale": "Jaringan komunikasi antar komputer mengacu pada infrastruktur jaringan/internet."
+      }
+    ]
+  },
+  {
+    "questionNumber": 5,
+    "question": "Siapa yang menjadi aktor utama dalam interaksi manusia dan komputer?",
+    "answerOptions": [
+      {
+        "text": "Programmer",
+        "isCorrect": false,
+        "rationale": "Programmer bertugas menulis kode sistem, bukan target utama yang berinteraksi langsung sehari-hari."
+      },
+      {
+        "text": "Administrator sistem",
+        "isCorrect": false,
+        "rationale": "Administrator bertugas memelihara infrastruktur, bukan aktor sentral dari konsep umum pengguna IMK."
+      },
+      {
+        "text": "Pengguna akhir",
+        "isCorrect": true,
+        "rationale": "Pengguna akhir adalah aktor utama yang berinteraksi langsung dengan sistem komputer melalui antarmuka."
+      },
+      {
+        "text": "Desainer grafis",
+        "isCorrect": false,
+        "rationale": "Desainer grafis bertugas membuat aset visual, bukan aktor yang menggunakan fungsionalitas akhir sistem."
+      }
+    ]
+  },
+  {
+    "questionNumber": 6,
+    "question": "Langkah pertama dalam pengembangan antarmuka adalah?",
+    "answerOptions": [
+      {
+        "text": "Pengujian pengguna",
+        "isCorrect": false,
+        "rationale": "Pengujian dilakukan di tahap akhir setelah purwarupa atau produk selesai dibuat."
+      },
+      {
+        "text": "Analisis kebutuhan pengguna",
+        "isCorrect": true,
+        "rationale": "Analisis kebutuhan pengguna merupakan langkah awal untuk memahami apa yang diinginkan dan dibutuhkan pengguna."
+      },
+      {
+        "text": "Implementasi kode program",
+        "isCorrect": false,
+        "rationale": "Implementasi kode dilakukan setelah desain dan analisis kebutuhan selesai dipetakan."
+      },
+      {
+        "text": "Desain visual antarmuka",
+        "isCorrect": false,
+        "rationale": "Desain visual baru bisa dikerjakan secara akurat setelah menganalisis kebutuhan penggunanya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 7,
+    "question": "Metode yang digunakan untuk mengumpulkan data dari pengguna dalam pengembangan antarmuka disebut?",
+    "answerOptions": [
+      {
+        "text": "Prototyping",
+        "isCorrect": false,
+        "rationale": "Prototyping adalah metode pembuatan model awal, bukan metode murni pengumpulan data awal."
+      },
+      {
+        "text": "Wawancara",
+        "isCorrect": true,
+        "rationale": "Wawancara adalah teknik pengumpulan data langsung dengan pengguna untuk memahami kebutuhan mereka."
+      },
+      {
+        "text": "Debugging",
+        "isCorrect": false,
+        "rationale": "Debugging adalah proses mencari dan memperbaiki kesalahan (bug) pada kode program."
+      },
+      {
+        "text": "Compiling",
+        "isCorrect": false,
+        "rationale": "Compiling adalah proses menerjemahkan kode sumber menjadi bahasa mesin."
+      }
+    ]
+  },
+  {
+    "questionNumber": 8,
+    "question": "Tujuan dari prototyping dalam pengembangan antarmuka adalah?",
+    "answerOptions": [
+      {
+        "text": "Menulis kode program final",
+        "isCorrect": false,
+        "rationale": "Prototyping menghasilkan model sementara, bukan kode akhir/final yang siap rilis."
+      },
+      {
+        "text": "Menguji keamanan sistem",
+        "isCorrect": false,
+        "rationale": "Pengujian keamanan membutuhkan sistem yang lebih matang melalui penetration testing, bukan sekadar prototipe antarmuka."
+      },
+      {
+        "text": "Mendapatkan umpan balik awal dari pengguna",
+        "isCorrect": true,
+        "rationale": "Prototyping bertujuan membuat model awal antarmuka untuk mendapatkan umpan balik pengguna sebelum pengembangan penuh."
+      },
+      {
+        "text": "Mengoptimalkan performa perangkat keras",
+        "isCorrect": false,
+        "rationale": "Prototyping antarmuka berfokus pada interaksi software-user, tidak berpengaruh langsung pada optimalisasi hardware."
+      }
+    ]
+  },
+  {
+    "questionNumber": 9,
+    "question": "Salah satu prinsip desain antarmuka yang baik adalah?",
+    "answerOptions": [
+      {
+        "text": "Konsistensi dalam tata letak dan istilah",
+        "isCorrect": true,
+        "rationale": "Konsistensi membantu pengguna belajar dan menggunakan antarmuka dengan lebih mudah dan efisien."
+      },
+      {
+        "text": "Menggunakan banyak warna cerah",
+        "isCorrect": false,
+        "rationale": "Warna cerah yang terlalu banyak justru dapat merusak fokus visual dan membuat mata pengguna cepat lelah."
+      },
+      {
+        "text": "Menyembunyikan semua navigasi",
+        "isCorrect": false,
+        "rationale": "Menyembunyikan navigasi akan membuat pengguna bingung dan kesulitan menjelajahi sistem (penerapan prinsip visibility yang buruk)."
+      },
+      {
+        "text": "Memprioritaskan estetika di atas fungsi",
+        "isCorrect": false,
+        "rationale": "Fungsi dan kegunaan (usability) harus seimbang atau lebih diutamakan daripada estetika semata agar sistem tetap bekerja baik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 10,
+    "question": "Proses evaluasi antarmuka dengan melibatkan pengguna akhir dikenal sebagai?",
+    "answerOptions": [
+      {
+        "text": "Usability testing",
+        "isCorrect": true,
+        "rationale": "Usability testing adalah evaluasi antarmuka oleh pengguna akhir untuk mengidentifikasi masalah kegunaan."
+      },
+      {
+        "text": "Code review",
+        "isCorrect": false,
+        "rationale": "Code review dilakukan oleh sesama programmer untuk memeriksa kualitas kode program."
+      },
+      {
+        "text": "System audit",
+        "isCorrect": false,
+        "rationale": "Audit sistem berfokus pada pemeriksaan kepatuhan, keamanan, dan fungsionalitas backend secara formal."
+      },
+      {
+        "text": "Network scanning",
+        "isCorrect": false,
+        "rationale": "Network scanning dilakukan untuk memetakan port atau celah keamanan pada jaringan komputer."
+      }
+    ]
+  },
+  {
+    "questionNumber": 11,
+    "question": "Dalam pemodelan sistem pengolah, model yang menggambarkan bagaimana manusia memproses informasi disebut?",
+    "answerOptions": [
+      {
+        "text": "Modeling matematika",
+        "isCorrect": false,
+        "rationale": "Model matematika menggunakan rumus numerik untuk menggambarkan sistem fisis atau teoretis."
+      },
+      {
+        "text": "Model kognitif",
+        "isCorrect": true,
+        "rationale": "Model kognitif menjelaskan proses mental manusia dalam menerima, mengolah, dan merespon informasi."
+      },
+      {
+        "text": "Model fisik",
+        "isCorrect": false,
+        "rationale": "Model fisik berkaitan dengan bentuk anatomis tubuh atau perangkat keras nyata."
+      },
+      {
+        "text": "Model jaringan",
+        "isCorrect": false,
+        "rationale": "Model jaringan menggambarkan keterhubungan simpul komunikasi data."
+      }
+    ]
+  },
+  {
+    "questionNumber": 12,
+    "question": "Komponen utama dalam model pengolah informasi manusia meliputi?",
+    "answerOptions": [
+      {
+        "text": "Sensor, memori, dan prosesor",
+        "isCorrect": true,
+        "rationale": "Model pengolah informasi manusia terdiri dari sensor untuk input, memori untuk penyimpanan, dan prosesor untuk pengolahan."
+      },
+      {
+        "text": "CPU, RAM, dan hard disk",
+        "isCorrect": false,
+        "rationale": "Ini adalah arsitektur fisik dari perangkat keras komputer (arsitektur Von Neumann)."
+      },
+      {
+        "text": "Keyboard, monitor, dan mouse",
+        "isCorrect": false,
+        "rationale": "Ini merupakan perangkat periferal input/output komputer fisis."
+      },
+      {
+        "text": "Input, output, dan storage",
+        "isCorrect": false,
+        "rationale": "Ini istilah umum siklus pemrosesan data komputer, bukan istilah spesifik komponen biologis/kognitif manusia."
+      }
+    ]
+  },
+  {
+    "questionNumber": 13,
+    "question": "Proses dalam memori yang menyimpan informasi untuk waktu singkat disebut?",
+    "answerOptions": [
+      {
+        "text": "Memori jangka panjang",
+        "isCorrect": false,
+        "rationale": "Memori jangka panjang menyimpan informasi secara permanen atau dalam durasi yang sangat lama."
+      },
+      {
+        "text": "Memori sensorik",
+        "isCorrect": false,
+        "rationale": "Memori sensorik hanya mempertahankan impresi stimulus indra dalam hitungan milidetik."
+      },
+      {
+        "text": "Memori jangka pendek",
+        "isCorrect": true,
+        "rationale": "Memori jangka pendek menyimpan informasi untuk sementara, biasanya dalam hitungan detik hingga menit."
+      },
+      {
+        "text": "Memori visual",
+        "isCorrect": false,
+        "rationale": "Memori visual adalah tipe memori berdasarkan modalitas indra (penglihatan), bukan klasifikasi waktu penyimpanan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 14,
+    "question": "Teori yang menjelaskan batasan kapasitas memori jangka pendek manusia adalah?",
+    "answerOptions": [
+      {
+        "text": "Teori Miller",
+        "isCorrect": true,
+        "rationale": "Teori Miller menyatakan kapasitas memori jangka pendek manusia adalah sekitar 7 plus minus 2 item."
+      },
+      {
+        "text": "Teori Piaget",
+        "isCorrect": false,
+        "rationale": "Teori Piaget berfokus pada tahapan perkembangan kognitif anak-anak."
+      },
+      {
+        "text": "Teori Vygotsky",
+        "isCorrect": false,
+        "rationale": "Teori Vygotsky menekankan pada perkembangan kognitif melalui interaksi sosial budaya."
+      },
+      {
+        "text": "Teori Freud",
+        "isCorrect": false,
+        "rationale": "Teori Freud berfokus pada psikoanalisis dan alam bawah sadar manusia."
+      }
+    ]
+  },
+  {
+    "questionNumber": 15,
+    "question": "Salah satu faktor yang mempengaruhi kinerja sistem pengolah manusia adalah?",
+    "answerOptions": [
+      {
+        "text": "Warna monitor",
+        "isCorrect": false,
+        "rationale": "Warna monitor memengaruhi estetika tampilan, namun bukan faktor internal psikologis penentu kinerja sistem pemroses kognitif dasar manusia."
+      },
+      {
+        "text": "Kecepatan internet",
+        "isCorrect": false,
+        "rationale": "Kecepatan internet memengaruhi performa jaringan sistem komputer, bukan internal manusia."
+      },
+      {
+        "text": "Tingkat stres pengguna",
+        "isCorrect": true,
+        "rationale": "Tingkat stres dapat mengganggu konsentrasi dan mengurangi efisiensi pemrosesan informasi oleh manusia."
+      },
+      {
+        "text": "Jenis sistem operasi",
+        "isCorrect": false,
+        "rationale": "Jenis OS memengaruhi manajemen data di komputer, bukan kapabilitas kognitif alami manusia."
+      }
+    ]
+  },
+  {
+    "questionNumber": 16,
+    "question": "Pancaindera yang paling dominan digunakan dalam interaksi dengan komputer adalah?",
+    "answerOptions": [
+      {
+        "text": "Indra peraba",
+        "isCorrect": false,
+        "rationale": "Indra peraba (melalui sentuhan keyboard/mouse) penting, namun porsinya tidak sedominan umpan balik visual."
+      },
+      {
+        "text": "Indra penciuman",
+        "isCorrect": false,
+        "rationale": "Indra penciuman hampir tidak pernah digunakan dalam skenario interaksi komputer standar saat ini."
+      },
+      {
+        "text": "Indra penglihatan",
+        "isCorrect": true,
+        "rationale": "Indra penglihatan sangat dominan karena pengguna melihat antarmuka visual seperti teks, gambar, dan ikon."
+      },
+      {
+        "text": "Indra perasa",
+        "isCorrect": false,
+        "rationale": "Indra perasa (lidah/pengecap) tidak digunakan dalam mengoperasikan sistem komputer umum."
+      }
+    ]
+  },
+  {
+    "questionNumber": 17,
+    "question": "Faktor lingkungan sekitar yang dapat mempengaruhi interaksi manusia dan komputer adalah?",
+    "answerOptions": [
+      {
+        "text": "Pencahayaan ruangan",
+        "isCorrect": true,
+        "rationale": "Pencahayaan ruangan mempengaruhi kenyamanan visual pengguna saat berinteraksi dengan antarmuka komputer."
+      },
+      {
+        "text": "Jenis prosesor",
+        "isCorrect": false,
+        "rationale": "Jenis prosesor adalah komponen perangkat keras internal komputer, bukan bagian dari lingkungan fisik sekitar."
+      },
+      {
+        "text": "Kapasitas hard disk",
+        "isCorrect": false,
+        "rationale": "Kapasitas penyimpanan data termasuk komponen arsitektur komputer fisik, bukan kondisi lingkungan kerja."
+      },
+      {
+        "text": "Versi sistem operasi",
+        "isCorrect": false,
+        "rationale": "Versi perangkat lunak sistem bukan merupakan bagian dari faktor lingkungan fisik (seperti suhu atau cahaya)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 18,
+    "question": "Manakah dari berikut ini yang BUKAN merupakan bagian dari sistem penglihatan manusia yang mempengaruhi interaksi dengan komputer?",
+    "answerOptions": [
+      {
+        "text": "Tulang pendengaran",
+        "isCorrect": true,
+        "rationale": "Tulang pendengaran adalah bagian dari sistem pendengaran, bukan sistem penglihatan."
+      },
+      {
+        "text": "Sistem saraf optik",
+        "isCorrect": false,
+        "rationale": "Saraf optik sangat memengaruhi IMK karena bertugas mentransmisikan sinyal visual dari retina ke otak."
+      },
+      {
+        "text": "Kornea dan lensa mata",
+        "isCorrect": false,
+        "rationale": "Kornea dan lensa berfungsi memfokuskan cahaya masuk ke mata, krusial untuk membaca tampilan layar."
+      },
+      {
+        "text": "Reseptor pada retina",
+        "isCorrect": false,
+        "rationale": "Sel batang dan kerucut pada retina menangkap warna dan cahaya dari monitor komputer."
+      }
+    ]
+  },
+  {
+    "questionNumber": 19,
+    "question": "Fenomena 'afterimage' pada mata manusia terjadi karena...",
+    "answerOptions": [
+      {
+        "text": "Pigmen pada reseptor retina membutuhkan waktu untuk regenerasi",
+        "isCorrect": true,
+        "rationale": "Afterimage terjadi karena pigmen pada sel kerucut dan batang retina memerlukan waktu untuk pulih setelah terpapar cahaya intens."
+      },
+      {
+        "text": "Kecepatan rambat cahaya rendah",
+        "isCorrect": false,
+        "rationale": "Kecepatan rambat cahaya di udara selalu konstan dan sangat cepat, tidak memengaruhi pembentukan impresi visual ini."
+      },
+      {
+        "text": "Kelemahan otot siliaris",
+        "isCorrect": false,
+        "rationale": "Otot siliaris mengatur akomodasi/fokus lensa mata, bukan penyebab kelelahan sel fotoreseptor warna."
+      },
+      {
+        "text": "Gangguan pada kornea",
+        "isCorrect": false,
+        "rationale": "Gangguan kornea menyebabkan distorsi refraksi (kabur), bukan efek bayangan sisa (afterimage)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 20,
+    "question": "Dalam konteks lingkungan sekitar, tingkat pencahayaan yang terlalu rendah dapat menyebabkan...",
+    "answerOptions": [
+      {
+        "text": "Peningkatan kenyamanan visual",
+        "isCorrect": false,
+        "rationale": "Pencahayaan rendah di sekitar layar cerah justru merusak kenyamanan akibat kontras berlebih."
+      },
+      {
+        "text": "Penurunan ketajaman penglihatan dan kelelahan mata",
+        "isCorrect": true,
+        "rationale": "Pencahayaan rendah mengurangi kemampuan mata untuk melihat detail, menyebabkan ketegangan dan kelelahan mata."
+      },
+      {
+        "text": "Peningkatan kontras warna",
+        "isCorrect": false,
+        "rationale": "Pencahayaan rendah tidak secara otomatis meningkatkan akurasi persepsi kontras warna objek."
+      },
+      {
+        "text": "Percepatan regenerasi pigmen retinal",
+        "isCorrect": false,
+        "rationale": "Pencahayaan rendah tidak mempercepat proses kimia alami pemulihan pigmen retina secara drastis saat bekerja."
+      }
+    ]
+  },
+  {
+    "questionNumber": 21,
+    "question": "Model interaksi manusia-komputer yang menekankan siklus eksekusi dan evaluasi dari pengguna disebut model...",
+    "answerOptions": [
+      {
+        "text": "Model kognitif pengguna",
+        "isCorrect": false,
+        "rationale": "Model kognitif lebih berfokus pada representasi mental internal, bukan siklus aksi terstruktur eksekusi-evaluasi."
+      },
+      {
+        "text": "Model antarmuka berorientasi objek",
+        "isCorrect": false,
+        "rationale": "Ini paradigma arsitektur pengembangan perangkat lunak visual, bukan pemodelan siklus psikologi interaksi."
+      },
+      {
+        "text": "Model dialog terstruktur",
+        "isCorrect": false,
+        "rationale": "Model dialog berfokus pada sintaks tata bahasa komunikasi antara user dan komputer."
+      },
+      {
+        "text": "Model siklus tindakan Norman",
+        "isCorrect": true,
+        "rationale": "Model Norman terdiri dari tujuh tahap yang mencakup eksekusi dan evaluasi tindakan pengguna."
+      }
+    ]
+  },
+  {
+    "questionNumber": 22,
+    "question": "Kerangka kerja interaksi yang membagi proses menjadi 'pengguna', 'sistem', dan 'saluran interaksi' disebut....",
+    "answerOptions": [
+      {
+        "text": "Kerangka kerja interaksi langsung",
+        "isCorrect": false,
+        "rationale": "Interaksi langsung berfokus pada manipulasi objek di layar secara instan."
+      },
+      {
+        "text": "Kerangka kerja tiga komponen",
+        "isCorrect": true,
+        "rationale": "Kerangka kerja tiga komponen membagi interaksi menjadi pengguna, sistem, dan saluran yang menghubungkan keduanya."
+      },
+      {
+        "text": "Kerangka kerja kognitif",
+        "isCorrect": false,
+        "rationale": "Kerangka kerja kognitif menitikberatkan pada proses berpikir dan kapasitas memori manusia."
+      },
+      {
+        "text": "Kerangka kerja berbasis tugas",
+        "isCorrect": false,
+        "rationale": "Kerangka kerja ini menstrukturkan interaksi berdasarkan gol atau sekuens tugas pekerjaan yang harus diselesaikan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 23,
+    "question": "In kerangka kerja untuk memahami interaksi, konsep 'kesenjangan eksekusi' mengacu pada...",
+    "answerOptions": [
+      {
+        "text": "Jarak antara niat pengguna dan tindakan yang diperlukan",
+        "isCorrect": true,
+        "rationale": "Kesenjangan eksekusi adalah kesulitan pengguna dalam menerjemahkan niat menjadi tindakan fisik yang sesuai."
+      },
+      {
+        "text": "Perbedaan antara tujuan pengguna dan hasil sistem",
+        "isCorrect": false,
+        "rationale": "Perbedaan tujuan dengan hasil nyata sistem lebih berkaitan dengan tahap evaluasi."
+      },
+      {
+        "text": "Perbedaan antara persepsi pengguna dan antarmuka",
+        "isCorrect": false,
+        "rationale": "Ini merupakan bagian dari masalah pemetaan kognitif, bukan formulasi aksi (eksekusi)."
+      },
+      {
+        "text": "Waktu respons sistem yang lambat",
+        "isCorrect": false,
+        "rationale": "Waktu respons lambat adalah kendala teknis performa sistem (latensi), bukan definisi gap eksekusi kognitif."
+      }
+    ]
+  },
+  {
+    "questionNumber": 24,
+    "question": "'Kesenjangan evaluasi' dalam kerangka kerja Norman terjadi ketika...",
+    "answerOptions": [
+      {
+        "text": "Pengguna tidak dapat menafsirkan umpan balik sistem",
+        "isCorrect": true,
+        "rationale": "Kesenjangan evaluasi adalah kesulitan pengguna dalam memahami umpan balik dari sistem."
+      },
+      {
+        "text": "Sistem gagal merespons input",
+        "isCorrect": false,
+        "rationale": "Sistem gagal merespons adalah bentuk malfungsi sistem atau crash perangkat lunak."
+      },
+      {
+        "text": "Tindakan pengguna tidak sesuai dengan model sistem",
+        "isCorrect": false,
+        "rationale": "Ketidaksesuaian tindakan dengan model sistem memicu terjadinya kegagalan pada tahap eksekusi."
+      },
+      {
+        "text": "Antarmuka tidak estetis",
+        "isCorrect": false,
+        "rationale": "Masalah estetika memengaruhi kepuasan visual, bukan ketidakmampuan membaca status perubahan sistem."
+      }
+    ]
+  },
+  {
+    "questionNumber": 25,
+    "question": "Manakah dari berikut ini yang merupakan contoh 'ijinan' (affordance/signifier) dalam kerangka kerja interaksi?",
+    "answerOptions": [
+      {
+        "text": "Menu dropdown yang diklik",
+        "isCorrect": false,
+        "rationale": "Mengklik dropdown adalah bentuk tindakan eksekusi, bukan petunjuk visual/karakteristik objeknya."
+      },
+      {
+        "text": "Warna tombol yang pudar",
+        "isCorrect": true,
+        "rationale": "Ijinan (affordance/signifier) memandu pengguna tentang kemungkinan tindakan, seperti tombol yang pudar menunjukkan tidak dapat diklik."
+      },
+      {
+        "text": "Bunyi klik saat tombol ditekan",
+        "isCorrect": false,
+        "rationale": "Bunyi klik merupakan umpan balik (feedback) setelah aksi dilakukan, bukan petunjuk awal sebelum aksi."
+      },
+      {
+        "text": "Pesan error pada layar",
+        "isCorrect": false,
+        "rationale": "Pesan error adalah bentuk umpan balik sistem untuk mengevaluasi kegagalan operasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 26,
+    "question": "Mengatasi kompleksitas dalam interaksi manusia-komputer sering dilakukan dengan menyembunyikan rincian yang tidak perlu, dikenal sebagai...",
+    "answerOptions": [
+      {
+        "text": "Enkapsulasi",
+        "isCorrect": false,
+        "rationale": "Enkapsulasi adalah pembungkusan data dan metode dalam pemrograman berorientasi objek."
+      },
+      {
+        "text": "Dekomposisi",
+        "isCorrect": false,
+        "rationale": "Dekomposisi adalah memecah masalah besar menjadi bagian kecil, bukan menyembunyikan detail fungsional."
+      },
+      {
+        "text": "Abstraksi",
+        "isCorrect": true,
+        "rationale": "Abstraksi menyembunyikan detail kompleks untuk memberikan pandangan yang lebih sederhana kepada pengguna."
+      },
+      {
+        "text": "Hierarki",
+        "isCorrect": false,
+        "rationale": "Hierarki adalah penataan struktur tingkatan data dari yang umum ke yang spesifik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 27,
+    "question": "Teknik untuk memecah tugas kompleks menjadi sub-tugas yang lebih kecil dan mudah dikelola disebut...",
+    "answerOptions": [
+      {
+        "text": "Abstraksi",
+        "isCorrect": false,
+        "rationale": "Abstraksi berfokus pada penyembunyian detail, bukan pembagian struktur pengerjaan tugas."
+      },
+      {
+        "text": "Delegasi",
+        "isCorrect": false,
+        "rationale": "Delegasi berarti menyerahkan wewenang pengerjaan tugas kepada entitas lain."
+      },
+      {
+        "text": "Generalisasi",
+        "isCorrect": false,
+        "rationale": "Generalisasi adalah penarikan kesimpulan umum atau penyatuan karakteristik yang sama."
+      },
+      {
+        "text": "Dekomposisi",
+        "isCorrect": true,
+        "rationale": "Dekomposisi memecah masalah besar menjadi bagian-bagian yang lebih kecil dan lebih mudah ditangani."
+      }
+    ]
+  },
+  {
+    "questionNumber": 28,
+    "question": "Penggunaan 'wizard' atau asisten langkah demi langkah dalam perangkat lunak adalah contoh penerapan...",
+    "answerOptions": [
+      {
+        "text": "Umpan balik",
+        "isCorrect": false,
+        "rationale": "Umpan balik menginformasikan hasil aksi, sedangkan wizard memandu pembagian sekuens proses aksi."
+      },
+      {
+        "text": "Abstraksi",
+        "isCorrect": false,
+        "rationale": "Meskipun menyembunyikan proses latar belakang, peran utama alur sekuensial wizard mencerminkan pembagian langkah tugas."
+      },
+      {
+        "text": "Visibilitas",
+        "isCorrect": false,
+        "rationale": "Visibilitas memastikan opsi terlihat, bukan menstrukturkan tahapan pengerjaan tugas kompleks."
+      },
+      {
+        "text": "Dekomposisi",
+        "isCorrect": true,
+        "rationale": "Wizard memandu pengguna melalui serangkaian langkah kecil yang menyederhanakan tugas kompleks."
+      }
+    ]
+  },
+  {
+    "questionNumber": 29,
+    "question": "Prinsip 'konsistensi' dalam desain antarmuka termasuk dalam kategori...",
+    "answerOptions": [
+      {
+        "text": "Mengurangi beban memori jangka pendek",
+        "isCorrect": false,
+        "rationale": "Meskipun membantu kognisi, peran utama standarisasi elemen visual secara sistemik adalah taktik mereduksi kompleksitas eksternal."
+      },
+      {
+        "text": "Mengatasi kompleksitas melalui standarisasi",
+        "isCorrect": true,
+        "rationale": "Konsistensi membuat antarmuka dapat diprediksi dan memudahkan pengguna, mengurangi kompleksitas persepsi."
+      },
+      {
+        "text": "Meningkatkan kecepatan prosesor",
+        "isCorrect": false,
+        "rationale": "Prinsip desain antarmuka tidak mempengaruhi clock rate atau spesifikasi kecepatan fisik prosesor."
+      },
+      {
+        "text": "Mengurangi jumlah klik",
+        "isCorrect": false,
+        "rationale": "Konsistensi tidak selalu otomatis mengurangi jumlah klik, melainkan menyamakan arti tindakan di setiap halaman."
+      }
+    ]
+  },
+  {
+    "questionNumber": 30,
+    "question": "Dalam mengatasi kompleksitas, pemberian 'umpan balik' yang tepat membantu pengguna dengan cara...",
+    "answerOptions": [
+      {
+        "text": "Menampilkan semua fitur sekaligus",
+        "isCorrect": false,
+        "rationale": "Menampilkan semua fitur sekaligus justru memicu kelebihan informasi (information overload) bagi pengguna."
+      },
+      {
+        "text": "Mempercepat eksekusi tugas",
+        "isCorrect": false,
+        "rationale": "Umpan balik memberi kejelasan status, bukan mempercepat waktu respons komputasi mesin itu sendiri."
+      },
+      {
+        "text": "Memberikan informasi tentang hasil tindakan",
+        "isCorrect": true,
+        "rationale": "Umpan balik memberi tahu pengguna bahwa tindakan telah diterima dan menunjukkan hasilnya."
+      },
+      {
+        "text": "Menghentikan interaksi yang salah",
+        "isCorrect": false,
+        "rationale": "Menghentikan kesalahan secara paksa adalah fungsi dari error prevention atau constraint, bukan tugas murni dari info umpan balik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 31,
+    "question": "Paradigma interaksi yang pertama kali digunakan pada komputer mainframe tanpa antarmuka grafis adalah...",
+    "answerOptions": [
+      {
+        "text": "Manipulasi langsung",
+        "isCorrect": false,
+        "rationale": "Manipulasi langsung muncul belakangan setelah adanya teknologi layar grafis murni."
+      },
+      {
+        "text": "Antarmuka grafis (GUI)",
+        "isCorrect": false,
+        "rationale": "GUI menggunakan elemen visual seperti jendela dan ikon yang belum ada di era mainframe awal."
+      },
+      {
+        "text": "Antarmuka baris perintah (CLI)",
+        "isCorrect": true,
+        "rationale": "CLI menggunakan teks dan perintah tulisan, tanpa grafis, dan mendahului GUI."
+      },
+      {
+        "text": "Interaksi berbasis menu",
+        "isCorrect": false,
+        "rationale": "Menu teks terstruktur berkembang setelah era command-line murni yang mengetikkan seluruh sintaks instruksi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 32,
+    "question": "Paradigma interaksi yang memungkinkan pengguna memanipulasi objek secara visual di layar disebut...",
+    "answerOptions": [
+      {
+        "text": "Manipulasi langsung",
+        "isCorrect": true,
+        "rationale": "Manipulasi langsung memungkinkan pengguna berinteraksi dengan objek layar secara langsung dan intuitif."
+      },
+      {
+        "text": "Antarmuka baris perintah",
+        "isCorrect": false,
+        "rationale": "Antarmuka baris perintah berbasis pengetikan teks manual, bukan manipulasi visual."
+      },
+      {
+        "text": "Antarmuka berbasis menu",
+        "isCorrect": false,
+        "rationale": "Antarmuka menu mengandalkan pemilihan dari daftar opsi, bukan menggeser atau mengubah objek secara langsung."
+      },
+      {
+        "text": "Dialog berbasis teks",
+        "isCorrect": false,
+        "rationale": "Dialog berbasis teks mengandalkan masukan karakter string, bukan representasi grafis spasial."
+      }
+    ]
+  },
+  {
+    "questionNumber": 33,
+    "question": "Paradigma interaksi 'antarmuka grafis' (GUI) dipopulerkan oleh...",
+    "answerOptions": [
+      {
+        "text": "IBM PC",
+        "isCorrect": false,
+        "rationale": "IBM PC awal populer dengan sistem operasi berbasis teks (MS-DOS) sebelum mengadopsi GUI secara luas."
+      },
+      {
+        "text": "Microsoft Windows",
+        "isCorrect": false,
+        "rationale": "Windows sukses secara massal belakangan, namun Apple yang pertama sukses memopulerkannya di pasar komersial terintegrasi."
+      },
+      {
+        "text": "Apple Macintosh",
+        "isCorrect": true,
+        "rationale": "GUI komersial pertama yang sukses diperkenalkan oleh Apple Macintosh pada tahun 1984."
+      },
+      {
+        "text": "UNIX shell",
+        "isCorrect": false,
+        "rationale": "UNIX shell adalah representasi lingkungan teks baris perintah (CLI), bukan GUI."
+      }
+    ]
+  },
+  {
+    "questionNumber": 34,
+    "question": "Paradigma interaksi berbasis 'menu' sangat cocok untuk...",
+    "answerOptions": [
+      {
+        "text": "Pengguna dengan pengalaman tinggi",
+        "isCorrect": false,
+        "rationale": "Pengguna mahir biasanya menganggap menu terlalu lambat dan lebih memilih shortcut keyboard atau perintah teks langsung."
+      },
+      {
+        "text": "Interaksi yang memerlukan kustomisasi ekstensif",
+        "isCorrect": false,
+        "rationale": "Kustomisasi kompleks lebih fleksibel dieksekusi lewat baris perintah atau panel parameter khusus dibanding menu standar."
+      },
+      {
+        "text": "Tugas yang membutuhkan kecepatan input tinggi",
+        "isCorrect": false,
+        "rationale": "Navigasi struktur menu membutuhkan waktu pencarian visual yang memperlambat kecepatan input konstan."
+      },
+      {
+        "text": "Pengguna pemula atau yang jarang menggunakan sistem",
+        "isCorrect": true,
+        "rationale": "Menu menyediakan pilihan yang terstruktur, membantu pengguna pemula menjelajahi fitur tanpa harus menghafal perintah."
+      }
+    ]
+  },
+  {
+    "questionNumber": 35,
+    "question": "Paradigma interaksi yang pertama kali muncul dan menggunakan antarmuka berbasis teks dengan perintah yang diketikkan oleh pengguna disebut sebagai paradigma?",
+    "answerOptions": [
+      {
+        "text": "Paradigma sistem besar dan mainframe",
+        "isCorrect": true,
+        "rationale": "Paradigma sistem besar dan mainframe menggunakan antarmuka berbasis teks dan perintah yang diketikkan pengguna."
+      },
+      {
+        "text": "Paradigma antarmuka grafis",
+        "isCorrect": false,
+        "rationale": "Paradigma grafis bertumpu pada metafora desktop wimp (windows, icons, menus, pointer), bukan baris perintah murni."
+      },
+      {
+        "text": "Paradigma interaksi berbasis web",
+        "isCorrect": false,
+        "rationale": "Interaksi berbasis web menggunakan hiperteks dan navigasi link global yang muncul di era internet."
+      },
+      {
+        "text": "Paradigma komputasi di mana-mana",
+        "isCorrect": false,
+        "rationale": "Komputasi di mana-mana (ubiquitous computing) mengacu pada sensor pintar dan IoT terintegrasi dalam kehidupan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 36,
+    "question": "Salah satu kesalahan klasik dalam perancangan antarmuka adalah mengabaikan kebutuhan pengguna. Dampak utama dari kesalahan ini adalah?",
+    "answerOptions": [
+      {
+        "text": "Rendahnya tingkat kepuasan pengguna",
+        "isCorrect": true,
+        "rationale": "Mengabaikan kebutuhan pengguna menyebabkan antarmuka tidak sesuai sehingga pengguna tidak puas."
+      },
+      {
+        "text": "Meningkatnya kecepatan eksekusi program",
+        "isCorrect": false,
+        "rationale": "Kecepatan eksekusi program bergantung pada optimasi kode backend dan spesifikasi hardware, bukan pengabaian analisis user."
+      },
+      {
+        "text": "Menurunnya biaya pengembangan.",
+        "isCorrect": false,
+        "rationale": "Mengabaikan kebutuhan di awal justru melonjakkan biaya akibat pengerjaan ulang (rework) sistem yang gagal pakai."
+      },
+      {
+        "text": "Bertambahnya fitur yang tersedia",
+        "isCorrect": false,
+        "rationale": "Mengabaikan user tidak otomatis menambah jumlah fitur bermanfaat, melainkan membuat arah pengembangan menjadi salah sasaran."
+      }
+    ]
+  },
+  {
+    "questionNumber": 37,
+    "question": "Kesalahan klasik lain dalam perancangan antarmuka adalah tidak melibatkan pengguna dalam proses desain. Akibat langsung dari kesalahan ini adalah?",
+    "answerOptions": [
+      {
+        "text": "Produk lebih cepat selesai",
+        "isCorrect": false,
+        "rationale": "Tanpa validasi user, penyelesaian produk terhambat di akhir karena banyaknya revisi fatal akibat desain yang tidak aplikatif."
+      },
+      {
+        "text": "Antarmuka lebih kompleks dari yang diperlukan",
+        "isCorrect": true,
+        "rationale": "Tanpa masukan pengguna, antarmuka cenderung memiliki fitur yang tidak sesuai dan kompleks."
+      },
+      {
+        "text": "Biaya perawatan menjadi lebih murah.",
+        "isCorrect": false,
+        "rationale": "Sistem yang membingungkan menuntut biaya pelatihan tambahan dan pemeliharaan adaptif yang mahal."
+      },
+      {
+        "text": "Dokumentasi menjadi lebih lengkap",
+        "isCorrect": false,
+        "rationale": "Kelengkapan dokumentasi bergantung pada kedisiplinan tim teknis, bukan akibat dari pengabaian keterlibatan pengguna."
+      }
+    ]
+  },
+  {
+    "questionNumber": 38,
+    "question": "Kesalahan klasik dalam antarmuka yang sering terjadi adalah menggunakan istilah teknis yang tidak dipahami pengguna umum. Hal ini menyebabkan?",
+    "answerOptions": [
+      {
+        "text": "Pengguna menjadi lebih mahir",
+        "isCorrect": false,
+        "rationale": "Pengguna awam tidak menjadi mahir secara instan, melainkan merasa frustrasi karena tidak mengerti maksud sistem."
+      },
+      {
+        "text": "Antarmuka terlihat profesional",
+        "isCorrect": false,
+        "rationale": "Profesionalisme diukur dari kejelasan dan efisiensi komunikasi sistem, bukan dari kerumitan istilah jargon internal kode."
+      },
+      {
+        "text": "Waktu pelatihan berkurang",
+        "isCorrect": false,
+        "rationale": "Penggunaan istilah asing justru memperpanjang durasi waktu pelatihan bagi staf pengguna baru."
+      },
+      {
+        "text": "Kebingungan dan kesalahan pengguna",
+        "isCorrect": true,
+        "rationale": "Istilah teknis asing bagi pengguna awam sehingga menimbulkan kebingungan dan kesalahan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 39,
+    "question": "Salah satu kesalahan klasik adalah memberikan umpan balik yang tidak memadai kepada pengguna. Contoh umpan balik yang baik adalah?",
+    "answerOptions": [
+      {
+        "text": "Tidak ada respons setelah menekan tombol",
+        "isCorrect": false,
+        "rationale": "Tidak adanya respons membuat pengguna bingung apakah sistem sedang memproses atau mengalami hang."
+      },
+      {
+        "text": "Pesan error yang samar dan tidak jelas",
+        "isCorrect": false,
+        "rationale": "Pesan galat yang samar seperti 'Error 500' tanpa penjelasan solusi tidak membantu perbaikan aksi pengguna."
+      },
+      {
+        "text": "Indikator visual saat tombol ditekan",
+        "isCorrect": true,
+        "rationale": "Umpan balik yang baik memberikan respons langsung seperti indikator visual pada tombol."
+      },
+      {
+        "text": "Menunggu lama tanpa pemberitahuan",
+        "isCorrect": false,
+        "rationale": "Menunggu tanpa loader atau progress bar adalah bentuk penanganan feedback yang sangat buruk."
+      }
+    ]
+  },
+  {
+    "questionNumber": 40,
+    "question": "Kesalahan klasik dalam antarmuka adalah desain yang tidak konsisten. Dampak konsistensi rendah terhadap pengguna adalah?",
+    "answerOptions": [
+      {
+        "text": "Membantu pengguna belajar lebih cepat",
+        "isCorrect": false,
+        "rationale": "Konsistensi tinggilah yang membantu proses belajar, ketidakkonsistenan justru merusaknya."
+      },
+      {
+        "text": "Menyulitkan pengguna dalam memprediksi perilaku sistem",
+        "isCorrect": true,
+        "rationale": "Ketidakkonsistenan membuat pengguna bingung karena pola interaksi berubah-ubah."
+      },
+      {
+        "text": "Mengurangi kemungkinan kesalahan",
+        "isCorrect": false,
+        "rationale": "Konsistensi yang buruk meningkatkan rasion kesalahan (error rate) karena misinterpretasi fungsi tombol."
+      },
+      {
+        "text": "Meningkatkan efisiensi kerja",
+        "isCorrect": false,
+        "rationale": "Efisiensi menurun karena waktu terbuang untuk memahami ulang tata letak halaman baru yang berbeda aturan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 41,
+    "question": "Kebergunaan (usability) dalam interaksi manusia dan komputer mencakup aspek learnability. Definisi learnability adalah?",
+    "answerOptions": [
+      {
+        "text": "Kecepatan sistem dalam merespon perintah",
+        "isCorrect": false,
+        "rationale": "Responsivitas teknis mengacu pada performa sistem perangkat lunak, bukan kapasitas belajar kognitif manusia."
+      },
+      {
+        "text": "Kemudahan pengguna dalam menyelesaikan tugas saat pertama kali menggunakan",
+        "isCorrect": true,
+        "rationale": "Learnability mengukur seberapa mudah pengguna baru dapat menyelesaikan tugas."
+      },
+      {
+        "text": "Jumlah fitur yang tersedia dalam sistem",
+        "isCorrect": false,
+        "rationale": "Banyaknya fitur mencerminkan fungsionalitas atau cakupan produk, bukan kemudahan dipelajari."
+      },
+      {
+        "text": "Keandalan sistem dalam kondisi beban tinggi",
+        "isCorrect": false,
+        "rationale": "Keandalan pada beban tinggi disebut skalabilitas atau reliabilitas infrastruktur backend."
+      }
+    ]
+  },
+  {
+    "questionNumber": 42,
+    "question": "Aspek kebergunaan efficiency mengacu pada?",
+    "answerOptions": [
+      {
+        "text": "Waktu dan sumber daya yang dibutuhkan untuk mencapai tujuan",
+        "isCorrect": true,
+        "rationale": "Efficiency berkaitan dengan cepat dan hematnya pengguna dalam menyelesaikan tugas."
+      },
+      {
+        "text": "Seberapa mudah pengguna mengingat cara menggunakan sistem",
+        "isCorrect": false,
+        "rationale": "Kemudahan mengingat cara penggunaan setelah jeda waktu adalah definisi dari aspek memorability."
+      },
+      {
+        "text": "Frekuensi kesalahan yang dilakukan pengguna",
+        "isCorrect": false,
+        "rationale": "Frekuensi tingkat kesalahan merupakan parameter ukur dari aspek errors."
+      },
+      {
+        "text": "Tingkat kepuasan subjektif pengguna",
+        "isCorrect": false,
+        "rationale": "Tingkat kepuasan subjektif kenyamanan operasional adalah definisi dari aspek satisfaction."
+      }
+    ]
+  },
+  {
+    "questionNumber": 43,
+    "question": "Aspek kebergunaan memorability penting untuk sistem yang digunakan secara tidak teratur. Contoh memorability yang baik adalah?",
+    "answerOptions": [
+      {
+        "text": "Pengguna harus membaca ulang manual setiap kali",
+        "isCorrect": false,
+        "rationale": "Harus membaca manual berulang kali menandakan memorability sistem sangat buruk."
+      },
+      {
+        "text": "Sistem memberikan pelatihan ulang",
+        "isCorrect": false,
+        "rationale": "Kebutuhan training ulang membuktikan alur kerja aplikasi sulit diingat secara intuitif."
+      },
+      {
+        "text": "Pengguna masih ingat cara menggunakan setelah beberapa minggu",
+        "isCorrect": true,
+        "rationale": "Memorability yang baik memungkinkan pengguna kembali menggunakan sistem tanpa belajar ulang."
+      },
+      {
+        "text": "Pengguna sering melakukan kesalahan",
+        "isCorrect": false,
+        "rationale": "Kerap melakukan kesalahan mengindikasikan kegagalan perlindungan eror (poor error protection) atau rancangan yang membingungkan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 44,
+    "question": "Aspek kebergunaan errors mengukur tingkat kesalahan pengguna. Tujuan desain yang baik adalah?",
+    "answerOptions": [
+      {
+        "text": "Menambah jumlah kesalahan yang mungkin",
+        "isCorrect": false,
+        "rationale": "Menambah potensi jebakan galat merusak seluruh nilai kegunaan produk."
+      },
+      {
+        "text": "Mengabaikan kesalahan kecil",
+        "isCorrect": false,
+        "rationale": "Mengabaikan kesalahan kecil tanpa pemulihan dapat berakumulasi menjadi masalah integritas data yang fatal."
+      },
+      {
+        "text": "Menyembunyikan kesalahan dari pengguna",
+        "isCorrect": false,
+        "rationale": "Menyembunyikan galat membuat pengguna bingung mengapa hasil output tidak sesuai ekspektasi."
+      },
+      {
+        "text": "Meminimalkan dampak kesalahan dan membantu pemulihan",
+        "isCorrect": true,
+        "rationale": "Desain yang baik mengurangi frekuensi dan tingkat keparahan kesalahan serta menyediakan pemulihan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 45,
+    "question": "Aspek kebergunaan satisfaction berhubungan dengan persepsi subjektif pengguna. Contoh pengukuran satisfaction adalah?",
+    "answerOptions": [
+      {
+        "text": "Survei kepuasan pengguna",
+        "isCorrect": true,
+        "rationale": "Satisfaction diukur melalui umpan balik subjektif pengguna, misalnya kuesioner atau survei kepuasan."
+      },
+      {
+        "text": "Jumlah klik yang dilakukan",
+        "isCorrect": false,
+        "rationale": "Jumlah klik mengukur efisiensi rute navigasi tugas, bukan perasaan emosional kepuasan."
+      },
+      {
+        "text": "Waktu penyelesaian tugas",
+        "isCorrect": false,
+        "rationale": "Durasi pengerjaan mengukur metrik kuantitatif efisiensi kerja (productivity/efficiency rate)."
+      },
+      {
+        "text": "Jumlah fitur yang digunakan",
+        "isCorrect": false,
+        "rationale": "Banyaknya fitur terpakai mengukur adopsi produk (feature adoption), bukan kenyamanan subjektif pengguna."
+      }
+    ]
+  },
+  {
+    "questionNumber": 46,
+    "question": "Manipulasi langsung dalam antarmuka memungkinkan pengguna untuk berinteraksi secara langsung dengan objek. Prinsip utama manipulasi langsung adalah?",
+    "answerOptions": [
+      {
+        "text": "Pemisahan antar aksi dan hasil",
+        "isCorrect": false,
+        "rationale": "Manipulasi langsung justru menyatukan aksi dan hasil secara instan, bukan memisahkannya."
+      },
+      {
+        "text": "Penggunaan perintah teks yang panjang",
+        "isCorrect": false,
+        "rationale": "Penggunaan perintah teks panjang merupakan ciri khas dari paradigma CLI, bukan manipulasi visual objek."
+      },
+      {
+        "text": "Menghilangkan umpan balik visual",
+        "isCorrect": false,
+        "rationale": "Menghilangkan umpan balik visual bertolak belakang dengan sifat dasar manipulasi langsung yang mengandalkan visibilitas reaksi objek."
+      },
+      {
+        "text": "Representasi metaforis dari objek dan aksi",
+        "isCorrect": true,
+        "rationale": "Manipulasi langsung menggunakan representasi visual atau metaforis dari objek dan aksi nyata di layar komputer."
+      }
+    ]
+  },
+  {
+    "questionNumber": 47,
+    "question": "Keuntungan utama manipulasi langsung adalah mengurangi beban kognitif pengguna karena?",
+    "answerOptions": [
+      {
+        "text": "Pengguna harus menghafal perintah",
+        "isCorrect": false,
+        "rationale": "Menghafal sintaks perintah justru menaikkan beban memori jangka pendek dan kognitif secara drastis."
+      },
+      {
+        "text": "Antarmuka menjadi lebih abstrak",
+        "isCorrect": false,
+        "rationale": "Abstraksi tinggi menjauhkan pemahaman intuitif pengguna; manipulasi langsung menyasar bentuk konkret konseptual."
+      },
+      {
+        "text": "Hasil aksi terlihat langsung sehingga mudah dipahami",
+        "isCorrect": true,
+        "rationale": "Dengan manipulasi langsung, pengguna melihat dampak aksi secara langsung sehingga mudah dipahami tanpa proses inferensi rumit."
+      },
+      {
+        "text": "Interaksi hanya melalui keyboard",
+        "isCorrect": false,
+        "rationale": "Interaksi murni keyboard membatasi kemampuan spasial seret-dan-lepas (drag-and-drop) yang disokong peranti penunjuk."
+      }
+    ]
+  },
+  {
+    "questionNumber": 48,
+    "question": "Contoh antarmuka yang menerapkan manipulasi langsung adalah?",
+    "answerOptions": [
+      {
+        "text": "Antarmuka baris perintah (CLI)",
+        "isCorrect": false,
+        "rationale": "CLI murni berbasis instruksi pengetikan string perintah teks terstruktur."
+      },
+      {
+        "text": "Formulir isian teks biasa",
+        "isCorrect": false,
+        "rationale": "Formulir isian adalah interaksi pengisian data tidak langsung, bukan aksi manipulasi spasial objek grafis."
+      },
+      {
+        "text": "Editor grafis dengan drag and drop",
+        "isCorrect": true,
+        "rationale": "Editor grafis dengan drag and drop memungkinkan pengguna memanipulasi objek visual langsung secara spasial."
+      },
+      {
+        "text": "Menu berbasis teks",
+        "isCorrect": false,
+        "rationale": "Menu berbasis teks bekerja lewat pemilihan indeks atau opsi statis, bukan interaksi fisik representasi objek."
+      }
+    ]
+  },
+  {
+    "questionNumber": 49,
+    "question": "Dalam manipulasi langsung, prinsip visibility berarti bahwa?",
+    "answerOptions": [
+      {
+        "text": "Perintah harus disembunyikan",
+        "isCorrect": false,
+        "rationale": "Menyembunyikan opsi melanggar arti kata visibilitas (keterlihatan) itu sendiri."
+      },
+      {
+        "text": "Pengguna harus mencari fungsi melalui menu",
+        "isCorrect": false,
+        "rationale": "Pencarian berlapis di dalam menu yang dalam menandakan kontrol utama kurang terekspos secara kasat mata."
+      },
+      {
+        "text": "Hanya hasil akhir yang ditampilkan",
+        "isCorrect": false,
+        "rationale": "Setiap tahap perubahan transisi harus terlihat jelas, bukan sekadar melompat ke hasil akhir akhir."
+      },
+      {
+        "text": "Objek dan aksi yang tersedia harus terlihat oleh pengguna",
+        "isCorrect": true,
+        "rationale": "Visibility menekankan bahwa objek dan aksi yang dapat dilakukan harus tampak jelas di antarmuka sistem."
+      }
+    ]
+  },
+  {
+    "questionNumber": 50,
+    "question": "Salah satu prinsip manipulasi langsung adalah umpan balik langsung. Maksud dari prinsip ini adalah?",
+    "answerOptions": [
+      {
+        "text": "Setiap aksi menghasilkan umpan balik seketika",
+        "isCorrect": true,
+        "rationale": "Umpan balik langsung berarti respons segera atau real-time setelah pengguna melakukan aksi fisik pada objek."
+      },
+      {
+        "text": "Umpan balik muncul setelah beberapa menit",
+        "isCorrect": false,
+        "rationale": "Respons dalam hitungan menit dikategorikan sebagai penundaan sistem (delay/latensi tinggi), bukan umpan balik instan."
+      },
+      {
+        "text": "Umpan balik hanya saat error",
+        "isCorrect": false,
+        "rationale": "Umpan balik dibutuhkan pada setiap aksi sukses maupun gagal guna memastikan kontinuitas pemahaman operasional."
+      },
+      {
+        "text": "Tidak perlu umpan balik",
+        "isCorrect": false,
+        "rationale": "Ketiadaan umpan balik dalam interaksi langsung menghancurkan persepsi kendali pengguna atas sistem komputer."
+      }
+    ]
+  },
+  {
+    "questionNumber": 51,
+    "question": "Peranti penunjuk (pointing device) seperti mouse digunakan untuk memilih objek di layar. Prinsip Fitts dalam konteks peranti penunjuk menyatakan bahwa waktu untuk mencapai target tergantung pada?",
+    "answerOptions": [
+      {
+        "text": "Warna target",
+        "isCorrect": false,
+        "rationale": "Warna target memengaruhi atensi visual, namun bukan variabel matematis dalam rumus kecepatan gerak Hukum Fitts."
+      },
+      {
+        "text": "Ukuran target dan jarak ke target",
+        "isCorrect": true,
+        "rationale": "Hukum Fitts menyatakan bahwa waktu mencapai target dipengaruhi secara logaritmik oleh jarak pergerakan dan ukuran lebar target."
+      },
+      {
+        "text": "Bentuk target",
+        "isCorrect": false,
+        "rationale": "Geometri/bentuk objek (lingkaran atau persegi) tidak signifikan dibanding total luas dimensi lebar sasaran bidik kursor."
+      },
+      {
+        "text": "Jumlah target",
+        "isCorrect": false,
+        "rationale": "Jumlah target memengaruhi hukum pilihan alternatif (Hukum Hick), bukan waktu tempuh motorik satu objek target tunggal."
+      }
+    ]
+  },
+  {
+    "questionNumber": 52,
+    "question": "Dalam konteks peranti penunjuk, jenis peranti apa yang memungkinkan pengguna menggerakkan kursor dengan menggeser jari pada permukaan datar?",
+    "answerOptions": [
+      {
+        "text": "Mouse",
+        "isCorrect": false,
+        "rationale": "Mouse digerakkan dengan menggeser seluruh badan perangkat fisik di atas meja, bukan menggeser jari di area diam."
+      },
+      {
+        "text": "Trackball",
+        "isCorrect": false,
+        "rationale": "Trackball menggunakan putaran bola statis yang diputar jari untuk mengarahkan kursor posisi."
+      },
+      {
+        "text": "Touchscreen",
+        "isCorrect": false,
+        "rationale": "Touchscreen melakukan deteksi sentuhan langsung pada area display/layar kerja utama, bukan permukaan bantalan terpisah."
+      },
+      {
+        "text": "Trackpad",
+        "isCorrect": true,
+        "rationale": "Trackpad adalah peranti penunjuk yang menggunakan permukaan datar terintegrasi untuk mendeteksi gerakan jari dan menggerakkan kursor."
+      }
+    ]
+  },
+  {
+    "questionNumber": 53,
+    "question": "Apa kelebihan utama dari peranti penunjuk berupa mouse dibandingkan dengan trackball?",
+    "answerOptions": [
+      {
+        "text": "Mouse lebih murah",
+        "isCorrect": false,
+        "rationale": "Faktor harga bersifat relatif tergantung spesifikasi komponen dan bukan keunggulan ergonomi/fungsional utama mekanismenya."
+      },
+      {
+        "text": "Mouse tidak memerlukan permukaan datar",
+        "isCorrect": false,
+        "rationale": "Sebaliknya, mouse membutuhkan permukaan datar untuk refleksi sensor optiknya, sedangkan trackball bisa beroperasi di mana saja."
+      },
+      {
+        "text": "Mouse lebih tahan lama",
+        "isCorrect": false,
+        "rationale": "Ketahanan bergantung pada material pabrikan konstruksi, bukan bawaan dasar perbedaan jenis mekanis inputnya."
+      },
+      {
+        "text": "Mouse lebih akurat untuk menggambar",
+        "isCorrect": true,
+        "rationale": "Mouse memberikan kontrol koordinat gerak lengan yang lebih halus, kontinu, dan akurat untuk tugas spasial presisi tinggi seperti menggambar."
+      }
+    ]
+  },
+  {
+    "questionNumber": 54,
+    "question": "Peranti penunjuk apa yang menggunakan bola yang diputar untuk menggerakkan kursor dan cocok digunakan di ruang terbatas?",
+    "answerOptions": [
+      {
+        "text": "Stylus",
+        "isCorrect": false,
+        "rationale": "Stylus berupa pena digital yang digoreskan pada pen tablet khusus."
+      },
+      {
+        "text": "Touchscreen",
+        "isCorrect": false,
+        "rationale": "Touchscreen mengharuskan tangan menjangkau permukaan panel monitor secara penuh."
+      },
+      {
+        "text": "Trackball",
+        "isCorrect": true,
+        "rationale": "Trackball memiliki bola statis yang diputar dengan jari sehingga badan alat tidak bergeser dan hemat ruang kerja."
+      },
+      {
+        "text": "Mouse",
+        "isCorrect": false,
+        "rationale": "Mouse membutuhkan area sapuan permukaan meja (mousepad) yang cukup lapang agar kursor bisa bergerak bebas."
+      }
+    ]
+  },
+  {
+    "questionNumber": 55,
+    "question": "Fitur apa yang umumnya dimiliki oleh peranti penunjuk modern untuk mempercepat navigasi antarmuka?",
+    "answerOptions": [
+      {
+        "text": "Baterai isi ulang",
+        "isCorrect": false,
+        "rationale": "Baterai memengaruhi metode catu daya nirkabel, bukan peningkatan kecepatan navigasi elemen UI secara langsung."
+      },
+      {
+        "text": "Tombol gulir (scroll wheel)",
+        "isCorrect": true,
+        "rationale": "Tombol gulir memungkinkan pengguna menggulir dokumen/halaman panjang secara cepat tanpa memindahkan kursor ke scrollbar."
+      },
+      {
+        "text": "Koneksi nirkabel",
+        "isCorrect": false,
+        "rationale": "Koneksi nirkabel (wireless) membebaskan kabel fisik meja, namun tidak mengubah fungsi kecepatan scrolling layar."
+      },
+      {
+        "text": "Dua tombol",
+        "isCorrect": false,
+        "rationale": "Keberadaan dua tombol (klik kiri/kanan) adalah standar fungsi klik dasar primer, bukan fitur akselerasi navigasi sekunder."
+      }
+    ]
+  },
+  {
+    "questionNumber": 56,
+    "question": "Dalam antarmuka berbasis menu, apa tujuan utama dari penggunaan menu?",
+    "answerOptions": [
+      {
+        "text": "Memberi pengguna pilihan perintah secara terstruktur",
+        "isCorrect": true,
+        "rationale": "Menu menyajikan pilihan perintah dalam struktur hierarki sehingga pengguna dapat memilih dengan mudah tanpa harus mengingat sintaks."
+      },
+      {
+        "text": "Menyembunyikan semua fungsi sistem",
+        "isCorrect": false,
+        "rationale": "Tujuannya adalah mengelompokkan dan mengekspos fungsi secara teratur, bukan menyembunyikannya secara permanen dari akses."
+      },
+      {
+        "text": "Mempercepat proses input teks",
+        "isCorrect": false,
+        "rationale": "Input teks massal tetap memerlukan keyboard fisik/virtual; menu berfokus pada eksekusi perintah siap pakai."
+      },
+      {
+        "text": "Meningkatkan kecepatan pemrosesan komputer",
+        "isCorrect": false,
+        "rationale": "Menu adalah komponen desain antarmuka, tidak berdampak pada siklus komputasi internal hardware (CPU cycle)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 57,
+    "question": "Jenis menu apa yang muncul di layar setelah pengguna mengklik kanan pada suatu objek?",
+    "answerOptions": [
+      {
+        "text": "Menu tarik-turun (pull-down menu)",
+        "isCorrect": false,
+        "rationale": "Pull-down menu berlabuh pada menu bar di bagian atas layar aplikasi."
+      },
+      {
+        "text": "Menu kaskade (cascade menu)",
+        "isCorrect": false,
+        "rationale": "Cascade menu adalah submenu bertingkat yang melebar ke samping dari menu induk."
+      },
+      {
+        "text": "Menu konteks (context menu)",
+        "isCorrect": true,
+        "rationale": "Menu konteks muncul sesuai dengan objek spesifik yang diklik kanan dan menyediakan opsi relevan setempat."
+      },
+      {
+        "text": "Menu datar (flat menu)",
+        "isCorrect": false,
+        "rationale": "Flat menu menampilkan opsi satu tingkat tanpa ada struktur cabang bertingkat di dalamnya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 58,
+    "question": "Apa kelemahan utama dari menu yang terlalu panjang dan berisi banyak item?",
+    "answerOptions": [
+      {
+        "text": "Menyulitkan pengguna dalam mencari pilihan yang diinginkan",
+        "isCorrect": true,
+        "rationale": "Menu panjang memicu kelelahan visual sehingga memakan waktu lebih lama bagi pengguna untuk memindai mencari opsi."
+      },
+      {
+        "text": "Memerlukan lebih banyak memori",
+        "isCorrect": false,
+        "rationale": "Dampak konsumsi RAM komponen teks menu sangat kecil dan tidak signifikan bagi komputer modern."
+      },
+      {
+        "text": "Mengurangi kecepatan respon sistem",
+        "isCorrect": false,
+        "rationale": "Kecepatan merespons rendering menu instan, hambatan murni ada pada respons kognitif internal manusia."
+      },
+      {
+        "text": "Menyebabkan kebingungan karena terlalu sederhana",
+        "isCorrect": false,
+        "rationale": "Sebaliknya, menu yang terlalu panjang membuat struktur menjadi terlalu rumit, bukan terlalu sederhana."
+      }
+    ]
+  },
+  {
+    "questionNumber": 59,
+    "question": "Dalam perancangan menu, istilah apa yang mengacu pada pengelompokan item menu berdasarkan fungsi yang mirip?",
+    "answerOptions": [
+      {
+        "text": "Pengurutan alfabetis",
+        "isCorrect": false,
+        "rationale": "Pengurutan alfabetis menyusun kata berdasarkan urutan huruf A-Z tanpa peduli kemiripan tugasnya."
+      },
+      {
+        "text": "Pengelompokan acak",
+        "isCorrect": false,
+        "rationale": "Pengelompokan acak melanggar asas usabilitas karena merusak keterpolaan posisi letak item."
+      },
+      {
+        "text": "Pengurutan kronologis",
+        "isCorrect": false,
+        "rationale": "Urutan kronologis mengandalkan faktor waktu terjadinya peristiwa (misal histori file terbaru)."
+      },
+      {
+        "text": "Pengelompokan fungsional",
+        "isCorrect": true,
+        "rationale": "Pengelompokan fungsional menyatukan item menu yang memiliki peran atau ranah operasional serupa untuk mempermudah pencarian."
+      }
+    ]
+  },
+  {
+    "questionNumber": 60,
+    "question": "Apa yang dimaksud dengan menu tarik-turun (pull-down menu)?",
+    "answerOptions": [
+      {
+        "text": "Menu yang muncul di lokasi kursor saat tombol ditekan",
+        "isCorrect": false,
+        "rationale": "Ini adalah ciri khas mekanis kemunculan pop-up menu atau context menu."
+      },
+      {
+        "text": "Menu yang muncul saat mengklik judul menu di bilah menu",
+        "isCorrect": true,
+        "rationale": "Menu tarik-turun muncul setelah pengguna mengklik judul menu pada bilah menu atas, menampilkan daftar ke bawah."
+      },
+      {
+        "text": "Menu yang ditampilkan saat pengguna menggulir ke bawah",
+        "isCorrect": false,
+        "rationale": "Menggulir halaman ke bawah memicu scroll navigasi konten, bukan pemanggilan pull-down menu."
+      },
+      {
+        "text": "Menu yang selalu terlihat di layar",
+        "isCorrect": false,
+        "rationale": "Menu yang selalu terekspos menetap di layar disebut sebagai permanent menu bar atau panel statis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 61,
+    "question": "Mengapa penting untuk mengelompokkan pilihan dalam menu berdasarkan urutan logis atau frekuensi penggunaan?",
+    "answerOptions": [
+      {
+        "text": "Agar menu lebih menarik secara visual",
+        "isCorrect": false,
+        "rationale": "Daya tarik visual ditentukan oleh tipografi, warna, dan ikonografi, bukan murni dari struktur urutan logika teks."
+      },
+      {
+        "text": "Untuk meningkatkan efisiensi dan kecepatan pengguna dalam memilih",
+        "isCorrect": true,
+        "rationale": "Pengorganisasian pilihan secara logis atau berdasarkan frekuensi membantu pengguna menemukan perintah dengan cepat dan mengurangi waktu pencarian."
+      },
+      {
+        "text": "Untuk mengurangi jumlah item dalam menu",
+        "isCorrect": false,
+        "rationale": "Mengurutkan posisi letak item tidak mengurangi total hitungan kuantitas opsi yang tertera di dalam menu."
+      },
+      {
+        "text": "Agar sistem menjadi lebih ringan",
+        "isCorrect": false,
+        "rationale": "Urutan string menu tidak memiliki korelasi signifikan terhadap beban algoritma komputasi di memori."
+      }
+    ]
+  },
+  {
+    "questionNumber": 62,
+    "question": "Dalam mengorganisir pilihan menu, pendekatan mana yang paling sesuai untuk aplikasi dengan banyak fungsi kompleks?",
+    "answerOptions": [
+      {
+        "text": "Menggunakan hierarki menu dengan submenu",
+        "isCorrect": true,
+        "rationale": "Hierarki menu dengan submenu mengorganisir fungsi kompleks ke dalam kategori yang lebih kecil sehingga lebih mudah dinavigasi."
+      },
+      {
+        "text": "Menggunakan menu datar dengan semua pilihan terlihat",
+        "isCorrect": false,
+        "rationale": "Menu datar yang menjejalkan semua fungsi kompleks sekaligus akan menciptakan kekacauan visual ekstrim di layar."
+      },
+      {
+        "text": "Menggunakan satu menu panjang tanpa submenu",
+        "isCorrect": false,
+        "rationale": "Satu menu linear terlampau panjang memaksa user melakukan scrolling melelahkan dan merusak efisiensi navigasi."
+      },
+      {
+        "text": "Menggunakan menu acak",
+        "isCorrect": false,
+        "rationale": "Pola acak menghancurkan konsistensi spasial dan memicu tingginya kesalahan pencarian fungsi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 63,
+    "question": "Apa kelebihan dari penggunaan menu berbasis ikon dibandingkan menu teks?",
+    "answerOptions": [
+      {
+        "text": "Tidak memerlukan teks terjemahan",
+        "isCorrect": false,
+        "rationale": "Ikon abstrak sering kali tetap membutuhkan tooltip teks lokal agar tidak memicu ambiguitas arti multibahasa."
+      },
+      {
+        "text": "Menghemat ruang di layar",
+        "isCorrect": false,
+        "rationale": "Meskipun menghemat ruang, keunggulan psikologi kognitif utamanya adalah kemudahan pengenalan memori visual objek."
+      },
+      {
+        "text": "Lebih mudah diingat karena menggunakan gambar",
+        "isCorrect": true,
+        "rationale": "Ikon menggunakan gambar metafora yang mudah dikenali otak sehingga mempercepat pengenalan fungsi tanpa harus mengeja teks."
+      },
+      {
+        "text": "Semua jawaban benar",
+        "isCorrect": false,
+        "rationale": "Karena opsi perihal eliminasi terjemahan total tidak sepenuhnya benar dalam kaidah aksesibilitas internasional."
+      }
+    ]
+  },
+  {
+    "questionNumber": 64,
+    "question": "Apa yang dimaksud dengan dialog berbasis teks dalam antarmuka manusia dan komputer?",
+    "answerOptions": [
+      {
+        "text": "Antarmuka yang berkomunikasi dengan pengguna melalui serangkaian pertanyaan dan jawaban teks",
+        "isCorrect": true,
+        "rationale": "Dialog berbasis teks melibatkan pertukaran pesan karakter teks secara sekuensial antara sistem dan pengguna untuk memandu jalannya interaksi."
+      },
+      {
+        "text": "Antarmuka yang hanya menggunakan gambar dan ikon",
+        "isCorrect": false,
+        "rationale": "Ini merupakan definisi dari antarmuka grafis (GUI) murni atau visual interface."
+      },
+      {
+        "text": "Antarmuka yang menggunakan suara sebagai input",
+        "isCorrect": false,
+        "rationale": "Interaksi suara diklasifikasikan sebagai Voice User Interface (VUI) atau antarmuka auditori."
+      },
+      {
+        "text": "Antarmuka yang menggunakan menu drop-down",
+        "isCorrect": false,
+        "rationale": "Menu drop-down adalah komponen widget visual penunjang GUI, bukan murni komunikasi dialog string teks."
+      }
+    ]
+  },
+  {
+    "questionNumber": 65,
+    "question": "Contoh dari dialog berbasis teks adalah?",
+    "answerOptions": [
+      {
+        "text": "Formulir isian online",
+        "isCorrect": false,
+        "rationale": "Formulir online masuk dalam kategori Form-filling interface yang menggabungkan elemen field visual GUI."
+      },
+      {
+        "text": "Tombol pada toolbar",
+        "isCorrect": false,
+        "rationale": "Tombol toolbar adalah kontrol murni grafis dalam arsitektur WIMP."
+      },
+      {
+        "text": "Grafik batang interaktif",
+        "isCorrect": false,
+        "rationale": "Grafik interaktif mengandalkan visualisasi data spasial langsung (Direct Manipulation/Information Visualization)."
+      },
+      {
+        "text": "Command prompt atau terminal",
+        "isCorrect": true,
+        "rationale": "Command prompt menggunakan baris perintah teks yang diketik manual oleh pengguna dan memberikan respons balik dalam bentuk blok teks."
+      }
+    ]
+  },
+  {
+    "questionNumber": 66,
+    "question": "Apa kelebihan utama dari dialog berbasis teks dibandingkan antarmuka grafis?",
+    "answerOptions": [
+      {
+        "text": "Lebih efisien untuk pengguna mahir karena cepat dalam eksekusi perintah",
+        "isCorrect": true,
+        "rationale": "Pengguna mahir dapat mengetik perintah pintas dengan cepat tanpa perlu memindahkan tangan ke mouse atau menavigasi menu bertingkat."
+      },
+      {
+        "text": "Lebih mudah dipelajari oleh pemula",
+        "isCorrect": false,
+        "rationale": "Sistem teks dinilai sangat sulit bagi pemula karena tidak adanya petunjuk visual opsi tindakan (low learnability)."
+      },
+      {
+        "text": "Menampilkan informasi visual yang lebih kaya",
+        "isCorrect": false,
+        "rationale": "Dialog teks sangat terbatas dalam aspek visual karena umumnya hanya menyajikan deretan karakter monospaced."
+      },
+      {
+        "text": "Memerlukan lebih sedikit daya komputasi",
+        "isCorrect": false,
+        "rationale": "Meskipun menghemat daya, keuntungan interaksional utamanya terletak pada faktor efisiensi kecepatan operasional bagi pakar."
+      }
+    ]
+  },
+  {
+    "questionNumber": 67,
+    "question": "Dalam dialog berbasis teks, apa fungsi dari prompt?",
+    "answerOptions": [
+      {
+        "text": "Menampilkan gambar untuk memandu pengguna",
+        "isCorrect": false,
+        "rationale": "Prompt terminal konvensional tidak menangani atau menampilkan berkas aset gambar grafis."
+      },
+      {
+        "text": "Menandakan bahwa sistem siap menerima input dari pengguna",
+        "isCorrect": true,
+        "rationale": "Prompt biasanya berupa simbol khusus (seperti > atau $) yang menunjukkan bahwa sistem sedang aktif menunggu masukan instruksi."
+      },
+      {
+        "text": "Menampilkan daftar pilihan",
+        "isCorrect": false,
+        "rationale": "Daftar pilihan dimunculkan oleh perintah list (seperti 'ls' atau 'dir'), bukan oleh baris karakter prompt itu sendiri."
+      },
+      {
+        "text": "Menyimpan perintah yang telah diketik",
+        "isCorrect": false,
+        "rationale": "Penyimpanan riwayat perintah dikelola oleh buffer internal atau file history sistem (seperti .bash_history)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 68,
+    "question": "Apa tantangan utama dalam merancang dialog berbasis teks yang baik?",
+    "answerOptions": [
+      {
+        "text": "Memerlukan perangkat keras yang mahal",
+        "isCorrect": false,
+        "rationale": "Sebaliknya, sistem berbasis teks justru sangat ringan dan dapat berjalan lancar di komputer berspesifikasi rendah."
+      },
+      {
+        "text": "Sulit untuk memberikan umpan balik visual",
+        "isCorrect": false,
+        "rationale": "Umpan balik teks bisa langsung dicetak di baris baru, batasan utama rancangannya berpusat pada penataan semantik bahasanya."
+      },
+      {
+        "text": "Harus dirancang agar mudah dipahami dan tidak membingungkan pengguna",
+        "isCorrect": true,
+        "rationale": "Dialog berbasis teks harus menggunakan struktur kalimat/istilah yang jelas, konsisten, dan logis agar tidak memicu misinterpretasi perintah."
+      },
+      {
+        "text": "Hanya mendukung satu bahasa",
+        "isCorrect": false,
+        "rationale": "Sistem CLI modern tetap dapat dikonfigurasi untuk mendukung visualisasi berbagai encoding bahasa internasional."
+      }
+    ]
+  },
+  {
+    "questionNumber": 69,
+    "question": "Dalam dialog berbasis teks, antarmuka yang menggunakan perintah-perintah seperti 'cp', 'ls', atau 'dir' termasuk dalam kategori...",
+    "answerOptions": [
+      {
+        "text": "antarmuka berbasis menu",
+        "isCorrect": false,
+        "rationale": "Antarmuka menu menampilkan daftar opsi pilihan tetap yang siap dieksekusi tanpa perlu diketik kodenya."
+      },
+      {
+        "text": "antarmuka baris perintah",
+        "isCorrect": true,
+        "rationale": "Antarmuka baris perintah (CLI) adalah contoh dialog di mana pengguna mengetikkan instruksi string teks secara spesifik."
+      },
+      {
+        "text": "antarmuka grafis",
+        "isCorrect": false,
+        "rationale": "Antarmuka grafis mengandalkan manipulasi elemen visual (WIMP), bukan pengetikan instruksi singkatan."
+      },
+      {
+        "text": "antarmuka borang",
+        "isCorrect": false,
+        "rationale": "Antarmuka borang berwujud pengisian field data terstruktur menyerupai formulir kertas fisik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 70,
+    "question": "Salah satu kelemahan utama dialog berbasis teks dengan baris perintah adalah...",
+    "answerOptions": [
+      {
+        "text": "memerlukan memori visual yang besar",
+        "isCorrect": false,
+        "rationale": "Sistem teks tidak membebani memori pengenalan visual objek karena minimnya pemakaian elemen grafis."
+      },
+      {
+        "text": "pengguna harus menghafal sintaks perintah",
+        "isCorrect": true,
+        "rationale": "Kelemahan utama CLI adalah pengguna dipaksa mengingat dengan tepat nama perintah beserta parameter argumennya."
+      },
+      {
+        "text": "tidak efisien untuk pengguna ahli",
+        "isCorrect": false,
+        "rationale": "Sebaliknya, CLI justru sangat disukai para ahli karena tingkat efisiensi dan kecepatan eksekusinya yang sangat tinggi."
+      },
+      {
+        "text": "memerlukan perangkat keras yang mahal",
+        "isCorrect": false,
+        "rationale": "CLI membutuhkan sumber daya komputasi yang minimal, sehingga ramah untuk komputer berspesifikasi rendah."
+      }
+    ]
+  },
+  {
+    "questionNumber": 71,
+    "question": "Pada dialog berbasis pengisian borang, elemen yang digunakan untuk memungkinkan pengguna memilih salah satu dari beberapa opsi yang sudah ditentukan adalah...",
+    "answerOptions": [
+      {
+        "text": "kotak teks",
+        "isCorrect": false,
+        "rationale": "Kotak teks (text box) digunakan untuk menginput data string alfabet/numerik secara bebas bebas."
+      },
+      {
+        "text": "daftar drop-down",
+        "isCorrect": false,
+        "rationale": "Daftar drop-down juga memuat pilihan opsi, namun jawaban yang paling presisi untuk memilih satu dari sekelompok opsi terbuka adalah tombol radio."
+      },
+      {
+        "text": "kotak centang",
+        "isCorrect": false,
+        "rationale": "Kotak centang (checkbox) ditujukan untuk pemilihan multi-opsi (pengguna boleh memilih lebih dari satu)."
+      },
+      {
+        "text": "tombol radio",
+        "isCorrect": true,
+        "rationale": "Tombol radio (radio button) digunakan dalam borang untuk memastikan pengguna hanya memilih tepat satu opsi eksklusif dari kelompok pilihan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 72,
+    "question": "Dalam perancangan borang, prinsip yang menyatakan bahwa pengguna harus dapat mengisi borang dengan cepat dan tanpa kesalahan disebut...",
+    "answerOptions": [
+      {
+        "text": "konsistensi",
+        "isCorrect": false,
+        "rationale": "Konsistensi menjaga kesamaan pola komponen desain antarmuka di seluruh halaman aplikasi."
+      },
+      {
+        "text": "efisiensi",
+        "isCorrect": true,
+        "rationale": "Efisiensi dalam perancangan borang berarti struktur dirancang agar alur pengisian berjalan cepat dengan minimalisasi galat."
+      },
+      {
+        "text": "fleksibilitas",
+        "isCorrect": false,
+        "rationale": "Fleksibilitas mengacu pada kemampuan mengakomodasi berbagai variasi metode input dari pengguna."
+      },
+      {
+        "text": "estetika",
+        "isCorrect": false,
+        "rationale": "Estetika berfokus pada keindahan visual, tata warna, serta keseimbangan layout borang."
+      }
+    ]
+  },
+  {
+    "questionNumber": 73,
+    "question": "Jika sebuah borang memiliki beberapa bidang yang saling terkait, maka pengelompokan bidang tersebut sebaiknya dilakukan berdasarkan...",
+    "answerOptions": [
+      {
+        "text": "urutan abjad",
+        "isCorrect": false,
+        "rationale": "Urutan abjad label field akan merusak alur pengisian alami (misal: label 'Kota' terpisah jauh dari 'Alamat')."
+      },
+      {
+        "text": "frekuensi penggunaan",
+        "isCorrect": false,
+        "rationale": "Pengurutan frekuensi murni pada field borang acap kali memicu lompatan konteks data yang membingungkan ingatan kognitif."
+      },
+      {
+        "text": "urutan kronologis atau logis",
+        "isCorrect": true,
+        "rationale": "Pengelompokan bidang berdasarkan urutan kronologis atau logis membantu pengguna mengikuti alur alami pengisian informasi."
+      },
+      {
+        "text": "ukuran bidang",
+        "isCorrect": false,
+        "rationale": "Menyusun letak kolom berdasarkan panjang pendeknya kotak field akan merusak struktur semantik data."
+      }
+    ]
+  },
+  {
+    "questionNumber": 74,
+    "question": "Untuk mengurangi kesalahan pengguna saat mengisi borang, sebaiknya digunakan...",
+    "answerOptions": [
+      {
+        "text": "animasi saat mengisi",
+        "isCorrect": false,
+        "rationale": "Animasi berlebih justru berisiko mendistorsi fokus perhatian dan memperlambat proses input data."
+      },
+      {
+        "text": "warna latar yang mencolok",
+        "isCorrect": false,
+        "rationale": "Warna latar mencolok membuat mata cepat lelah dan menyulitkan pembacaan teks panduan borang."
+      },
+      {
+        "text": "ukuran font yang besar",
+        "isCorrect": false,
+        "rationale": "Ukuran font memengaruhi legibilitas, namun penahan utama laju kesalahan validasi nilai input adalah sistem deteksi otomatis."
+      },
+      {
+        "text": "validasi otomatis",
+        "isCorrect": true,
+        "rationale": "Validasi otomatis dapat mendeteksi kesalahan format input secara real-time (seperti kurangnya karakter @ pada email) sebelum data disubmit."
+      }
+    ]
+  },
+  {
+    "questionNumber": 75,
+    "question": "Pada dialog berbasis pengisian borang, jika suatu bidang tidak wajib diisi, sebaiknya diberikan tanda...",
+    "answerOptions": [
+      {
+        "text": "bintang atau asterisk",
+        "isCorrect": true,
+        "rationale": "Biasanya, tanda bintang atau asterisk digunakan untuk menandai bidang yang wajib diisi (required), sehingga bidang opsional dibedakan dengan tidak diberi tanda tersebut atau dilabeli '(opsional)'."
+      },
+      {
+        "text": "garis bawah",
+        "isCorrect": false,
+        "rationale": "Garis bawah (underline) umumnya diasosiasikan sebagai penanda elemen tautan/hyperlink teks aktif."
+      },
+      {
+        "text": "tanda tanya",
+        "isCorrect": false,
+        "rationale": "Tanda tanya biasanya dialokasikan untuk memicu komponen bantuan (help inline icon/tooltip)."
+      },
+      {
+        "text": "tanda seru",
+        "isCorrect": false,
+        "rationale": "Tanda seru digunakan untuk penanda visual adanya galat fatal (error validation alert)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 76,
+    "question": "Prinsip perancangan tampilan yang menekankan bahwa elemen yang memiliki fungsi serupa harus memiliki tampilan yang seragam disebut...",
+    "answerOptions": [
+      {
+        "text": "keseimbangan",
+        "isCorrect": false,
+        "rationale": "Keseimbangan (balance) berkaitan dengan distribusi bobot visual secara merata di area tata letak."
+      },
+      {
+        "text": "konsistensi",
+        "isCorrect": true,
+        "rationale": "Konsistensi adalah prinsip yang memastikan elemen dengan fungsi serupa memiliki tampilan seragam demi membangun ekspektasi pola pengguna."
+      },
+      {
+        "text": "kesatuan",
+        "isCorrect": false,
+        "rationale": "Kesatuan (unity) mengacu pada hubungan harmonis antar komponen agar terlihat menyatu sebagai satu kesatuan sistem."
+      },
+      {
+        "text": "kontras",
+        "isCorrect": false,
+        "rationale": "Kontras digunakan untuk membedakan dua elemen berbeda secara mencolok guna menarik fokus perhatian visual."
+      }
+    ]
+  },
+  {
+    "questionNumber": 77,
+    "question": "Salah satu petunjuk perancangan tampilan yang baik adalah menyediakan ...",
+    "answerOptions": [
+      {
+        "text": "teks yang panjang",
+        "isCorrect": false,
+        "rationale": "Teks panjang yang padat menghancurkan aspek scannability dan membuat pengguna malas membaca petunjuk aplikasi."
+      },
+      {
+        "text": "warna yang gelap",
+        "isCorrect": false,
+        "rationale": "Skema gelap (dark mode) bersifat opsional untuk preferensi, bukan petunjuk dasar mutlak kebergunaan layout universal."
+      },
+      {
+        "text": "animasi yang kompleks",
+        "isCorrect": false,
+        "rationale": "Animasi kompleks berpotensi membebani kinerja rendering grafis dan mengalihkan fokus alur kerja utama."
+      },
+      {
+        "text": "umpan balik yang jelas",
+        "isCorrect": true,
+        "rationale": "Umpan balik yang jelas membantu pengguna memahami hasil dari tindakan mereka, sehingga meningkatkan kebergunaan tampilan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 78,
+    "question": "Dalam perancangan tampilan, penggunaan warna merah biasanya dikaitkan dengan...",
+    "answerOptions": [
+      {
+        "text": "informasi netral",
+        "isCorrect": false,
+        "rationale": "Informasi netral umumnya menggunakan warna monokromatik seperti abu-abu, hitam, atau putih."
+      },
+      {
+        "text": "tampilan latar belakang",
+        "isCorrect": false,
+        "rationale": "Latar belakang berwarna merah pekat merusak keterbacaan teks kontras di atasnya dan memicu kelelahan retina."
+      },
+      {
+        "text": "peringatan atau kesalahan",
+        "isCorrect": true,
+        "rationale": "Warna merah memiliki konvensi universal sebagai sinyal bahaya, peringatan kritis, atau indikasi terjadinya kesalahan sistem."
+      },
+      {
+        "text": "teks biasa",
+        "isCorrect": false,
+        "rationale": "Teks biasa memakai warna netral gelap (seperti charcoal/hitam) untuk menjaga kenyamanan membaca dokumen."
+      }
+    ]
+  },
+  {
+    "questionNumber": 79,
+    "question": "Prinsip yang menyatakan bahwa elemen yang paling sering digunakan harus ditempatkan di lokasi yang mudah dijangkau disebut...",
+    "answerOptions": [
+      {
+        "text": "aksesibilitas",
+        "isCorrect": true,
+        "rationale": "Aksesibilitas dalam konteks tata letak menekankan pada kemudahan menjangkau komponen interaksi yang memiliki utilitas frekuensi tinggi."
+      },
+      {
+        "text": "konsistensi",
+        "isCorrect": false,
+        "rationale": "Konsistensi berfokus pada keseragaman bentuk dan makna komponen di semua modul, bukan letak zona jangkauan."
+      },
+      {
+        "text": "prioritas",
+        "isCorrect": false,
+        "rationale": "Prioritas adalah penentuan derajat kepentingan fitur, yang mana implementasi tata letak fisiknya didasarkan pada asas aksesibilitas ruang jangkau."
+      },
+      {
+        "text": "fleksibilitas",
+        "isCorrect": false,
+        "rationale": "Fleksibilitas merujuk pada keleluasaan sistem dalam menerima berbagai jenis variasi skenario input user."
+      }
+    ]
+  },
+  {
+    "questionNumber": 80,
+    "question": "Peranti bantu perancangan tampilan yang berfungsi untuk membuat sketsa atau prototipe awal antarmuka secara cepat disebut...",
+    "answerOptions": [
+      {
+        "text": "flowchart",
+        "isCorrect": false,
+        "rationale": "Flowchart memetakan logika alur algoritma kode program, bukan sketsa rancangan tata letak komponen UI."
+      },
+      {
+        "text": "storyboard",
+        "isCorrect": false,
+        "rationale": "Storyboard menggambarkan sekuens narasi interaksi pengguna langkah demi langkah melalui panel ilustrasi cerita."
+      },
+      {
+        "text": "wireframe",
+        "isCorrect": true,
+        "rationale": "Wireframe adalah peranti bantu cetak biru kasar untuk menyusun struktur kerangka komponen antarmuka tanpa detail estetika visual."
+      },
+      {
+        "text": "mockup",
+        "isCorrect": false,
+        "rationale": "Mockup merupakan rancangan desain statis dengan tingkat presisi visual tinggi (high-fidelity) yang memuat detail warna dan aset asli."
+      }
+    ]
+  },
+  {
+    "questionNumber": 81,
+    "question": "Peranti bantu perancangan berupa alur cerita yang menggambarkan interaksi pengguna langkah demi langkah disebut...",
+    "answerOptions": [
+      {
+        "text": "template",
+        "isCorrect": false,
+        "rationale": "Template adalah cetakan desain siap pakai yang digunakan ulang untuk mempercepat produksi layout."
+      },
+      {
+        "text": "grid",
+        "isCorrect": false,
+        "rationale": "Grid merupakan sistem garis bantu panduan untuk menyelaraskan proporsi letak objek tata letak."
+      },
+      {
+        "text": "prototipe",
+        "isCorrect": false,
+        "rationale": "Prototipe adalah model fungsional interaktif yang mensimulasikan cara kerja sistem nyata."
+      },
+      {
+        "text": "storyboard",
+        "isCorrect": true,
+        "rationale": "Storyboard menggambarkan urutan interaksi pengguna dengan antarmuka dalam bentuk panel-panel visual yang berurutan secara naratif."
+      }
+    ]
+  },
+  {
+    "questionNumber": 82,
+    "question": "Alat perancangan yang memungkinkan pembuatan model fungsional antarmuka yang dapat diuji coba oleh pengguna disebut...",
+    "answerOptions": [
+      {
+        "text": "prototipe",
+        "isCorrect": true,
+        "rationale": "Prototipe adalah model simulasi fungsional yang memungkinkan pengguna berinteraksi langsung guna menguji coba kegunaan desain."
+      },
+      {
+        "text": "flowchart",
+        "isCorrect": false,
+        "rationale": "Flowchart adalah representasi diagramatis logis dari urutan instruksi pemrosesan sistem di balik layar."
+      },
+      {
+        "text": "sketsa",
+        "isCorrect": false,
+        "rationale": "Sketsa berupa coretan tangan gambar diam di kertas yang tidak memiliki kemampuan merespons interaksi klik pengguna."
+      },
+      {
+        "text": "diagram alir",
+        "isCorrect": false,
+        "rationale": "Diagram alir sinonim dengan flowchart, bertugas memetakan sekuens logika data, bukan fungsionalitas UI."
+      }
+    ]
+  },
+  {
+    "questionNumber": 83,
+    "question": "Peranti bantu perancangan yang menggunakan sistem grid untuk mengatur tata letak elemen tampilan bertujuan untuk mencapai...",
+    "answerOptions": [
+      {
+        "text": "warna yang kontras",
+        "isCorrect": false,
+        "rationale": "Kontras warna ditentukan melalui pemilihan palet nilai heksadesimal kode warna, bukan dari penataan posisi kotak grid."
+      },
+      {
+        "text": "animasi yang halus",
+        "isCorrect": false,
+        "rationale": "Kehalusan gerakan animasi dikontrol oleh pengaturan frame rate, transition-duration, atau easing function CSS/JS."
+      },
+      {
+        "text": "keseimbangan dan keteraturan",
+        "isCorrect": true,
+        "rationale": "Sistem grid membantu menciptakan keseimbangan simetri spasial dan keteraturan dalam tata letak sehingga tampilan terlihat rapi terstruktur."
+      },
+      {
+        "text": "teks yang dinamis",
+        "isCorrect": false,
+        "rationale": "Dinamika muatan konten teks dikelola oleh integrasi data backend aplikasi (API), bukan dari kerangka grid layout."
+      }
+    ]
+  },
+  {
+    "questionNumber": 84,
+    "question": "Salah satu keuntungan menggunakan prototipe dalam perancangan tampilan adalah...",
+    "answerOptions": [
+      {
+        "text": "menghemat biaya produksi akhir",
+        "isCorrect": true,
+        "rationale": "Prototipe memungkinkan deteksi dini masalah alur interaksi, sehingga menghindari pembongkaran kode program final yang berbiaya mahal."
+      },
+      {
+        "text": "menambah kompleksitas desain",
+        "isCorrect": false,
+        "rationale": "Tujuan desain justru menyederhanakan interaksi; penambahan kompleksitas yang tidak perlu adalah hal buruk."
+      },
+      {
+        "text": "mengurangi kebutuhan evaluasi",
+        "isCorrect": false,
+        "rationale": "Sebaliknya, pembuatan prototipe justru bertujuan memfasilitasi pelaksanaan tahapan evaluasi agar berjalan berkala."
+      },
+      {
+        "text": "menjamin desain tanpa kesalahan",
+        "isCorrect": false,
+        "rationale": "Prototipe tidak menjamin hilangnya kesalahan secara mutlak, melainkan sarana memitigasi dan meminimalkan tingkat risikonya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 85,
+    "question": "Salah satu peranti bantu perancangan tampilan yang digunakan untuk membuat sketsa antarmuka secara cepat tanpa menggunakan kode pemrograman adalah...",
+    "answerOptions": [
+      {
+        "text": "Mockup",
+        "isCorrect": true,
+        "rationale": "Mockup adalah peranti bantu yang digunakan untuk merancang sketsa representasi visual statis antarmuka secara cepat tanpa logika pengodean."
+      },
+      {
+        "text": "Prototipe berfungsi penuh",
+        "isCorrect": false,
+        "rationale": "Prototipe fungsional tingkat tinggi umumnya sudah mengintegrasikan skrip kode program interaktif untuk menyimulasikan sistem asli."
+      },
+      {
+        "text": "Storyboard",
+        "isCorrect": false,
+        "rationale": "Storyboard berfokus memetakan kronologi komparatif narasi petualangan user (user journey), bukan sketsa layout satu frame halaman."
+      },
+      {
+        "text": "Diagram alir",
+        "isCorrect": false,
+        "rationale": "Diagram alir memetakan arsitektur bagan jalannya proses logika internal data, bukan wujud fisik visual halaman."
+      }
+    ]
+  },
+  {
+    "questionNumber": 86,
+    "question": "Peranti masukan yang memungkinkan pengguna mengontrol kursor dengan menggerakkan jari pada permukaan datar adalah...",
+    "answerOptions": [
+      {
+        "text": "Mouse",
+        "isCorrect": false,
+        "rationale": "Mouse digerakkan dengan menggeser fisik unit casing perangkat itu sendiri di atas permukaan meja kerja."
+      },
+      {
+        "text": "Touchpad",
+        "isCorrect": true,
+        "rationale": "Touchpad adalah peranti masukan statis yang mendeteksi geseran jari pengguna pada permukaan sensor datar untuk mengontrol koordinat kursor."
+      },
+      {
+        "text": "Trackball",
+        "isCorrect": false,
+        "rationale": "Trackball digerakkan dengan menggelindingkan bola yang tertanam tetap pada badan dudukan perangkat perangkat masukan."
+      },
+      {
+        "text": "Joystick",
+        "isCorrect": false,
+        "rationale": "Joystick memanfaatkan pergerakan tuas tongkat fisis bersumbu untuk mengendalikan arah objek (umum pada game/simulasi)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 87,
+    "question": "Keyboard yang memiliki tata letak tombol yang dirancang untuk mengurangi pergerakan jari dan meningkatkan kecepatan mengetik adalah...",
+    "answerOptions": [
+      {
+        "text": "Keyboard QWERTY",
+        "isCorrect": false,
+        "rationale": "Tata letak QWERTY awalnya didesain untuk memperlambat pengetikan pada mesin tik mekanik guna mencegah kemacetan batang pencetak."
+      },
+      {
+        "text": "Keyboard numerik",
+        "isCorrect": false,
+        "rationale": "Keyboard numerik (numpad) khusus dikhususkan untuk entri data angka kalkulasi secara cepat, bukan untuk mengetik teks alfabetis."
+      },
+      {
+        "text": "Keyboard Dvorak",
+        "isCorrect": true,
+        "rationale": "Keyboard Dvorak dirancang secara ergonomis untuk meminimalkan jarak tempuh gerakan jari dengan menempatkan huruf vokal dan konsonan terpopuler di baris tengah (home row)."
+      },
+      {
+        "text": "Keyboard virtual",
+        "isCorrect": false,
+        "rationale": "Keyboard virtual (on-screen keyboard) adalah software keyboard pada layar sentuh digital, yang layout susunannya biasanya tetap memakai QWERTY."
+      }
+    ]
+  },
+  {
+    "questionNumber": 88,
+    "question": "Peranti masukan yang menggunakan sinar cahaya untuk mendeteksi posisi objek dan sering digunakan dalam sistem pelacakan gerakan adalah...",
+    "answerOptions": [
+      {
+        "text": "Scanner",
+        "isCorrect": false,
+        "rationale": "Scanner menggunakan sensor cahaya statis untuk memindai dokumen fisik kertas menjadi duplikat berkas gambar digital."
+      },
+      {
+        "text": "Light pen",
+        "isCorrect": true,
+        "rationale": "Light pen memanfaatkan tabung penangkap sinar cahaya dari pancaran tabung CRT monitor untuk mendeteksi koordinat posisi presisi ujung pena."
+      },
+      {
+        "text": "Touch screen",
+        "isCorrect": false,
+        "rationale": "Layar sentuh modern umumnya menggunakan perubahan sensor medan kapasitif/resistif dari sentuhan kulit jari, bukan deteksi sorot sinar pena cahaya."
+      },
+      {
+        "text": "Digitizer",
+        "isCorrect": false,
+        "rationale": "Digitizer (graphics tablet) mendeteksi koordinat goresan pen stylus lewat induksi elektromagnetik pada permukaan papan pad."
+      }
+    ]
+  },
+  {
+    "questionNumber": 89,
+    "question": "Dalam interaksi manusia dan komputer, peranti masukan yang memungkinkan pengguna memberikan input melalui suara termasuk dalam kategori...",
+    "answerOptions": [
+      {
+        "text": "Peranti berbasis teks",
+        "isCorrect": false,
+        "rationale": "Peranti berbasis teks mengandalkan pengetikan karakter simbol string lewat papan ketik mekanik/elektronik."
+      },
+      {
+        "text": "Peranti berbasis penunjuk",
+        "isCorrect": false,
+        "rationale": "Peranti penunjuk (pointing device) mentranslasikan gerakan spasial motorik tangan menjadi arah kursor navigasi."
+      },
+      {
+        "text": "Peranti berbasis suara",
+        "isCorrect": true,
+        "rationale": "Peranti berbasis suara seperti mikrofon menangkap gelombang akustik vokal pengguna untuk diterjemahkan oleh sistem pengenal ucapan (speech recognition)."
+      },
+      {
+        "text": "Peranti berbasis penglihatan",
+        "isCorrect": false,
+        "rationale": "Peranti berbasis penglihatan mengandalkan sensor optis kamera (image/vision sensor) untuk mendeteksi gestur wajah atau mata."
+      }
+    ]
+  },
+  {
+    "questionNumber": 90,
+    "question": "Keunggulan utama penggunaan scanner sebagai peranti masukan adalah....",
+    "answerOptions": [
+      {
+        "text": "Mengontrol kursor secara presisi",
+        "isCorrect": false,
+        "rationale": "Scanner tidak memiliki fungsi kendali kursor navigasi UI; peran tersebut dipegang oleh peranti mouse atau trackpad."
+      },
+      {
+        "text": "Memberikan umpan balik haptik",
+        "isCorrect": false,
+        "rationale": "Umpan balik haptik (getaran fisis) diberikan oleh perangkat output khusus seperti kontroler game atau aktuator smartphone."
+      },
+      {
+        "text": "Mendeteksi gerakan tangan",
+        "isCorrect": false,
+        "rationale": "Deteksi gerakan atau gestur bebas ruang (gesture tracking) ditangani oleh peranti kamera sensor gerak seperti Leap Motion atau kinect."
+      },
+      {
+        "text": "Memasukkan data gambar atau dokumen secara digital",
+        "isCorrect": true,
+        "rationale": "Scanner bekerja optimal merubah dokumen fisik lembaran kertas, cetakan foto, maupun gambar nyata menjadi representasi data digital di komputer."
+      }
+    ]
+  },
+  {
+    "questionNumber": 91,
+    "question": "Risiko penggunaan peranti interaksi yang sering menyebabkan kelelahan otot pada pergelangan tangan akibat gerakan berulang disebut...",
+    "answerOptions": [
+      {
+        "text": "Carpal tunnel syndrome",
+        "isCorrect": true,
+        "rationale": "Carpal tunnel syndrome adalah gangguan akibat tekanan pada saraf median di pergelangan tangan, sering dipicu gerakan berulang seperti mengetik."
+      },
+      {
+        "text": "Tendonitis",
+        "isCorrect": false,
+        "rationale": "Tendonitis adalah peradangan pada tendon, meskipun bisa disebabkan gerakan berulang, deskripsi spesifik mengenai tekanan saraf median pada pergelangan tangan lebih tepat merujuk ke CTS."
+      },
+      {
+        "text": "Nyeri punggung",
+        "isCorrect": false,
+        "rationale": "Nyeri punggung disebabkan oleh posisi duduk atau kursi yang tidak ergonomis, bukan akibat gerakan berulang pada pergelangan tangan."
+      },
+      {
+        "text": "Mata kering",
+        "isCorrect": false,
+        "rationale": "Mata kering merupakan gangguan visual akibat durasi menatap layar yang terlalu lama, bukan masalah otot pergelangan tangan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 92,
+    "question": "Penggunaan mouse yang tidak ergonomis dapat meningkatkan risiko terjadinya...",
+    "answerOptions": [
+      {
+        "text": "Cedera regangan berulang",
+        "isCorrect": true,
+        "rationale": "Cedera regangan berulang (RSI) sering terjadi pada penggunaan mouse yang tidak ergonomis karena gerakan tangan yang berulang."
+      },
+      {
+        "text": "Gangguan pendengaran",
+        "isCorrect": false,
+        "rationale": "Gangguan pendengaran dipengaruhi oleh tingkat kebisingan lingkungan (desibel) atau penggunaan audio yang terlalu keras, tidak ada hubungannya dengan mouse."
+      },
+      {
+        "text": "Penglihatan kabur",
+        "isCorrect": false,
+        "rationale": "Penglihatan kabur disebabkan oleh pancaran radiasi layar, pencahayaan buruk, atau durasi kerja di depan monitor tanpa istirahat."
+      },
+      {
+        "text": "Infeksi kulit",
+        "isCorrect": false,
+        "rationale": "Infeksi kulit umumnya disebabkan oleh faktor higienis atau bakteri, bukan faktor ergonomis dari bentuk atau posisi mouse."
+      }
+    ]
+  },
+  {
+    "questionNumber": 93,
+    "question": "Risiko kesehatan akibat penggunaan keyboard yang terlalu rendah atau tinggi adalah...",
+    "answerOptions": [
+      {
+        "text": "Sakit kepala",
+        "isCorrect": false,
+        "rationale": "Sakit kepala biasanya dipicu oleh ketegangan mata atau stres visual dari layar, bukan posisi ketinggian keyboard."
+      },
+      {
+        "text": "Nyeri leher dan bahu",
+        "isCorrect": true,
+        "rationale": "Posisi keyboard yang tidak tepat menyebabkan postur tubuh yang salah dan menimbulkan nyeri pada leher serta bahu."
+      },
+      {
+        "text": "Gangguan pencernaan",
+        "isCorrect": false,
+        "rationale": "Gangguan pencernaan tidak berkaitan langsung dengan posisi mekanis penempatan keyboard kerja."
+      },
+      {
+        "text": "Vertigo",
+        "isCorrect": false,
+        "rationale": "Vertigo merupakan gangguan keseimbangan tubuh bagian dalam dan tidak dipicu secara langsung oleh posisi keyboard."
+      }
+    ]
+  },
+  {
+    "questionNumber": 94,
+    "question": "Salah satu risiko visual akibat penggunaan layar komputer dalam jangka panjang tanpa istirahat adalah...",
+    "answerOptions": [
+      {
+        "text": "Digital eye strain",
+        "isCorrect": true,
+        "rationale": "Digital eye strain adalah gangguan mata seperti mata lelah, kering, dan penglihatan kabur akibat penggunaan layar berlebihan."
+      },
+      {
+        "text": "Miopi",
+        "isCorrect": false,
+        "rationale": "Miopi (rabun jauh) merupakan kelainan refraksi mata jangka panjang yang dipengaruhi genetik dan kebiasaan, bukan sekadar efek instan tanpa istirahat."
+      },
+      {
+        "text": "Katarak",
+        "isCorrect": false,
+        "rationale": "Katarak adalah kekeruhan pada lensa mata yang umumnya berkembang karena faktor usia atau paparan sinar UV, bukan akibat layar komputer."
+      },
+      {
+        "text": "Astigmatisme",
+        "isCorrect": false,
+        "rationale": "Astigmatisme (mata silinder) disebabkan oleh kelengkupan kornea yang tidak sempurna, bukan akibat kelelahan visual jangka pendek."
+      }
+    ]
+  },
+  {
+    "questionNumber": 95,
+    "question": "Risiko penggunaan peranti interaksi berupa perangkat getar pada game dapat menyebabkan...",
+    "answerOptions": [
+      {
+        "text": "Gangguan tidur",
+        "isCorrect": false,
+        "rationale": "Gangguan tidur lebih banyak dipengaruhi oleh paparan blue light dari layar sebelum tidur, bukan oleh efek getar kontroler."
+      },
+      {
+        "text": "Penurunan pendengaran",
+        "isCorrect": false,
+        "rationale": "Penurunan pendengaran disebabkan oleh intensitas suara (volume) yang terlalu tinggi, bukan getaran mekanis pada tangan."
+      },
+      {
+        "text": "Alergi kulit",
+        "isCorrect": false,
+        "rationale": "Alergi kulit dipicu oleh material bahan perangkat atau kebersihan fisik, bukan karena efek getaran dari fitur game."
+      },
+      {
+        "text": "Kerusakan sendi tangan",
+        "isCorrect": true,
+        "rationale": "Getaran berlebihan dari perangkat game dapat menyebabkan tekanan pada sendi tangan dan berujung pada kerusakan sendi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 96,
+    "question": "Aspek penting dalam kenyamanan lingkungan kerja yang berkaitan dengan pencahayaan adalah...",
+    "answerOptions": [
+      {
+        "text": "Menggunakan lampu neon langsung mengarah ke mata",
+        "isCorrect": false,
+        "rationale": "Lampu yang langsung mengarah ke mata justru menyebabkan silau yang parah dan mempercepat kelelahan mata."
+      },
+      {
+        "text": "Mengatur pencahayaan agar tidak menimbulkan silau",
+        "isCorrect": true,
+        "rationale": "Pencahayaan yang baik harus mengurangi silau pada layar dan memberikan cahaya yang cukup untuk kenyamanan mata."
+      },
+      {
+        "text": "Menempatkan layar dengan sumber cahaya di belakang",
+        "isCorrect": false,
+        "rationale": "Sumber cahaya tepat di belakang layar akan membuat mata silau karena kontras yang terlalu tinggi saat menatap monitor."
+      },
+      {
+        "text": "Mematikan semua lampu ruangan",
+        "isCorrect": false,
+        "rationale": "Bekerja di ruangan yang gelap gulita dengan layar monitor yang terang akan meningkatkan ketegangan mata secara drastis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 97,
+    "question": "Suhu ruangan yang ideal untuk kenyamanan kerja di depan komputer adalah sekitar...",
+    "answerOptions": [
+      {
+        "text": "15-18 derajat Celcius",
+        "isCorrect": false,
+        "rationale": "Suhu 15-18 derajat terlalu dingin bagi kebanyakan orang dan dapat menyebabkan otot menjadi kaku saat mengetik."
+      },
+      {
+        "text": "30-32 derajat Celcius",
+        "isCorrect": false,
+        "rationale": "Suhu di atas 30 derajat terlalu panas, menyebabkan tubuh cepat gerah, berkeringat, dan menurunkan konsentrasi."
+      },
+      {
+        "text": "25-28 derajat Celcius",
+        "isCorrect": false,
+        "rationale": "Suhu ini cenderung hangat untuk ruang kerja komputer, terutama jika ruangan diisi oleh perangkat keras yang mengeluarkan panas tambahan."
+      },
+      {
+        "text": "20-22 derajat Celcius",
+        "isCorrect": true,
+        "rationale": "Suhu ruangan antara 20-22 derajat Celcius dianggap optimal untuk kenyamanan dan konsentrasi saat bekerja."
+      }
+    ]
+  },
+  {
+    "questionNumber": 98,
+    "question": "Posisi duduk yang ergonomis saat menggunakan komputer sebaiknya...",
+    "answerOptions": [
+      {
+        "text": "Kaki menyilang di bawah kursi",
+        "isCorrect": false,
+        "rationale": "Kaki menyilang dapat menghambat sirkulasi darah dan mengganggu keseimbangan distribusi berat badan pada panggul."
+      },
+      {
+        "text": "Lengan membentuk sudut 45 derajat",
+        "isCorrect": false,
+        "rationale": "Lengan yang baik seharusnya membentuk sudut sekitar 90 derajat agar otot lengan dan bahu tetap rileks."
+      },
+      {
+        "text": "Punggung tegak dan kaki rata di lantai",
+        "isCorrect": true,
+        "rationale": "Posisi duduk ergonomis melibatkan punggung tegak dan kaki rata di lantai untuk mengurangi tekanan pada tulang belakang."
+      },
+      {
+        "text": "Kepala menunduk ke arah layar",
+        "isCorrect": false,
+        "rationale": "Kepala menunduk menempatkan beban berat pada otot leher belakang dan dapat memicu cedera leher jangka panjang."
+      }
+    ]
+  },
+  {
+    "questionNumber": 99,
+    "question": "Tingkat kebisingan yang dapat mengganggu konsentrasi kerja di lingkungan komputer adalah di atas...",
+    "answerOptions": [
+      {
+        "text": "40 desibel",
+        "isCorrect": false,
+        "rationale": "Tingkat suara 40 desibel setara dengan area perpustakaan yang tenang, sehingga sangat ideal untuk fokus bekerja."
+      },
+      {
+        "text": "85 desibel",
+        "isCorrect": false,
+        "rationale": "85 desibel adalah batas bahaya pendengaran untuk paparan jangka panjang (tingkat pabrik), bukan sekadar batas awal gangguan konsentrasi."
+      },
+      {
+        "text": "70 desibel",
+        "isCorrect": false,
+        "rationale": "70 desibel setara dengan kebisingan jalan raya utama; tingkat konsentrasi sudah sangat terganggu sebelum mencapai angka ini."
+      },
+      {
+        "text": "55 desibel",
+        "isCorrect": true,
+        "rationale": "Tingkat kebisingan di atas 55 desibel dapat mulai mengganggu konsentrasi dan produktivitas kerja."
+      }
+    ]
+  },
+  {
+    "questionNumber": 100,
+    "question": "Salah satu cara mengurangi risiko kelelahan mata akibat penggunaan komputer adalah dengan menerapkan aturan...",
+    "answerOptions": [
+      {
+        "text": "10-10-10",
+        "isCorrect": false,
+        "rationale": "Aturan 10-10-10 bukan merupakan standar baku internasional dalam kesehatan keselamatan kerja atau oftalmologi."
+      },
+      {
+        "text": "30-30-30",
+        "isCorrect": false,
+        "rationale": "Meskipun istirahat itu baik, rumus 30-30-30 kurang populer dan tidak diakui secara luas seperti rumus 20-20-20."
+      },
+      {
+        "text": "20-20-20",
+        "isCorrect": true,
+        "rationale": "Aturan 20-20-20 menganjurkan setiap 20 menit melihat objek sejauh 20 kaki selama 20 detik untuk mengistirahatkan mata."
+      },
+      {
+        "text": "5-5-5",
+        "isCorrect": false,
+        "rationale": "Aturan 5-5-5 memberikan jeda waktu yang terlalu pendek baik untuk jarak pandang maupun durasi relaksasi otot mata."
+      }
+    ]
+  }
+]
+
+      function renderSoal() {
+    const container = document.getElementById('container');
+    soalList.forEach(soal => {
+      const soalDiv = document.createElement('div');
+      soalDiv.className = 'soal';
+      soalDiv.setAttribute('data-qnum', soal.questionNumber);
+      
+      let soalHTML = `<h3>Soal ${soal.questionNumber}.</h3>`;
+      soalHTML += `<p>${soal.question}</p>`;
+      soalHTML += `<div class="jawaban">`;
+      
+      soal.answerOptions.forEach((option, index) => {
+          const label = String.fromCharCode(65 + index); 
+          
+          soalHTML += `
+              <button 
+                  onclick="checkAnswer(this, ${soal.questionNumber}, ${option.isCorrect})"
+                  data-iscorrect="${option.isCorrect}"
+                  data-label="${label}">
+                  ${label}. ${option.text}
+              </button>
+              <div class="penjelasan-opsi">
+                <strong>Penjelasan Opsi ${label}:</strong> ${option.rationale}
+              </div>
+          `;
+      });
+      
+      soalHTML += `</div>`;
+      soalDiv.innerHTML = soalHTML;
+      container.appendChild(soalDiv);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', renderSoal);
+</script>
+
+</body>
+</html>

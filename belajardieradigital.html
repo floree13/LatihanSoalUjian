@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal Ujian</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7f6;
+      margin: 0;
+      padding: 20px 10px;
+    }
+    h1 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    .soal {
+      background: #ffffff;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 5px solid #42a5f5;
+    }
+    h3 {
+      color: #3f51b5;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .jawaban button {
+      color: #2a2a2a;
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #c5cae9;
+      background: #e8eaf6;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .jawaban button:hover:not(:disabled) {
+      background: #c5cae9;
+    }
+    .jawaban button.benar {
+      background-color: #dcf9dc;
+      border-color: #388e3c;
+      font-weight: bold;
+    }
+    .jawaban button.salah {
+      background-color: #ffcdd2;
+      border-color: #d32f2f;
+      opacity: 0.7;
+    }
+
+    .penjelasan-opsi {
+      background: #f3e5f5;
+      color: #4a148c;
+      padding: 10px;
+      margin-top: -5px;
+      margin-bottom: 15px;
+      border-radius: 0 0 8px 8px;
+      border-top: none;
+      border-left: 5px solid #7b1fa2;
+      font-size: 14px;
+      display: none;
+    }
+    .counter {
+      position: sticky;
+      bottom: 0;
+      background: #1a237e;
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 20px; }
+      .jawaban button { font-size: 14px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Latihan Soal Belajar di Era Digital UT</h1>
+
+<div id="container"></div>
+
+<div class="counter">
+  ✅ Jawaban Benar: <span id="benar">0</span> |
+  ❌ Jawaban Salah: <span id="salah">0</span>
+</div>
+
+<script>
+  let totalBenar = 0;
+  let totalSalah = 0;
+  let answeredQuestions = new Set();
+
+  function updateCounter() {
+     document.getElementById("benar").textContent = totalBenar;
+    document.getElementById("salah").textContent = totalSalah;
+  }
+
+  function checkAnswer(button, questionNumber, isCorrect) {
+      if (answeredQuestions.has(questionNumber)) {
+          return;
+      }
+
+      const soalElement = button.closest('.soal');
+      const buttons = soalElement.querySelectorAll('.jawaban button');
+      
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (isCorrect) {
+          button.classList.add('benar');
+          totalBenar++;
+      } else {
+          button.classList.add('salah');
+          totalSalah++;
+          
+          buttons.forEach(btn => {
+              if (btn.getAttribute('data-iscorrect') === 'true') {
+                  btn.classList.add('benar');
+              }
+          });
+      }
+
+      const allRationales = soalElement.querySelectorAll('.penjelasan-opsi');
+      allRationales.forEach(rationaleDiv => {
+          rationaleDiv.style.display = 'block';
+      });
+
+      answeredQuestions.add(questionNumber);
+      updateCounter();
+  }
+
+  const soalList = [
+    {
+    "questionNumber": 1,
+    "question": "Istilah \"wirausaha\" dalam bahasa Indonesia merupakan gabungan dari kata \"wira\" yang berarti berani dan kata \"usaha\" yang berarti...",
+    "answerOptions": [
+      {
+        "text": "Kegiatan produksi barang",
+        "isCorrect": false,
+        "rationale": "Produksi barang terlalu sempit karena usaha tidak hanya terbatas pada pembuatan barang fisik saja."
+      },
+      {
+        "text": "Kegiatan bisnis atau perniagaan",
+        "isCorrect": true,
+        "rationale": "Kata 'usaha' dalam kewirausahaan bermakna kegiatan bisnis atau perniagaan secara menyeluruh."
+      },
+      {
+        "text": "Kegiatan mencari keuntungan",
+        "isCorrect": false,
+        "rationale": "Mencari keuntungan adalah tujuan dari bisnis, bukan arti harfiah dari kata 'usaha' itu sendiri."
+      },
+      {
+        "text": "Kegiatan investasi modal",
+        "isCorrect": false,
+        "rationale": "Investasi modal merupakan bagian dari pendanaan bisnis, bukan arti kata 'usaha'."
+      }
+    ]
+  },
+  {
+    "questionNumber": 2,
+    "question": "Tokoh yang pertama kali memperkenalkan konsep kewirausahaan dalam konteks ekonomi pada abad ke-18 adalah...",
+    "answerOptions": [
+      {
+        "text": "Richard Cantillon",
+        "isCorrect": true,
+        "rationale": "Richard Cantillon adalah ekonom abad ke-18 yang pertama kali membawa istilah entrepreneur ke dalam literatur ekonomi lewat analisis fungsi penanggung risiko."
+      },
+      {
+        "text": "Joseph Schumpeter",
+        "isCorrect": false,
+        "rationale": "Joseph Schumpeter memperkenalkan peran wirausaha sebagai penggerak inovasi ('creative destruction') pada abad ke-20, bukan ke-18."
+      },
+      {
+        "text": "Peter Drucker",
+        "isCorrect": false,
+        "rationale": "Peter Drucker adalah bapak manajemen modern abad ke-20 yang banyak membahas inovasi praktis, bukan penemu istilah awal di abad ke-18."
+      },
+      {
+        "text": "Adam Smith",
+        "isCorrect": false,
+        "rationale": "Adam Smith dikenal dengan teori pasar bebas 'invisible hand' dan melihat wirausaha secara implisit sebagai pemilik modal, bukan yang mendefinisikan konsep kewirausahaan pertama kali."
+      }
+    ]
+  },
+  {
+    "questionNumber": 3,
+    "question": "Perkembangan kewirausahaan di era digital ditandai oleh munculnya fenomena di mana seseorang dapat membangun bisnis dengan modal sangat kecil dan skala global. Fenomena ini dikenal sebagai...",
+    "answerOptions": [
+      {
+        "text": "Franchise digital",
+        "isCorrect": false,
+        "rationale": "Franchise digital adalah duplikasi model bisnis digital yang sudah mapan, bukan istilah untuk perusahaan rintisan bermodal kecil dengan pertumbuhan global yang masif."
+      },
+      {
+        "text": "Venture capital",
+        "isCorrect": false,
+        "rationale": "Venture capital adalah institusi atau lembaga keuangan yang memberikan pendanaan/investasi kepada startup, bukan fenomena bentuk bisnisnya."
+      },
+      {
+        "text": "Startup",
+        "isCorrect": true,
+        "rationale": "Startup adalah perusahaan rintisan berbasis teknologi yang dirancang untuk tumbuh cepat dengan modal awal efisien namun memiliki daya jangkau pasar yang luas secara global."
+      },
+      {
+        "text": "E-commerce tradisional",
+        "isCorrect": false,
+        "rationale": "E-commerce tradisional biasanya merujuk pada toko online biasa yang rantai ekosistemnya masih linier dan skalabilitasnya cenderung konvensional."
+      }
+    ]
+  },
+  {
+    "questionNumber": 4,
+    "question": "Peran teknologi digital dalam keberhasilan usaha modern terutama terletak pada kemampuannya untuk...",
+    "answerOptions": [
+      {
+        "text": "Menggantikan tenaga kerja manusia sepenuhnya",
+        "isCorrect": false,
+        "rationale": "Teknologi digital mendampingi, mengotomasi, dan augmentasi tugas manusia, namun tidak menggantikan kreativitas dan empati manusia sepenuhnya."
+      },
+      {
+        "text": "Menjamin keuntungan bisnis secara otomatis",
+        "isCorrect": false,
+        "rationale": "Tidak ada teknologi yang bisa menjamin keuntungan otomatis tanpa adanya strategi bisnis, produk yang tepat, dan eksekusi yang baik."
+      },
+      {
+        "text": "Menghilangkan risiko bisnis secara total",
+        "isCorrect": false,
+        "rationale": "Risiko bisnis akan selalu ada; teknologi digital hanya membantu memitigasi atau mengelolanya, bukan menghilangkannya secara total."
+      },
+      {
+        "text": "Memperluas jangkauan pasar dan efisiensi operasional",
+        "isCorrect": true,
+        "rationale": "Teknologi digital membebaskan bisnis dari batasan geografis (memperluas pasar) serta memotong biaya operasional melalui otomatisasi proses."
+      }
+    ]
+  },
+  {
+    "questionNumber": 5,
+    "question": "Seorang wirausaha menggunakan media sosial untuk memasarkan produknya secara langsung kepada konsumen tanpa perantara. Hal ini mencerminkan manfaat teknologi digital berupa...",
+    "answerOptions": [
+      {
+        "text": "Peningkatan biaya distribusi",
+        "isCorrect": false,
+        "rationale": "Memotong perantara justru menurunkan biaya distribusi, bukan meningkatkannya."
+      },
+      {
+        "text": "Disintermediasi saluran distribusi",
+        "isCorrect": true,
+        "rationale": "Disintermediasi adalah pemotongan atau penghapusan rantai perantara (seperti agen atau grosir) sehingga produsen langsung terhubung dengan konsumen akhir."
+      },
+      {
+        "text": "Ketergantungan pada agen pemasar",
+        "isCorrect": false,
+        "rationale": "Dengan langsung menjual via media sosial, wirausaha menjadi mandiri dan tidak tergantung pada agen pemasar pihak ketiga."
+      },
+      {
+        "text": "Perpanjangan rantai pasokan",
+        "isCorrect": false,
+        "rationale": "Penjualan langsung memperpendek rantai pasokan, bukan memperpanjangnya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 6,
+    "question": "Menurut konsep kewirausahaan modern, wirausaha bukan hanya sekadar pemilik bisnis, melainkan seseorang yang mampu...",
+    "answerOptions": [
+      {
+        "text": "Menciptakan nilai baru melalui inovasi dan mengambil risiko",
+        "isCorrect": true,
+        "rationale": "Hakikat utama kewirausahaan modern berfokus pada inovasi (value creation) dan keberanian mengambil risiko yang terukur demi memecahkan masalah."
+      },
+      {
+        "text": "Mengelola keuangan perusahaan dengan ketat",
+        "isCorrect": false,
+        "rationale": "Mengelola keuangan secara ketat adalah fungsi manajerial akuntansi yang baik, namun belum tentu mencerminkan sifat inovatif wirausaha."
+      },
+      {
+        "text": "Memproduksi barang dalam jumlah besar",
+        "isCorrect": false,
+        "rationale": "Memproduksi barang massal adalah ranah manufaktur skala besar, sedangkan wirausaha bisa bergerak di skala kecil maupun sektor jasa/digital."
+      },
+      {
+        "text": "Merekrut karyawan sebanyak-banyaknya",
+        "isCorrect": false,
+        "rationale": "Jumlah karyawan yang banyak bukan indikator utama esensi wirausaha modern yang justru mengedepankan efisiensi kerja tim."
+      }
+    ]
+  },
+  {
+    "questionNumber": 7,
+    "question": "Bentuk wirausaha yang menjalankan bisnis di dalam struktur organisasi yang sudah ada disebut...",
+    "answerOptions": [
+      {
+        "text": "Social entrepreneur",
+        "isCorrect": false,
+        "rationale": "Social entrepreneur berfokus pada penyelesaian isu-isu sosial melalui model bisnis, bukan beroperasi di dalam perusahaan lain."
+      },
+      {
+        "text": "Serial entrepreneur",
+        "isCorrect": false,
+        "rationale": "Serial entrepreneur adalah individu yang mendirikan, mendewasakan, lalu menjual suatu bisnis, kemudian mendirikan bisnis baru secara berulang."
+      },
+      {
+        "text": "Intrapreneur",
+        "isCorrect": true,
+        "rationale": "Intrapreneur mengaplikasikan pola pikir, inovasi, dan aksi kewirausahaan di dalam lingkungan internal tempat ia bekerja (perusahaan mapan)."
+      },
+      {
+        "text": "Technopreneur",
+        "isCorrect": false,
+        "rationale": "Technopreneur adalah wirausaha yang membangun bisnis berbasis pemanfaatan teknologi, terlepas dari apakah itu di dalam perusahaan atau independen."
+      }
+    ]
+  },
+  {
+    "questionNumber": 8,
+    "question": "Wirausaha sosial berbeda dari wirausaha konvensional karena wirausaha sosial lebih mengutamakan...",
+    "answerOptions": [
+      {
+        "text": "Akumulasi laba sebesar-besarnya bagi pemilik",
+        "isCorrect": false,
+        "rationale": "Mengejar laba sebesar-besarnya adalah orientasi utama bisnis komersial/konvensional kapitalis."
+      },
+      {
+        "text": "Pengembangan produk teknologi tinggi",
+        "isCorrect": false,
+        "rationale": "Pengembangan teknologi tinggi merupakan fokus dari technopreneurship, bukan kewirausahaan sosial."
+      },
+      {
+        "text": "Ekspansi pasar ke luar negeri",
+        "isCorrect": false,
+        "rationale": "Ekspansi global adalah strategi pertumbuhan umum (growth strategy), bukan pembeda esensial misi sosial."
+      },
+      {
+        "text": "Penciptaan dampak sosial positif bagi masyarakat",
+        "isCorrect": true,
+        "rationale": "Tujuan dan tolok ukur kesuksesan wirausaha sosial terletak pada seberapa besar solusi bisnis mereka membawa perubahan positif bagi isu sosial masyarakat."
+      }
+    ]
+  },
+  {
+    "questionNumber": 9,
+    "question": "Karakteristik wirausaha yang mencerminkan kemampuan mempertahankan semangat dan upaya meski menghadapi kegagalan berulang disebut...",
+    "answerOptions": [
+      {
+        "text": "Kreativitas tinggi",
+        "isCorrect": false,
+        "rationale": "Kreativitas tinggi berkaitan dengan kemampuan melahirkan ide-ide baru dan unik, bukan ketahanan menghadapi kegagalan."
+      },
+      {
+        "text": "Kegigihan (persistence)",
+        "isCorrect": true,
+        "rationale": "Kegigihan (persistence) adalah sikap pantang menyerah, ulet, dan terus melangkah maju walaupun diterpa hambatan dan kegagalan berulang kali."
+      },
+      {
+        "text": "Orientasi hasil",
+        "isCorrect": false,
+        "rationale": "Orientasi hasil adalah fokus pada pencapaian target akhir, tetapi belum tentu menggambarkan ketangguhan mental saat prosesnya gagal."
+      },
+      {
+        "text": "Kepemimpinan visioner",
+        "isCorrect": false,
+        "rationale": "Kepemimpinan visioner adalah kemampuan melihat masa depan dan mengarahkan orang lain ke arah sana, bukan ketekunan individu saat jatuh."
+      }
+    ]
+  },
+  {
+    "questionNumber": 10,
+    "question": "Wirausaha yang memiliki kemampuan menganalisis peluang pasar dan mengambil keputusan berbasis data disebut memiliki karakteristik...",
+    "answerOptions": [
+      {
+        "text": "Oportunistik dan kalkulatif",
+        "isCorrect": true,
+        "rationale": "Oportunistik berarti mampu melihat peluang dengan jeli, sedangkan kalkulatif berarti menganalisis langkah berdasarkan perhitungan data dan risiko yang rasional."
+      },
+      {
+        "text": "Impulsif dan spekulatif",
+        "isCorrect": false,
+        "rationale": "Impulsif berarti bertindak tanpa pikir panjang, dan spekulatif berarti menebak risiko tanpa dasar data yang kuat."
+      },
+      {
+        "text": "Konservatif dan berhati-hati",
+        "isCorrect": false,
+        "rationale": "Konservatif cenderung menghindari perubahan dan risiko baru, bertolak belakang dengan sifat adaptif wirausaha digital."
+      },
+      {
+        "text": "Pasif dan reaktif",
+        "isCorrect": false,
+        "rationale": "Pasif dan reaktif berarti hanya menunggu kondisi berubah baru merespons, bukan tipe wirausaha yang dinamis mendahului pasar."
+      }
+    ]
+  },
+  {
+    "questionNumber": 11,
+    "question": "Seorang calon wirausaha diminta mengidentifikasi kekuatan diri sebelum memulai usaha. Tujuan utama dari langkah ini adalah...",
+    "answerOptions": [
+      {
+        "text": "Memastikan bisnis akan langsung menguntungkan",
+        "isCorrect": false,
+        "rationale": "Mengenal diri tidak menjamin keuntungan instan karena profitabilitas dipengaruhi faktor pasar, eksekusi, dan eksternal."
+      },
+      {
+        "text": "Menghindari persaingan dengan usaha lain",
+        "isCorrect": false,
+        "rationale": "Persaingan tidak bisa dihindari hanya dengan mengenal diri; persaingan dimitigasi lewat keunggulan strategi diferensiasi produk."
+      },
+      {
+        "text": "Menyelaraskan potensi diri dengan peluang usaha yang dipilih",
+        "isCorrect": true,
+        "rationale": "Mengidentifikasi kekuatan internal membantu calon wirausaha memilih bidang bisnis yang cocok dengan minat serta kompetensinya, meningkatkan peluang sukses eksekusi."
+      },
+      {
+        "text": "Mendapatkan pinjaman modal dari bank dengan mudah",
+        "isCorrect": false,
+        "rationale": "Pihak bank menilai kelayakan modal berdasarkan analisis finansial usaha (5C), bukan dari refleksi psikologis kekuatan diri sang pemilik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 12,
+    "question": "Dalam proses mengenal potensi diri, seorang wirausaha melakukan refleksi mendalam terhadap pengalaman, keahlian, dan minatnya. Proses ini paling tepat disebut sebagai...",
+    "answerOptions": [
+      {
+        "text": "Analisis SWOT eksternal",
+        "isCorrect": false,
+        "rationale": "Analisis SWOT eksternal memetakan Opportunity (Peluang) dan Threat (Ancaman) dari luar lingkungan bisnis, bukan refleksi internal pribadi."
+      },
+      {
+        "text": "Riset pasar primer",
+        "isCorrect": false,
+        "rationale": "Riset pasar primer adalah pencarian data langsung ke target konsumen di lapangan, seperti survei atau wawancara pembeli."
+      },
+      {
+        "text": "Benchmarking kompetitor",
+        "isCorrect": false,
+        "rationale": "Benchmarking kompetitor adalah membandingkan standar proses bisnis internal kita dengan standar terbaik milik perusahaan pesaing."
+      },
+      {
+        "text": "Inventarisasi sumber daya personal",
+        "isCorrect": true,
+        "rationale": "Inventarisasi sumber daya personal adalah proses mendata aset non-fisik internal diri kita sendiri, seperti rekam jejak pengalaman, skill, dan minat."
+      }
+    ]
+  },
+  {
+    "questionNumber": 13,
+    "question": "Prinsip effectuation yang dikembangkan oleh Saras Sarasvathy menekankan bahwa wirausaha ahli cenderung memulai usaha dengan...",
+    "answerOptions": [
+      {
+        "text": "Merencanakan tujuan akhir secara detail terlebih dahulu",
+        "isCorrect": false,
+        "rationale": "Merencanakan tujuan akhir secara mendetail di awal adalah karakteristik pendekatan causation, bukan effectuation."
+      },
+      {
+        "text": "Sumber daya yang tersedia saat ini",
+        "isCorrect": true,
+        "rationale": "Prinsip effectuation mengajarkan wirausaha untuk bergerak berdasarkan modal apa yang dimiliki saat ini (siapa mereka, apa yang diketahui, siapa yang dikenal)."
+      },
+      {
+        "text": "Analisis pasar komprehensif selama berbulan-bulan",
+        "isCorrect": false,
+        "rationale": "Analisis pasar yang panjang di awal merupakan pendekatan prediktif (causation) yang sering kali kurang lincah dalam merespons ketidakpastian tinggi."
+      },
+      {
+        "text": "Modal finansial yang sudah terkumpul lengkap",
+        "isCorrect": false,
+        "rationale": "Effectuation tidak mewajibkan modal finansial lengkap terkumpul dulu; usaha dijalankan secara bertahap memanfaatkan aset non-keuangan terdekat."
+      }
+    ]
+  },
+  {
+    "questionNumber": 14,
+    "question": "Salah satu prinsip effectuation adalah \"affordable loss\". Prinsip ini bermakna bahwa wirausaha sebaiknya...",
+    "answerOptions": [
+      {
+        "text": "Hanya mempertaruhkan jumlah yang siap mereka rugikan",
+        "isCorrect": true,
+        "rationale": "Affordable loss menekankan batas pengeluaran modal awal berdasarkan jumlah maksimal kerugian yang mampu ditanggung tanpa merusak stabilitas keuangan."
+      },
+      {
+        "text": "Menghitung potensi keuntungan maksimal sebelum berinvestasi",
+        "isCorrect": false,
+        "rationale": "Menghitung keuntungan maksimal merupakan cara pandang causation yang mengejar 'expected return', bukan membatasi risiko kerugian."
+      },
+      {
+        "text": "Mencari investor besar sebelum memulai usaha",
+        "isCorrect": false,
+        "rationale": "Mencari investor besar di awal bertentangan dengan semangat efisiensi modal mandiri (bootstrapping) yang melekat pada awal alur effectuation."
+      },
+      {
+        "text": "Menunggu kondisi pasar yang paling menguntungkan",
+        "isCorrect": false,
+        "rationale": "Wirausaha effectuation tidak menunggu pasar menjadi sempurna, melainkan aktif membentuk pasar dari tindakan-tindakan kecil terkendali."
+      }
+    ]
+  },
+  {
+    "questionNumber": 15,
+    "question": "Dalam prinsip effectuation, wirausaha memanfaatkan kejutan atau kendala yang tidak terduga sebagai peluang baru. Prinsip ini dikenal sebagai...",
+    "answerOptions": [
+      {
+        "text": "Bird-in-hand",
+        "isCorrect": false,
+        "rationale": "Bird-in-hand adalah prinsip memulai bisnis dengan apa yang sudah dimiliki, bukan cara merespons kejutan di tengah jalan."
+      },
+      {
+        "text": "Affordable loss",
+        "isCorrect": false,
+        "rationale": "Affordable loss berfokus pada pembatasan risiko kerugian finansial yang sanggup ditoleransi oleh wirausaha."
+      },
+      {
+        "text": "Lemonade principle",
+        "isCorrect": true,
+        "rationale": "Lemonade principle dianalogikan dari pepatah 'ketika hidup memberi lemon, buatlah lemonade'. Artinya, mengubah kejutan buruk/kejadian tak terduga menjadi peluang bernilai bisnis."
+      },
+      {
+        "text": "Crazy quilt",
+        "isCorrect": false,
+        "rationale": "Crazy quilt adalah prinsip membangun kemitraan strategis dengan pihak-pihak yang berkomitmen tanpa memandang kompetisi ketat."
+      }
+    ]
+  },
+  {
+    "questionNumber": 16,
+    "question": "Tahapan pertama dalam memulai aktivitas kewirausahaan di era digital menurut BMP adalah...",
+    "answerOptions": [
+      {
+        "text": "Mendaftarkan merek dagang secara resmi",
+        "isCorrect": false,
+        "rationale": "Pendaftaran legalitas merek dilakukan setelah konsep bisnis terbukti valid di pasar, bukan di langkah pertama."
+      },
+      {
+        "text": "Membuat prototipe produk akhir",
+        "isCorrect": false,
+        "rationale": "Prototipe tidak bisa dibuat sebelum wirausaha tahu masalah apa yang ingin diselesaikan melalui produk tersebut."
+      },
+      {
+        "text": "Menyusun laporan keuangan awal",
+        "isCorrect": false,
+        "rationale": "Menyusun keuangan awal dilakukan saat rancangan model bisnis sudah mulai terstruktur, bukan saat pencarian ide awal."
+      },
+      {
+        "text": "Mengidentifikasi masalah atau kebutuhan yang belum terpenuhi",
+        "isCorrect": true,
+        "rationale": "Langkah awal bisnis digital yang solid adalah mencari masalah riil atau kebutuhan di masyarakat; solusi atas masalah itulah yang melahirkan peluang produk."
+      }
+    ]
+  },
+  {
+    "questionNumber": 17,
+    "question": "Design thinking sebagai pendekatan dalam menemukan solusi usaha bersifat berpusat pada...",
+    "answerOptions": [
+      {
+        "text": "Kemampuan teknologi yang tersedia",
+        "isCorrect": false,
+        "rationale": "Fokus pada teknologi disebut teknologi-sentris (technology-driven), yang berisiko membuat produk canggih tetapi tidak dibutuhkan pengguna."
+      },
+      {
+        "text": "Kebutuhan dan pengalaman pengguna (manusia)",
+        "isCorrect": true,
+        "rationale": "Design thinking adalah metodologi human-centered design, artinya seluruh inovasi wajib berakar dari empati mendalam terhadap kebutuhan riil manusia/pengguna."
+      },
+      {
+        "text": "Efisiensi biaya produksi",
+        "isCorrect": false,
+        "rationale": "Efisiensi biaya produksi adalah fokus manajemen operasi konvensional (lean manufacturing), bukan fokus utama penemuan solusi inovatif awal."
+      },
+      {
+        "text": "Tren pasar yang sedang populer",
+        "isCorrect": false,
+        "rationale": "Hanya mengikuti tren pasar yang populer bersifat reaktif dan bisa membuat produk kehilangan nilai keunikan orisinalnya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 18,
+    "question": "Urutan tahapan design thinking yang benar adalah...",
+    "answerOptions": [
+      {
+        "text": "Empathize, Define, Ideate, Prototype, Test",
+        "isCorrect": true,
+        "rationale": "Urutan logis standar: Merasakan masalah pengguna (Empathize), Menentukan akar masalah (Define), Brainstorming solusi (Ideate), Membuat contoh solusi (Prototype), dan Menguji cobanya (Test)."
+      },
+      {
+        "text": "Define, Empathize, Prototype, Ideate, Test",
+        "isCorrect": false,
+        "rationale": "Salah karena Define ditaruh sebelum Empathize; kita tidak bisa mendefinisikan masalah sebelum memahami penggunanya terlebih dahulu."
+      },
+      {
+        "text": "Ideate, Define, Empathize, Test, Prototype",
+        "isCorrect": false,
+        "rationale": "Salah karena memunculkan ide solusi (Ideate) di awal sebelum memahami masalah pengguna secara langsung."
+      },
+      {
+        "text": "Prototype, Test, Empathize, Define, Ideate",
+        "isCorrect": false,
+        "rationale": "Salah karena urutannya terbalik; membuat prototipe ditaruh di awal proses sebelum riset empati dilakukan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 19,
+    "question": "Pada fase \"Ideate\" dalam design thinking, aktivitas yang paling tepat dilakukan adalah...",
+    "answerOptions": [
+      {
+        "text": "Mewawancarai pengguna untuk memahami masalah mereka",
+        "isCorrect": false,
+        "rationale": "Mewawancarai pengguna masuk ke dalam fase pertama, yaitu Empathize."
+      },
+      {
+        "text": "Menguji produk kepada kelompok pengguna target",
+        "isCorrect": false,
+        "rationale": "Menguji coba produk langsung ke pengguna masuk ke dalam fase akhir, yaitu Test."
+      },
+      {
+        "text": "Menghasilkan sebanyak mungkin alternatif solusi tanpa penilaian awal",
+        "isCorrect": true,
+        "rationale": "Tujuan utama Ideate adalah mengeksplorasi kreativitas kuantitas ide secara bebas tanpa dihakimi atau dinilai terlebih dahulu pada awal diskusi."
+      },
+      {
+        "text": "Membuat laporan keuangan proyeksi bisnis",
+        "isCorrect": false,
+        "rationale": "Proyeksi laporan keuangan merupakan analisis kelayakan ekonomi bisnis, bukan bagian dari proses penemuan ide kreatif di design thinking."
+      }
+    ]
+  },
+  {
+    "questionNumber": 20,
+    "question": "Konsumen di era digital memiliki karakteristik yang berbeda dari era sebelumnya. Salah satu perbedaan utama adalah konsumen era digital lebih...",
+    "answerOptions": [
+      {
+        "text": "Pasif dalam menerima informasi produk",
+        "isCorrect": false,
+        "rationale": "Konsumen era digital justru sangat aktif memilah informasi, bukan sekadar menerima apa adanya dari produsen."
+      },
+      {
+        "text": "Bergantung pada iklan televisi untuk keputusan beli",
+        "isCorrect": false,
+        "rationale": "Konsumen era digital lebih mempercayai ulasan online, rating media sosial, atau rekomendasi komunitas digital daripada iklan TV."
+      },
+      {
+        "text": "Loyal terhadap satu merek tanpa membandingkan alternatif",
+        "isCorrect": false,
+        "rationale": "Kemudahan akses internet membuat loyalitas konsumen digital lebih dinamis karena mereka mudah tergiur membandingkan alternatif brand lain."
+      },
+      {
+        "text": "Aktif mencari informasi dan membandingkan produk sebelum membeli",
+        "isCorrect": true,
+        "rationale": "Ketersediaan mesin pencari dan e-commerce membuat konsumen bertindak cerdas mencari perbandingan harga, spesifikasi, dan ulasan sebelum bertransaksi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 21,
+    "question": "Segmentasi pasar adalah proses membagi pasar menjadi kelompok-kelompok konsumen berdasarkan karakteristik tertentu. Tujuan utama segmentasi bagi wirausaha adalah...",
+    "answerOptions": [
+      {
+        "text": "Memproduksi produk dalam jumlah sebanyak mungkin",
+        "isCorrect": false,
+        "rationale": "Memproduksi sebanyak mungkin merupakan tujuan ekonomis skala besar (mass production), bukan esensi pembagian segmen pasar."
+      },
+      {
+        "text": "Merancang penawaran yang lebih relevan bagi kelompok konsumen tertentu",
+        "isCorrect": true,
+        "rationale": "Dengan memetakan segmen spesifik, wirausaha dapat menyesuaikan produk dan gaya komunikasi pemasaran agar tepat sasaran menjawab keunikan kelompok tersebut."
+      },
+      {
+        "text": "Mengurangi jumlah kompetitor di pasar",
+        "isCorrect": false,
+        "rationale": "Segmentasi tidak bisa menghilangkan atau mengurangi jumlah kompetitor yang ada di luar sana secara fisik."
+      },
+      {
+        "text": "Menetapkan harga seragam untuk semua konsumen",
+        "isCorrect": false,
+        "rationale": "Segmentasi justru sering kali memicu diferensiasi harga (price discrimination) agar sesuai dengan daya beli masing-masing kelompok konsumen."
+      }
+    ]
+  },
+  {
+    "questionNumber": 22,
+    "question": "Value Proposition Canvas digunakan wirausaha untuk memastikan bahwa produk atau layanan yang ditawarkan sesuai dengan...",
+    "answerOptions": [
+      {
+        "text": "Pekerjaan, hambatan, dan manfaat yang diinginkan konsumen",
+        "isCorrect": true,
+        "rationale": "Value Proposition Canvas menyelaraskan sisi produk (value proposition) dengan sisi profil pelanggan (customer jobs, pains, dan gains) agar tercipta product-market fit."
+      },
+      {
+        "text": "Kapasitas produksi dan struktur biaya perusahaan",
+        "isCorrect": false,
+        "rationale": "Kapasitas produksi dan struktur biaya dibahas dalam Business Model Canvas (blok Key Activities dan Cost Structure), bukan pada fokus pemetaan nilai pelanggan."
+      },
+      {
+        "text": "Regulasi pemerintah dan standar industri",
+        "isCorrect": false,
+        "rationale": "Kepatuhan regulasi adalah faktor kepatuhan hukum eksternal, bukan elemen pemetaan kanvas proposisi nilai konsumen."
+      },
+      {
+        "text": "Jumlah investor dan besarnya modal yang tersedia",
+        "isCorrect": false,
+        "rationale": "Ketersediaan modal investor tidak dipetakan dalam Value Proposition Canvas yang murni berfokus pada keselarasan produk dan solusi konsumen."
+      }
+    ]
+  },
+  {
+    "questionNumber": 23,
+    "question": "Seorang wirausaha menemukan bahwa konsumennya mengeluhkan proses pembayaran yang rumit di aplikasinya. Dalam Value Proposition Canvas, keluhan ini dikategorikan sebagai...",
+    "answerOptions": [
+      {
+        "text": "Customer gains",
+        "isCorrect": false,
+        "rationale": "Customer gains adalah hasil positif atau keuntungan yang diharapkan dan dicari oleh pelanggan dari sebuah solusi."
+      },
+      {
+        "text": "Value creators",
+        "isCorrect": false,
+        "rationale": "Value creators terletak di sisi perusahaan, yaitu bagaimana fitur produk menciptakan keuntungan ekstra bagi pelanggan."
+      },
+      {
+        "text": "Customer pains",
+        "isCorrect": true,
+        "rationale": "Customer pains mencakup segala sesuatu yang mengganggu, menyulitkan, mengesalkan, atau menjadi hambatan bagi pelanggan sebelum, selama, dan setelah menyelesaikan tugasnya."
+      },
+      {
+        "text": "Products and services",
+        "isCorrect": false,
+        "rationale": "Products and services adalah daftar produk atau layanan fisik/digital yang ditawarkan wirausaha kepada konsumen."
+      }
+    ]
+  },
+  {
+    "questionNumber": 24,
+    "question": "Business Model Canvas (BMC) terdiri dari sembilan blok bangunan. Blok yang menggambarkan cara perusahaan menciptakan, menyampaikan, dan menangkap nilai adalah...",
+    "answerOptions": [
+      {
+        "text": "Key activities saja",
+        "isCorrect": false,
+        "rationale": "Key activities hanya menggambarkan aktivitas operasional internal utama perusahaan saja, belum mencakup aspek pengantaran nilai atau keuangan."
+      },
+      {
+        "text": "Revenue streams saja",
+        "isCorrect": false,
+        "rationale": "Revenue streams hanya berfokus pada cara perusahaan menangkap nilai finansial dari pelanggan, mengabaikan cara pembuatan dan pengantaran nilainya."
+      },
+      {
+        "text": "Customer segments saja",
+        "isCorrect": false,
+        "rationale": "Customer segments hanya menerangkan siapa target pasarnya, bukan mekanisme operasional penciptaan nilai bisnis."
+      },
+      {
+        "text": "Keseluruhan sembilan blok secara terintegrasi",
+        "isCorrect": true,
+        "rationale": "Definisi dari Business Model Canvas adalah sebuah peta holistik di mana kesembilan blok saling terhubung menceritakan strategi bisnis dalam menciptakan, mengantarkan, dan menangkap nilai."
+      }
+    ]
+  },
+  {
+    "questionNumber": 25,
+    "question": "Dalam Business Model Canvas, blok \"Key Partners\" menggambarkan...",
+    "answerOptions": [
+      {
+        "text": "Jaringan pemasok dan mitra yang membuat model bisnis berfungsi",
+        "isCorrect": true,
+        "rationale": "Key Partners merinci aliansi pihak eksternal (supplier, vendor, rekan kolaborasi resmi) yang menyokong operasional bisnis agar berjalan optimal dan minim risiko."
+      },
+      {
+        "text": "Kelompok pelanggan yang paling menguntungkan perusahaan",
+        "isCorrect": false,
+        "rationale": "Kelompok pelanggan yang menguntungkan dipetakan di dalam blok Customer Segments."
+      },
+      {
+        "text": "Sumber-sumber pendapatan utama perusahaan",
+        "isCorrect": false,
+        "rationale": "Sumber-sumber penghasil uang dari pelanggan dipetakan di dalam blok Revenue Streams."
+      },
+      {
+        "text": "Aktivitas produksi inti yang dilakukan perusahaan",
+        "isCorrect": false,
+        "rationale": "Daftar kegiatan operasional produksi inti dipetakan di dalam blok Key Activities."
+      }
+    ]
+  },
+  {
+    "questionNumber": 26,
+    "question": "Sebuah platform e-commerce memperoleh pendapatan dari komisi setiap transaksi yang terjadi di platformnya. Dalam BMC, mekanisme ini termasuk jenis revenue stream berupa...",
+    "answerOptions": [
+      {
+        "text": "Licensing fee",
+        "isCorrect": false,
+        "rationale": "Licensing fee adalah biaya lisensi hak kekayaan intelektual agar pihak lain boleh menggunakan hak cipta tersebut."
+      },
+      {
+        "text": "Subscription fee",
+        "isCorrect": false,
+        "rationale": "Subscription fee adalah biaya berlangganan berulang (per bulan/tahun) untuk akses konstan ke suatu layanan bisnis."
+      },
+      {
+        "text": "Brokerage fee",
+        "isCorrect": true,
+        "rationale": "Brokerage fee merupakan biaya komisi penengah yang didapatkan perantara karena telah sukses mempertemukan dan memfasilitasi transaksi antar dua pihak."
+      },
+      {
+        "text": "Asset sale",
+        "isCorrect": false,
+        "rationale": "Asset sale adalah penjualan hak kepemilikan atas suatu barang fisik secara penuh kepada pembeli."
+      }
+    ]
+  },
+  {
+    "questionNumber": 27,
+    "question": "Permodelan bisnis menggunakan BMC memiliki keunggulan dibandingkan rencana bisnis konvensional karena BMC...",
+    "answerOptions": [
+      {
+        "text": "Menyajikan proyeksi keuangan yang lebih akurat",
+        "isCorrect": false,
+        "rationale": "BMC tidak menampilkan angka-angka tabel akuntansi keuangan mendetail; proyeksi mendalam tetap butuh dokumen pendukung finansial khusus."
+      },
+      {
+        "text": "Memberikan gambaran bisnis secara visual, ringkas, dan mudah diubah",
+        "isCorrect": true,
+        "rationale": "Keunggulan utama BMC terletak pada lembar satu halamannya yang sangat visual, interaktif untuk diubah (pivoting), dan mudah dipahami tim dengan cepat."
+      },
+      {
+        "text": "Menggantikan kebutuhan akan analisis pasar yang mendalam",
+        "isCorrect": false,
+        "rationale": "BMC tidak menggantikan analisis pasar; kanvas ini justru membutuhkan input berbasis data riset pasar yang valid agar isinya tidak sekadar asumsi tebakan."
+      },
+      {
+        "text": "Berfokus pada aspek hukum dan kepatuhan regulasi",
+        "isCorrect": false,
+        "rationale": "BMC berfokus pada logika komersial bisnis, bukan dokumen kepatuhan hukum legalitas perusahaan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 28,
+    "question": "Blue Ocean Strategy dikembangkan oleh W. Chan Kim dan Renee Mauborgne. Konsep \"samudra biru\" merujuk pada...",
+    "answerOptions": [
+      {
+        "text": "Pasar yang sudah penuh sesak dengan kompetitor",
+        "isCorrect": false,
+        "rationale": "Pasar padat kompetitor yang berdarah-darah karena perang harga disebut dengan istilah Samudra Merah (Red Ocean)."
+      },
+      {
+        "text": "Strategi memenangkan perang harga di pasar yang ada",
+        "isCorrect": false,
+        "rationale": "Perang harga di pasar yang sudah ada merupakan ciri khas persaingan konvensional di wilayah samudra merah."
+      },
+      {
+        "text": "Pendekatan diferensiasi produk dari kompetitor utama",
+        "isCorrect": false,
+        "rationale": "Sekadar membedakan diri dari kompetitor utama di pasar lama masih termasuk pertarungan samudra merah jika industrinya tidak dirubah fundamentalnya."
+      },
+      {
+        "text": "Ruang pasar baru yang belum diperebutkan dan bebas persaingan",
+        "isCorrect": true,
+        "rationale": "Samudra Biru menggambarkan penciptaan industri baru atau ruang pasar tanpa kompetisi yang memicu munculnya permintaan baru di masyarakat."
+      }
+    ]
+  },
+  {
+    "questionNumber": 29,
+    "question": "Alat analisis utama dalam Blue Ocean Strategy yang digunakan untuk membandingkan faktor-faktor kompetisi antara industri yang ada dengan samudra biru yang potensial adalah...",
+    "answerOptions": [
+      {
+        "text": "Strategy canvas (kanvas strategi)",
+        "isCorrect": true,
+        "rationale": "Kanvas strategi memetakan faktor kompetisi industri pada sumbu horizontal dan tingkat penawaran pada sumbu vertikal untuk melukiskan kurva nilai pembeda."
+      },
+      {
+        "text": "Value Proposition Canvas",
+        "isCorrect": false,
+        "rationale": "Value Proposition Canvas dipelopori Alexander Osterwalder untuk melihat kecocokan produk dengan profil pembeli, bukan alat khusus Blue Ocean."
+      },
+      {
+        "text": "Business Model Canvas",
+        "isCorrect": false,
+        "rationale": "Business Model Canvas dipakai untuk memetakan sembilan blok model bisnis internal, bukan khusus mengukur grafik faktor persaingan eksternal Blue Ocean."
+      },
+      {
+        "text": "Analisis SWOT",
+        "isCorrect": false,
+        "rationale": "SWOT adalah kerangka umum klasik untuk melihat kekuatan, kelemahan, peluang, dan ancaman, bukan alat visual pemetaan kurva nilai strategi baru."
+      }
+    ]
+  },
+  {
+    "questionNumber": 30,
+    "question": "Kerangka HTML empat tindakan (Four Actions Framework) dalam Blue Ocean Strategy terdiri dari empat pertanyaan kunci, yaitu...",
+    "answerOptions": [
+      {
+        "text": "Produksi, distribusi, promosi, dan penetapan harga",
+        "isCorrect": false,
+        "rationale": "Opsi ini merupakan pilar dari bauran pemasaran klasik atau Marketing Mix (4P)."
+      },
+      {
+        "text": "Segmentasi, targeting, positioning, dan diferensiasi",
+        "isCorrect": false,
+        "rationale": "Opsi ini adalah langkah dasar strategi pemasaran inti (STPD) dalam manajemen pemasaran umum."
+      },
+      {
+        "text": "Hapuskan, kurangi, tingkatkan, dan ciptakan",
+        "isCorrect": true,
+        "rationale": "Four Actions Framework menuntut bisnis mendobrak industri lewat aksi: Eliminate (Hapus), Reduce (Kurangi), Raise (Tingkatkan), dan Create (Ciptakan)."
+      },
+      {
+        "text": "Analisis, rencanakan, implementasikan, dan evaluasi",
+        "isCorrect": false,
+        "rationale": "Ini merupakan siklus standar dari tahapan fungsi manajemen operasional umum (PDCA/manajerial)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 31,
+    "question": "Proses peluncuran usaha di era digital sangat dipengaruhi oleh konsep Minimum Viable Product (MVP). MVP dapat didefinisikan sebagai...",
+    "answerOptions": [
+      {
+        "text": "Produk final yang sudah sempurna dan siap dijual massal",
+        "isCorrect": false,
+        "rationale": "Produk final yang sempurna membutuhkan biaya dan waktu lama, berlawanan dengan esensi dasar MVP yang serba taktis dan hemat."
+      },
+      {
+        "text": "Versi produk paling sederhana yang dapat diuji kepada pelanggan nyata",
+        "isCorrect": true,
+        "rationale": "MVP sengaja dibuat hanya dengan fitur-fitur esensial minimum agar dapat dilepas segera ke pasar nyata guna divalidasi responnya oleh konsumen asli."
+      },
+      {
+        "text": "Produk dengan fitur terlengkap di kelasnya",
+        "isCorrect": false,
+        "rationale": "Fitur terlengkap di kelasnya adalah produk premium matang, bukan versi rintisan minimum."
+      },
+      {
+        "text": "Prototipe yang hanya diuji secara internal oleh tim pendiri",
+        "isCorrect": false,
+        "rationale": "MVP wajib berinteraksi dengan pasar luar/konsumen riil; jika hanya dites internal oleh pendiri, fungsinya sebatas uji coba laboratorium teknologi biasa."
+      }
+    ]
+  },
+  {
+    "questionNumber": 32,
+    "question": "Dalam metodologi lean startup, siklus \"Build-Measure-Learn\" bertujuan untuk...",
+    "answerOptions": [
+      {
+        "text": "Memperpanjang fase perencanaan sebelum produk diluncurkan",
+        "isCorrect": false,
+        "rationale": "Metodologi lean justru memotong habis fase perencanaan teoretis yang terlalu panjang agar tidak membuang waktu eksekusi lapangan."
+      },
+      {
+        "text": "Memastikan semua fitur selesai sebelum diuji ke pasar",
+        "isCorrect": false,
+        "rationale": "Menunggu semua fitur selesai berisiko membuat produk gagal total di pasar jika ternyata fitur tersebut tidak diinginkan pembeli."
+      },
+      {
+        "text": "Memaksimalkan anggaran pemasaran pada peluncuran pertama",
+        "isCorrect": false,
+        "rationale": "Lean startup menganjurkan penghematan biaya pemasaran di awal sampai produk terbukti tervalidasi kecocokannya dengan pasar."
+      },
+      {
+        "text": "Mempercepat pembelajaran dan iterasi produk berdasarkan data nyata",
+        "isCorrect": true,
+        "rationale": "Tujuan siklus ini adalah membuat produk cepat (Build), mengukur data respon pasarnya (Measure), lalu belajar dari evaluasi tersebut (Learn) untuk perbaikan terus-menerus."
+      }
+    ]
+  },
+  {
+    "questionNumber": 33,
+    "question": "Shared leadership dalam konteks pengelolaan usaha di era digital berarti kepemimpinan...",
+    "answerOptions": [
+      {
+        "text": "Didistribusikan kepada anggota tim sesuai keahlian dan situasi",
+        "isCorrect": true,
+        "rationale": "Shared leadership mengikis sistem bos tunggal kaku; peran memimpin bergeser secara cair kepada anggota tim yang paling kompeten menangani situasi spesifik tertentu."
+      },
+      {
+        "text": "Dikendalikan oleh satu orang pemimpin tertinggi secara mutlak",
+        "isCorrect": false,
+        "rationale": "Kendali mutlak satu orang merupakan gaya kepemimpinan otoriter atau autokratis konvensional."
+      },
+      {
+        "text": "Dirotasi secara berkala berdasarkan jadwal yang sudah ditentukan",
+        "isCorrect": false,
+        "rationale": "Rotasi kepemimpinan terjadwal kaku seperti arisan jabatan kurang efektif karena kepemimpinan bersama harus mengalir adaptif sesuai tuntutan masalah, bukan kalender."
+      },
+      {
+        "text": "Diserahkan kepada konsultan eksternal yang independen",
+        "isCorrect": false,
+        "rationale": "Konsultan luar hanya bertindak memberi masukan saran strategi, tidak memegang kendali kepemimpinan tim internal bisnis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 34,
+    "question": "Keunggulan shared leadership dibandingkan kepemimpinan tradisional dalam bisnis digital adalah...",
+    "answerOptions": [
+      {
+        "text": "Mengurangi jumlah keputusan yang perlu diambil oleh tim",
+        "isCorrect": false,
+        "rationale": "Jumlah keputusan tidak berkurang; cara pendistribusian dan pembagian beban pengambilan keputusan yang berubah menjadi lebih merata."
+      },
+      {
+        "text": "Mempermudah pengawasan kinerja individu anggota tim",
+        "isCorrect": false,
+        "rationale": "Shared leadership mengutamakan rasa percaya dan otonomi mandiri, bukan fokus pada pengawasan ketat hierarki mikro manajemen."
+      },
+      {
+        "text": "Meningkatkan fleksibilitas dan kemampuan adaptasi tim terhadap perubahan cepat",
+        "isCorrect": true,
+        "rationale": "Tanpa perlu menunggu birokrasi persetujuan atasan tunggal, anggota tim bisa merespons dinamika digital yang serba cepat secara lincah."
+      },
+      {
+        "text": "Memastikan hanya satu orang yang bertanggung jawab atas setiap keputusan",
+        "isCorrect": false,
+        "rationale": "Shared leadership justru mengedepankan asas tanggung jawab kolektif bersama (shared accountability) atas hasil kerja tim."
+      }
+    ]
+  },
+  {
+    "questionNumber": 35,
+    "question": "Dalam pembentukan tim yang efektif untuk usaha di era digital, keberagaman (diversity) anggota tim diprioritaskan karena...",
+    "answerOptions": [
+      {
+        "text": "Memenuhi persyaratan hukum ketenagakerjaan",
+        "isCorrect": false,
+        "rationale": "Memenuhi aturan hukum adalah bentuk kepatuhan administrasi negara, bukan motif internal strategis untuk memicu performa kreativitas bisnis."
+      },
+      {
+        "text": "Menghindari dominasi satu kelompok dalam pengambilan keputusan",
+        "isCorrect": false,
+        "rationale": "Mencegah dominasi kelompok adalah dampak sosial positifnya, tetapi tujuan utama bisnis adalah pemanfaatan variasi sudut pandang demi inovasi."
+      },
+      {
+        "text": "Mempermudah koordinasi karena semua anggota memiliki perspektif berbeda",
+        "isCorrect": false,
+        "rationale": "Sebaliknya, perbedaan perspektif di awal justru membuat koordinasi lebih menantang dan memakan waktu dibanding kelompok yang seragam."
+      },
+      {
+        "text": "Menghasilkan perspektif dan solusi yang lebih beragam dan inovatif",
+        "isCorrect": true,
+        "rationale": "Perbedaan latar belakang, keahlian, dan kultur melahirkan kekayaan opsi sudut pandang pemecahan masalah yang kreatif sehingga produk akhir lebih inovatif."
+      }
+    ]
+  },
+  {
+    "questionNumber": 36,
+    "question": "Fase pembentukan tim menurut model Tuckman dimulai dari tahap \"forming\". Pada tahap ini, anggota tim cenderung...",
+    "answerOptions": [
+      {
+        "text": "Mengalami konflik dan persaingan antar anggota",
+        "isCorrect": false,
+        "rationale": "Adanya konflik terbuka dan benturan ego antar individu merupakan tanda dari fase kedua Tuckman, yaitu Storming."
+      },
+      {
+        "text": "Bersikap sopan, hati-hati, dan masih saling mengenal",
+        "isCorrect": true,
+        "rationale": "Tahap forming adalah tahap orientasi awal di mana semua orang masih beradaptasi, menjaga sikap, bersikap normatif, dan canggung karena belum kenal dekat."
+      },
+      {
+        "text": "Bekerja secara mandiri dengan produktivitas tinggi",
+        "isCorrect": false,
+        "rationale": "Kerja otonom berproduktivitas tinggi terjadi pada fase lanjut kematangan tim, yaitu Performing."
+      },
+      {
+        "text": "Memiliki norma dan pola kerja yang sudah terbentuk kuat",
+        "isCorrect": false,
+        "rationale": "Terbentuknya aturan main, norma kelompok, dan kesepakatan pola kerja teratur adalah ciri dari fase Norming."
+      }
+    ]
+  },
+  {
+    "questionNumber": 37,
+    "question": "Strategi pengelolaan merek (branding) di era digital berbeda dari era konvensional karena merek kini dibangun melalui...",
+    "answerOptions": [
+      {
+        "text": "Interaksi dua arah antara merek dan konsumen secara real-time",
+        "isCorrect": true,
+        "rationale": "Branding digital hidup dari percakapan langsung sosial media, penanganan komplain cepat, dan keterlibatan komunitas konsumen secara dua arah saat itu juga."
+      },
+      {
+        "text": "Iklan television dan radio yang mahal dan masif",
+        "isCorrect": false,
+        "rationale": "Iklan massal TV/radio adalah corong utama pemasaran konvensional satu arah masa lalu yang berbiaya sangat tinggi."
+      },
+      {
+        "text": "Distribusi brosur dan katalog fisik secara luas",
+        "isCorrect": false,
+        "rationale": "Pembagian brosur cetak kertas merupakan taktik pemasaran luar jaringan (offline) tradisional."
+      },
+      {
+        "text": "Penempatan produk di rak toko dengan lokasi strategis",
+        "isCorrect": false,
+        "rationale": "Penataan rak fisik (trade marketing) adalah fokus utama distribusi gerai retail luring konvensional, bukan esensi brand digital."
+      }
+    ]
+  },
+  {
+    "questionNumber": 38,
+    "question": "Penetapan posisi pasar (market positioning) bertujuan agar konsumen memiliki persepsi yang jelas dan berbeda tentang produk dibandingkan pesaing. Hal ini paling tepat dicapai melalui...",
+    "answerOptions": [
+      {
+        "text": "Menetapkan harga terendah di kelasnya",
+        "isCorrect": false,
+        "rationale": "Harga termurah (cost leadership) adalah taktik perang harga yang mudah ditiru dan belum tentu membangun persepsi nilai jangka panjang yang unik."
+      },
+      {
+        "text": "Memproduksi barang dalam volume terbesar",
+        "isCorrect": false,
+        "rationale": "Volume produksi besar berdampak pada skala ekonomi industri internal, bukan otomatis merubah citra psikologis di benak konsumen."
+      },
+      {
+        "text": "Mengkomunikasikan keunggulan unik yang relevan bagi segmen target",
+        "isCorrect": true,
+        "rationale": "Positioning yang berhasil dibangun dengan menonjolkan satu nilai unik (Unique Selling Proposition) yang sangat dibutuhkan oleh target pasar khusus kita."
+      },
+      {
+        "text": "Meniru strategi merek pemimpin pasar secara tepat",
+        "isCorrect": false,
+        "rationale": "Meniru mentah-mentah pemimpin pasar (me-too product) justru membuat brand tenggelam dan kehilangan identitas pembeda di mata konsumen."
+      }
+    ]
+  },
+  {
+    "questionNumber": 39,
+    "question": "Dalam perencanaan penjualan di era digital, konsep \"sales funnel\" menggambarkan proses...",
+    "answerOptions": [
+      {
+        "text": "Produksi barang dari bahan baku hingga produk jadi",
+        "isCorrect": false,
+        "rationale": "Alur pengolahan bahan mentah menjadi produk jadi merupakan rantai nilai manufaktur atau Supply Chain Management."
+      },
+      {
+        "text": "Pengiriman produk dari gudang ke tangan konsumen",
+        "isCorrect": false,
+        "rationale": "Proses perpindahan barang fisik ke tangan konsumen adalah bagian dari sistem manajemen logistik distribusi."
+      },
+      {
+        "text": "Pengelolaan keuangan dari pendapatan hingga laba bersih",
+        "isCorrect": false,
+        "rationale": "Alur pencatatan dari omset gross hingga net profit berada dalam sistem siklus laporan keuangan laba rugi akuntansi."
+      },
+      {
+        "text": "Perjalanan calon pelanggan dari sadar merek hingga melakukan pembelian",
+        "isCorrect": true,
+        "rationale": "Sales funnel (corong penjualan) memetakan konversi audiens dari sekadar tahu brand (Awareness), tertarik (Interest), berminat (Desire), sampai membeli produk (Action)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 40,
+    "question": "Seorang wirausaha membandingkan pendekatan causation (perencanaan berbasis tujuan) dan effectuation (berangkat dari sumber daya yang ada). Perbedaan mendasar antara keduanya terletak pada...",
+    "answerOptions": [
+      {
+        "text": "Causation lebih sering digunakan oleh wirausaha pemula daripada yang berpengalaman",
+        "isCorrect": false,
+        "rationale": "Sebenarnya terbalik; riset membuktikan wirausaha pemula cenderung dipaksa pakai model causation terstruktur di kelas, sedangkan wirausaha kawakan alami memakai effectuation."
+      },
+      {
+        "text": "Causation bertolak dari tujuan yang sudah ditetapkan, effectuation bertolak dari sarana yang tersedia",
+        "isCorrect": true,
+        "rationale": "Pembeda utama: Causation menetapkan gol final dulu baru mengumpulkan alat mencapainya. Effectuation melihat inventaris alat yang dipegang dulu baru merancang gol adaptif dari sana."
+      },
+      {
+        "text": "Effectuation selalu menghasilkan keuntungan lebih besar daripada causation",
+        "isCorrect": false,
+        "rationale": "Kedua metode punya plus minus; tidak ada jaminan mutlak metode mana yang otomatis menghasilkan profit nominal uang lebih melimpah."
+      },
+      {
+        "text": "Causation tidak memerlukan analisis pasar sedangkan effectuation memerlukan riset mendalam",
+        "isCorrect": false,
+        "rationale": "Pernyataan ini terbalik; causation sangat bertumpu pada prediksi riset pasar kuantitatif mendalam di awal, sedangkan effectuation lebih banyak aksi eksperimen riil langsung."
+      }
+    ]
+  },
+  {
+    "questionNumber": 41,
+    "question": "Seorang wirausaha muda ingin memasuki pasar kuliner namun tidak tahu harus mulai dari mana. Berdasarkan prinsip bird-in-hand dalam effectuation, langkah pertama yang paling tepat adalah...",
+    "answerOptions": [
+      {
+        "text": "Melakukan riset pasar selama satu tahun sebelum membuka bisnis",
+        "isCorrect": false,
+        "rationale": "Riset pasar satu tahun menghabiskan waktu terlalu lama dan merupakan wujud pola pikir prediksi causation kaku."
+      },
+      {
+        "text": "Menggunakan modal sebesar mungkin sebelum memulai",
+        "isCorrect": false,
+        "rationale": "Mencari modal ekstrim di awal berbahaya dan melanggar esensi kemandirian aset kecil terdekat yang diusung effectuation."
+      },
+      {
+        "text": "Menginventarisasi keahlian memasak, jaringan, dan sumber daya yang sudah dimiliki",
+        "isCorrect": true,
+        "rationale": "Prinsip 'burung di tangan' mewajibkan wirausaha mendata aset yang ada sekarang: bakat sendiri (what I know), teman dekat (who I know), dan modal internal saat ini."
+      },
+      {
+        "text": "Langsung mendirikan restoran berskala besar untuk menunjukkan keseriusan",
+        "isCorrect": false,
+        "rationale": "Membuka restoran megah di awal tanpa validasi pasar dapat memicu kebangkrutan fatal jika terjadi kesalahan konsep (tidak patuh affordable loss)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 42,
+    "question": "Sebuah startup teknologi menganalisis model bisnisnya dan menemukan bahwa biaya akuisisi pelanggan jauh lebih tinggi dari nilai seumur hidup pelanggan tersebut. Kondisi ini mengindikasikan...",
+    "answerOptions": [
+      {
+        "text": "Model bisnis tidak berkelanjutan dan perlu direvisi secara mendasar",
+        "isCorrect": true,
+        "rationale": "Jika Customer Acquisition Cost (CAC) lebih mahal dari Customer Lifetime Value (CLV), perusahaan merugi tiap kali menjaring pengguna baru. Bisnis ini bocor secara finansial."
+      },
+      {
+        "text": "Perusahaan sedang dalam fase pertumbuhan yang normal dan sehat",
+        "isCorrect": false,
+        "rationale": "Kondisi biaya akuisisi boncos permanen dibanding nilai belanja pembeli adalah penyakit bisnis yang kronis, bukan tanda pertumbuhan sehat."
+      },
+      {
+        "text": "Tim pemasaran perlu ditambah lebih banyak tenaga kerja",
+        "isCorrect": false,
+        "rationale": "Menambah karyawan pemasaran justru berpotensi membengkakkan pengeluaran CAC jika konversi dan retensi produknya belum diperbaiki."
+      },
+      {
+        "text": "Harga produk sudah terlalu tinggi dan perlu diturunkan segera",
+        "isCorrect": false,
+        "rationale": "Jika harga diturunkan tanpa merubah retensi, nilai sumbangsih CLV justru akan makin anjlok memperlebar jurang kerugian keuangan perusahaan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 43,
+    "question": "Dua wirausaha berdebat tentang strategi pertumbuhan bisnis digital mereka. Wirausaha A ingin bertahan di segmen yang ada dengan terus meningkatkan kualitas, sementara wirausaha B ingin menciptakan kategori produk baru yang belum ada. Strategi wirausaha B lebih mencerminkan pendekatan...",
+    "answerOptions": [
+      {
+        "text": "Red ocean strategy",
+        "isCorrect": false,
+        "rationale": "Red ocean strategy berfokus pada pertarungan mengalahkan lawan di industri pasar tradisional yang sudah mapan dan padat."
+      },
+      {
+        "text": "Cost leadership strategy",
+        "isCorrect": false,
+        "rationale": "Cost leadership adalah strategi memangkas biaya internal agar bisa menjual dengan harga termurah di pasar lama."
+      },
+      {
+        "text": "Market penetration strategy",
+        "isCorrect": false,
+        "rationale": "Penetrasi pasar adalah usaha menjual lebih banyak produk lama ke target pasar lama lewat promosi gencar."
+      },
+      {
+        "text": "Blue ocean strategy",
+        "isCorrect": true,
+        "rationale": "Langkah menciptakan kategori industri baru atau keunikan inovasi nilai yang membuat kompetisi usang adalah esensi sejati dari strategi Samudra Biru."
+      }
+    ]
+  },
+  {
+    "questionNumber": 44,
+    "question": "Sebuah usaha kuliner rumahan mulai membangun presence digital dengan membuat konten resep di media sosial tanpa menyebut nama merek. Berdasarkan strategi pemasaran digital, pendekatan ini merupakan contoh...",
+    "answerOptions": [
+      {
+        "text": "Pemasaran berbayar melalui iklan digital",
+        "isCorrect": false,
+        "rationale": "Pemasaran berbayar (paid ads) memanfaatkan penayangan iklan berbayar Google/FB Ads secara langsung, bukan pembuatan konten edukasi organik."
+      },
+      {
+        "text": "Content marketing untuk membangun kepercayaan audiens",
+        "isCorrect": true,
+        "rationale": "Content marketing fokus memproduksi konten bermanfaat/bermanfaat gratis bagi audiens guna merajut interaksi kedekatan dan reputasi jangka panjang sebelum jualan."
+      },
+      {
+        "text": "Pemasaran langsung kepada konsumen potensial",
+        "isCorrect": false,
+        "rationale": "Pemasaran langsung (direct marketing) secara eksplisit langsung menawarkan jualan produk lewat pesan pribadi/telemarketing ke target pembeli."
+      },
+      {
+        "text": "Strategi rebranding untuk mengubah identitas merek",
+        "isCorrect": false,
+        "rationale": "Rebranding adalah langkah total merombak logo, nama, atau visi misi perusahaan yang sudah dikenal publik, bukan sekadar memposting konten video resep masakan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 45,
+    "question": "Seorang wirausaha ingin menganalisis apakah tim yang dibentuknya sudah berfungsi secara optimal. Berdasarkan model Tuckman, tanda bahwa tim sudah mencapai tahap \"performing\" adalah...",
+    "answerOptions": [
+      {
+        "text": "Anggota tim sering berselisih paham dan berkonflik terbuka",
+        "isCorrect": false,
+        "rationale": "Sering berkonflik terbuka adalah indikasi tim masih terjebak di tahap transisi awal, yakni Storming."
+      },
+      {
+        "text": "Pemimpin harus terus mengawasi setiap pekerjaan anggota tim",
+        "isCorrect": false,
+        "rationale": "Pengawasan ketat (mikromanajemen) menandakan tim belum mandiri dan masih butuh arahan kuat khas fase awal Forming."
+      },
+      {
+        "text": "Tim bekerja secara mandiri, kolaboratif, dan produktif menuju tujuan bersama",
+        "isCorrect": true,
+        "rationale": "Tahap performing ditandai dengan sinergi kerja yang sangat matang, otonomi tinggi, minim gesekan destruktif, dan fokus penuh pada penyelesaian misi gol bersama."
+      },
+      {
+        "text": "Anggota tim masih dalam proses saling mengenal dan orientasi peran",
+        "isCorrect": false,
+        "rationale": "Proses perkenalan dan penjajakan peran awal adalah karakteristik mutlak dari tahapan paling pertama, Forming."
+      }
+    ]
+  },
+  {
+    "questionNumber": 46,
+    "question": "Dalam konteks segmentasi pasar digital, variabel segmentasi yang membagi pasar berdasarkan perilaku pembelian dan penggunaan produk oleh konsumen disebut segmentasi...",
+    "answerOptions": [
+      {
+        "text": "Perilaku (behavioral)",
+        "isCorrect": true,
+        "rationale": "Segmentasi perilaku mengelompokkan pembeli berdasarkan rekam jejak aksi nyata mereka, seperti kebiasaan belanja, tingkat loyalitas brand, dan intensitas pemakaian fitur produk."
+      },
+      {
+        "text": "Demografis",
+        "isCorrect": false,
+        "rationale": "Segmentasi demografis membagi pasar lewat data kependudukan luar seperti usia, jenis kelamin, tingkat pendapatan, atau pendidikan."
+      },
+      {
+        "text": "Geografis",
+        "isCorrect": false,
+        "rationale": "Segmentasi geografis memilah kelompok berdasarkan wilayah fisik tempat tinggal seperti kota, negara, atau iklim daerah."
+      },
+      {
+        "text": "Psikografis",
+        "isCorrect": false,
+        "rationale": "Segmentasi psikografis membedakan pasar lewat aspek mentalitas dalam diri seperti kelas sosial, gaya hidup (lifestyle), kepribadian, atau nilai hidup."
+      }
+    ]
+  },
+  {
+    "questionNumber": 47,
+    "question": "Salah satu perbedaan utama model bisnis digital berbasis platform (platform business model) dengan model bisnis tradisional adalah...",
+    "answerOptions": [
+      {
+        "text": "Platform bisnis digital tidak memerlukan teknologi canggih",
+        "isCorrect": false,
+        "rationale": "Bisnis platform justru sangat mutlak membutuhkan infrastruktur sistem digital dan teknologi algoritma canggih agar mampu mempertemukan banyak pengguna secara otomatis."
+      },
+      {
+        "text": "Model bisnis tradisional lebih menguntungkan secara finansial",
+        "isCorrect": false,
+        "rationale": "Bisnis platform raksasa digital terbukti memiliki efisiensi aset (asset-light) yang mampu melahirkan laba berlipat ganda jauh melampaui batas fisik bisnis tradisional linier."
+      },
+      {
+        "text": "Platform digital tidak dapat melayani lebih dari dua kelompok pengguna",
+        "isCorrect": false,
+        "rationale": "Platform multisisi (multi-sided platforms) bisa melayani banyak kelompok sekaligus, misal: pengendara, penumpang, merchant makanan, dan pengiklan dalam satu aplikasi."
+      },
+      {
+        "text": "Platform menghubungkan dua atau lebih kelompok pengguna dan menciptakan nilai dari interaksinya",
+        "isCorrect": true,
+        "rationale": "Nilai ekonomi utama model bisnis platform bersumber dari fungsi fasilitator ekosistem interaksi langsung antara produsen independen dengan konsumen luar (efek jaringan/network effects)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 48,
+    "question": "Saluran pemasaran digital (digital marketing channels) yang memanfaatkan optimasi mesin pencari untuk meningkatkan visibilitas organik sebuah situs web disebut...",
+    "answerOptions": [
+      {
+        "text": "Search Engine Marketing (SEM)",
+        "isCorrect": false,
+        "rationale": "SEM mengacu pada taktik meningkatkan visibilitas mesin pencari menggunakan jalur iklan teks berbayar (paid search ads)."
+      },
+      {
+        "text": "Search Engine Optimization (SEO)",
+        "isCorrect": true,
+        "rationale": "SEO berfokus pada perbaikan teknis struktur situs dan kualitas artikel secara organik/gratis agar algoritma mesin pencari menaruh web di halaman pertama."
+      },
+      {
+        "text": "Pay Per Click (PPC)",
+        "isCorrect": false,
+        "rationale": "PPC adalah sistem pembayaran model iklan digital di mana pemilik brand membayar biaya tiap kali ada audiens yang mengklik tautan iklannya."
+      },
+      {
+        "text": "Email marketing automation",
+        "isCorrect": false,
+        "rationale": "Email automation adalah sistem otomatisasi pengiriman pesan surat elektronik beruntun kepada daftar prospek konsumen, tidak ada kaitannya dengan mesin pencari."
+      }
+    ]
+  },
+  {
+    "questionNumber": 49,
+    "question": "Ketika wirausaha menganalisis model bisnis pesaing dan menemukan bahwa pesaing bersaing hanya berdasarkan harga murah di pasar yang sudah jenuh, kondisi ini dalam Blue Ocean Strategy disebut sebagai...",
+    "answerOptions": [
+      {
+        "text": "Peluang blue ocean yang belum dimanfaatkan",
+        "isCorrect": false,
+        "rationale": "Pasar yang jenuh dan fokus pada banting harga adalah tanda ketiadaan inovasi samudra biru."
+      },
+      {
+        "text": "Strategi diferensiasi yang efektif",
+        "isCorrect": false,
+        "rationale": "Sekadar murah di pasar jenuh bukan diferensiasi sejati; itu adalah jebakan komoditas generic yang mematikan margin profit perusahaan."
+      },
+      {
+        "text": "Kondisi red ocean yang penuh persaingan",
+        "isCorrect": true,
+        "rationale": "Kondisi industri padat yang saling memotong harga demi memperebutkan kue pasar lama yang stagnan adalah visualisasi definisi dari Samudra Merah (Red Ocean)."
+      },
+      {
+        "text": "Model bisnis yang sedang dalam fase pertumbuhan pesat",
+        "isCorrect": false,
+        "rationale": "Pasar yang jenuh dengan perang harga ketat menandakan fase kedewasaan akhir (maturity) atau penurunan industri, bukan pertumbuhan kilat."
+      }
+    ]
+  },
+  {
+    "questionNumber": 50,
+    "question": "Seorang wirausaha berhasil membangun tim inti yang solid, tetapi menghadapi tantangan bahwa anggota tim bekerja dari berbagai kota berbeda. Pendekatan kepemimpinan yang paling sesuai untuk mengelola tim terdistribusi dalam konteks era digital adalah...",
+    "answerOptions": [
+      {
+        "text": "Menerapkan shared leadership dengan memanfaatkan alat kolaborasi digital dan komunikasi asinkron",
+        "isCorrect": true,
+        "rationale": "Tim jarak jauh (remote team) paling subur dikelola dengan rasa percaya lewat shared leadership, ditunjang piranti software kerja (Trello, Slack) dan budaya komunikasi asinkron yang fleksibel."
+      },
+      {
+        "text": "Mewajibkan semua anggota tim pindah ke satu kota agar dapat diawasi langsung",
+        "isCorrect": false,
+        "rationale": "Memaksa pindah fisik menghancurkan keuntungan fleksibilitas talenta digital global dan menaikkan beban biaya operasional kantor konvensional."
+      },
+      {
+        "text": "Menggunakan model kepemimpinan hierarkis ketat dengan laporan harian tertulis",
+        "isCorrect": false,
+        "rationale": "Hierarki kaku dan birokrasi laporan tertulis harian yang berlebihan memicu kejenuhan (burnout) serta menurunkan kreativitas kecepatan bertindak tim digital."
+      },
+      {
+        "text": "Mengurangi jumlah anggota tim hingga semua dapat hadir di satu lokasi",
+        "isCorrect": false,
+        "rationale": "Memecat atau mengurangi tim berbakat hanya karena masalah kendala jarak geografis adalah kemunduran strategi operasional di era internet."
+      }
+    ]
+  }
+  ]
+
+    function renderSoal() {
+    const container = document.getElementById('container');
+    soalList.forEach(soal => {
+      const soalDiv = document.createElement('div');
+      soalDiv.className = 'soal';
+      soalDiv.setAttribute('data-qnum', soal.questionNumber);
+      
+      let soalHTML = `<h3>Soal ${soal.questionNumber}.</h3>`;
+      soalHTML += `<p>${soal.question}</p>`;
+      soalHTML += `<div class="jawaban">`;
+      
+      soal.answerOptions.forEach((option, index) => {
+          const label = String.fromCharCode(65 + index); 
+          
+          soalHTML += `
+              <button 
+                  onclick="checkAnswer(this, ${soal.questionNumber}, ${option.isCorrect})"
+                  data-iscorrect="${option.isCorrect}"
+                  data-label="${label}">
+                  ${label}. ${option.text}
+              </button>
+              <div class="penjelasan-opsi">
+                <strong>Penjelasan Opsi ${label}:</strong> ${option.rationale}
+              </div>
+          `;
+      });
+      
+      soalHTML += `</div>`;
+      soalDiv.innerHTML = soalHTML;
+      container.appendChild(soalDiv);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', renderSoal);
+</script>
+
+</body>
+</html>

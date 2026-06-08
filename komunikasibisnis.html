@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal Ujian</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7f6;
+      margin: 0;
+      padding: 20px 10px;
+    }
+    h1 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    .soal {
+      background: #ffffff;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 5px solid #42a5f5;
+    }
+    h3 {
+      color: #3f51b5;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .jawaban button {
+      color: #2a2a2a;
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #c5cae9;
+      background: #e8eaf6;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .jawaban button:hover:not(:disabled) {
+      background: #c5cae9;
+    }
+    .jawaban button.benar {
+      background-color: #dcf9dc;
+      border-color: #388e3c;
+      font-weight: bold;
+    }
+    .jawaban button.salah {
+      background-color: #ffcdd2;
+      border-color: #d32f2f;
+      opacity: 0.7;
+    }
+
+    .penjelasan-opsi {
+      background: #f3e5f5;
+      color: #4a148c;
+      padding: 10px;
+      margin-top: -5px;
+      margin-bottom: 15px;
+      border-radius: 0 0 8px 8px;
+      border-top: none;
+      border-left: 5px solid #7b1fa2;
+      font-size: 14px;
+      display: none;
+    }
+    .counter {
+      position: sticky;
+      bottom: 0;
+      background: #1a237e;
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 20px; }
+      .jawaban button { font-size: 14px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Latihan Komunikasi Bisnis UT</h1>
+
+<div id="container"></div>
+
+<div class="counter">
+  ✅ Jawaban Benar: <span id="benar">0</span> |
+  ❌ Jawaban Salah: <span id="salah">0</span>
+</div>
+
+<script>
+  let totalBenar = 0;
+  let totalSalah = 0;
+  let answeredQuestions = new Set();
+
+  function updateCounter() {
+     document.getElementById("benar").textContent = totalBenar;
+    document.getElementById("salah").textContent = totalSalah;
+  }
+
+  function checkAnswer(button, questionNumber, isCorrect) {
+      if (answeredQuestions.has(questionNumber)) {
+          return;
+      }
+
+      const soalElement = button.closest('.soal');
+      const buttons = soalElement.querySelectorAll('.jawaban button');
+      
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (isCorrect) {
+          button.classList.add('benar');
+          totalBenar++;
+      } else {
+          button.classList.add('salah');
+          totalSalah++;
+          
+          buttons.forEach(btn => {
+              if (btn.getAttribute('data-iscorrect') === 'true') {
+                  btn.classList.add('benar');
+              }
+          });
+      }
+
+      const allRationales = soalElement.querySelectorAll('.penjelasan-opsi');
+      allRationales.forEach(rationaleDiv => {
+          rationaleDiv.style.display = 'block';
+      });
+
+      answeredQuestions.add(questionNumber);
+      updateCounter();
+  }
+
+  const soalList = [
+    {
+    "questionNumber": 1,
+    "question": "Komunikasi bisnis pada dasarnya adalah proses penyampaian pesan yang bertujuan untuk...",
+    "answerOptions": [
+      {
+        "text": "Memperhi opini publik secara luas",
+        "isCorrect": false,
+        "rationale": "Mempengaruhi opini publik secara luas merupakan fokus utama dari Hubungan Masyarakat (Humas/PR) secara umum atau komunikasi politik, bukan esensi dasar komunikasi bisnis."
+      },
+      {
+        "text": "Mencapai tujuan organisasi melalui pertukaran informasi",
+        "isCorrect": true,
+        "rationale": "Komunikasi bisnis dirancang secara spesifik untuk memfasilitasi aliran informasi demi tercapainya target, efisiensi, dan tujuan strategis organisasi bisnis."
+      },
+      {
+        "text": "Menghibur karyawan di lingkungan kerja",
+        "isCorrect": false,
+        "rationale": "Menghibur karyawan adalah fungsi rekreasi atau program keakraban internal (ice breaking), bukan tujuan utama dari komunikasi bisnis."
+      },
+      {
+        "text": "Mempromosikan produk kepada konsumen akhir",
+        "isCorrect": false,
+        "rationale": "Mempromosikan produk hanyalah salah satu bagian dari komunikasi pemasaran, sedangkan ruang lingkup komunikasi bisnis jauh lebih luas dari sekadar promosi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 2,
+    "question": "Salah satu konteks utama yang membedakan komunikasi bisnis dari komunikasi umum adalah...",
+    "answerOptions": [
+      {
+        "text": "Komunikasi bisnis selalu menggunakan bahasa asing",
+        "isCorrect": false,
+        "rationale": "Komunikasi bisnis dapat menggunakan bahasa nasional atau lokal, tergantung pada target audiens dan rekan bisnis yang dihadapi."
+      },
+      {
+        "text": "Komunikasi bisnis dilakukan secara tatap muka saja.",
+        "isCorrect": false,
+        "rationale": "Komunikasi bisnis modern memanfaatkan banyak saluran digital dan tertulis seperti email, laporan, maupun panggilan video."
+      },
+      {
+        "text": "Adanya tujuan komersial dan organisasional yang mendasarinya",
+        "isCorrect": true,
+        "rationale": "Konteks komersial (profit) dan pencapaian target organisasi adalah karakteristik utama yang membedakannya dari komunikasi sosial atau umum."
+      },
+      {
+        "text": "Komunikasi bisnis tidak memerlukan umpan balik",
+        "isCorrect": false,
+        "rationale": "Umpan balik (feedback) justru sangat krusial dalam bisnis untuk memastikan efektivitas pesan dan kelancaran transaksi atau kerja sama."
+      }
+    ]
+  },
+  {
+    "questionNumber": 3,
+    "question": "Ruang lingkup komunikasi bisnis mencakup berbagai aspek, di antaranya....",
+    "answerOptions": [
+      {
+        "text": "Hanya komunikasi internal perusahaan",
+        "isCorrect": false,
+        "rationale": "Pilihan ini tidak tepat karena bisnis juga harus berkomunikasi dengan pihak luar seperti pemasok, pelanggan, dan regulator."
+      },
+      {
+        "text": "Komunikasi internal dan eksternal organisasi bisnis",
+        "isCorrect": true,
+        "rationale": "Ruang lingkup komunikasi bisnis wajib mencakup interaksi internal (antar-karyawan/manajemen) dan interaksi eksternal (dengan pihak luar organisasi)."
+      },
+      {
+        "text": "Hanya komunikasi dengan pelanggan",
+        "isCorrect": false,
+        "rationale": "Komunikasi dengan pelanggan hanyalah salah satu elemen dari komunikasi eksternal; masih ada pemegang saham, vendor, dan internal staf."
+      },
+      {
+        "text": "Komunikasi antarpribadi saja",
+        "isCorrect": false,
+        "rationale": "Komunikasi bisnis juga melibatkan bentuk komunikasi kelompok (rapat), komunikasi organisasi, serta komunikasi massa (iklan)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 4,
+    "question": "Konsep dasar komunikasi bisnis yang paling penting adalah bahwa pesan harus bersifat...",
+    "answerOptions": [
+      {
+        "text": "Jelas, tepat, dan dapat dipahami oleh penerima",
+        "isCorrect": true,
+        "rationale": "Pesan bisnis harus mengutamakan kejelasan (clarity) dan ketepatan (accuracy) untuk menghindari kesalahpahaman yang bisa merugikan operasional atau finansial."
+      },
+      {
+        "text": "Panjang dan terperinci agar tidak menimbulkan kesalahpahaman",
+        "isCorrect": false,
+        "rationale": "Pesan yang terlalu panjang dan bertele-tele justru rawan membuat penerima kehilangan poin utama dan membuang waktu kerja."
+      },
+      {
+        "text": "Sepihak sehingga pengirim memegang kendali penuh",
+        "isCorrect": false,
+        "rationale": "Komunikasi satu arah yang kaku menghambat kolaborasi, kreativitas, dan umpan balik yang sehat dalam ekosistem bisnis."
+      },
+      {
+        "text": "Formal dan menggunakan istilah teknis tinggi",
+        "isCorrect": false,
+        "rationale": "Penggunaan istilah teknis (jargon) yang terlalu tinggi berisiko membuat pesan sulit dipahami jika audiens tidak memiliki latar belakang yang sama."
+      }
+    ]
+  },
+  {
+    "questionNumber": 5,
+    "question": "Bentuk komunikasi yang terjadi di dalam struktur organisasi bisnis dari atasan ke bawahan disebut...",
+    "answerOptions": [
+      {
+        "text": "Komunikasi horizontal",
+        "isCorrect": false,
+        "rationale": "Komunikasi horizontal terjadi antara individu atau departemen yang memiliki tingkatan hierarki atau posisi yang setara."
+      },
+      {
+        "text": "Komunikasi diagonal",
+        "isCorrect": false,
+        "rationale": "Komunikasi diagonal melibatkan interaksi antarindividu dari bagian yang berbeda dan tingkat hierarki yang berbeda pula tanpa jalur instruksi langsung."
+      },
+      {
+        "text": "Komunikasi lateral",
+        "isCorrect": false,
+        "rationale": "Komunikasi lateral merupakan nama lain dari komunikasi horizontal, yaitu komunikasi antarrekan kerja sejawat."
+      },
+      {
+        "text": "Komunikasi vertikal ke bawah",
+        "isCorrect": true,
+        "rationale": "Komunikasi vertikal ke bawah (downward communication) adalah aliran informasi resmi dari manajemen tingkat atas ke tingkat bawah (karyawan)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 6,
+    "question": "Komunikasi yang mengalir dari bawahan kepada atasan dalam organisasi bisnis berfungsi terutama untuk....",
+    "answerOptions": [
+      {
+        "text": "Memberikan instruksi kerja",
+        "isCorrect": false,
+        "rationale": "Memberikan instruksi kerja merupakan fungsi utama dari komunikasi vertikal ke bawah (dari atasan ke bawahan)."
+      },
+      {
+        "text": "Menyampaikan umpan balik, laporan, dan saran",
+        "isCorrect": true,
+        "rationale": "Komunikasi ke atas (upward communication) digunakan oleh bawahan untuk melaporkan progres kerja, memberikan masukan, atau menyampaikan keluhan kepada pimpinan."
+      },
+      {
+        "text": "Mengumumkan kebijakan perusahaan",
+        "isCorrect": false,
+        "rationale": "Pengumuman kebijakan perusahaan adalah wewenang manajemen puncak yang disebarkan ke bawah, bukan dari bawahan."
+      },
+      {
+        "text": "Mendistribusikan informasi promosi",
+        "isCorrect": false,
+        "rationale": "Informasi promosi didistribusikan oleh divisi pemasaran ke pihak luar (konsumen), bukan ke atasan intern perusahaan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 7,
+    "question": "Fungsi komunikasi dalam organisasi bisnis yang berkaitan dengan pencapaian target kerja karyawan adalah fungsi...",
+    "answerOptions": [
+      {
+        "text": "Informasi",
+        "isCorrect": false,
+        "rationale": "Fungsi informasi berfokus pada penyediaan data yang dibutuhkan untuk melaksanakan tugas, bukan dorongan semangat untuk mencapai target."
+      },
+      {
+        "text": "Kontrol",
+        "isCorrect": false,
+        "rationale": "Fungsi kontrol bertugas memantau kepatuhan karyawan terhadap peraturan operasional perusahaan."
+      },
+      {
+        "text": "Motivasi",
+        "isCorrect": true,
+        "rationale": "Fungsi motivasi dalam komunikasi bisnis bertujuan memberikan arah, apresiasi, dan dorongan agar karyawan terstimulasi mencapai target kerjanya."
+      },
+      {
+        "text": "Ekspresi emosi",
+        "isCorrect": false,
+        "rationale": "Fungsi ekspresi emosi memfasilitasi pelepasan perasaan atau kepuasan sosial, tetapi tidak mengarah langsung pada pencapaian performa kerja normatif."
+      }
+    ]
+  },
+  {
+    "questionNumber": 8,
+    "question": "Media komunikasi bisnis yang termasuk kategori media cetak tradisional adalah...",
+    "answerOptions": [
+      {
+        "text": "Email dan aplikasi pesan instan",
+        "isCorrect": false,
+        "rationale": "Email dan aplikasi pesan instan (seperti WhatsApp) merupakan media komunikasi digital berbasis elektronik."
+      },
+      {
+        "text": "Video conference dan webinar",
+        "isCorrect": false,
+        "rationale": "Video conference dan webinar adalah media berbasis jaringan internet yang menggabungkan elemen audio dan video interaktif."
+      },
+      {
+        "text": "Media sosial dan blog perusahaan",
+        "isCorrect": false,
+        "rationale": "Media sosial dan blog termasuk dalam kategori media baru (new media) berbasis platform web digital."
+      },
+      {
+        "text": "Memo, surat, dan laporan tertulis",
+        "isCorrect": true,
+        "rationale": "Memo, surat fisik, dan laporan tertulis di atas kertas merupakan contoh klasik dari media cetak tradisional yang digunakan di dunia bisnis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 9,
+    "question": "Perkembangan teknologi digital paling berdampak pada komunikasi bisnis dalam hal...",
+    "answerOptions": [
+      {
+        "text": "Menghilangkan kebutuhan komunikasi tatap muka sepenuhnya",
+        "isCorrect": false,
+        "rationale": "Komunikasi tatap muka langsung (offline) tetap krusial untuk membangun keintiman, kepercayaan mendalam, dan negosiasi tingkat tinggi."
+      },
+      {
+        "text": "Memperlambat proses pengiriman pesan bisnis",
+        "isCorrect": false,
+        "rationale": "Teknologi digital justru mempercepat pengiriman pesan dari yang sebelumnya memakan waktu berhari-hari menjadi hitungan detik."
+      },
+      {
+        "text": "Mempercepat dan memperluas jangkauan penyebaran informasi",
+        "isCorrect": true,
+        "rationale": "Dampak terbesar teknologi digital adalah efisiensi waktu pengiriman informasi dan kemampuan menembus batasan geografis secara global."
+      },
+      {
+        "text": "Membatasi komunikasi hanya di lingkup lokal",
+        "isCorrect": false,
+        "rationale": "Teknologi digital menghancurkan sekat lokal dan membuka peluang pasar internasional secara tak terbatas."
+      }
+    ]
+  },
+  {
+    "questionNumber": 10,
+    "question": "Teknologi komunikasi bisnis yang memungkinkan pertemuan jarak jauh secara real-time dengan tampilan visual adalah....",
+    "answerOptions": [
+      {
+        "text": "Telepon konvensional",
+        "isCorrect": false,
+        "rationale": "Telepon konvensional hanya mampu mentransmisikan data audio (suara) tanpa komponen visual."
+      },
+      {
+        "text": "Faksimile",
+        "isCorrect": false,
+        "rationale": "Faksimile digunakan untuk mengirimkan salinan dokumen cetak melalui jaringan telepon, bukan media pertemuan interaktif."
+      },
+      {
+        "text": "Video conference",
+        "isCorrect": true,
+        "rationale": "Video conference memungkinkan interaksi tatap muka virtual secara langsung (*real-time*) yang mencakup video dan audio jarak jauh."
+      },
+      {
+        "text": "Surat elektronik",
+        "isCorrect": false,
+        "rationale": "Surat elektronik (email) bersifat asinkron (tidak real-time secara interaktif langsung) dan berbasis teks/file dokumen."
+      }
+    ]
+  },
+  {
+    "questionNumber": 11,
+    "question": "Proses komunikasi massa dalam bisnis mencakup penyampaian pesan kepada...",
+    "answerOptions": [
+      {
+        "text": "Satu individu secara langsung",
+        "isCorrect": false,
+        "rationale": "Penyampaian pesan ke satu individu langsung masuk ke kategori komunikasi antarpribadi (interpersonal)."
+      },
+      {
+        "text": "Kelompok kecil yang terbatas",
+        "isCorrect": false,
+        "rationale": "Komunikasi dengan kelompok terbatas (seperti divisi kerja) dikelompokkan ke dalam komunikasi kelompok."
+      },
+      {
+        "text": "Audiens yang luas dan heterogen melalui media massa",
+        "isCorrect": true,
+        "rationale": "Ciri khas komunikasi massa adalah menggunakan saluran media massa untuk menjangkau khalayak luas, tidak saling mengenal, dan beraneka ragam."
+      },
+      {
+        "text": "Hanya karyawan internal perusahaan",
+        "isCorrect": false,
+        "rationale": "Penyampaian pesan khusus karyawan internal disebut komunikasi internal organisasi, bukan komunikasi massa."
+      }
+    ]
+  },
+  {
+    "questionNumber": 12,
+    "question": "Dalam proses komunikasi interpersonal bisnis, elemen yang paling menentukan keberhasilan komunikasi adalah...",
+    "answerOptions": [
+      {
+        "text": "Biaya komunikasi yang rendah",
+        "isCorrect": false,
+        "rationale": "Biaya yang murah tidak menjamin pesan tersebut dapat dipahami dengan baik atau menghasilkan kesepakatan bisnis."
+      },
+      {
+        "text": "Kemampuan mendengar aktif dan memberikan respons tepat",
+        "isCorrect": true,
+        "rationale": "Mendengar aktif (active listening) memastikan keakuratan penyerapan informasi, empati, serta akurasi feedback yang diberikan ke rekan bicara."
+      },
+      {
+        "text": "Penggunaan teknologi terkini",
+        "isCorrect": false,
+        "rationale": "Teknologi canggih akan sia-sia jika komunikator tidak memiliki etika dan kemampuan komunikasi antarpribadi yang baik."
+      },
+      {
+        "text": "Jumlah pesan yang dikirimkan",
+        "isCorrect": false,
+        "rationale": "Mengirim pesan dalam jumlah banyak (bombardir informasi) tanpa kualitas justru memicu kejenuhan informasi (*information overload*)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 13,
+    "question": "Komunikasi kelompok dalam konteks bisnis biasanya terjadi dalam situasi..",
+    "answerOptions": [
+      {
+        "text": "Rapat tim, diskusi proyek, dan presentasi kelompok",
+        "isCorrect": true,
+        "rationale": "Aktivitas tersebut melibatkan interaksi lebih dari dua orang yang berkumpul demi menyelesaikan agenda atau proyek bisnis yang sama."
+      },
+      {
+        "text": "Negosiasi antara dua pihak saja",
+        "isCorrect": false,
+        "rationale": "Interaksi yang dibatasi hanya antara dua pihak (one-on-one) dikategorikan sebagai komunikasi interpersonal."
+      },
+      {
+        "text": "Pengiriman surat resmi kepada klien",
+        "isCorrect": false,
+        "rationale": "Pengiriman surat ke satu klien eksternal tergolong komunikasi tertulis antarpribadi atau korespondensi bisnis."
+      },
+      {
+        "text": "Periklanan produk di media massa.",
+        "isCorrect": false,
+        "rationale": "Periklanan produk di media massa merupakan aplikasi nyata dari konsep komunikasi massa."
+      }
+    ]
+  },
+  {
+    "questionNumber": 14,
+    "question": "Proses komunikasi melalui media online (internet) dalam bisnis memiliki karakteristik utama berupa...",
+    "answerOptions": [
+      {
+        "text": "Komunikasi hanya bersifat satu arah",
+        "isCorrect": false,
+        "rationale": "Internet justru mengubah pola komunikasi menjadi dua arah atau banyak arah berkat adanya kolom komentar dan fitur chat."
+      },
+      {
+        "text": "Interaktivitas tinggi dan dapat menjangkau audiens global",
+        "isCorrect": true,
+        "rationale": "Kekuatan utama media online adalah sifatnya yang interaktif secara instan serta akses jangkauannya yang mendunia (*borderless*)."
+      },
+      {
+        "text": "Membutuhkan waktu yang lama untuk pengiriman pesan",
+        "isCorrect": false,
+        "rationale": "Internet adalah media komunikasi tercepat saat ini, mampu mentransmisikan data dalam hitungan milidetik."
+      },
+      {
+        "text": "Hanya dapat digunakan oleh perusahaan besar",
+        "isCorrect": false,
+        "rationale": "Internet bersifat demokratis; UMKM atau bisnis perorangan pun bisa memanfaatkannya dengan modal yang sangat minim."
+      }
+    ]
+  },
+  {
+    "questionNumber": 15,
+    "question": "Komunikasi verbal dalam bisnis mencakup bentuk komunikasi yang menggunakan...",
+    "answerOptions": [
+      {
+        "text": "Ekspresi wajah dan gerakan tubuh",
+        "isCorrect": false,
+        "rationale": "Ekspresi wajah, bahasa tubuh, dan gestur dikategorikan sebagai bentuk komunikasi nonverbal."
+      },
+      {
+        "text": "Kata-kata lisan maupun tulisan",
+        "isCorrect": true,
+        "rationale": "Komunikasi verbal definisinya adalah penyampaian pesan dengan menggunakan simbol bahasa atau kata-kata, baik diucapkan langsung (lisan) maupun diketik/ditulis."
+      },
+      {
+        "text": "Simbol, gambar, dan diagram",
+        "isCorrect": false,
+        "rationale": "Penggunaan gambar, grafik, atau diagram diklasifikasikan sebagai komunikasi visual."
+      },
+      {
+        "text": "Jarak dan sentuhan fisik",
+        "isCorrect": false,
+        "rationale": "Jarak (proksemik) dan sentuhan (haptik) merupakan bagian dari dimensi komunikasi nonverbal."
+      }
+    ]
+  },
+  {
+    "questionNumber": 16,
+    "question": "Komunikasi nonverbal yang efektif dalam konteks bisnis mencakup hal-hal berikut, KECUALI...",
+    "answerOptions": [
+      {
+        "text": "Kontak mata yang tepat saat presentasi",
+        "isCorrect": false,
+        "rationale": "Kontak mata adalah elemen nonverbal yang benar dan efektif karena membangun impresi kejujuran serta fokus."
+      },
+      {
+        "text": "Postur tubuh yang menunjukkan kepercayaan diri",
+        "isCorrect": false,
+        "rationale": "Postur tubuh tegak dan terbuka merupakan komunikasi nonverbal yang baik untuk meyakinkan klien atau investor."
+      },
+      {
+        "text": "Penggunaan kalimat yang panjang dan berbelit",
+        "isCorrect": true,
+        "rationale": "Kalimat panjang berbelit-belit adalah masalah struktural dalam komunikasi *verbal* (bahasa), bukan bentuk dari unsur komunikasi nonverbal."
+      },
+      {
+        "text": "Penampilan dan pakaian yang profesional",
+        "isCorrect": false,
+        "rationale": "Cara berpakaian (artifak) adalah bentuk komunikasi nonverbal penting yang mencerminkan kredibilitas bisnis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 17,
+    "question": "Komunikasi visual dalam bisnis mencakup penggunaan elemen seperti...",
+    "answerOptions": [
+      {
+        "text": "Grafik, tabel, infografis, dan gambar untuk menyampaikan data",
+        "isCorrect": true,
+        "rationale": "Elemen visual seperti grafik dan infografis mempermudah pemahaman data kuantitatif yang rumit agar lebih cepat dipahami secara kasat mata."
+      },
+      {
+        "text": "Intonasi suara dan kecepatan bicara",
+        "isCorrect": false,
+        "rationale": "Intonasi dan kecepatan bicara termasuk dalam vokalik atau parabahasa, yang merupakan bagian dari aspek nonverbal lisan."
+      },
+      {
+        "text": "Kata-kata persuasif dalam negosiasi",
+        "isCorrect": false,
+        "rationale": "Kata-kata persuasif tergolong ke dalam struktur komunikasi verbal, bukan elemen visual grafis."
+      },
+      {
+        "text": "Salam pembuka dalam surat resmi",
+        "isCorrect": false,
+        "rationale": "Salam pembuka adalah komponen tekstual dalam komunikasi verbal tertulis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 18,
+    "question": "Stakeholders dalam konteks komunikasi bisnis adalah...",
+    "answerOptions": [
+      {
+        "text": "Hanya pemegang saham perusahaan",
+        "isCorrect": false,
+        "rationale": "Pemegang saham disebut *shareholder*, yang merupakan bagian kecil dari spektrum luas para pemangku kepentingan (*stakeholders*)."
+      },
+      {
+        "text": "Seluruh pihak yang memiliki kepentingan terhadap aktivitas bisnis perusahaan",
+        "isCorrect": true,
+        "rationale": "Stakeholders mencakup individu, kelompok, atau lembaga yang memengaruhi atau dipengaruhi langsung oleh keputusan, kebijakan, dan operasional bisnis perusahaan."
+      },
+      {
+        "text": "Karyawan tetap perusahaan saja",
+        "isCorrect": false,
+        "rationale": "Karyawan tetap hanyalah bagian dari kelompok internal stakeholders, tidak mewakili entitas eksternal yang juga berkepentingan."
+      },
+      {
+        "text": "Konsumen akhir produk atau jasa perusahaan",
+        "isCorrect": false,
+        "rationale": "Konsumen akhir adalah salah satu eksternal stakeholder, tetapi definisi ini mengabaikan peran krusial vendor, bank, dan pemerintah."
+      }
+    ]
+  },
+  {
+    "questionNumber": 19,
+    "question": "Jenis stakeholders yang termasuk dalam kategori internal perusahaan adalah...",
+    "answerOptions": [
+      {
+        "text": "Pemasok dan distributor",
+        "isCorrect": false,
+        "rationale": "Pemasok dan distributor beroperasi di luar manajemen internal entitas perusahaan, sehingga berstatus eksternal."
+      },
+      {
+        "text": "Pemerintah dan lembaga regulasi",
+        "isCorrect": false,
+        "rationale": "Pemerintah bertindak sebagai pengawas dan pembuat regulasi hukum dari luar lingkungan internal perusahaan."
+      },
+      {
+        "text": "Komunitas lokal dan media massa",
+        "isCorrect": false,
+        "rationale": "Komunitas lokal dan pers adalah masyarakat publik luar yang mengamati dampak sosial/lingkungan dari operasional perusahaan."
+      },
+      {
+        "text": "Karyawan, manajemen, dan pemegang saham",
+        "isCorrect": true,
+        "rationale": "Ketiga elemen ini berada langsung di dalam struktur kepemilikan dan operasional harian yang menggerakkan roda internal perusahaan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 20,
+    "question": "Karakteristik utama dari stakeholders eksternal perusahaan adalah...",
+    "answerOptions": [
+      {
+        "text": "Mereka bekerja di dalam struktur organisasi perusahaan",
+        "isCorrect": false,
+        "rationale": "Pihak yang bekerja di dalam struktur organisasi adalah definisi operasional dari stakeholders internal."
+      },
+      {
+        "text": "Mereka tidak memiliki pengaruh terhadap keputusan bisnis",
+        "isCorrect": false,
+        "rationale": "Stakeholders eksternal seperti pemerintah atau serikat konsumen memiliki daya pengaruh hukum atau boikot yang sangat masif terhadap arah bisnis."
+      },
+      {
+        "text": "Mereka berada di luar perusahaan tetapi dapat mempengaruhi atau dipengaruhi oleh perusahaan",
+        "isCorrect": true,
+        "rationale": "Ini adalah karakteristik mutlak; posisi fisiknya di luar batas legal operasional internal perusahaan, namun memiliki relasi timbal balik dengan bisnis tersebut."
+      },
+      {
+        "text": "Mereka hanya berinteraksi dengan perusahaan saat transaksi terjadi",
+        "isCorrect": false,
+        "rationale": "Beberapa eksternal stakeholder seperti regulator (pemerintah) atau LSM lingkungan berinteraksi memantau korporasi secara konstan tanpa transaksi dagang."
+      }
+    ]
+  },
+  {
+    "questionNumber": 21,
+    "question": "Lobi dalam komunikasi bisnis dapat didefinisikan sebagai...",
+    "answerOptions": [
+      {
+        "text": "Ruang tunggu di kantor perusahaan",
+        "isCorrect": false,
+        "rationale": "Itu adalah arti arsitektural/fisik dari kata 'lobi', bukan pengertian lobi sebagai aktivitas atau strategi komunikasi bisnis."
+      },
+      {
+        "text": "Teknik presentasi formal di hadapan pemegang saham",
+        "isCorrect": false,
+        "rationale": "Presentasi di hadapan pemegang saham adalah agenda formal seperti RUPS, sedangkan lobi sifatnya lebih kasual dan persuasif."
+      },
+      {
+        "text": "Proses penyelesaian konflik antarkaryawan",
+        "isCorrect": false,
+        "rationale": "Penyelesaian konflik internal antarstaf merupakan bagian dari manajemen konflik atau mediasi HRD."
+      },
+      {
+        "text": "Upaya mempengaruhi pengambil keputusan secara tidak resmi untuk kepentingan tertentu",
+        "isCorrect": true,
+        "rationale": "Lobi (*lobbying*) adalah serangkaian aktivitas komunikasi informal/pendekatan personal untuk memengaruhi opini pejabat atau pemegang kebijakan agar berpihak pada target bisnis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 22,
+    "question": "Negosiasi dalam komunikasi bisnis bertujuan utama untuk...",
+    "answerOptions": [
+      {
+        "text": "Mengalahkan pihak lain dalam perdebatan",
+        "isCorrect": false,
+        "rationale": "Mengalahkan pihak lain adalah pola pikir konfrontatif yang merusak prospek kemitraan jangka panjang dalam ekosistem komersial."
+      },
+      {
+        "text": "Mempertahankan posisi awal tanpa kompromi",
+        "isCorrect": false,
+        "rationale": "Sikap kaku tanpa kompromi akan membuat negosiasi buntu (*deadlock*) dan membatalkan potensi kerja sama yang ada."
+      },
+      {
+        "text": "Mencapai kesepakatan yang saling menguntungkan bagi semua pihak",
+        "isCorrect": true,
+        "rationale": "Esensi utama dari negosiasi bisnis komersial adalah menyelaraskan perbedaan kepentingan demi mencapai titik temu yang menguntungkan bersama."
+      },
+      {
+        "text": "Menyampaikan keluhan kepada mitra bisnis",
+        "isCorrect": false,
+        "rationale": "Menyampaikan keluhan merupakan tindakan komplain, sedangkan negosiasi berorientasi mencari jalan keluar/solusi dari perbedaan kesepakatan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 23,
+    "question": "Salah satu teknik lobi yang efektif dalam komunikasi bisnis adalah...",
+    "answerOptions": [
+      {
+        "text": "Membangun relasi dan kepercayaan sebelum menyampaikan kepentingan",
+        "isCorrect": true,
+        "rationale": "Lobi berjalan mulus jika didasari atas hubungan baik (*rapport*) dan rasa percaya (*trust*) yang dibangun secara bertahap dengan target."
+      },
+      {
+        "text": "Memaksakan kehendak kepada pihak yang dilobi",
+        "isCorrect": false,
+        "rationale": "Memaksakan kehendak justru menciptakan penolakan psikologis keras dari pihak yang sedang dilobi."
+      },
+      {
+        "text": "Menggunakan ancaman untuk mencapai tujuan",
+        "isCorrect": false,
+        "rationale": "Penggunaan ancaman melanggar etika dan aspek hukum bisnis, serta menghancurkan reputasi perusahaan secara permanen."
+      },
+      {
+        "text": "Menghindari komunikasi langsung dengan pengambil keputusan",
+        "isCorrect": false,
+        "rationale": "Menghindari sasaran utama membuat lobi menjadi tidak tepat sasaran dan membuang waktu operasional."
+      }
+    ]
+  },
+  {
+    "questionNumber": 24,
+    "question": "Dalam teknik negosiasi, pendekatan \"win-win solution\" berarti...",
+    "answerOptions": [
+      {
+        "text": "Hanya satu pihak yang mendapatkan keuntungan maksimal",
+        "isCorrect": false,
+        "rationale": "Kondisi di mana hanya satu pihak yang untung besar disebut dengan pendekatan *win-lose*."
+      },
+      {
+        "text": "Negosiasi berakhir tanpa ada kesepakatan",
+        "isCorrect": false,
+        "rationale": "Kondisi tanpa kesepakatan akhir disebut situasi *lose-lose* atau kebuntuan total (*deadlock*)."
+      },
+      {
+        "text": "Kedua pihak memperoleh hasil yang saling menguntungkan",
+        "isCorrect": true,
+        "rationale": "Pendekatan *win-win* mengedepankan kolaborasi dan integrasi kepentingan sehingga seluruh pihak merasa diuntungkan oleh keputusan bersama."
+      },
+      {
+        "text": "Pihak yang lebih kuat selalu memenangkan negosiasi",
+        "isCorrect": false,
+        "rationale": "Dominasi pihak kuat atas pihak lemah mencerminkan gaya penekanan otoriter (*forcing*), bukan negosiasi berbasis kemitraan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 25,
+    "question": "Peran lobi dalam komunikasi bisnis adalah untuk...",
+    "answerOptions": [
+      {
+        "text": "Menggantikan proses negosiasi formal",
+        "isCorrect": false,
+        "rationale": "Lobi tidak menggantikan negosiasi formal, melainkan berfungsi sebagai jembatan pembuka atau pelicin agar negosiasi formal berjalan lancar."
+      },
+      {
+        "text": "Mempengaruhi kebijakan atau keputusan yang berdampak pada kepentingan bisnis",
+        "isCorrect": true,
+        "rationale": "Fungsi utama lobi secara makro adalah mengondisikan atau memitigasi regulasi eksternal agar tidak merugikan iklim bisnis perusahaan."
+      },
+      {
+        "text": "Mempromosikan produk kepada pelanggan ritel",
+        "isCorrect": false,
+        "rationale": "Promosi kepada retail massal menggunakan strategi penjualan langsung (*direct selling*) atau periklanan, bukan teknik lobi."
+      },
+      {
+        "text": "Menyusun laporan keuangan perusahaan",
+        "isCorrect": false,
+        "rationale": "Penyusunan laporan keuangan adalah wilayah kerja teknis akuntansi, sama sekali bukan fungsi dari komunikasi lobi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 26,
+    "question": "Penyusunan pesan bisnis yang efektif diawali dengan tahap...",
+    "answerOptions": [
+      {
+        "text": "Pengeditan dan revisi teks.",
+        "isCorrect": false,
+        "rationale": "Tahap pengeditan (revisi) ditempatkan di bagian akhir proses penulisan untuk menyempurnakan draft yang sudah jadi."
+      },
+      {
+        "text": "Pengiriman pesan kepada penerima",
+        "isCorrect": false,
+        "rationale": "Pengiriman adalah langkah eksekusi setelah seluruh rangkaian pembuatan dan peninjauan pesan selesai dilakukan."
+      },
+      {
+        "text": "Evaluasi hasil komunikasi",
+        "isCorrect": false,
+        "rationale": "Evaluasi dilakukan pasca-komunikasi berlangsung untuk menilai respons balik (*feedback*) dari audiens."
+      },
+      {
+        "text": "Perencanaan yang meliputi analisis tujuan, audiens, dan saluran komunikasi",
+        "isCorrect": true,
+        "rationale": "Tahap perencanaan (planning) wajib diletakkan di awal agar pesan yang diproduksi terarah, sesuai segmentasi audiens, dan menggunakan media yang tepat."
+      }
+    ]
+  },
+  {
+    "questionNumber": 27,
+    "question": "Korespondensi bisnis yang baik harus memenuhi prinsip 7C, salah satunya adalah \"Conciseness\" yang berarti...",
+    "answerOptions": [
+      {
+        "text": "Pesan disampaikan secara lengkap tanpa pengurangan",
+        "isCorrect": false,
+        "rationale": "Pesan yang disampaikan secara utuh dan lengkap mengacu pada prinsip *Completeness*."
+      },
+      {
+        "text": "Pesan menggunakan bahasa yang sopan dan penuh hormat",
+        "isCorrect": false,
+        "rationale": "Bahasa yang santun, ramah, dan menghormati penerima merujuk pada prinsip *Courtesy*."
+      },
+      {
+        "text": "Pesan disampaikan secara singkat, padat, dan tidak bertele-tele",
+        "isCorrect": true,
+        "rationale": "*Conciseness* artinya ringkas; mengeliminasi kata-kata mubazir tanpa mengorbankan esensi penting informasi agar hemat waktu baca."
+      },
+      {
+        "text": "Pesan disertai bukti dan data yang kuat",
+        "isCorrect": false,
+        "rationale": "Penyajian data konkret, spesifik, dan tidak abstrak merupakan penjabaran dari prinsip *Concreteness*."
+      }
+    ]
+  },
+  {
+    "questionNumber": 28,
+    "question": "Bagian surat bisnis yang berisi alasan atau tujuan penulisan surat disebut...",
+    "answerOptions": [
+      {
+        "text": "Kepala surat (letterhead).",
+        "isCorrect": false,
+        "rationale": "Kepala surat atau kop surat berisi identitas legal resmi perusahaan seperti nama, logo, alamat, dan nomor kontak."
+      },
+      {
+        "text": "Salam penutup",
+        "isCorrect": false,
+        "rationale": "Salam penutup berfungsi sebagai pemanis tanda berakhirnya pesan surat secara formal (misalnya: Hormat kami)."
+      },
+      {
+        "text": "Isi atau tubuh surat",
+        "isCorrect": true,
+        "rationale": "Tubuh surat (*body of the letter*) adalah bagian inti tempat seluruh pesan utama, latar belakang, maksud, dan detail informasi dituangkan."
+      },
+      {
+        "text": "Tembusan",
+        "isCorrect": false,
+        "rationale": "Tembusan (*cc*) digunakan untuk menginformasikan kepada pihak lain yang juga perlu mengetahui perihal surat tersebut."
+      }
+    ]
+  },
+  {
+    "questionNumber": 29,
+    "question": "Surat lamaran kerja yang baik harus mencantumkan hal-hal berikut, KECUALI...",
+    "answerOptions": [
+      {
+        "text": "Motivasi dan alasan melamar posisi tersebut",
+        "isCorrect": false,
+        "rationale": "Motivasi sangat penting dicantumkan agar HRD mengetahui keseriusan dan ketertarikan kandidat pada posisi terkait."
+      },
+      {
+        "text": "Data pribadi seperti nomor rekening bank",
+        "isCorrect": true,
+        "rationale": "Nomor rekening bank bersifat rahasia dan sensitif. Informasi keuangan ini tidak boleh dimasukkan dalam berkas lamaran awal karena berisiko memicu kebocoran data."
+      },
+      {
+        "text": "Kualifikasi dan pengalaman yang relevan",
+        "isCorrect": false,
+        "rationale": "Kualifikasi adalah nilai jual utama pelamar untuk membuktikan bahwa dirinya kompeten mengemban tugas jabatan tersebut."
+      },
+      {
+        "text": "Posisi yang dilamar secara jelas",
+        "isCorrect": false,
+        "rationale": "Menyebutkan posisi incaran dengan jelas mempermudah penyaringan klasifikasi berkas oleh perekrut kerja."
+      }
+    ]
+  },
+  {
+    "questionNumber": 30,
+    "question": "Curriculum Vitae (CV) atau resume yang efektif dalam lamaran kerja harus bersifat...",
+    "answerOptions": [
+      {
+        "text": "Ringkas, jelas, relevan, dan disesuaikan dengan posisi yang dilamar",
+        "isCorrect": true,
+        "rationale": "CV yang tertarget (*tailored resume*) mempermudah sistem ATS atau HRD membaca keselarasan latar belakang pelamar dengan kebutuhan formasi jabatan."
+      },
+      {
+        "text": "Sepanjang mungkin agar terlihat berpengalaman",
+        "isCorrect": false,
+        "rationale": "CV yang terlalu panjang (berlembar-lembar) justru melelahkan perekrut dan menyamarkan informasi penting yang sebenarnya dicari."
+      },
+      {
+        "text": "Ditulis dalam bahasa asing saja",
+        "isCorrect": false,
+        "rationale": "Bahasa yang digunakan harus disesuaikan dengan syarat dari perusahaan tujuan; jika melamar ke instansi lokal, bahasa Indonesia tetap diperbolehkan."
+      },
+      {
+        "text": "Mencantumkan seluruh riwayat hidup tanpa penyaringan",
+        "isCorrect": false,
+        "rationale": "Memasukkan riwayat non-esensial (misal: juara lomba masa TK) menurunkan tingkat profesionalitas isi CV di mata industri."
+      }
+    ]
+  },
+  {
+    "questionNumber": 31,
+    "question": "Laporan bisnis berfungsi sebagai alat komunikasi yang menyampaikan...",
+    "answerOptions": [
+      {
+        "text": "Hiburan dan cerita inspirasi kepada karyawan",
+        "isCorrect": false,
+        "rationale": "Kisah inspiratif atau hiburan disalurkan lewat majalah internal perusahaan (newsletter) atau kegiatan gathering, bukan laporan bisnis resmi."
+      },
+      {
+        "text": "Informasi faktual, analisis, dan rekomendasi untuk pengambilan keputusan",
+        "isCorrect": true,
+        "rationale": "Tujuan utama laporan bisnis adalah menyediakan kompilasi data yang valid, analisis objektif, serta opsi solusi tepercaya bagi jajaran direksi."
+      },
+      {
+        "text": "Promosi produk kepada pelanggan potensial",
+        "isCorrect": false,
+        "rationale": "Promosi penawaran produk disajikan melalui brosur, katalog jualan, atau proposal bisnis eksternal."
+      },
+      {
+        "text": "Keluhan konsumen kepada manajemen",
+        "isCorrect": false,
+        "rationale": "Keluhan dari pelanggan ditampung dalam log data *Customer Service* atau analisis kepuasan konsumen."
+      }
+    ]
+  },
+  {
+    "questionNumber": 32,
+    "question": "Penulisan laporan bisnis yang baik mengikuti struktur yang terdiri atas...",
+    "answerOptions": [
+      {
+        "text": "Kata pengantar, daftar isi, dan lampiran saja",
+        "isCorrect": false,
+        "rationale": "Elemen-elemen ini hanyalah bagian pelengkap administratif, tidak menyentuh bagian substansi analisis laporan bisnis."
+      },
+      {
+        "text": "Hanya kesimpulan dan rekomendasi",
+        "isCorrect": false,
+        "rationale": "Kesimpulan dan saran tidak akan dinilai kredibel jika tidak didahului oleh penyajian data mentah dan analisis pembahasan mendalam."
+      },
+      {
+        "text": "Abstrak dan daftar pustaka saja",
+        "isCorrect": false,
+        "rationale": "Format ini lebih mirip dengan karya tulis ilmiah akademis murni (skripsi/jurnal ilmiah), bukan laporan operasional korporat."
+      },
+      {
+        "text": "Pendahuluan, isi/pembahasan, dan penutup/kesimpulan",
+        "isCorrect": true,
+        "rationale": "Struktur standar tripartit ini (awal-tengah-akhir) menjamin alur logika pelaporan runtut, runtutan latar belakang jelas, dan solusi terjabarkan mantap."
+      }
+    ]
+  },
+  {
+    "questionNumber": 33,
+    "question": "Presentasi bisnis yang efektif memerlukan persiapan yang mencakup...",
+    "answerOptions": [
+      {
+        "text": "Menghafal seluruh teks tanpa memahami isinya",
+        "isCorrect": false,
+        "rationale": "Menghafal teks membuat gaya bicara kaku seperti robot, dan pembicara akan panik total jika lupa satu kata di tengah presentasi."
+      },
+      {
+        "text": "Analisis audiens, perancangan konten, dan latihan penyampaian",
+        "isCorrect": true,
+        "rationale": "Persiapan matang ini memastikan pembicara paham siapa pendengarnya, konten yang dibawakan berbobot, serta penyampaiannya mengalir dengan luwes."
+      },
+      {
+        "text": "Mengandalkan improvisasi sepenuhnya tanpa persiapan",
+        "isCorrect": false,
+        "rationale": "Improvisasi tanpa basis data matang berisiko membuat pembahasan melantur ke mana-mana dan merusak reputasi profesional di depan klien."
+      },
+      {
+        "text": "Membaca langsung dari slide tanpa kontak mata",
+        "isCorrect": false,
+        "rationale": "Terus-menerus membaca slide memutus ikatan emosional (engaging) dengan audiens dan menciptakan kesan tidak menguasai materi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 34,
+    "question": "Dalam presentasi bisnis, fungsi slide visual adalah untuk....",
+    "answerOptions": [
+      {
+        "text": "Menggantikan seluruh peran pembicara",
+        "isCorrect": false,
+        "rationale": "Slide visual hanyalah alat bantu sekunder; kekuatan persuasi utama tetap berada pada diri narasi sang pembicara."
+      },
+      {
+        "text": "Mendukung dan memperkuat pesan yang disampaikan pembicara",
+        "isCorrect": true,
+        "rationale": "Fungsi utama slide adalah mengilustrasikan poin kunci, bagan, atau tren rumit agar audiens lebih mudah mencerna perkataan pembicara."
+      },
+      {
+        "text": "Memuat seluruh teks yang akan dibacakan",
+        "isCorrect": false,
+        "rationale": "Slide yang penuh sesak oleh paragraf teks (*text-heavy*) membuat audiens lelah membaca dan abai terhadap penjelasan lisan."
+      },
+      {
+        "text": "Mengalihkan perhatian audiens dari pembicara",
+        "isCorrect": false,
+        "rationale": "Slide didesain untuk menuntun fokus audiens mendalami submateri, bukan memecah konsentrasi dari alur pembicaraan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 35,
+    "question": "Briefing dalam komunikasi bisnis adalah kegiatan...",
+    "answerOptions": [
+      {
+        "text": "Penulisan laporan panjang kepada direksi",
+        "isCorrect": false,
+        "rationale": "Penyusunan laporan tertulis komprehensif masuk ke dalam kategori administrasi bisnis atau penyusunan laporan operasional."
+      },
+      {
+        "text": "Sesi wawancara dengan calon karyawan baru",
+        "isCorrect": false,
+        "rationale": "Wawancara calon pegawai merupakan bagian dari proses seleksi ketenagakerjaan (*recruitment interview*)."
+      },
+      {
+        "text": "Presentasi tahunan kepada pemegang saham",
+        "isCorrect": false,
+        "rationale": "Pertemuan dengan investor tahunan disebut Rapat Umum Pemegang Saham (RUPS) yang berjalan sangat formal."
+      },
+      {
+        "text": "Penyampaian informasi singkat dan padat kepada tim sebelum pelaksanaan tugas",
+        "isCorrect": true,
+        "rationale": "*Briefing* bertujuan menyelaraskan fokus, membagi tugas harian, serta memberikan instruksi-instruksi operasional kilat agar tim siap bekerja."
+      }
+    ]
+  },
+  {
+    "questionNumber": 36,
+    "question": "Job interview (wawancara kerja) merupakan bentuk komunikasi bisnis yang termasuk kategori....",
+    "answerOptions": [
+      {
+        "text": "Komunikasi massa",
+        "isCorrect": false,
+        "rationale": "Wawancara kerja tidak menggunakan media penyiaran massal untuk disebarkan ke jutaan orang tak dikenal."
+      },
+      {
+        "text": "Komunikasi verbal satu arah",
+        "isCorrect": false,
+        "rationale": "Wawancara kerja melibatkan tanya jawab aktif dari pewawancara dan tanggapan balik langsung dari pelamar, jadi sifatnya dua arah."
+      },
+      {
+        "text": "Komunikasi interpersonal dua arah",
+        "isCorrect": true,
+        "rationale": "Proses ini mendudukkan pelamar dan pewawancara secara tatap muka (atau virtual) untuk saling bertukar informasi secara mendalam (*interpersonal relationship*)."
+      },
+      {
+        "text": "Komunikasi nonverbal",
+        "isCorrect": false,
+        "rationale": "Meskipun bahasa tubuh dinilai, muatan utama penilaian wawancara tetap didasari atas kata-kata verbal (jawaban lisan) pelamar."
+      }
+    ]
+  },
+  {
+    "questionNumber": 37,
+    "question": "Dalam sebuah meeting bisnis, peran notulis adalah untuk....",
+    "answerOptions": [
+      {
+        "text": "Memimpin jalannya diskusi.",
+        "isCorrect": false,
+        "rationale": "Tugas memimpin jalannya diskusi, mengarahkan pembicaraan, dan membuka/menutup rapat adalah wewenang ketua rapat (*chairperson*/moderator)."
+      },
+      {
+        "text": "Mencatat seluruh hasil pembahasan dan keputusan rapat",
+        "isCorrect": true,
+        "rationale": "Notulis bertanggung jawab menyusun notulen (*minutes of meeting*) sebagai dokumen legal rekam jejak keputusan rapat."
+      },
+      {
+        "text": "Mempresentasikan laporan keuangan",
+        "isCorrect": false,
+        "rationale": "Presentasi instrumen finansial disajikan oleh manajer keuangan atau akuntan perusahaan."
+      },
+      {
+        "text": "Mengundang peserta rapat",
+        "isCorrect": false,
+        "rationale": "Mengirim undangan dan mengatur jadwal pertemuan biasanya dijalankan oleh sekretaris atau bagian administrasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 38,
+    "question": "Hambatan komunikasi bisnis yang bersifat semantik terjadi karena...",
+    "answerOptions": [
+      {
+        "text": "Gangguan teknis pada perangkat komunikasi",
+        "isCorrect": false,
+        "rationale": "Kerusakan alat atau sinyal buruk masuk dalam kategori hambatan teknis atau mekanis."
+      },
+      {
+        "text": "Suasana ruangan yang tidak kondusif",
+        "isCorrect": false,
+        "rationale": "Kebisingan lingkungan sekitar atau ruangan pengap tergolong sebagai hambatan fisik/lingkungan."
+      },
+      {
+        "text": "Kurangnya anggaran untuk komunikasi",
+        "isCorrect": false,
+        "rationale": "Keterbatasan dana merupakan masalah manajerial atau hambatan finansial organisasi."
+      },
+      {
+        "text": "Perbedaan interpretasi makna kata antara pengirim dan penerima",
+        "isCorrect": true,
+        "rationale": "Hambatan semantik murni berkaitan dengan bahasa, denotasi, konotasi, atau salah paham arti kata/jargon yang dipakai saat bertukar pesan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 39,
+    "question": "Salah satu fungsi utama komunikasi horizontal dalam organisasi bisnis adalah..",
+    "answerOptions": [
+      {
+        "text": "Menyampaikan instruksi dari manajemen puncak",
+        "isCorrect": false,
+        "rationale": "Penyampaian instruksi kerja dari atas ke bawah merupakan bagian dari alur komunikasi vertikal ke bawah."
+      },
+      {
+        "text": "Memberikan laporan hasil kerja kepada atasan",
+        "isCorrect": false,
+        "rationale": "Melaporkan progres kerja ke pimpinan adalah bentuk nyata dari saluran komunikasi vertikal ke atas."
+      },
+      {
+        "text": "Meningkatkan koordinasi dan kerja sama antardepartemen yang setara",
+        "isCorrect": true,
+        "rationale": "Komunikasi horizontal (sejajar) memperlancar arus info antardivisi (misal: divisi marketing dengan divisi produksi) agar sinkron tanpa birokrasi berbelit."
+      },
+      {
+        "text": "Menyampaikan keluhan karyawan kepada HRD",
+        "isCorrect": false,
+        "rationale": "Penyampaian aspirasi/keluhan staf ke lini personalia mengalir secara vertikal ke atas atau lewat kotak saran resmi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 40,
+    "question": "Komunikasi informal dalam organisasi bisnis yang sering disebut \"grapevine\" memiliki karakteristik...",
+    "answerOptions": [
+      {
+        "text": "Selalu menghasilkan informasi yang akurat dan terverifikasi",
+        "isCorrect": false,
+        "rationale": "Karena dasarnya selentingan desas-desus, info *grapevine* sering kali bercampur rumor fiktif dan keakuratannya sangat rendah."
+      },
+      {
+        "text": "Berjalan cepat dan tidak mengikuti hierarki formal, tetapi rentan terhadap distorsi",
+        "isCorrect": true,
+        "rationale": "*Grapevine* (obrolan warung kopi/gosip kantor) menyebar super cepat lewat jalur bawah tanah di luar struktur formal, namun sarat akan perubahan fakta (distorsi)."
+      },
+      {
+        "text": "Hanya terjadi dalam rapat formal",
+        "isCorrect": false,
+        "rationale": "Jalur informal justru meletup di luar koridor formal, seperti saat jam istirahat makan siang atau di koridor kantor."
+      },
+      {
+        "text": "Dikendalikan sepenuhnya oleh manajemen",
+        "isCorrect": false,
+        "rationale": "Manajemen tidak bisa mengontrol penuh arus desas-desus informal karena tumbuh organik di kalangan relasi sosial staf."
+      }
+    ]
+  },
+  {
+    "questionNumber": 41,
+    "question": "Dalam proses negosiasi bisnis, tahap \"opening\" bertujuan untuk...",
+    "answerOptions": [
+      {
+        "text": "Menandatangani kontrak kesepakatan",
+        "isCorrect": false,
+        "rationale": "Penandatanganan berkas kesepakatan berada di tahap penutupan (*closing/agreement*), bukan pembukaan."
+      },
+      {
+        "text": "Membangun suasana kondusif dan menetapkan agenda negosiasi",
+        "isCorrect": true,
+        "rationale": "Tahap awal (*opening*) wajib diisi dengan memecah kekakuan (*ice breaking*), menyamakan persepsi aturan main, dan merumuskan agenda yang mau dikompromikan."
+      },
+      {
+        "text": "Mengumumkan hasil akhir negosiasi",
+        "isCorrect": false,
+        "rationale": "Pengumuman hasil akhir dilakukan pasca-seluruh klausul disetujui bersama oleh kedua belah pihak."
+      },
+      {
+        "text": "Mengevaluasi pelaksanaan kesepakatan",
+        "isCorrect": false,
+        "rationale": "Evaluasi baru bisa terlaksana setelah kesepakatan bisnis diimplementasikan dalam kurun waktu tertentu."
+      }
+    ]
+  },
+  {
+    "questionNumber": 42,
+    "question": "Media sosial sebagai alat komunikasi bisnis modern memiliki keunggulan berupa...",
+    "answerOptions": [
+      {
+        "text": "Kemampuan membangun interaksi langsung dengan pelanggan secara luas dan cepat",
+        "isCorrect": true,
+        "rationale": "Media sosial meruntuhkan sekat perantara, memungkinkan perusahaan berinteraksi real-time, mendengar keluhan, dan melayani pasar massal seketika."
+      },
+      {
+        "text": "Hanya dapat digunakan oleh generasi muda",
+        "isCorrect": false,
+        "rationale": "Demografi pengguna media sosial masa kini mencakup lintas usia, menjadikannya ladang target pasar yang sangat variatif."
+      },
+      {
+        "text": "Tidak memerlukan strategi konten khusus",
+        "isCorrect": false,
+        "rationale": "Tanpa strategi konten (copywriting/visual) yang matang, akun bisnis akan tenggelam oleh algoritma persaingan kompetitor."
+      },
+      {
+        "text": "Selalu menghasilkan citra positif bagi perusahaan",
+        "isCorrect": false,
+        "rationale": "Media sosial bagai pisau bermata dua; salah penanganan komplain di ruang publik bisa memicu boikot viral yang merusak citra."
+      }
+    ]
+  },
+  {
+    "questionNumber": 43,
+    "question": "Pesan bisnis yang bersifat \"persuasif\" bertujuan untuk...",
+    "answerOptions": [
+      {
+        "text": "Sekadar menginformasikan fakta tanpa mempengaruhi sikap",
+        "isCorrect": false,
+        "rationale": "Pesan yang sekadar memaparkan fakta tanpa tendensi ajakan disebut pesan informatif murni."
+      },
+      {
+        "text": "Memberikan instruksi teknis kepada karyawan",
+        "isCorrect": false,
+        "rationale": "Instruksi teknis bersifat perintah direktif/regulatif, bukan ajakan halus yang membutuhkan pembujukan emosional."
+      },
+      {
+        "text": "Menyampaikan laporan rutin kepada manajemen",
+        "isCorrect": false,
+        "rationale": "Laporan operasional rutin bersifat deskriptif dan akuntabel, tujuannya memaparkan performa riil di lapangan."
+      },
+      {
+        "text": "Mempengaruhi sikap, keyakinan, atau tindakan penerima pesan",
+        "isCorrect": true,
+        "rationale": "Inti utama pesan persuasif adalah menggerakkan hati dan logika audiens (misal: calon pembeli) agar mau menyetujui, membeli, atau mengikuti anjuran pengirim."
+      }
+    ]
+  },
+  {
+    "questionNumber": 44,
+    "question": "Dalam konteks komunikasi bisnis, etika komunikasi mengharuskan penyampaian informasi yang...",
+    "answerOptions": [
+      {
+        "text": "Mengutamakan keuntungan sepihak",
+        "isCorrect": false,
+        "rationale": "Hanya mengejar untung sepihak tanpa memedulikan hak konsumen/mitra mencederai nilai keadilan dan moralitas dasar bisnis."
+      },
+      {
+        "text": "Jujur, tidak menyesatkan, dan menghormati hak penerima pesan",
+        "isCorrect": true,
+        "rationale": "Etika komunikasi bisnis bertumpu pada transparansi fakta produk/jasa serta perlindungan hak bagi pemangku kepentingan agar tidak tertipu."
+      },
+      {
+        "text": "Menyembunyikan informasi yang merugikan perusahaan",
+        "isCorrect": false,
+        "rationale": "Sengaja menutupi kecacatan fatal produk termasuk tindakan pembohongan publik yang melanggar hukum perlindungan konsumen."
+      },
+      {
+        "text": "Menggunakan teknik manipulasi untuk memenangkan negosiasi",
+        "isCorrect": false,
+        "rationale": "Manipulasi data atau intimidasi psikologis saat berunding dicap sebagai praktik curang yang merusak iklim industri sehat."
+      }
+    ]
+  },
+  {
+    "questionNumber": 45,
+    "question": "Salah satu karakteristik penting dari stakeholders primer (primary stakeholders) adalah....",
+    "answerOptions": [
+      {
+        "text": "Mereka tidak memiliki hubungan kontraktual dengan perusahaan",
+        "isCorrect": false,
+        "rationale": "Stakeholders primer umumnya justru memiliki ikatan kontrak hukum yang kuat dengan operasional korporasi."
+      },
+      {
+        "text": "Mereka hanya berkepentingan secara moral terhadap perusahaan",
+        "isCorrect": false,
+        "rationale": "Kelompok yang didominasi oleh kepentingan moral/isu sosial biasanya masuk ke faksi stakeholders sekunder (seperti LSM)."
+      },
+      {
+        "text": "Mereka memiliki hubungan langsung dan formal serta dapat sangat mempengaruhi keberlangsungan bisnis",
+        "isCorrect": true,
+        "rationale": "Stakeholder primer adalah pilar utama (contoh: pemodal, pekerja, pembeli, pemasok); tanpanya, roda bisnis akan langsung mandek dan kolaps."
+      },
+      {
+        "text": "Mereka adalah kelompok masyarakat yang tidak dikenal perusahaan",
+        "isCorrect": false,
+        "rationale": "Perusahaan pasti mengenal sangat baik siapa target investor, partner supplier, dan basis pegawai intinya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 46,
+    "question": "Komunikasi bisnis lintas budaya memerlukan pemahaman tentang...",
+    "answerOptions": [
+      {
+        "text": "Hanya bahasa verbal yang digunakan",
+        "isCorrect": false,
+        "rationale": "Memahami kata-kata saja belum cukup jika kita buta terhadap adat tata krama atau simbol nonverbal wilayah tersebut."
+      },
+      {
+        "text": "Perbedaan nilai, norma, dan gaya komunikasi antarbangsa atau kelompok budaya",
+        "isCorrect": true,
+        "rationale": "Sensitivitas lintas budaya menuntut pemahaman cara pandang hidup, tradisi negosiasi, dan pantangan kultural agar kerja sama internasional terhindar dari ketersinggungan."
+      },
+      {
+        "text": "Teknik penerjemahan dokumen resmi saja",
+        "isCorrect": false,
+        "rationale": "Alih bahasa dokumen legal hanyalah urusan administratif kebahasaan, belum menyentuh aspek relasi diplomasi psikologis manusia."
+      },
+      {
+        "text": "Sistem hukum negara tujuan bisnis",
+        "isCorrect": false,
+        "rationale": "Aspek hukum negara tujuan dipelajari dalam ranah hukum bisnis internasional, bukan fokus utama esensi dari studi komunikasi budaya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 47,
+    "question": "Memo bisnis berbeda dari surat bisnis terutama karena memo...",
+    "answerOptions": [
+      {
+        "text": "Digunakan untuk berkomunikasi dengan pihak eksternal perusahaan",
+        "isCorrect": false,
+        "rationale": "Surat yang dikirim ke eksternal perusahaan (klien/vendor) harus berbentuk surat bisnis resmi, bukan nota memo."
+      },
+      {
+        "text": "Umumnya digunakan untuk komunikasi internal yang singkat dan spesifik",
+        "isCorrect": true,
+        "rationale": "Memo (memorandum) dirancang sebagai alat pemberitahuan kilat antar-pejabat atau internal staf di dalam satu lingkungan instansi."
+      },
+      {
+        "text": "Memerlukan kop surat yang sangat lengkap",
+        "isCorrect": false,
+        "rationale": "Komponen memo jauh lebih sederhana dibanding surat eksternal, biasanya langsung berformat: Kepada, Dari, Tanggal, Perihal."
+      },
+      {
+        "text": "Harus selalu ditandatangani oleh direktur utama",
+        "isCorrect": false,
+        "rationale": "Memo bisa diterbitkan oleh manajer divisi atau kepala seksi mana pun demi kelancaran tugas harian internal departemennya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 48,
+    "question": "Dalam SDN penyusunan pesan bisnis negatif (bad news), pendekatan yang disarankan adalah...",
+    "answerOptions": [
+      {
+        "text": "Menyampaikan berita buruk secara langsung tanpa basa-basi",
+        "isCorrect": false,
+        "rationale": "Gaya langsung tanpa penyangga emosi (*direct approach*) rawan memicu kekecewaan ekstrem atau merusak hubungan psikologis dengan pembaca."
+      },
+      {
+        "text": "Menyembunyikan informasi negatif sepenuhnya",
+        "isCorrect": false,
+        "rationale": "Menutupi berita buruk (seperti pembatalan proyek atau PHK) justru memicu krisis transparansi dan melanggar etika tata kelola bisnis."
+      },
+      {
+        "text": "Mendelegasikan penyampaian berita buruk kepada pihak ketiga",
+        "isCorrect": false,
+        "rationale": "Melempar tanggung jawab penyampaian berita buruk mencerminkan ketidakprofesionalan kepemimpinan manajemen."
+      },
+      {
+        "text": "Menggunakan pendekatan tidak langsung dengan memberi penjelasan sebelum menyampaikan penolakan atau berita buruk",
+        "isCorrect": true,
+        "rationale": "Pendekatan tidak langsung (*indirect approach*) menggunakan pembuka netral (*buffer*) dan alasan rasional terlebih dahulu agar pembaca siap secara psikologis menerima keputusan buruk."
+      }
+    ]
+  },
+  {
+    "questionNumber": 49,
+    "question": "Kemampuan mendengar aktif (active listening) dalam komunikasi bisnis penting karena...",
+    "answerOptions": [
+      {
+        "text": "Memungkinkan penerima pesan mendominasi percakapan",
+        "isCorrect": false,
+        "rationale": "Mendengar aktif menuntut porsi menyimak yang baik, bukan mendominasi pembicaraan atau memotong kalimat orang lain."
+      },
+      {
+        "text": "Menunjukkan bahwa penerima setuju dengan semua yang disampaikan",
+        "isCorrect": false,
+        "rationale": "Mendengar aktif berarti berusaha memahami cara pandang lawan bicara dengan akurat, bukan berarti kita wajib menyetujui opini mereka."
+      },
+      {
+        "text": "Meningkatkan pemahaman, mengurangi kesalahpahaman, dan membangun hubungan kerja yang lebih baik",
+        "isCorrect": true,
+        "rationale": "Dengan mendengarkan secara saksama, kita dapat menangkap esensi pesan tersembunyi, menghindari bias tafsir, serta menumbuhkan rasa dihargai pada rekan kerja."
+      },
+      {
+        "text": "Mempercepat proses komunikasi sehingga tidak perlu umpan balik",
+        "isCorrect": false,
+        "rationale": "Mendengar aktif justru menuntut pemberian umpan balik berupa konfirmasi ulang atau pertanyaan klarifikasi demi validitas pesan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 50,
+    "question": "Diskusi dalam komunikasi bisnis bertujuan untuk...",
+    "answerOptions": [
+      {
+        "text": "Mengumumkan keputusan yang sudah final kepada peserta",
+        "isCorrect": false,
+        "rationale": "Menyampaikan keputusan final yang mutlak tanpa kompromi disebut bentuk pengumuman searah (instruksi), bukan forum diskusi."
+      },
+      {
+        "text": "Menampilkan kemampuan retorika individu semata",
+        "isCorrect": false,
+        "rationale": "Pamer kecakapan bicara individu tanpa sumbangsih solusi hanya akan membuang durasi rapat kerja secara sia-sia."
+      },
+      {
+        "text": "Menyelesaikan masalah secara sepihak oleh pimpinan",
+        "isCorrect": false,
+        "rationale": "Solusi sepihak mencerminkan gaya kepemimpinan otoriter yang menutup pintu sumbang saran dari anggota tim."
+      },
+      {
+        "text": "Mempertukarkan ide, menganalisis masalah, dan mencapai pemahaman atau keputusan bersama",
+        "isCorrect": true,
+        "rationale": "Tujuan luhur diskusi bisnis adalah mengolaborasikan berbagai sudut pandang keahlian staf demi melahirkan resolusi masalah yang matang dan disepakati mufakat."
+      }
+    ]
+  }
+]
+
+
+      function renderSoal() {
+    const container = document.getElementById('container');
+    soalList.forEach(soal => {
+      const soalDiv = document.createElement('div');
+      soalDiv.className = 'soal';
+      soalDiv.setAttribute('data-qnum', soal.questionNumber);
+      
+      let soalHTML = `<h3>Soal ${soal.questionNumber}.</h3>`;
+      soalHTML += `<p>${soal.question}</p>`;
+      soalHTML += `<div class="jawaban">`;
+      
+      soal.answerOptions.forEach((option, index) => {
+          const label = String.fromCharCode(65 + index); 
+          
+          soalHTML += `
+              <button 
+                  onclick="checkAnswer(this, ${soal.questionNumber}, ${option.isCorrect})"
+                  data-iscorrect="${option.isCorrect}"
+                  data-label="${label}">
+                  ${label}. ${option.text}
+              </button>
+              <div class="penjelasan-opsi">
+                <strong>Penjelasan Opsi ${label}:</strong> ${option.rationale}
+              </div>
+          `;
+      });
+      
+      soalHTML += `</div>`;
+      soalDiv.innerHTML = soalHTML;
+      container.appendChild(soalDiv);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', renderSoal);
+</script>
+
+</body>
+</html>

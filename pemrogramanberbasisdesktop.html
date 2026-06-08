@@ -1,0 +1,2773 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal Ujian</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7f6;
+      margin: 0;
+      padding: 20px 10px;
+    }
+    h1 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    .soal {
+      background: #ffffff;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 5px solid #42a5f5;
+    }
+    h3 {
+      color: #3f51b5;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .jawaban button {
+      color: #2a2a2a;
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #c5cae9;
+      background: #e8eaf6;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .jawaban button:hover:not(:disabled) {
+      background: #c5cae9;
+    }
+    .jawaban button.benar {
+      background-color: #dcf9dc;
+      border-color: #388e3c;
+      font-weight: bold;
+    }
+    .jawaban button.salah {
+      background-color: #ffcdd2;
+      border-color: #d32f2f;
+      opacity: 0.7;
+    }
+
+    .penjelasan-opsi {
+      background: #f3e5f5;
+      color: #4a148c;
+      padding: 10px;
+      margin-top: -5px;
+      margin-bottom: 15px;
+      border-radius: 0 0 8px 8px;
+      border-top: none;
+      border-left: 5px solid #7b1fa2;
+      font-size: 14px;
+      display: none;
+    }
+    .counter {
+      position: sticky;
+      bottom: 0;
+      background: #1a237e;
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 20px; }
+      .jawaban button { font-size: 14px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Latihan Soal Pemrograman Berbasis Desktop UT</h1>
+
+<div id="container"></div>
+
+<div class="counter">
+  ✅ Jawaban Benar: <span id="benar">0</span> |
+  ❌ Jawaban Salah: <span id="salah">0</span>
+</div>
+
+<script>
+  let totalBenar = 0;
+  let totalSalah = 0;
+  let answeredQuestions = new Set();
+
+  function updateCounter() {
+     document.getElementById("benar").textContent = totalBenar;
+    document.getElementById("salah").textContent = totalSalah;
+  }
+
+  function checkAnswer(button, questionNumber, isCorrect) {
+      if (answeredQuestions.has(questionNumber)) {
+          return;
+      }
+
+      const soalElement = button.closest('.soal');
+      const buttons = soalElement.querySelectorAll('.jawaban button');
+      
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (isCorrect) {
+          button.classList.add('benar');
+          totalBenar++;
+      } else {
+          button.classList.add('salah');
+          totalSalah++;
+          
+          buttons.forEach(btn => {
+              if (btn.getAttribute('data-iscorrect') === 'true') {
+                  btn.classList.add('benar');
+              }
+          });
+      }
+
+      const allRationales = soalElement.querySelectorAll('.penjelasan-opsi');
+      allRationales.forEach(rationaleDiv => {
+          rationaleDiv.style.display = 'block';
+      });
+
+      answeredQuestions.add(questionNumber);
+      updateCounter();
+  }
+
+  const soalList = [
+    {
+    "questionNumber": 1,
+    "question": "Apa yang dimaksud dengan pemrograman berorientasi objek (OOP)?",
+    "answerOptions": [
+      {
+        "text": "Paradigma pemrograman yang menggunakan objek sebagai entitas utama",
+        "isCorrect": true,
+        "rationale": "OOP adalah paradigma yang menggunakan objek sebagai komponen utama untuk menyusun program, bukan berfokus pada fungsi atau prosedur."
+      },
+      {
+        "text": "Teknik pemrograman yang berfokus pada fungsi dan prosedur",
+        "isCorrect": false,
+        "rationale": "Fokus pada fungsi dan prosedur merupakan ciri dari paradigma pemrograman prosedural atau fungsional."
+      },
+      {
+        "text": "Metode pemrograman yang hanya menggunakan bahasa assembly",
+        "isCorrect": false,
+        "rationale": "Bahasa Assembly termasuk dalam pemrograman tingkat rendah, sedangkan OOP umumnya diterapkan pada bahasa tingkat tinggi seperti Java, C++, atau Python."
+      },
+      {
+        "text": "Pendekatan pemrograman yang tidak menggunakan struktur data",
+        "isCorrect": false,
+        "rationale": "OOP tetap menggunakan struktur data yang diwujudkan dalam bentuk atribut atau properti di dalam objek."
+      }
+    ]
+  },
+  {
+    "questionNumber": 2,
+    "question": "Manakah dari berikut ini yang merupakan prinsip utama dalam OOP?",
+    "answerOptions": [
+      {
+        "text": "Polimorfisme, pewarisan, dan enkapsulasi",
+        "isCorrect": true,
+        "rationale": "Tiga pilar utama (ditambah abstraksi) yang membentuk pondasi pemrograman berorientasi objek adalah polimorfisme, pewarisan (inheritance), dan enkapsulasi."
+      },
+      {
+        "text": "Pengulangan, seleksi, dan array",
+        "isCorrect": false,
+        "rationale": "Pengulangan, seleksi, dan array merupakan bagian dari struktur kontrol dasar dan struktur data dalam pemrograman dasar/prosedural."
+      },
+      {
+        "text": "Variabel, konstanta, dan tipe data",
+        "isCorrect": false,
+        "rationale": "Variabel, konstanta, dan tipe data adalah elemen fundamental yang ada di hampir semua paradigma pemrograman."
+      },
+      {
+        "text": "Input, proses, dan output",
+        "isCorrect": false,
+        "rationale": "Input, proses, dan output adalah siklus pemrosesan informasi standar pada komputer secara umum."
+      }
+    ]
+  },
+  {
+    "questionNumber": 3,
+    "question": "Apa fungsi dari objek dalam OOP?",
+    "answerOptions": [
+      {
+        "text": "Menyimpan data statis yang tidak bisa diubah",
+        "isCorrect": false,
+        "rationale": "Data di dalam objek (atribut) umumnya dinamis dan dapat diubah melalui metode yang disediakan."
+      },
+      {
+        "text": "Menjalankan perintah secara berurutan",
+        "isCorrect": false,
+        "rationale": "Menjalankan perintah berurutan langkah-demi-langkah adalah karakteristik utama dari pemrograman sekuensial/prosedural."
+      },
+      {
+        "text": "Mewakili entitas dunia nyata dengan atribut dan perilaku",
+        "isCorrect": true,
+        "rationale": "Objek dalam OOP dirancang untuk merepresentasikan entitas nyata atau abstrak yang memiliki karakteristik data (atribut) dan tindakan yang bisa dilakukan (metode)."
+      },
+      {
+        "text": "Menggantikan penggunaan variabel dan fungsi",
+        "isCorrect": false,
+        "rationale": "Objek tidak menggantikan variabel dan fungsi, melainkan membungkus variabel (sebagai atribut) dan fungsi (sebagai metode) ke dalam satu kesatuan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 4,
+    "question": "Manakah contoh yang paling tepat untuk menggambarkan konsep kelas dan objek?",
+    "answerOptions": [
+      {
+        "text": "Kelas adalah cetak biru, objek adalah instance dari kelas tersebut",
+        "isCorrect": true,
+        "rationale": "Kelas berfungsi sebagai cetak biru (blueprint) atau cetakan abstrak, sedangkan objek adalah wujud nyata (instance) yang dibuat dari cetakan tersebut."
+      },
+      {
+        "text": "Objek adalah cetak biru, kelas adalah instance dari objek",
+        "isCorrect": false,
+        "rationale": "Pernyataan ini terbalik; objek dibentuk berdasarkan kelas, bukan sebaliknya."
+      },
+      {
+        "text": "Kelas dan objek adalah istilah yang sama",
+        "isCorrect": false,
+        "rationale": "Kelas dan objek berbeda secara konsep; kelas adalah definisinya, objek adalah realisasinya."
+      },
+      {
+        "text": "Kelas hanya digunakan untuk angka, objek untuk teks",
+        "isCorrect": false,
+        "rationale": "Kelas dan objek tidak dibatasi oleh tipe data tertentu dan bisa menampung kombinasi tipe data apa saja."
+      }
+    ]
+  },
+  {
+    "questionNumber": 5,
+    "question": "Apa perbedaan utama antara kelas dan objek dalam OOP?",
+    "answerOptions": [
+      {
+        "text": "Kelas dapat diubah, objek tidak dapat diubah",
+        "isCorrect": false,
+        "rationale": "Keduanya dapat dimodifikasi pada tahap yang berbeda; kode kelas bisa diubah saat coding, nilai objek bisa diubah saat runtime."
+      },
+      {
+        "text": "Kelas hanya memiliki metode, objek hanya memiliki atribut",
+        "isCorrect": false,
+        "rationale": "Kelas mendefinisikan struktur metode dan atribut, sementara objek mewarisi dan memiliki nilai dari kedua elemen tersebut."
+      },
+      {
+        "text": "Kelas bersifat abstrak, objek bersifat konkret",
+        "isCorrect": true,
+        "rationale": "Kelas merupakan konsep atau struktur abstrak yang belum memiliki nilai nyata di memori, sedangkan objek adalah wujud nyata yang datanya sudah dialokasikan."
+      },
+      {
+        "text": "Kelas adalah objek yang sudah jadi",
+        "isCorrect": false,
+        "rationale": "Kebalikannya, objek adalah produk jadi yang dicetak menggunakan spesifikasi dari kelas."
+      }
+    ]
+  },
+  {
+    "questionNumber": 6,
+    "question": "Mengapa OOP dianggap lebih efektif untuk pengembangan perangkat lunak skala besar?",
+    "answerOptions": [
+      {
+        "text": "Karena OOP tidak memerlukan dokumentasi",
+        "isCorrect": false,
+        "rationale": "Semua proyek perangkat lunak skala besar, termasuk yang berbasis OOP, mutlak memerlukan dokumentasi yang baik."
+      },
+      {
+        "text": "Karena OOP hanya menggunakan satu file program",
+        "isCorrect": false,
+        "rationale": "OOP justru memecah program ke dalam banyak file komponen (modular) sesuai dengan kelasnya masing-masing."
+      },
+      {
+        "text": "Karena OOP lebih lambat dalam eksekusi",
+        "isCorrect": false,
+        "rationale": "Kecepatan eksekusi yang sedikit lebih lambat (karena overhead objek) bukanlah alasan keefektifan pengembangan skala besar."
+      },
+      {
+        "text": "Karena OOP mendukung modularitas, reuse, dan pemeliharaan kode",
+        "isCorrect": true,
+        "rationale": "OOP membagi kode menjadi modul-modul terpisah, memungkinkan pemakaian ulang kode lewat pewarisan, sehingga mempermudah pemeliharaan sistem yang besar."
+      }
+    ]
+  },
+  {
+    "questionNumber": 7,
+    "question": "Langkah pertama yang harus dilakukan saat menginstal Java Development Kit (JDK) adalah?",
+    "answerOptions": [
+      {
+        "text": "Menjalankan perintah 'java -version' di terminal",
+        "isCorrect": false,
+        "rationale": "Perintah pengecekan versi hanya bisa berjalan setelah proses instalasi selesai dilakukan."
+      },
+      {
+        "text": "Mengatur variabel lingkungan PATH",
+        "isCorrect": false,
+        "rationale": "Pengaturan PATH dilakukan setelah file JDK berhasil terpasang di dalam sistem komputer."
+      },
+      {
+        "text": "Menginstal Integrated Development Environment (IDE)",
+        "isCorrect": false,
+        "rationale": "IDE biasanya diinstal setelah JDK siap, atau dipasang bersamaan tetapi membutuhkan JDK agar bisa mengompilasi program."
+      },
+      {
+        "text": "Mengunduh JDK dari situs resmi Oracle atau OpenJDK",
+        "isCorrect": true,
+        "rationale": "Langkah paling awal yang mutlak dilakukan adalah mendapatkan file master installer JDK dari repositori atau situs resminya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 8,
+    "question": "Apa fungsi dari variabel lingkungan PATH dalam instalasi Java?",
+    "answerOptions": [
+      {
+        "text": "Memungkinkan sistem operasi menemukan perintah javac dan java",
+        "isCorrect": true,
+        "rationale": "Variabel PATH mendaftarkan direktori biner Java ke sistem operasi, sehingga perintah pengompilasi (javac) dan eksekusi (java) bisa dipanggil dari folder mana saja melalui terminal."
+      },
+      {
+        "text": "Menentukan lokasi penyimpanan file Java",
+        "isCorrect": false,
+        "rationale": "Lokasi penyimpanan file kode sumber (.java) ditentukan secara bebas oleh pengguna saat menyimpan file proyek."
+      },
+      {
+        "text": "Mengatur memori yang digunakan oleh JVM",
+        "isCorrect": false,
+        "rationale": "Pengaturan alokasi memori JVM dikonfigurasi melalui argumen baris perintah khusus (seperti -Xmx atau -Xms), bukan melalui PATH."
+      },
+      {
+        "text": "Menyimpan versi JDK yang terinstal",
+        "isCorrect": false,
+        "rationale": "PATH hanya berisi teks alamat folder, informasi versi tersimpan di dalam metadata file biner Java itu sendiri."
+      }
+    ]
+  },
+  {
+    "questionNumber": 9,
+    "question": "Perintah apa yang digunakan untuk memverifikasi bahwa JDK telah terinstal dengan benar?",
+    "answerOptions": [
+      {
+        "text": "javac -check",
+        "isCorrect": false,
+        "rationale": "Tidak ada argumen '-check' yang valid untuk perintah javac bawaan Java."
+      },
+      {
+        "text": "java -install",
+        "isCorrect": false,
+        "rationale": "Argumen '-install' bukan merupakan perintah verifikasi bawaan dari lingkungan Java."
+      },
+      {
+        "text": "java -version",
+        "isCorrect": true,
+        "rationale": "Menjalankan perintah 'java -version' di command prompt/terminal akan menampilkan informasi versi Java aktif sekaligus membuktikan sistem mengenali *runtime environment*."
+      },
+      {
+        "text": "javac -verify",
+        "isCorrect": false,
+        "rationale": "Perintah '-verify' tidak digunakan untuk mengecek keberhasilan instalasi global JDK."
+      }
+    ]
+  },
+  {
+    "questionNumber": 10,
+    "question": "Apa yang dimaksud dengan Java Runtime Environment (JRE)?",
+    "answerOptions": [
+      {
+        "text": "Lingkungan untuk mengembangkan program Java",
+        "isCorrect": false,
+        "rationale": "Lingkungan untuk mengembangkan atau membuat program baru adalah tugas dari JDK (Java Development Kit)."
+      },
+      {
+        "text": "Lingkungan untuk menjalankan program Java",
+        "isCorrect": true,
+        "rationale": "JRE adalah paket minimal yang menyediakan komponen inti berupa JVM dan pustaka standar yang diperlukan khusus untuk mengeksekusi/menjalankan aplikasi Java jadi."
+      },
+      {
+        "text": "Compiler untuk kode Java",
+        "isCorrect": false,
+        "rationale": "Alat pengompilasi (compiler) adalah javac, yang hanya tersedia di dalam paket JDK, bukan JRE."
+      },
+      {
+        "text": "Debugger untuk program Java",
+        "isCorrect": false,
+        "rationale": "Alat pelacak kesalahan (debugger) dikemas dalam bundel perkakas pengembang (JDK) atau bawaan dari IDE."
+      }
+    ]
+  },
+  {
+    "questionNumber": 11,
+    "question": "Mengya penting untuk menginstal JDK, bukan hanya JRE, saat belajar pemrograman Java?",
+    "answerOptions": [
+      {
+        "text": "JRE tidak dapat diinstal secara terpisah",
+        "isCorrect": false,
+        "rationale": "JRE dapat diunduh dan dipasang secara mandiri oleh pengguna yang hanya ingin menjadi konsumen/menjalankan aplikasi."
+      },
+      {
+        "text": "JDK mencakup compiler javac dan alat pengembangan lainnya",
+        "isCorrect": true,
+        "rationale": "Sebagai pelajar atau pemrogram, Anda wajib memproses kode mentah (.java) menjadi bytecode (.class), yang mana proses kompilasi tersebut membutuhkan perkakas javac yang hanya ada di JDK."
+      },
+      {
+        "text": "JRE hanya untuk sistem operasi Windows",
+        "isCorrect": false,
+        "rationale": "JRE bersifat lintas platform dan tersedia untuk berbagai sistem operasi seperti Linux, macOS, dan Windows."
+      },
+      {
+        "text": "JDK lebih ringan daripada JRE",
+        "isCorrect": false,
+        "rationale": "Ukuran JDK justru lebih besar dan berat karena memuat semua kelengkapan JRE ditambah utilitas pengembangan program."
+      }
+    ]
+  },
+  {
+    "questionNumber": 12,
+    "question": "Apa yang harus dilakukan setelah mengunduh installer JDK?",
+    "answerOptions": [
+      {
+        "text": "Langsung menjalankan program Java",
+        "isCorrect": false,
+        "rationale": "Program Java tidak dapat dijalankan sebelum sistem memiliki mesin pengeksekusi yang terpasang mapan melalui instalasi."
+      },
+      {
+        "text": "Mengubah kode sumber Java",
+        "isCorrect": false,
+        "rationale": "Mengubah kode sumber bisa dilakukan kapan saja, namun tidak berguna jika file master instalasi belum dipasang ke komputer."
+      },
+      {
+        "text": "Menghapus JRE yang sudah ada",
+        "isCorrect": false,
+        "rationale": "Menghapus JRE lama tidak wajib dilakukan, karena JDK baru dapat berjalan berdampingan atau memperbarui komponen runtime secara otomatis."
+      },
+      {
+        "text": "Menjalankan installer dan mengikuti petunjuk instalasi",
+        "isCorrect": true,
+        "rationale": "Sama seperti aplikasi pada umumnya, setelah mengunduh file mentah installer, pengguna harus mengeksekusinya untuk memasang berkas sistem ke direktori komputer."
+      }
+    ]
+  },
+  {
+    "questionNumber": 13,
+    "question": "Tipe data manakah yang digunakan untuk menyimpan nilai benar atau salah dalam Java?",
+    "answerOptions": [
+      {
+        "text": "int",
+        "isCorrect": false,
+        "rationale": "Tipe data int (integer) khusus dialokasikan untuk menyimpan bilangan bulat, bukan nilai logika."
+      },
+      {
+        "text": "boolean",
+        "isCorrect": true,
+        "rationale": "Dalam Java, nilai logika biner logika benar (true) atau salah (false) direpresentasikan secara eksklusif oleh tipe data boolean."
+      }
+    ]
+  },
+  {
+    "questionNumber": 14,
+    "question": "Manakah dari berikut ini yang merupakan identifier yang valid dalam Java?",
+    "answerOptions": [
+      {
+        "text": "2angka",
+        "isCorrect": false,
+        "rationale": "Aturan sintaksis Java melarang keras penamaan identifier dimulai menggunakan karakter angka."
+      },
+      {
+        "text": "harga-barang",
+        "isCorrect": false,
+        "rationale": "Tanda hubung (-) dianggap sebagai operator pengurangan oleh compiler Java, sehingga tidak boleh disisipkan dalam nama identifier."
+      },
+      {
+        "text": "class",
+        "isCorrect": false,
+        "rationale": "Kata 'class' merupakan kata kunci cadangan (reserved keyword) yang sudah memiliki arti khusus dalam struktur bahasa Java."
+      },
+      {
+        "text": "nilai_saya",
+        "isCorrect": true,
+        "rationale": "Nama variabel 'nilai_saya' valid karena hanya terdiri dari kombinasi huruf dan karakter underscore (_), serta tidak menabrak aturan baku pemrograman Java."
+      }
+    ]
+  },
+  {
+    "questionNumber": 15,
+    "question": "Apa yang dimaksud dengan keyword dalam Java?",
+    "answerOptions": [
+      {
+        "text": "Nama variabel yang dibuat programmer",
+        "isCorrect": false,
+        "rationale": "Nama variabel yang ditentukan mandiri oleh pemrogram disebut identifier, bukan keyword."
+      },
+      {
+        "text": "Nama kelas yang ditentukan pengguna",
+        "isCorrect": false,
+        "rationale": "Nama kelas buatan pengguna juga dikelompokkan ke dalam kategori tata nama identifier."
+      },
+      {
+        "text": "Kata-kata yang memiliki makna khusus dalam bahasa Java",
+        "isCorrect": true,
+        "rationale": "Keyword adalah kosakata baku sistem (seperti public, static, void, if) yang telah dipesan oleh kompiler Java untuk menjalankan instruksi sintaksis tertentu."
+      },
+      {
+        "text": "Tipe data yang dapat diubah",
+        "isCorrect": false,
+        "rationale": "Tipe data adalah klasifikasi memori variabel, bukan sebutan untuk kata kunci pengendali bahasa."
+      }
+    ]
+  },
+  {
+    "questionNumber": 16,
+    "question": "Manakah pernyataan yang benar tentang tipe data float di Java?",
+    "answerOptions": [
+      {
+        "text": "float dapat menyimpan nilai desimal dengan akurasi tunggal",
+        "isCorrect": true,
+        "rationale": "Tipe data float berukuran 32-bit dan digunakan untuk bilangan pecahan/desimal berpresisi tunggal (*single-precision floating-point*)."
+      },
+      {
+        "text": "float digunakan untuk bilangan bulat",
+        "isCorrect": false,
+        "rationale": "Bilangan bulat ditangani oleh kelompok tipe data integer seperti byte, short, int, dan long."
+      },
+      {
+        "text": "float adalah tipe data default untuk angka desimal",
+        "isCorrect": false,
+        "rationale": "Tipe data default untuk bilangan literal desimal di Java secara otomatis dianggap sebagai double, bukan float."
+      },
+      {
+        "text": "float harus diakhiri dengan huruf L",
+        "isCorrect": false,
+        "rationale": "Akhiran huruf 'L' disematkan khusus untuk literal tipe data long, sedangkan float membutuhkan akhiran 'f' atau 'F'."
+      }
+    ]
+  },
+  {
+    "questionNumber": 17,
+    "question": "Apa perbedaan antara variabel lokal dan variabel instance dalam Java?",
+    "answerOptions": [
+      {
+        "text": "Variabel lokal dapat diakses dari mana saja, variabel instance hanya dalam metode",
+        "isCorrect": false,
+        "rationale": "Pernyataan ini terbalik; variabel instansilah yang memiliki cakupan akses lebih luas di dalam kelas."
+      },
+      {
+        "text": "Variabel lokal dideklarasikan di dalam metode, variabel instance di dalam kelas",
+        "isCorrect": true,
+        "rationale": "Variabel lokal lahir dan hidup terbatas di dalam cakupan blok metode tempat ia ditulis, sedangkan variabel instance diletakkan di luar metode langsung di bawah blok kelas sebagai identitas objek."
+      },
+      {
+        "text": "Variabel lokal memiliki nilai default, variabel instance tidak",
+        "isCorrect": false,
+        "rationale": "Variabel lokal wajib diinisialisasi manual sebelum dipakai karena tidak diberi nilai default, kebalikan dengan variabel instance yang otomatis mendapatkan nilai default bawaan sistem."
+      },
+      {
+        "text": "Variabel instance harus bertipe int, variabel lokal bisa tipe apa saja",
+        "isCorrect": false,
+        "rationale": "Kedua pengelompokan lokasi variabel ini bebas menggunakan tipe data dasar maupun kompleks apa saja sesuai kebutuhan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 18,
+    "question": "Dalam Java, mana dari berikut ini yang merupakan contoh identifier yang valid?",
+    "answerOptions": [
+      {
+        "text": "nama_saya",
+        "isCorrect": true,
+        "rationale": "Identifier di Java sah apabila diawali huruf/undescore/tanda dolar, serta disambung karakter alfanumerik tanpa spasi. Penggunaan underscore (_) sangat valid."
+      },
+      {
+        "text": "nama saya",
+        "isCorrect": false,
+        "rationale": "Identifier tidak diizinkan mengandung spasi kosong karena spasi berfungsi sebagai pemisah instruksi kode."
+      },
+      {
+        "text": "nama-saya",
+        "isCorrect": false,
+        "rationale": "Penggunaan simbol tanda hubung (-) dilarang sebab dievaluasi kompiler sebagai simbol operasi matematika pengurangan."
+      },
+      {
+        "text": "nama saya",
+        "isCorrect": false,
+        "rationale": "Opsi ini mengandung karakter spasi tersembunyi yang merusak legalitas aturan penamaan variabel."
+      }
+    ]
+  },
+  {
+    "questionNumber": 19,
+    "question": "Diberikan class Mahasiswa dengan atribut String nama dan int umur. Bagaimana cara mendeklarasikan objek baru dan mengisi atribut nama dengan 'Andi'?",
+    "answerOptions": [
+      {
+        "text": "Mahasiswa mhs = new Mahasiswa(); mhs.nama = 'Andi';",
+        "isCorrect": false,
+        "rationale": "Karakter petik tunggal (') dipakai untuk tipe data char tunggal, bukan untuk objek kumpulan huruf teks (String)."
+      },
+      {
+        "text": "Mahasiswa mhs = new(); mhs.nama = \"Andi\";",
+        "isCorrect": false,
+        "rationale": "Sintaksis pemanggilan operator new wajib disertai penulisan eksplisit nama metode konstruktor kelas tujuan."
+      },
+      {
+        "text": "Mahasiswa mhs = new Mahasiswa; mhs.nama = \"Andi\";",
+        "isCorrect": false,
+        "rationale": "Pembuatan objek baru kehilangan tanda sepasang kurung () untuk menandakan eksekusi fungsi konstruktor kelas."
+      },
+      {
+        "text": "Mahasiswa mhs = new Mahasiswa(); mhs.nama = \"Andi\";",
+        "isCorrect": true,
+        "rationale": "Sintaksis ini sempurna: tipe acuan kelas di awal, inisialisasi menggunakan kata kunci 'new' diikuti fungsi konstruktor, dan nilai teks String dibungkus tanda petik ganda (\")."
+      }
+    ]
+  },
+  {
+    "questionNumber": 20,
+    "question": "Dalam method hitungLuas yang menerima parameter int panjang dan int lebar, bagaimana cara memanggil method tersebut jika objek bernama ruang?",
+    "answerOptions": [
+      {
+        "text": "ruang.hitungLuas(5,3)",
+        "isCorrect": true,
+        "rationale": "Pemanggilan metode instans dilakukan lewat penyebutan nama objek, diikuti tanda titik, nama metode, dan melemparkan nilai argumen konkret di dalam kurung dipisah koma."
+      },
+      {
+        "text": "hitungLuas(5, 3)",
+        "isCorrect": false,
+        "rationale": "Pemanggilan langsung tanpa variabel penunjuk objek hanya berlaku untuk metode statis atau metode dalam lingkup internal kelas yang sama."
+      },
+      {
+        "text": "ruang.hitungLuas int 5 int 3",
+        "isCorrect": false,
+        "rationale": "Format pemanggilan parameter ini cacat karena tidak menyertakan tanda kurung dan malah mengulang penulisan tipe data."
+      },
+      {
+        "text": "ruang.hitungLuas(5, 3)",
+        "isCorrect": false,
+        "rationale": "Meskipun mirip, penulisan di luar standar acuan kode yang bersih sebaiknya menghindari spasi berlebih yang tidak lazim pada argumen data."
+      }
+    ]
+  },
+  {
+    "questionNumber": 21,
+    "question": "Jika ada class Mobil dengan method void bergerak(), dan objek mobil1, pernyataan mana yang benar untuk memanggil method tersebut?",
+    "answerOptions": [
+      {
+        "text": "mobil1.bergerak()",
+        "isCorrect": true,
+        "rationale": "Metode non-statis (instance method) terikat pada objek nyata, sehingga wajib dipanggil melalui nama variabel objeknya (mobil1), bukan lewat nama cetak birunya."
+      },
+      {
+        "text": "Mobil.bergerak()",
+        "isCorrect": false,
+        "rationale": "Memanggil metode langsung menggunakan nama Kelas (Mobil) hanya diperbolehkan untuk fungsi yang memiliki predikat kata kunci 'static'."
+      },
+      {
+        "text": "mobil1.bergerak",
+        "isCorrect": false,
+        "rationale": "Sintaksis kehilangan sepasang tanda kurung () yang merupakan penanda mutlak dari pemanggilan sebuah aksi metode."
+      },
+      {
+        "text": "bergerak()",
+        "isCorrect": false,
+        "rationale": "Pemanggilan tanpa objek acuan akan berujung pesan error kompilasi karena compiler kehilangan konteks kepemilikan fungsi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 22,
+    "question": "Dalam Java, tipe data boolean digunakan untuk menyimpan nilai apa?",
+    "answerOptions": [
+      {
+        "text": "Bilangan bulat",
+        "isCorrect": false,
+        "rationale": "Bilangan bulat disimpan menggunakan tipe data kelompok integral seperti int atau long."
+      },
+      {
+        "text": "Bilangan desimal",
+        "isCorrect": false,
+        "rationale": "Nilai pecahan desimal diwadahi oleh tipe data berkategori floating-point seperti float atau double."
+      },
+      {
+        "text": "Nilai true atau false",
+        "isCorrect": true,
+        "rationale": "Alokasi memori tipe data boolean dikhususkan untuk menyimpan satu di antara dua kondisi logika kebenaran: true (benar) atau false (salah)."
+      },
+      {
+        "text": "Karakter",
+        "isCorrect": false,
+        "rationale": "Karakter tulisan alfabet tunggal disimpan memanfaatkan tipe data char."
+      }
+    ]
+  },
+  {
+    "questionNumber": 23,
+    "question": "Diberikan class Buku dengan atribut String judul dan method void setJudul(String j). Bagaimana cara mengisi atribut judul dengan nilai 'Java'?",
+    "answerOptions": [
+      {
+        "text": "buku.setJudul(\"Java\");",
+        "isCorrect": true,
+        "rationale": "Mengubah data lewat metode setter (setJudul) dilakukan dengan memasukkan argumen string berbungkus tanda petik dua (\") ke dalam parameter fungsi objek."
+      },
+      {
+        "text": "buku.setJudul('Java');",
+        "isCorrect": false,
+        "rationale": "Penggunaan tanda petik tunggal salah karena peruntukannya khusus menguji literal karakter tunggal, bukan teks panjang."
+      },
+      {
+        "text": "buku.judul = Java';",
+        "isCorrect": false,
+        "rationale": "Sintaksis ini rusak akibat ketidaksesuaian penutup petik dan mengabaikan kaidah penggunaan fungsi pembungkus data yang tersedia."
+      },
+      {
+        "text": "buku.judul = \"Java\";",
+        "isCorrect": false,
+        "rationale": "Meskipun secara teknis bisa dilakukan jika aksesnya publik, metode yang paling sesuai dengan instruksi keberadaan fungsi setJudul adalah memanggil fungsinya langsung."
+      }
+    ]
+  },
+  {
+    "questionNumber": 24,
+    "question": "Jika ada int[] angka = {1, 2, 3, 4, 5};, berapa nilai dari angka[2]?",
+    "answerOptions": [
+      {
+        "text": "1",
+        "isCorrect": false,
+        "rationale": "Nilai 1 menempati urutan paling awal, yaitu indeks posisi ke-0."
+      },
+      {
+        "text": "3",
+        "isCorrect": true,
+        "rationale": "Sistem indeks elemen larik (array) selalu berhitung mulai dari angka 0. Maka, angka[0]=1, angka[1]=2, dan indeks angka[2] menunjuk elemen bernilai 3."
+      },
+      {
+        "text": "2",
+        "isCorrect": false,
+        "rationale": "Nilai 2 berada pada alokasi penomoran indeks ke-1."
+      },
+      {
+        "text": "4",
+        "isCorrect": false,
+        "rationale": "Nilai 4 berada di urutan kanan berikutnya, yaitu indeks ke-3."
+      }
+    ]
+  },
+  {
+    "questionNumber": 25,
+    "question": "Diberikan String kata = \"Pemrograman\";, method apa yang digunakan untuk mengambil karakter pada indeks ke-4?",
+    "answerOptions": [
+      {
+        "text": "kata.index(4)",
+        "isCorrect": false,
+        "rationale": "Tidak ada fungsi internal bernama '.index()' dalam pustaka bawaan kelas objek String Java."
+      },
+      {
+        "text": "kata.getChar(4)",
+        "isCorrect": false,
+        "rationale": "Fungsi bernama getChars() ada namun beroperasi mengekstrak kelompok array karakter, bukan satu huruf indeks tunggal."
+      },
+      {
+        "text": "kata.charAt(4)",
+        "isCorrect": true,
+        "rationale": "Fungsi bawaan .charAt(int index) didesain khusus untuk mengembalikan nilai komponen huruf tunggal (char) pada nomor indeks tertentu yang dipanggil."
+      },
+      {
+        "text": "kata.substring(4,5)",
+        "isCorrect": false,
+        "rationale": "Meskipun menghasilkan string huruf yang sama, substring mengembalikan tipe data objek berupa pecahan teks bertipe String, bukan bernilai karakter primari (char)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 26,
+    "question": "Array dua dimensi int[][] matriks = new int[3][4]; memiliki jumlah baris dan kolom berapa?",
+    "answerOptions": [
+      {
+        "text": "4 baris, 3 kolom",
+        "isCorrect": false,
+        "rationale": "Pernyataan ini terbalik dalam menginterpretasikan urutan dimensi array berurutan."
+      },
+      {
+        "text": "3 baris, 4 kolom",
+        "isCorrect": true,
+        "rationale": "Pada pendefinisian array multi-dimensi Java, tanda kurung siku pertama `[3]` mengalokasikan slot baris, dan kurung siku kedua `[4]` menentukan kuantitas kolom."
+      },
+      {
+        "text": "3 baris, 3 kolom",
+        "isCorrect": false,
+        "rationale": "Dimensi kolom tidak sesuai dengan ukuran alokasi instansiasi memori matriks."
+      },
+      {
+        "text": "4 baris, 4 kolom",
+        "isCorrect": false,
+        "rationale": "Dimensi baris meleset dari ukuran slot memori baris yang dideklarasikan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 27,
+    "question": "Jika String s1 = \"Halo\"; String s2 = \"halo\";, manakah pernyataan yang benar?",
+    "answerOptions": [
+      {
+        "text": "s1 == s2 akan true",
+        "isCorrect": false,
+        "rationale": "Operator `==` menguji kesamaan referensi alamat memori objek, dan nilai huruf besar-kecil yang berbeda tidak menghasilkan true."
+      },
+      {
+        "text": "s1.equalsIgnoreCase(s2) akan true",
+        "isCorrect": true,
+        "rationale": "Metode `.equalsIgnoreCase()` membandingkan nilai teks dari dua objek String dengan mengabaikan perbedaan sensitivitas huruf besar maupun kecil."
+      },
+      {
+        "text": "s1.equals(s2) akan true",
+        "isCorrect": false,
+        "rationale": "Metode `.equals()` bersifat case-sensitive, sehingga mendeteksi perbedaan antara huruf kapital 'H' dengan huruf kecil 'h'."
+      },
+      {
+        "text": "s1.compareTo(s2) akan 0",
+        "isCorrect": false,
+        "rationale": "Fungsi .compareTo() mengembalikan angka 0 hanya jika kedua teks identik secara mutlak, termasuk kesamaan kapitalisasinya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 28,
+    "question": "Array String[] nama = {\"Ali\", \"Budi\", \"Cici\"};, bagaimana cara mengubah elemen pertama menjadi 'Doni'?",
+    "answerOptions": [
+      {
+        "text": "nama[0] = 'Doni';",
+        "isCorrect": false,
+        "rationale": "Penggunaan tanda petik tunggal salah karena teks 'Doni' berupa kumpulan huruf yang membutuhkan tipe representasi String."
+      },
+      {
+        "text": "nama[1] = \"Doni\";",
+        "isCorrect": false,
+        "rationale": "Indeks nomor 1 menunjuk ke lokasi elemen kedua (mengganti posisi Budi), bukan mengubah elemen pertama."
+      },
+      {
+        "text": "nama[0] = \"Doni\";",
+        "isCorrect": true,
+        "rationale": "Elemen pertama berada pada indeks ke-0. Pemberian nilai baru dilakukan dengan menggunakan operator penugasan (=) disertai string berbungkus tanda petik ganda."
+      },
+      {
+        "text": "nama[0] = Doni;",
+        "isCorrect": false,
+        "rationale": "Teks Doni tanpa pembungkus petik akan dicurigai kompiler sebagai nama variabel tak dikenal yang memicu galat kompilasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 29,
+    "question": "Method length() pada String digunakan untuk apa?",
+    "answerOptions": [
+      {
+        "text": "Mengembalikan panjang array",
+        "isCorrect": false,
+        "rationale": "Untuk menghitung ukuran tampung array, properti yang dipakai adalah properti `.length` tanpa tanda kurung eksekusi."
+      },
+      {
+        "text": "Mengembalikan ukuran memori",
+        "isCorrect": false,
+        "rationale": "Ukuran fisik alokasi bait memori objek tidak diekspos melalui fungsi instans ini."
+      },
+      {
+        "text": "Mengembalikan indeks terakhir",
+        "isCorrect": false,
+        "rationale": "Nilai indeks terakhir didapatkan lewat kalkulasi pengurangan hasil total panjang dikurangi satu."
+      },
+      {
+        "text": "Mengembalikan jumlah karakter dalam string",
+        "isCorrect": true,
+        "rationale": "Metode panggilan `.length()` yang melekat pada objek String bertugas menghitung dan mengembalikan kuantitas total huruf/karakter penyusun teks tersebut."
+      }
+    ]
+  },
+  {
+    "questionNumber": 30,
+    "question": "Jika String teks = \"Java\";, bagaimana cara mendapatkan substring \"av\"?",
+    "answerOptions": [
+      {
+        "text": "teks.substring(2,4)",
+        "isCorrect": false,
+        "rationale": "Instruksi ini mengambil potongan teks mulai dari indeks ke-2 hingga 3, menghasilkan teks \"va\"."
+      },
+      {
+        "text": "teks.substring(1,3)",
+        "isCorrect": true,
+        "rationale": "Metode `.substring(int beginIndex, int endIndex)` memotong teks dari batas awal inklusif (indeks 1 = 'a') sampai batas akhir eksklusif (indeks 3 tidak diikutkan, berhenti di indeks 2 = 'v'), menghasilkan kata \"av\"."
+      },
+      {
+        "text": "teks.substring(0,2)",
+        "isCorrect": false,
+        "rationale": "Pemotongan dari posisi nol hingga sebelum dua menghasilkan bagian teks awal, yaitu \"Ja\"."
+      },
+      {
+        "text": "teks.substring(1,2)",
+        "isCorrect": false,
+        "rationale": "Batas akhir yang terlalu sempit hanya menyisakan ekstraksi satu karakter tunggal saja, yaitu \"a\"."
+      }
+    ]
+  },
+  {
+    "questionNumber": 31,
+    "question": "Array int[] data = {10, 20, 30, 40};, berapa nilai dari data.length?",
+    "answerOptions": [
+      {
+        "text": "3",
+        "isCorrect": false,
+        "rationale": "Angka 3 mewakili urutan indeks batas tertinggi dari array tersebut, bukan total kapasitas jumlah tampungannya."
+      },
+      {
+        "text": "Tidak terdefinisi",
+        "isCorrect": false,
+        "rationale": "Properti .length terdefinisi secara implisit pada seluruh bentuk instansiasi objek berjenis array di Java."
+      },
+      {
+        "text": "5",
+        "isCorrect": false,
+        "rationale": "Jumlah elemen riil di dalam kurung kurawal berjumlah empat, bukan lima."
+      },
+      {
+        "text": "4",
+        "isCorrect": true,
+        "rationale": "Properti `.length` pada objek array mengembalikan total elemen terisi di dalamnya. Karena berisi 10, 20, 30, dan 40, nilainya adalah 4."
+      }
+    ]
+  },
+  {
+    "questionNumber": 32,
+    "question": "Method toUpperCase() pada String akan mengembalikan string baru dengan karakter apa?",
+    "answerOptions": [
+      {
+        "text": "Semua huruf kapital",
+        "isCorrect": true,
+        "rationale": "Fungsi dari panggilan metode `.toUpperCase()` adalah menyalin teks lama dan mengonversi seluruh alfabet penyusunnya menjadi wujud varian huruf besar/kapital."
+      },
+      {
+        "text": "Semua huruf kecil",
+        "isCorrect": false,
+        "rationale": "Proses konversi menjadi varian huruf kecil seluruhnya ditangani oleh fungsi kembaran bernama `.toLowerCase()`."
+      },
+      {
+        "text": "Karakter pertama kapital",
+        "isCorrect": false,
+        "rationale": "Java tidak menyediakan fungsi instans siap pakai bawaan untuk mengubah bentuk kapitalisasi kata awal (*capitalize*)."
+      },
+      {
+        "text": "Tanpa perubahan",
+        "isCorrect": false,
+        "rationale": "String baru akan mengalami mutasi bentuk fisik visual karakter jika teks asal memuat alfabet non-kapital."
+      }
+    ]
+  },
+  {
+    "questionNumber": 33,
+    "question": "Jika String str = \"Pemrograman Berbasis Desktop\";, method indexOf('B') akan mengembalikan nilai berapa?",
+    "answerOptions": [
+      {
+        "text": "11",
+        "isCorrect": false,
+        "rationale": "Indeks ke-11 ditempati oleh karakter spasi kosong pertama sebelum kata Berbasis."
+      },
+      {
+        "text": "12",
+        "isCorrect": false,
+        "rationale": "Indeks nomor 12 diisi oleh huruf kecil 'e' pada potongan kata 'Berbasis'."
+      },
+      {
+        "text": "14",
+        "isCorrect": false,
+        "rationale": "Indeks nomor 14 ditempati oleh huruf kecil 'r' dalam untaian teks kalimat tersebut."
+      },
+      {
+        "text": "13",
+        "isCorrect": true,
+        "rationale": "Menghitung urutan huruf dari indeks paling kiri awal bermula angka 0, posisi letak huruf kapital 'B' tepat berdiri bertengger di jatah kotak indeks ke-13."
+      }
+    ]
+  },
+  {
+    "questionNumber": 34,
+    "question": "Array char[] huruf = {'a', 'b', 'c'};, bagaimana cara mengakses elemen 'b'?",
+    "answerOptions": [
+      {
+        "text": "huruf['b']",
+        "isCorrect": false,
+        "rationale": "Java tidak mendukung array asosiatif dengan kunci indeks berbasis teks karakter seperti php atau JavaScript."
+      },
+      {
+        "text": "huruf[2]",
+        "isCorrect": false,
+        "rationale": "Indeks posisi nomor 2 akan melompat dan menarik elemen terakhir dari larik, yaitu karakter 'c'."
+      },
+      {
+        "text": "huruf[1]",
+        "isCorrect": true,
+        "rationale": "Karakter 'a' menempati indeks 0, sehingga elemen kedua yang bernilai 'b' diakses dengan melemparkan penunjuk indeks nomor 1."
+      },
+      {
+        "text": "huruf[0]",
+        "isCorrect": false,
+        "rationale": "Akses indeks ke-0 memanggil nilai elemen gerbang depan, yaitu karakter 'a'."
+      }
+    ]
+  },
+  {
+    "questionNumber": 35,
+    "question": "Perhatikan kode berikut: public class Main { public static void main(String[] args) { int[] angka = {1,3,5,7,9}; System.out.println(angka.length); } } Apa output dari kode tersebut?",
+    "answerOptions": [
+      {
+        "text": "4",
+        "isCorrect": false,
+        "rationale": "Angka 4 adalah indeks posisi elemen terakhir, bukan ukuran kapasitas wadah penampung objek array."
+      },
+      {
+        "text": "5",
+        "isCorrect": true,
+        "rationale": "Variabel array bernama angka menampung lima elemen literal bilangan bulat, sehingga pemanggilan properti `.length` menghasilkan luaran angka 5."
+      },
+      {
+        "text": "6",
+        "isCorrect": false,
+        "rationale": "Nilai output melebihi kuantitas nyata dari isi daftar elemen yang dideklarasikan."
+      },
+      {
+        "text": "Error",
+        "isCorrect": false,
+        "rationale": "Struktur kode program ditulis dengan kaidah sintaksis Java yang valid sehingga akan berjalan lancar tanpa kendala eror."
+      }
+    ]
+  },
+  {
+    "questionNumber": 36,
+    "question": "Dalam struktur if, operator yang digunakan untuk memeriksa apakah dua nilai tidak sama adalah....",
+    "answerOptions": [
+      {
+        "text": "==",
+        "isCorrect": false,
+        "rationale": "Simbol operator `==` digunakan khusus untuk menguji kesamaan mutlak nilai antara dua variabel."
+      },
+      {
+        "text": ">=",
+        "isCorrect": false,
+        "rationale": "Simbol `>=` bertugas menguji hubungan kondisi logika lebih besar atau sama dengan."
+      },
+      {
+        "text": "!=",
+        "isCorrect": true,
+        "rationale": "Operator ketidaksamaan (*not equal*) diwakili oleh perpaduan tanda seru yang bersanding dengan tanda sama dengan (`!=`)."
+      },
+      {
+        "text": "<=",
+        "isCorrect": false,
+        "rationale": "Simbol `<=` dipakai menguji perbandingan logika nilai bernilai kurang dari atau sama dengan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 37,
+    "question": "int x = 10; if (x > 5) { System.out.println(\"A\"); } else if (x > 15) { System.out.println(\"B\"); } Apa output dari kode di atas?",
+    "answerOptions": [
+      {
+        "text": "Error",
+        "isCorrect": false,
+        "rationale": "Kondisi percabangan logis tersusun rapi sesuai regulasi tata bahasa pemrograman Java."
+      },
+      {
+        "text": "B",
+        "isCorrect": false,
+        "rationale": "Blok `else if` tidak akan dievaluasi karena program sudah menemukan kecocokan valid pada gerbang penyaringan pertama."
+      },
+      {
+        "text": "Tidak ada output",
+        "isCorrect": false,
+        "rationale": "Output dipastikan muncul karena salah satu syarat kondisi pengujian bernilai benar."
+      },
+      {
+        "text": "A",
+        "isCorrect": true,
+        "rationale": "Nilai variabel x adalah 10. Evaluasi pertama `(10 > 5)` langsung menghasilkan nilai true, sehingga perintah mencetak karakter \"A\" langsung dieksekusi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 38,
+    "question": "int nilai = 75; if (nilai > 80) { System.out.println(\"Lulus\"); } else if (nilai >= 60) { System.out.println(\"Remidi\"); } else { System.out.println(\"Tidak lulus\"); } Apa output dari kode di atas?",
+    "answerOptions": [
+      {
+        "text": "Remidi",
+        "isCorrect": true,
+        "rationale": "Evaluasi pertama `(75 > 80)` bernilai salah (false). Evaluasi kedua pada cabang `else if` yaitu `(75 >= 60)` menghasilkan nilai benar (true), sehingga tulisan \"Remidi\" dicetak."
+      },
+      {
+        "text": "Lulus",
+        "isCorrect": false,
+        "rationale": "Kondisi syarat mencetak kalimat Lulus tidak terpenuhi karena angka 75 bernilai kurang dari 80."
+      },
+      {
+        "text": "Tidak lulus",
+        "isCorrect": false,
+        "rationale": "Cabang default `else` dilewati karena program sudah menemukan kecocokan kondisi pada bagian blok penyaringan tengah."
+      },
+      {
+        "text": "Error",
+        "isCorrect": false,
+        "rationale": "Kode di atas bersih dari kesalahan sintaksis struktur percabangan logika."
+      }
+    ]
+  },
+  {
+    "questionNumber": 39,
+    "question": "String hasil; int a = 10, b = 20; if (a > b) { hasil = \"a lebih besar\"; } else { hasil = \"b lebih besar atau sama\"; } System.out.println(hasil); Apa output dari kode di atas?",
+    "answerOptions": [
+      {
+        "text": "a lebih besar",
+        "isCorrect": false,
+        "rationale": "Cabang pertama diabaikan karena pengujian logika `(10 > 20)` berujung pada nilai salah."
+      },
+      {
+        "text": "b lebih besar atau sama",
+        "isCorrect": true,
+        "rationale": "Karena kondisi penyaringan utama `(10 > 20)` bernilai salah (false), kendali eksekusi otomatis jatuh ke bagian penanganan default blok `else` yang memuat teks \"b lebih besar atau sama\"."
+      },
+      {
+        "text": "tidak ada output",
+        "isCorrect": false,
+        "rationale": "Perintah akhir cetak System.out.println akan menampilkan isi dari variabel hasil ke terminal."
+      },
+      {
+        "text": "error",
+        "isCorrect": false,
+        "rationale": "Variabel hasil dijamin terisi data pada kedua skenario cabang, sehingga tidak memicu isu variabel belum diinisialisasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 40,
+    "question": "int bilangan = 7; if (bilangan % 2 == 0) { System.out.println(\"Genap\"); } else { System.out.println(\"Ganjil\"); } Apa output dari kode di atas?",
+    "answerOptions": [
+      {
+        "text": "Genap",
+        "isCorrect": false,
+        "rationale": "Angka 7 jika dibagi dua menyisakan nilai sisa bagi satu, bukan nol, sehingga menyalahi syarat angka genap."
+      },
+      {
+        "text": "Tidak ada output",
+        "isCorrect": false,
+        "rationale": "Alur kode dipastikan mengeksekusi salah satu perintah keluaran string yang tersedia."
+      },
+      {
+        "text": "Ganjil",
+        "isCorrect": true,
+        "rationale": "Operasi aritmetika sisa bagi Modulo `(7 % 2)` menghasilkan sisa sisa nilai 1. Kondisi uji `(1 == 0)` bernilai salah, memaksa jalannya program masuk ke pelukan blok `else` untuk mencetak kata \"Ganjil\"."
+      },
+      {
+        "text": "Error",
+        "isCorrect": false,
+        "rationale": "Logika pengujian ganjil-genap tertulis dengan formulasi aritmetika komputer yang presisi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 41,
+    "question": "Dalam struktur switch case, statement yang digunakan untuk keluar dari blok switch setelah suatu case dieksekusi adalah...",
+    "answerOptions": [
+      {
+        "text": "continue",
+        "isCorrect": false,
+        "rationale": "Kata kunci continue bertugas memaksa alur program melompat ke putaran perulangan iterasi putaran berikutnya, bukan mematahkan struktur blok."
+      },
+      {
+        "text": "return",
+        "isCorrect": false,
+        "rationale": "Kata kunci return menghentikan jalannya seluruh fungsi metode kerja secara total dan mengirim balik sebuah nilai."
+      },
+      {
+        "text": "break",
+        "isCorrect": true,
+        "rationale": "Keyword `break` bertindak menghentikan proses pencocokan dan memaksa eksekusi program segera keluar dari kungkungan struktur kendali switch-case saat itu juga."
+      },
+      {
+        "text": "exit",
+        "isCorrect": false,
+        "rationale": "Fungsi System.exit() akan mematikan proses jalannya aplikasi Java di tingkat sistem operasi secara langsung."
+      }
+    ]
+  },
+  {
+    "questionNumber": 42,
+    "question": "int hari = 3; switch (hari) { case 1: System.out.println(\"Senin\"); break; case 2: System.out.println(\"Selasa\"); break; case 3: System.out.println(\"Rabu\"); break; default: System.out.println(\"Hari lain\"); } Apa output dari kode di atas?",
+    "answerOptions": [
+      {
+        "text": "Rabu",
+        "isCorrect": true,
+        "rationale": "Nilai variabel hari bernilai angka 3. Program langsung melompat ke lokasi label `case 3:`, mengeksekusi perintah pencetakan, dan berhenti berkat hantaman instruksi `break`."
+      },
+      {
+        "text": "Selasa",
+        "isCorrect": false,
+        "rationale": "Label case penanda nilai 2 dilewati karena tidak cocok dengan isi dari variabel sakelar kendali."
+      },
+      {
+        "text": "Senin",
+        "isCorrect": false,
+        "rationale": "Label case gerbang awal dilewati karena mendeteksi ketidakcocokan nilai input."
+      },
+      {
+        "text": "Hari lain",
+        "isCorrect": false,
+        "rationale": "Penanganan default tidak dijalankan karena nilai target sudah tertampung aman oleh label case spesifik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 43,
+    "question": "char nilai = 'B'; switch (nilai) { case 'A': System.out.println(\"Sangat baik\"); break; case 'B': System.out.println(\"Baik\"); break; case 'C': System.out.println(\"Cukup\"); break; default: System.out.println(\"Kurang\"); } Apa output dari kode di atas?",
+    "answerOptions": [
+      {
+        "text": "Baik",
+        "isCorrect": true,
+        "rationale": "Variabel nilai berisi karakter huruf 'B'. Hal ini memicu kecocokan valid pada kondisi `case 'B':` sehingga sistem menampilkan kata \"Baik\" lalu keluar dari blok switch."
+      },
+      {
+        "text": "Sangat baik",
+        "isCorrect": false,
+        "rationale": "Skenario label case 'A' dilewati akibat ketidaksesuaian input karakter variabel penguji."
+      },
+      {
+        "text": "Cukup",
+        "isCorrect": false,
+        "rationale": "Kondisi case 'C' tidak disentuh karena alur kendali telah dipatahkan oleh perintah break sebelumnya."
+      },
+      {
+        "text": "Kurang",
+        "isCorrect": false,
+        "rationale": "Sektor default dilewati berhubung data input masukan sudah terakomodasi oleh label pembanding internal."
+      }
+    ]
+  },
+  {
+    "questionNumber": 44,
+    "question": "String warna = \"merah\"; switch (warna) { case \"merah\": System.out.println(\"Berhenti\"); break; case \"kuning\": System.out.println(\"Hati-hati\"); break; case \"hijau\": System.out.println(\"Jalan\"); break; default: System.out.println(\"Warna tidak dikenal\"); } Apa output dari kode di atas?",
+    "answerOptions": [
+      {
+        "text": "Warna tidak dikenal",
+        "isCorrect": false,
+        "rationale": "Cabang default diabaikan karena data input string sudah terdeteksi di daftar label utama."
+      },
+      {
+        "text": "Hati-hati",
+        "isCorrect": false,
+        "rationale": "Label case pengujian warna kuning tidak dieksekusi karena tidak cocok dengan nilai variabel penguji."
+      },
+      {
+        "text": "Jalan",
+        "isCorrect": false,
+        "rationale": "Label case warna hijau dilewati karena proses pencarian kecocokan dihentikan lebih awal."
+      },
+      {
+        "text": "Berhenti",
+        "isCorrect": true,
+        "rationale": "Nilai variabel warna adalah string \"merah\". Struktur penyeleksi langsung mengarahkan jalannya logika ke `case \"merah\":` yang mencetak instruksi kata \"Berhenti\"."
+      }
+    ]
+  },
+  {
+    "questionNumber": 45,
+    "question": "int pilihan = 2; switch (pilihan) { case 1: System.out.println(\"Pertama\"); break; case 2: System.out.println(\"Kedua\"); break; case 3: System.out.println(\"Ketiga\"); break; default: System.out.println(\"Tidak ada\"); } Apa output dari kode di atas?",
+    "answerOptions": [
+      {
+        "text": "Kedua",
+        "isCorrect": true,
+        "rationale": "Input angka 2 memicu pemicu kecocokan otomatis pada kondisi `case 2:`. Kalimat \"Kedua\" dicetak, dan tanda break mengunci jalannya kode agar lekas keluar blok switch."
+      },
+      {
+        "text": "Pertama",
+        "isCorrect": false,
+        "rationale": "Kondisi penyaringan case teratas diabaikan karena input data tidak sinkron dengan nilai konstan pelabelan."
+      },
+      {
+        "text": "Ketiga",
+        "isCorrect": false,
+        "rationale": "Sektor penanganan case nomor 3 terisolasi dari jalannya eksekusi berkat pengaman rem instruksi break."
+      },
+      {
+        "text": "Tidak ada",
+        "isCorrect": false,
+        "rationale": "Cabang penanganan alternatif default tidak tersentuh akibat pencarian nilai target telah tuntas terpenuhi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 46,
+    "question": "Perhatikan kode berikut: for (int i = 0; i < 5; i++) { System.out.print(i + \" \"); } Apa output dari kode di atas?",
+    "answerOptions": [
+      {
+        "text": "1 2 3 4 5",
+        "isCorrect": false,
+        "rationale": "Siklus perulangan bermula dari angka 0, bukan diawali dari hitungan angka satu."
+      },
+      {
+        "text": "0 1 2 3 4",
+        "isCorrect": true,
+        "rationale": "Variabel iterasi i berjalan dari nilai awal 0. Kondisi batas berhenti adalah `i < 5`. Maka nilai i yang dicetak berturut-turut adalah 0, 1, 2, 3, dan 4."
+      },
+      {
+        "text": "0 1 2 3 4 5",
+        "isCorrect": false,
+        "rationale": "Angka 5 tidak ikut dicetak karena syarat kelayakan putaran menghendaki nilai i harus kurang dari lima secara mutlak."
+      },
+      {
+        "text": "1 2 3 4",
+        "isCorrect": false,
+        "rationale": "Hitungan ini kehilangan fase putaran perdana saat variabel i masih bernilai nol."
+      }
+    ]
+  },
+  {
+    "questionNumber": 47,
+    "question": "int sum = 0; for (int i = 1; i <= 4; i++) { sum += i; } System.out.println(sum); Apa output dari kode di atas?",
+    "answerOptions": [
+      {
+        "text": "6",
+        "isCorrect": false,
+        "rationale": "Nilai 6 didapat jika kalkulasi hitungan berenti prematur pada fase putaran iterasi urutan ketiga."
+      },
+      {
+        "text": "8",
+        "isCorrect": false,
+        "rationale": "Angka 8 bukanlah kalkulasi akumulatif deret aritmetika angka melompat yang presisi."
+      },
+      {
+        "text": "10",
+        "isCorrect": true,
+        "rationale": "Perulangan ini menghitung akumulasi total nilai variabel i. Jalannya proses matematika penambahan adalah: 0 + 1 + 2 + 3 + 4, yang menghasilkan jumlah total akhir bernilai 10."
+      },
+      {
+        "text": "4",
+        "isCorrect": false,
+        "rationale": "Angka 4 sekadar mencerminkan nilai iterasi penutup, bukan akumulasi penyimpanan nilai variabel sum."
+      }
+    ]
+  },
+  {
+    "questionNumber": 48,
+    "question": "String teks = \"Java\"; for (int i = 0; i < teks.length(); i++) { System.out.print(teks.charAt(i) + \" \"); } Apa output dari kode di atas?",
+    "answerOptions": [
+      {
+        "text": "Error",
+        "isCorrect": false,
+        "rationale": "Sintaksis kode pengaksesan indeks String dalam wadah loop for di atas valid tanpa cacat penulisan."
+      },
+      {
+        "text": "Java",
+        "isCorrect": false,
+        "rationale": "Output cetak ini melupakan instruksi penyisipan karakter spasi kosong di sela-sela pemisahan huruf."
+      },
+      {
+        "text": "J a v a ",
+        "isCorrect": true,
+        "rationale": "Loop bergerak menelusuri tiap indeks karakter penyusun objek kata dari awal hingga akhir, menarik hurufnya satu per satu lewat .charAt(i) dan membubuhkan spasi di sampingnya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 49,
+    "question": "int hasil = 1; for (int i = 1; i <= 3; i++) { hasil *= i; } System.out.println(hasil); Apa output dari kode di atas?",
+    "answerOptions": [
+      {
+        "text": "6",
+        "isCorrect": true,
+        "rationale": "Perulangan for di atas menjalankan perhitungan faktorial bertahap untuk perkalian deret angka berurutan: 1 * 1 * 2 * 3, yang menghasilkan jawaban akhir bernilai 6."
+      },
+      {
+        "text": "3",
+        "isCorrect": false,
+        "rationale": "Nilai 3 hanya mencerminkan nilai iterasi dari pencacah variabel i pada putaran penutup."
+      },
+      {
+        "text": "2",
+        "isCorrect": false,
+        "rationale": "Nilai terlalu kecil akibat perhitungan putaran mengalami macet sebelum putaran akhir diselesaikan."
+      },
+      {
+        "text": "9",
+        "isCorrect": false,
+        "rationale": "Hasil hitungan meleset dari rumus logika perkalian akumulatif deret yang ditentukan kode."
+      }
+    ]
+  },
+  {
+    "questionNumber": 50,
+    "question": "for (int i = 2; i <= 8; i += 2) { System.out.print(i + \" \"); } Apa output dari kode di atas?",
+    "answerOptions": [
+      {
+        "text": "4 6 8",
+        "isCorrect": false,
+        "rationale": "Hitungan ini kehilangan cetakan angka awal dua, padahal inisialisasi awal variabel i bermula di angka 2."
+      },
+      {
+        "text": "2 4 6 8 10",
+        "isCorrect": false,
+        "rationale": "Angka 10 ikut meleset tercetak, padahal batas kondisi tegas meminta nilai i tidak boleh melampaui angka 8."
+      },
+      {
+        "text": "2 3 4 5 6 7 8",
+        "isCorrect": false,
+        "rationale": "Langkah iterasi bersifat melompat dua angka (i += 2), sehingga tidak akan mencetak deret angka ganjil."
+      },
+      {
+        "text": "2 4 6 8 ",
+        "isCorrect": true,
+        "rationale": "Loop bermula dari angka 2, melangkah dengan kenaikan konstan sebesar 2 (i += 2) selama nilai i tidak melebihi angka 8. Maka urutan angka terbit adalah 2, 4, 6, dan 8."
+      }
+    ]
+  },
+  {
+    "questionNumber": 51,
+    "question": "int i = 0; while (i < 3) { System.out.print(i + \" \"); i++; } Apa output dari kode di atas?",
+    "answerOptions": [
+      {
+        "text": "1 2 3",
+        "isCorrect": false,
+        "rationale": "Deret angka salah cetak karena memulai siklus melupakan kondisi nilai awal variabel i yang bernilai nol."
+      },
+      {
+        "text": "0 1 2 ",
+        "isCorrect": true,
+        "rationale": "Loop while memproses instruksi cetak terlebih dahulu saat i=0, i=1, dan i=2. Saat i bertambah menjadi 3, kondisi syarat uji `(3 < 3)` bernilai false, sehingga perulangan terhenti."
+      },
+      {
+        "text": "0 1 2 3",
+        "isCorrect": false,
+        "rationale": "Angka 3 terikut tercetak, padahal angka 3 melanggar kondisi keabsahan syarat batas perulangan while."
+      },
+      {
+        "text": "Error",
+        "isCorrect": false,
+        "rationale": "Struktur loop while dikonstruksi secara kokoh dilengkapi variabel pengendali iterasi yang bergerak naik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 52,
+    "question": "Perulangan while pada Java akan terus berjalan selama apa?",
+    "answerOptions": [
+      {
+        "text": "kondisi bernilai true",
+        "isCorrect": true,
+        "rationale": "Karakteristik dasar dari perulangan jenis while-loop adalah terus mengeksekusi blok kode di dalamnya selama kondisi logika pengujinya terpenuhi (bernilai true)."
+      },
+      {
+        "text": "kondisi bernilai false",
+        "isCorrect": false,
+        "rationale": "Ketika ekspresi kondisi mendeteksi nilai salah (false), interupsi terjadi dan program lekas menyudahi siklus perulangan."
+      },
+      {
+        "text": "variabel counter mencapai batas",
+        "isCorrect": false,
+        "rationale": "While loop tidak memiliki variabel counter bawaan implisit seperti pada struktur for-loop."
+      },
+      {
+        "text": "eksekusi break dipanggil",
+        "isCorrect": false,
+        "rationale": "Panggilan break memicu perhentian darurat paksa, bukan merupakan parameter kondisi ideal kelanjutan perulangan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 53,
+    "question": "Apa yang terjadi jika kondisi pada perulangan while sejak awal bernilai false?",
+    "answerOptions": [
+      {
+        "text": "blok perulangan tetap dijalankan sekali",
+        "isCorrect": false,
+        "rationale": "Eksekusi minimal satu kali tanpa pandang bulu di awal adalah sifat dari struktur perulangan do-while, bukan while-loop."
+      },
+      {
+        "text": "program akan error",
+        "isCorrect": false,
+        "rationale": "Kondisi awal berstatus salah tidak memicu eror ketatanegaraan sintaksis, melainkan dilewati secara legal."
+      },
+      {
+        "text": "blok perulangan tidak pernah dijalankan",
+        "isCorrect": true,
+        "rationale": "Struktur perulangan while menguji validitas kondisi di gerbang pintu masuk utama. Jika sejak awal bernilai false, isi blok kode di dalamnya akan langsung dilewati."
+      },
+      {
+        "text": "perulangan berjalan tanpa henti",
+        "isCorrect": false,
+        "rationale": "Siklus tanpa henti (*infinite loop*) justru dipicu bila parameter kondisi terus bertahan bernilai true tanpa pernah mengalami mutasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 54,
+    "question": "Perhatikan kode berikut: int i = 0; while (i < 5) { i++; } Setelah perulangan selesai, berapa nilai i?",
+    "answerOptions": [
+      {
+        "text": "4",
+        "isCorrect": false,
+        "rationale": "Saat i bernilai 4, kondisi (4 < 5) masih true, sehingga kode i++ di dalam blok tetap dijalankan sekali lagi."
+      },
+      {
+        "text": "5",
+        "isCorrect": true,
+        "rationale": "Perulangan while berjalan selama kondisi i < 5 terpenuhi. Pada iterasi terakhir, nilai i yang semula 4 dinaikkan menjadi 5 melalui perintah i++. Ketika kondisi dicek kembali, nilai 5 < 5 bernilai salah (false), sehingga perulangan berhenti dan nilai akhir i adalah 5."
+      },
+      {
+        "text": "6",
+        "isCorrect": false,
+        "rationale": "Nilai variabel terhenti naik tepat setelah melanggar batas penyaringan gerbang kondisi."
+      },
+      {
+        "text":"0",
+        "isCorrect":false,
+        "rationale":"Angka 0 adalah nilai awal (inisialisasi) sebelum perulangan dimulai. Nilai ini terus berubah bertambah 1 setiap kali blok di dalam perulangan dieksekusi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 55,
+    "question": "Apa fungsi pernyataan break di dalam perulangan while?",
+    "answerOptions": [
+      {
+        "text": "melanjutkan ke iterasi berikutnya",
+        "isCorrect": false,
+        "rationale": "Melompati sisa kode saat ini demi meluncur ke putaran siklus berikutnya merupakan tugas dari perintah kata kunci continue."
+      },
+      {
+        "text": "menghentikan perulangan lebih awal",
+        "isCorrect": true,
+        "rationale": "Pernyataan kata kunci `break` disisipkan sebagai tombol darurat untuk mematahkan alur perulangan secara sepihak dan segera keluar dari loop tanpa menunggu kondisi bernilai false."
+      },
+      {
+        "text": "mengulang dari awal",
+        "isCorrect": false,
+        "rationale": "Tidak ada fungsi kata kunci break untuk memutar balik alur kronologi kerja algoritma kembali ke titik start."
+      },
+      {
+        "text": "menyebabkan error",
+        "isCorrect": false,
+        "rationale": "Penggunaan break di dalam tubuh badan loop merupakan praktik kendali aliran instruksi program yang legal."
+      }
+    ]
+  },
+  {
+    "questionNumber": 56,
+    "question": "Apa singkatan dari UML?",
+    "answerOptions": [
+      {
+        "text": "Unified Modeling Language",
+        "isCorrect": true,
+        "rationale": "UML adalah singkatan dari Unified Modeling Language, yaitu bahasa visual standar yang digunakan untuk membuat cetak biru spesifikasi, visualisasi, dan dokumentasi sistem perangkat lunak."
+      },
+      {
+        "text": "Unified Markup Language",
+        "isCorrect": false,
+        "rationale": "Istilah markup umum disematkan untuk bahasa penanda dokumen struktural teks seperti HTML atau XML."
+      },
+      {
+        "text": "Universal Modeling Language",
+        "isCorrect": false,
+        "rationale": "Meskipun sifatnya jamak universal, terminologi resmi internasional yang disepakati adalah Unified."
+      },
+      {
+        "text": "Unified Module Language",
+        "isCorrect": false,
+        "rationale": "Kata module melenceng dari esensi UML yang fokus pada pemodelan (*modeling*) rancang bangun arsitektur objek."
+      }
+    ]
+  },
+  {
+    "questionNumber": 57,
+    "question": "Diagram UML yang digunakan untuk menggambarkan interaksi antar objek berdasarkan urutan waktu adalah?",
+    "answerOptions": [
+      {
+        "text": "sequence diagram",
+        "isCorrect": true,
+        "rationale": "Sequence diagram didesain secara khusus untuk memvisualisasikan skenario kronologi aliran pertukaran pesan (*message*) antarobjek yang disusun berdasarkan urutan waktu kejadian."
+      },
+      {
+        "text": "class diagram",
+        "isCorrect": false,
+        "rationale": "Class diagram menampilkan struktur hubungan statis antarkelas, bukan alur interaksi dinamis berbasis kronologi waktu."
+      },
+      {
+        "text": "use case diagram",
+        "isCorrect": false,
+        "rationale": "Use case diagram berfokus memetakan fungsi interaksi sistem dari perspektif eksternal aktor pengguna."
+      },
+      {
+        "text": "activity diagram",
+        "isCorrect": false,
+        "rationale": "Activity diagram memodelkan aliran aktivitas proses bisnis sistem secara prosedural, mirip diagram alir (*flowchart*)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 58,
+    "question": "Jenis diagram UML yang menunjukkan hubungan antar kelas adalah?",
+    "answerOptions": [
+      {
+        "text": "use case diagram",
+        "isCorrect": false,
+        "rationale": "Use case diagram memetakan fungsionalitas sistem dari sudut pandang interaksi aktor luar."
+      },
+      {
+        "text": "activity diagram",
+        "isCorrect": false,
+        "rationale": "Activity diagram menggambarkan diagram alir proses bisnis atau urutan aktivitas sistem, bukan detail relasi struktur internal objek."
+      },
+      {
+        "text": "class diagram",
+        "isCorrect": true,
+        "rationale": "Class diagram adalah jenis diagram struktural statis yang memvisualisasikan kelas-kelas, atribut, metode, serta hubungan relasi (seperti asosiasi atau pewarisan) antarkelas."
+      },
+      {
+        "text": "sequence diagram",
+        "isCorrect": false,
+        "rationale": "Sequence diagram fokus pada skenario pesan kronologis dinamis runtime objek, bukan skema blueprint kelas secara statis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 59,
+    "question": "Apa tujuan utama dari use case diagram?",
+    "answerOptions": [
+      {
+        "text": "menunjukkan alur kerja sistem",
+        "isCorrect": false,
+        "rationale": "Alur kerja internal sistem secara rinci langkah-demi-langkah dipetakan lewat diagram aktivitas (*activity diagram*)."
+      },
+      {
+        "text": "menunjukkan urutan pesan",
+        "isCorrect": false,
+        "rationale": "Menunjukkan urutan pengiriman pesan komunikasi antarobjek merupakan domain utama dari diagram sekuens."
+      },
+      {
+        "text": "menunjukkan struktur kelas",
+        "isCorrect": false,
+        "rationale": "Struktur pembagian cetak biru kelas beserta isinya dimodelkan menggunakan diagram kelas."
+      },
+      {
+        "text": "menunjukkan interaksi pengguna dengan sistem",
+        "isCorrect": true,
+        "rationale": "Tujuan utama pemodelan use case diagram adalah menangkap tuntutan kebutuhan fungsional sistem dari kacamata interaksi antara sistem dengan pengguna luar (*actor*)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 60,
+    "question": "Dalam UML, apa yang dimaksud dengan aktor?",
+    "answerOptions": [
+      {
+        "text": "metode dalam objek",
+        "isCorrect": false,
+        "rationale": "Metode di dalam objek diposisikan sebagai perilaku fungsional komponen internal objek."
+      },
+      {
+        "text": "bagian dari kode program",
+        "isCorrect": false,
+        "rationale": "Aktor berada pada level konseptual desain luar sistem, bukan bagian baris sintaksis kode program."
+      },
+      {
+        "text": "kelas utama dalam sistem",
+        "isCorrect": false,
+        "rationale": "Kelas utama bertindak sebagai titik entri eksekusi aplikasi, bukan representasi eksternal."
+      },
+      {
+        "text": "entitas yang berinteraksi dengan sistem",
+        "isCorrect": true,
+        "rationale": "Aktor (*actor*) dalam representasi UML adalah subjek penentu berbentuk manusia, perangkat keras, atau sistem eksternal lain yang melakukan interaksi langsung dengan sistem yang dirancang."
+      }
+    ]
+  },
+  {
+    "questionNumber": 61,
+    "question": "Langkah pertama dalam perancangan dengan UML adalah?",
+    "answerOptions": [
+      {
+        "text": "membuat class diagram",
+        "isCorrect": false,
+        "rationale": "Pembuatan diagram kelas membutuhkan pemahaman objek matang yang didapat sesudah analisa kebutuhan tuntas dilakukan."
+      },
+      {
+        "text": "mengidentifikasi kebutuhan sistem",
+        "isCorrect": true,
+        "rationale": "Sebelum menggambar struktur internal, langkah awal wajib memetakan kebutuhan sistem (analisis kebutuhan) yang biasanya direalisasikan pertama kali lewat diagram *use case*."
+      },
+      {
+        "text": "membuat sequence diagram",
+        "isCorrect": false,
+        "rationale": "Diagram sekuens menuntut gambaran komponen interaksi fungsional kelas yang jelas, yang tidak tersedia di fase awal."
+      },
+      {
+        "text": "menulis kode program",
+        "isCorrect": false,
+        "rationale": "Menulis kode program merupakan tahap akhir implementasi fisik sesudah dokumentasi desain cetak biru UML rampung dirumuskan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 62,
+    "question": "Diagram UML yang menggambarkan aliran aktivitas dalam sistem adalah?",
+    "answerOptions": [
+      {
+        "text": "class diagram",
+        "isCorrect": false,
+        "rationale": "Diagram kelas memodelkan arsitektur data komponen statis sistem, bukan memetakan jalannya alur dinamika gerakan proses."
+      },
+      {
+        "text": "sequence diagram",
+        "isCorrect": false,
+        "rationale": "Diagram sekuens melacak urutan pesan antarobjek seiring berjalannya linimasa, bukan memodelkan flowchart aktivitas makro."
+      },
+      {
+        "text": "use case diagram",
+        "isCorrect": false,
+        "rationale": "Diagram use case sekadar mendefinisikan daftar fungsi layanan, tanpa memaparkan bagaimana detail urutan langkah proses tersebut bekerja."
+      },
+      {
+        "text": "activity diagram",
+        "isCorrect": true,
+        "rationale": "Activity diagram adalah jenis diagram dinamis yang memvisualisasikan aliran kerja (*workflow*) dari satu aktivitas ke aktivitas lainnya dalam sistem secara terstruktur."
+      }
+    ]
+  },
+  {
+    "questionNumber": 63,
+    "question": "Dalam perancangan UML, hubungan generalization antara kelas menunjukkan?",
+    "answerOptions": [
+      {
+        "text": "agregasi",
+        "isCorrect": false,
+        "rationale": "Agregasi memodelkan hubungan kepemilikan bagian objek yang sifatnya longgar (*has-a relationship*)."
+      },
+      {
+        "text": "pewarisan",
+        "isCorrect": true,
+        "rationale": "Hubungan *Generalization* dalam representasi visual UML mengindikasikan konsep pewarisan (*inheritance* atau hubungan relasi *is-a*), yang menghubungkan kelas anak (*subclass*) ke kelas induk (*superclass*)."
+      },
+      {
+        "text": "komposisi",
+        "isCorrect": false,
+        "rationale": "Komposisi menggambarkan hubungan bagian kepemilikan objek yang terikat kuat secara dependen mati-hidup."
+      },
+      {
+        "text": "dependensi",
+        "isCorrect": false,
+        "rationale": "Dependensi mencerminkan relasi ketergantungan temporer di mana perubahan satu kelas memengaruhi kelas lainnya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 64,
+    "question": "Apa yang dimaksud dengan multiplicity dalam class diagram?",
+    "answerOptions": [
+      {
+        "text": "tipe data atribut",
+        "isCorrect": false,
+        "rationale": "Tipe data mengindikasikan format nilai penampung properti (seperti String atau int), bukan parameter batasan relasi."
+      },
+      {
+        "text": "nama kelas",
+        "isCorrect": false,
+        "rationale": "Nama kelas diposisikan sebagai label identitas kotak komponen teratas dalam diagram."
+      },
+      {
+        "text": "jumlah instance yang terlibat dalam hubungan",
+        "isCorrect": true,
+        "rationale": "Multiplicity (kardinalitas) menentukan rentang jumlah batas minimum dan maksimum objek dari suatu kelas yang dapat terhubung dengan satu objek dari kelas mitra asosiasinya (misal: 1, 0..*, atau 1..*)."
+      },
+      {
+        "text": "metode kelas",
+        "isCorrect": false,
+        "rationale": "Metode kelas ditempatkan di sekat kotak paling bawah untuk mendeklarasikan fungsi operasi kerja objek."
+      }
+    ]
+  },
+  {
+    "questionNumber": 65,
+    "question": "Apa yang dimaksud dengan abstraction dalam pemrograman berorientasi objek?",
+    "answerOptions": [
+      {
+        "text": "menyembunyikan detail implementasi dan hanya menampilkan fungsi",
+        "isCorrect": true,
+        "rationale": "Abstraksi (abstraction) adalah konsep OOP yang berfokus menyembunyikan detail proses komputasi internal yang rumit dan hanya menyajikan antarmuka fungsionalitas esensialnya kepada pengguna objek."
+      },
+      {
+        "text": "membuat objek dari kelas",
+        "isCorrect": false,
+        "rationale": "Proses pencetakan objek nyata berdasarkan spesifikasi acuan kelas dinamakan instansiasi (*instantiation*)."
+      },
+      {
+        "text": "menghubungkan metode dengan data",
+        "isCorrect": false,
+        "rationale": "Membungkus penggabungan metode beserta data variabel ke dalam satu wadah pelindung disebut enkapsulasi."
+      },
+      {
+        "text": "mengubah nilai variabel",
+        "isCorrect": false,
+        "rationale": "Mengubah isian data nilai variabel dikategorikan sebagai operasi penugasan (*assignment*)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 66,
+    "question": "Interface dalam Java mendefinisikan?",
+    "answerOptions": [
+      {
+        "text": "Implementasi metode",
+        "isCorrect": false,
+        "rationale": "Blok badan implementasi nyata baris kode metode ditolak keberadaannya dalam deklarasi fungsi standar interface."
+      },
+      {
+        "text": "variabel instan",
+        "isCorrect": false,
+        "rationale": "Interface tidak diizinkan memiliki variabel instans pengubah kondisi, seluruh propertinya otomatis berpredikat public static final."
+      },
+      {
+        "text": "kontrak metode tanpa implementasi",
+        "isCorrect": true,
+        "rationale": "Interface bertindak sebagai cetak biru murni yang mendefinisikan kumpulan tanda tangan metode abstrak (kontrak kerja kelakuan) tanpa menyertakan blok kode isi implementasinya."
+      },
+      {
+        "text": "konstruktor",
+        "isCorrect": false,
+        "rationale": "Interface bersifat abstrak murni sehingga dilarang keras memuat metode konstruktor karena tidak bisa diinstansiasi secara mandiri."
+      }
+    ]
+  },
+  {
+    "questionNumber": 67,
+    "question": "Sebuah kelas yang mengimplementasikan interface harus?",
+    "answerOptions": [
+      {
+        "text": "mengimplementasikan semua metode abstrak dari interface",
+        "isCorrect": true,
+        "rationale": "Saat kelas konkret berkomitmen menandatangani kontrak interface via kata kunci implements, kelas tersebut memikul kewajiban mutlak untuk menuliskan implementasi badan kode bagi semua metode abstrak yang diwariskan."
+      },
+      {
+        "text": "tidak melakukan apa-apa",
+        "isCorrect": false,
+        "rationale": "Apatis atau tidak memenuhi kontrak implementasi berujung pada penolakan validasi dari kompiler Java (compiler error)."
+      },
+      {
+        "text": "hanya mengimplementasikan beberapa metode",
+        "isCorrect": false,
+        "rationale": "Mengimplementasikan sebagian metode hanya diizinkan jika kelas pengadopsi tersebut juga menyatakan dirinya berstatus sebagai kelas abstrak (*abstract class*)."
+      },
+      {
+        "text": "membuat interface baru",
+        "isCorrect": false,
+        "rationale": "Kelas pengadopsi tidak dituntut menciptakan interface tandingan melainkan diwajibkan menjabarkan isi fungsi interface acuan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 68,
+    "question": "Kata kunci yang digunakan untuk mengimplementasikan interface dalam Java adalah?",
+    "answerOptions": [
+      {
+        "text": "extends",
+        "isCorrect": false,
+        "rationale": "Keyword extends dialokasikan khusus untuk memperluas fungsionalitas pewarisan antar sesama kelas atau sesama interface."
+      },
+      {
+        "text": "interface",
+        "isCorrect": false,
+        "rationale": "Keyword interface dipakai untuk mendefinisikan wadah blueprint interface di awal pembuatan file."
+      },
+      {
+        "text": "abstract",
+        "isCorrect": false,
+        "rationale": "Keyword abstract disematkan di depan nama kelas atau metode untuk menegaskan sifat ketidaklengkapan struktur fisiknya."
+      },
+      {
+        "text": "implements",
+        "isCorrect": true,
+        "rationale": "Kata kunci `implements` wajib diketikkan oleh sebuah kelas konkret agar dapat mengadopsi dan merealisasikan seluruh kontrak fungsi dari objek *interface* tujuan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 69,
+    "question": "Dalam konsep abstraction pada pemrograman berorientasi objek Java, bagaimana cara mendeklarasikan sebuah kelas abstrak?",
+    "answerOptions": [
+      {
+        "text": "Menggunakan keyword 'static' sebelum kata kunci 'class'",
+        "isCorrect": false,
+        "rationale": "Keyword static mengonversi kelas menjadi komponen statis memori konteks global, bukan mengubahnya jadi kelas abstrak."
+      },
+      {
+        "text": "Menggunakan keyword 'final' sebelum kata kunci 'class'",
+        "isCorrect": false,
+        "rationale": "Keyword final justru mengunci kelas agar tidak bisa diturunkan atau diwariskan sama sekali, bertolak belakang dengan sifat kelas abstrak."
+      },
+      {
+        "text": "Menggunakan keyword 'abstract' sebelum kata kunci 'class'",
+        "isCorrect": true,
+        "rationale": "Pendeklarasian kelas abstrak diwujudkan dengan menyematkan kata kunci pengendali `abstract` tepat di sebelah kiri sebelum penulisan kata kunci `class`."
+      },
+      {
+        "text": "Menggunakan keyword 'private' sebelum kata kunci 'class'",
+        "isCorrect": false,
+        "rationale": "Keyword private mengatur level visibilitas akses data, bukan menetapkan karakteristik abstraksi objek."
+      }
+    ]
+  },
+  {
+    "questionNumber": 70,
+    "question": "Interface dalam Java mendefinisikan kontrak yang harus diimplementasikan oleh kelas. Manakah pernyataan yang benar mengenai interface?",
+    "answerOptions": [
+      {
+        "text": "Interface dapat diinstansiasi langsung",
+        "isCorrect": false,
+        "rationale": "Karena wujud fisiknya abstrak tanpa badan kode, memanggil perintah operator new langsung pada interface dilarang sistem."
+      },
+      {
+        "text": "Interface tidak dapat memiliki method abstrak",
+        "isCorrect": false,
+        "rationale": "Pernyataan keliru karena metode dalam isi tubuh interface secara default berstatus sebagai metode abstrak."
+      },
+      {
+        "text": "Interface dapat memiliki implementasi method default",
+        "isCorrect": true,
+        "rationale": "Semenjak rilisnya versi Java 8 ke atas, spesifikasi arsitektur memperbolehkan penyisipan metode konkret di dalam interface asalkan diawali kata kunci pembuka khusus `default`."
+      },
+      {
+        "text": "Interface hanya boleh memiliki satu method",
+        "isCorrect": false,
+        "rationale": "Interface dibebaskan menampung berapapun jumlah deklarasi tanda tangan metode kontrak sesuai skema arsitektur perancangan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 71,
+    "question": "Dalam inheritance, hubungan antara kelas induk dan kelas anak disebut sebagai relasi?",
+    "answerOptions": [
+      {
+        "text": "Polimorfisme",
+        "isCorrect": false,
+        "rationale": "Polimorfisme adalah kemampuan objek mengambil banyak wujud rupa yang berbeda saat program dijalankan."
+      },
+      {
+        "text": "Pewarisan",
+        "isCorrect": true,
+        "rationale": "Inheritance diterjemahkan ke dalam bahasa Indonesia sebagai konsep Pewarisan, yaitu mekanisme penurunan sifat, atribut, dan metode dari kelas induk (*parent class*) ke kelas anak (*child class*)."
+      },
+      {
+        "text": "Abstraksi",
+        "isCorrect": false,
+        "rationale": "Abstraksi menitikberatkan pada perancangan antarmuka fungsionalitas esensial dengan menyembunyikan detail detail rumit."
+      },
+      {
+        "text": "Enkapsulasi",
+        "isCorrect": false,
+        "rationale": "Enkapsulasi berfokus pada penyembunyian data internal melalui pembatasan hak visibilitas akses modifier."
+      }
+    ]
+  },
+  {
+    "questionNumber": 72,
+    "question": "Jika kelas B merupakan subclass dari kelas A, dan kelas A memiliki method 'tampil()' yang bersifat public, maka kelas B:",
+    "answerOptions": [
+      {
+        "text": "Method 'tampil()' menjadi private",
+        "isCorrect": false,
+        "rationale": "Hak akses warisan tidak mengalami degradasi penurunan paksa ke tingkat private di tangan subclass."
+      },
+      {
+        "text": "Method 'tampil()' harus dideklarasikan ulang",
+        "isCorrect": false,
+        "rationale": "Deklarasi ulang opsional dilakukan jika ingin memodifikasi kelakuannya lewat overriding, bukan sebuah kewajiban."
+      },
+      {
+        "text": "Method 'tampil()' otomatis diwariskan",
+        "isCorrect": true,
+        "rationale": "Karena berpredikat akses public, semua metode milik kelas induk (kelas A) otomatis turun dan dapat digunakan langsung oleh objek turunan di kelas B tanpa perlu menulis ulang kodenya."
+      },
+      {
+        "text": "Method 'tampil()' tidak bisa diakses",
+        "isCorrect": false,
+        "rationale": "Metode kelas induk hanya tertutup dari subclass apabila diberi batasan modifier berjenis private."
+      }
+    ]
+  },
+  {
+    "questionNumber": 73,
+    "question": "Keyword yang digunakan untuk memanggil konstruktor kelas induk dari kelas anak adalah?",
+    "answerOptions": [
+      {
+        "text": "super",
+        "isCorrect": true,
+        "rationale": "Kata kunci `super` dialokasikan khusus dalam sintaksis Java sebagai perwakilan penunjuk objek kelas induk, termasuk memicu fungsi konstruktor asal."
+      },
+      {
+        "text": "this",
+        "isCorrect": false,
+        "rationale": "Kata kunci this bertugas mereferensikan atau menunjuk instans dari objek lokal kelas itu sendiri."
+      },
+      {
+        "text": "parent",
+        "isCorrect": false,
+        "rationale": "Kata parent dipakai pada bahasa lain seperti PHP, namun bukan merupakan kosakata kata kunci yang valid di bahasa Java."
+      },
+      {
+        "text": "base",
+        "isCorrect": false,
+        "rationale": "Kata base merupakan keyword penunjuk kelas induk di bahasa C#, tidak dikenal dalam ekosistem Java."
+      }
+    ]
+  },
+  {
+    "questionNumber": 74,
+    "question": "Jika kelas induk memiliki konstruktor berparameter, bagaimana cara memanggilnya dari konstruktor kelas anak?",
+    "answerOptions": [
+      {
+        "text": "Menggunakan 'this(parameter)' sebagai pernyataan pertama",
+        "isCorrect": false,
+        "rationale": "this(parameter) diarahkan untuk memanggil konstruktor internal lain yang masih berada di dalam lingkup satu kelas yang sama."
+      },
+      {
+        "text": "Menggunakan 'super(parameter)' sebagai pernyataan pertama",
+        "isCorrect": true,
+        "rationale": "Untuk meneruskan nilai data ke konstruktor berparameter milik kelas induk, subclass harus memanggil metode `super(parameter)` di baris pertama di dalam konstruktornya."
+      },
+      {
+        "text": "Menggunakan 'parent(parameter)' sebagai pernyataan pertama",
+        "isCorrect": false,
+        "rationale": "Sintaksis kata parent tidak sah dan akan berujung pada penolakan oleh pengompilasi Java."
+      },
+      {
+        "text": "Menggunakan 'base(parameter)' sebagai pernyataan pertama",
+        "isCorrect": false,
+        "rationale": "Sintaksis kata base merupakan aturan luar bahasa C# yang tidak kompatibel dengan lingkungan Java."
+      }
+    ]
+  },
+  {
+    "questionNumber": 75,
+    "question": "Dalam inheritance, manakah pernyataan yang benar mengenai method overriding?",
+    "answerOptions": [
+      {
+        "text": "Method di kelas anak harus memiliki nama yang berbeda dari induk",
+        "isCorrect": false,
+        "rationale": "Overriding justru mewajibkan kesamaan nama metode secara mutlak demi menimpa fungsi asalnya."
+      },
+      {
+        "text": "Method di kelas anak dapat memiliki implementasi yang sama atau berbeda",
+        "isCorrect": true,
+        "rationale": "Overriding memungkinkan kelas anak mendefinisikan ulang isi badan metode yang diwarisi dari kelas induk agar memiliki perilaku spesifik yang berbeda, meskipun nama dan parameternya sama."
+      },
+      {
+        "text": "Method di kelas anak harus memiliki parameter yang berbeda dari induk",
+        "isCorrect": false,
+        "rationale": "Jika parameter sengaja diubah berbeda, tindakan tersebut diklasifikasikan sebagai konsep Overloading, bukan Overriding."
+      },
+      {
+        "text": "Method di kelas anak harus memiliki tipe kembalian yang berbeda",
+        "isCorrect": false,
+        "rationale": "Tipe kembalian (return type) wajib selaras atau kovarian dengan spesifikasi tanda tangan metode asli di kelas induk."
+      }
+    ]
+  },
+  {
+    "questionNumber": 76,
+    "question": "Encapsulation dalam OOP bertujuan untuk:",
+    "answerOptions": [
+      {
+        "text": "Menurunkan sifat dari kelas induk",
+        "isCorrect": false,
+        "rationale": "Mekanisme menurunkan sifat-sifat fungsionalitas dari kelas induk merupakan definisi kerja dari pilar Inheritance."
+      },
+      {
+        "text": "Membuat kelas menjadi abstrak",
+        "isCorrect": false,
+        "rationale": "Merancang kelas berstatus mengambang tanpa detail implementasi dikelompokkan ke dalam pilar Abstraction."
+      },
+      {
+        "text": "Memungkinkan banyak bentuk method",
+        "isCorrect": false,
+        "rationale": "Menyediakan ruang bagi satu fungsi memanifestasikan dirinya ke dalam banyak bentuk adalah peran pilar Polimorfisme."
+      },
+      {
+        "text": "Menyembunyikan detail implementasi dan melindungi data",
+        "isCorrect": true,
+        "rationale": "Tujuan esensial dari konsep Enkapsulasi (Encapsulation) adalah menyembunyikan detail data internal objek dari akses luar langsung dengan memanfaatkan modifier private dan mengontrolnya lewat fungsi getter-setter."
+      }
+    ]
+  },
+  {
+    "questionNumber": 77,
+    "question": "Untuk menerapkan encapsulation, atribut dalam kelas sebaiknya memiliki akses modifier:",
+    "answerOptions": [
+      {
+        "text": "public",
+        "isCorrect": false,
+        "rationale": "Modifier public membuat atribut dapat diakses bebas dari luar kelas, yang melanggar prinsip penyembunyian data (data hiding) pada enkapsulasi."
+      },
+      {
+        "text": "default",
+        "isCorrect": false,
+        "rationale": "Modifier default (package-private) masih mengizinkan kelas lain dalam package yang sama untuk mengakses atribut secara langsung."
+      },
+      {
+        "text": "protected",
+        "isCorrect": false,
+        "rationale": "Modifier protected membuka akses bagi subclass dan kelas dalam package yang sama, sehingga kurang ketat untuk enkapsulasi murni."
+      },
+      {
+        "text": "private",
+        "isCorrect": true,
+        "rationale": "Atribut private hanya dapat diakses dari dalam kelas itu sendiri. Ini adalah fondasi utama enkapsulasi untuk melindungi data dari manipulasi luar secara langsung."
+      }
+    ]
+  },
+  {
+    "questionNumber": 78,
+    "question": "Method yang digunakan untuk mengakses nilai atribut private disebut:",
+    "answerOptions": [
+      {
+        "text": "Setter",
+        "isCorrect": false,
+        "rationale": "Setter method digunakan khusus untuk mengubah atau mengisi nilai suatu atribut private, bukan untuk mengambil nilainya."
+      },
+      {
+        "text": "Constructor",
+        "isCorrect": false,
+        "rationale": "Constructor digunakan untuk menginisialisasi objek saat pertama kali dibuat, bukan untuk membaca nilai atribut secara spesifik di tengah program."
+      },
+      {
+        "text": "Getter",
+        "isCorrect": true,
+        "rationale": "Getter method bertugas untuk mengambil atau membaca nilai dari atribut yang memiliki hak akses private secara aman."
+      },
+      {
+        "text": "Destructor",
+        "isCorrect": false,
+        "rationale": "Destructor digunakan untuk menghapus objek dari memori (di Java proses ini ditangani otomatis oleh Garbage Collector), bukan untuk membaca atribut."
+      }
+    ]
+  },
+  {
+    "questionNumber": 79,
+    "question": "Jika sebuah atribut private ingin diubah nilainya dari luar kelas, maka harus disediakan:",
+    "answerOptions": [
+      {
+        "text": "Getter method",
+        "isCorrect": false,
+        "rationale": "Getter method hanya bersifat read-only (membaca nilai) dan tidak memiliki kemampuan untuk memodifikasi data atribut."
+      },
+      {
+        "text": "Method static",
+        "isCorrect": false,
+        "rationale": "Method static milik kelas secara keseluruhan dan tidak berkaitan langsung dengan pengubahan atribut instance private secara standar enkapsulasi."
+      },
+      {
+        "text": "Constructor berparameter",
+        "isCorrect": false,
+        "rationale": "Constructor berparameter hanya mengubah nilai saat objek pertama kali diinstansiasi, tidak bisa digunakan untuk mengubah nilai objek yang sudah berjalan."
+      },
+      {
+        "text": "Setter method",
+        "isCorrect": true,
+        "rationale": "Setter method dirancang khusus untuk menerima parameter dari luar kelas dan menggunakannya untuk memperbarui nilai atribut private secara terkontrol."
+      }
+    ]
+  },
+  {
+    "questionNumber": 80,
+    "question": "Manakah contoh yang benar dari enkapsulasi dalam kode Java?",
+    "answerOptions": [
+      {
+        "text": "public int data;",
+        "isCorrect": false,
+        "rationale": "Kode ini membiarkan variabel diakses langsung secara bebas, sehingga tidak menerapkan konsep enkapsulasi sama sekali."
+      },
+      {
+        "text": "int data;",
+        "isCorrect": false,
+        "rationale": "Menggunakan akses default (no-modifier) tetap membuka celah bagi kelas lain dalam satu package untuk mengubah data tanpa melalui filter method."
+      },
+      {
+        "text": "protected int data;",
+        "isCorrect": false,
+        "rationale": "Akses protected masih meloloskan hak akses langsung bagi subclass dan package terkait, belum mencerminkan data hiding yang ideal."
+      },
+      {
+        "text": "private int data; public int getData() { return data; }",
+        "isCorrect": true,
+        "rationale": "Potongan kode ini menerapkan enkapsulasi dengan sempurna: menyembunyikan variabel di dalam scope 'private' dan menyediakan jalur baca resmi via public getter."
+      }
+    ]
+  },
+  {
+    "questionNumber": 81,
+    "question": "Polymorphism dalam OOP memungkinkan:",
+    "answerOptions": [
+      {
+        "text": "Sebuah method memiliki banyak bentuk dengan nama yang sama",
+        "isCorrect": true,
+        "rationale": "Polymorphism (banyak bentuk) mengizinkan sebuah instruksi atau method yang bernama sama untuk merespons atau mengeksekusi tindakan berbeda tergantung objeknya."
+      },
+      {
+        "text": "Kelas tidak dapat diinstansiasi",
+        "isCorrect": false,
+        "rationale": "Kondisi kelas yang tidak dapat diinstansiasi secara langsung merupakan karakteristik dari Abstract Class atau Interface, bukan polimorfisme."
+      },
+      {
+        "text": "Data disembunyikan dari luar",
+        "isCorrect": false,
+        "rationale": "Menyembunyikan data dari jangkauan luar kelas merupakan definisi kerja dari konsep Encapsulation."
+      },
+      {
+        "text": "Kelas mewarisi sifat dari banyak induk",
+        "isCorrect": false,
+        "rationale": "Mewarisi sifat dari induk (apalagi banyak induk) berkaitan dengan konsep Multiple Inheritance, bukan polimorfisme."
+      }
+    ]
+  },
+  {
+    "questionNumber": 82,
+    "question": "Contoh polymorphism melalui method overloading adalah:",
+    "answerOptions": [
+      {
+        "text": "Method 'hitung (int a)' dan 'hitung (int a, int b)' dalam satu kelas",
+        "isCorrect": true,
+        "rationale": "Overloading terjadi ketika ada dua atau lebih method dengan nama yang persis sama namun memiliki parameter (jumlah/tipe) yang berbeda di dalam satu kelas."
+      },
+      {
+        "text": "Method 'hitung()' di kelas induk dan anak dengan nama sama",
+        "isCorrect": false,
+        "rationale": "Jika nama dan parameter sama tetapi posisinya berada di kelas induk dan anak, maka fenomena ini disebut dengan Method Overriding."
+      },
+      {
+        "text": "Method 'hitung()' di kelas induk dan anak dengan parameter berbeda",
+        "isCorrect": false,
+        "rationale": "Perbedaan parameter antar kelas induk dan anak tidak memenuhi syarat murni overriding dinamis yang mengacu pada kesamaan signature."
+      },
+      {
+        "text": "Method 'hitung()' hanya dideklarasikan sekali",
+        "isCorrect": false,
+        "rationale": "Deklarasi tunggal sebuah method tidak memicu terjadinya variasi bentuk, sehingga tidak mewakili konsep polimorfisme."
+      }
+    ]
+  },
+  {
+    "questionNumber": 83,
+    "question": "Untuk mencapai polymorphism melalui inheritance, method di kelas induk harus bersifat:",
+    "answerOptions": [
+      {
+        "text": "final",
+        "isCorrect": false,
+        "rationale": "Keyword final justru mengunci method agar mutlak tidak bisa diubah atau dimodifikasi perilakunya oleh kelas turunan."
+      },
+      {
+        "text": "dapat di-override",
+        "isCorrect": true,
+        "rationale": "Agar polimorfisme dinamis berjalan, kelas anak harus diberi izin untuk meng-override (menimpa) method induk guna memberikan implementasi spesifik."
+      },
+      {
+        "text": "private",
+        "isCorrect": false,
+        "rationale": "Method private bersifat rahasia bagi internal kelas induk, sehingga kelas anak bahkan tidak bisa melihat atau mewarisinya."
+      },
+      {
+        "text": "static",
+        "isCorrect": false,
+        "rationale": "Method static terikat pada kelas induk itu sendiri secara permanen dan tidak mendukung resolusi method dinamis saat runtime (overriding)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 84,
+    "question": "Jika sebuah method di kelas induk ditandai dengan 'final', maka method tersebut:",
+    "answerOptions": [
+      {
+        "text": "Tidak dapat di-override oleh kelas anak",
+        "isCorrect": true,
+        "rationale": "Kata kunci 'final' pada method dirancang untuk memutus rantai polimorfisme agar fungsionalitas aslinya tetap konsisten dan tidak bisa ditimpa subclass."
+      },
+      {
+        "text": "Dapat di-override oleh kelas anak",
+        "isCorrect": false,
+        "rationale": "Pernyataan ini salah karena bertolak belakang dengan aturan compiler Java mengenai pembatasan keyword final."
+      },
+      {
+        "text": "Hanya dapat diakses dari kelas induk",
+        "isCorrect": false,
+        "rationale": "Selama modifier-nya public/protected, method final tetap bisa dipanggil atau diakses dari luar, ia hanya dilarang untuk didefinisikan ulang."
+      },
+      {
+        "text": "Menjadi abstract secara otomatis",
+        "isCorrect": false,
+        "rationale": "Method abstract wajib di-override, sedangkan method final dilarang di-override. Kedua keyword ini bertentangan dan tidak bisa dipadukan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 85,
+    "question": "Dalam konsep polymorphism, method yang dapat dipanggil pada suatu objek ditentukan oleh tipe referensi, bukan oleh tipe objek sebenarnya. Manakah pernyataan berikut yang benar terkait polymorphism di Java?",
+    "answerOptions": [
+      {
+        "text": "Polymorphism hanya dapat diterapkan pada class abstrak",
+        "isCorrect": false,
+        "rationale": "Polymorphism juga bekerja dengan sangat baik pada class reguler (konkret) melalui mekanisme inheritance biasa maupun lewat interface."
+      },
+      {
+        "text": "Method overriding memungkinkan satu method memiliki banyak bentuk berdasarkan class turunan",
+        "isCorrect": true,
+        "rationale": "Melalui overriding, panggilan method yang sama pada variabel referensi induk akan menghasilkan output yang unik tergantung pada tipe objek konkret subclass-nya."
+      },
+      {
+        "text": "Polymorphism mengharuskan penggunaan static method",
+        "isCorrect": false,
+        "rationale": "Static method justru menggunakan prinsip 'early binding' (ditentukan saat compile) sehingga tidak mendukung polimorfisme dinamis runtime."
+      },
+      {
+        "text": "Polymorphism hanya bekerja pada method constructor",
+        "isCorrect": false,
+        "rationale": "Constructor tidak diwariskan ke subclass, sehingga tidak bisa di-override untuk keperluan runtime polymorphism."
+      }
+    ]
+  },
+  {
+    "questionNumber": 86,
+    "question": "Ketika terjadi eksepsi (exception) pada blok try-catch, apa yang terjadi jika tidak ada blok catch yang sesuai dengan tipe eksepsi tersebut?",
+    "answerOptions": [
+      {
+        "text": "Program akan melanjutkan eksekusi setelah blok try-catch",
+        "isCorrect": false,
+        "rationale": "Program tidak bisa lanjut begitu saja karena error yang menggantung dianggap fatal dan merusak alur memori runtime."
+      },
+      {
+        "text": "Eksepsi akan diabaikan secara otomatis",
+        "isCorrect": false,
+        "rationale": "Java tidak pernah mengabaikan eksepsi yang tidak tertangani; error tersebut akan terus dilempar ke atas sistem."
+      },
+      {
+        "text": "Eksepsi akan ditangani oleh blok finally",
+        "isCorrect": false,
+        "rationale": "Blok finally bertugas mengeksekusi kode bersih-bersih (cleanup), bukan untuk menangkap atau meredam objek eksepsi yang error."
+      },
+      {
+        "text": "Program akan menampilkan pesan error dan berhenti",
+        "isCorrect": true,
+        "rationale": "Apabila tidak ditemukan catch yang cocok, runtime Java akan meneruskan eksepsi tersebut ke Default Exception Handler, menampilkan stack trace, lalu menghentikan program (crash)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 87,
+    "question": "Statement manakah yang digunakan untuk menulis data ke dalam file teks di Java menggunakan kelas FileWriter?",
+    "answerOptions": [
+      {
+        "text": "FileWriter writer = new FileWriter(\"data.txt\"); writer.write(\"Hello\");",
+        "isCorrect": true,
+        "rationale": "Kelas java.io.FileWriter menyediakan method resmi `.write()` yang menerima parameter bertipe String untuk menulis karakter ke dalam file."
+      },
+      {
+        "text": "FileWriter writer = new FileWriter(\"data.txt\"); writer.print(\"Hello\");",
+        "isCorrect": false,
+        "rationale": "Method `.print()` merupakan bagian dari fungsionalitas kelas PrintWriter atau PrintStream, bukan milik FileWriter."
+      },
+      {
+        "text": "FileWriter writer = new FileWriter(\"data.txt\"); writer.appendLine(\"Hello\");",
+        "isCorrect": false,
+        "rationale": "Method `appendLine()` tidak eksis di library standar FileWriter bawaan Java IO."
+      },
+      {
+        "text": "FileWriter writer = new FileWriter(\"data.txt\"); writer.output(\"Hello\");",
+        "isCorrect": false,
+        "rationale": "Tidak ada method bernama `output()` pada object FileWriter untuk memproses penulisan String teks."
+      }
+    ]
+  },
+  {
+    "questionNumber": 88,
+    "question": "Apa fungsi dari blok finally dalam penanganan eksepsi?",
+    "answerOptions": [
+      {
+        "text": "Menangkap semua eksepsi yang terjadi di blok try",
+        "isCorrect": false,
+        "rationale": "Tugas menangkap eksepsi mutlak dipegang oleh blok catch, bukan blok finally."
+      },
+      {
+        "text": "Menjalankan kode tertentu tanpa syarat, baik terjadi eksepsi maupun tidak",
+        "isCorrect": true,
+        "rationale": "Blok finally dijamin akan selalu dieksekusi oleh mesin virtual Java baik ketika blok try berjalan normal maupun saat catch mendeteksi error. Sangat cocok untuk menutup koneksi atau stream data."
+      },
+      {
+        "text": "Menentukan class eksepsi yang akan ditangani",
+        "isCorrect": false,
+        "rationale": "Penentuan tipe kelas eksepsi dideklarasikan di dalam parameter yang ada di baris statement catch."
+      },
+      {
+        "text": "Menghentikan eksekusi program jika terjadi eksepsi",
+        "isCorrect": false,
+        "rationale": "Finally tidak menghentikan program, melainkan memastikan ada penutupan alur kerja yang bersih sebelum program dialihkan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 89,
+    "question": "Perhatikan kode berikut: try { int hasil = 10 / 0; } catch (ArithmeticException e) { System.out.println(\"Error\"); } finally { System.out.println(\"Selesai\"); } Output yang akan muncul adalah?",
+    "answerOptions": [
+      {
+        "text": "Error",
+        "isCorrect": false,
+        "rationale": "Output tidak berhenti di kata 'Error' saja karena masih ada blok finally di bawahnya yang wajib dijalankan."
+      },
+      {
+        "text": "Selesai",
+        "isCorrect": false,
+        "rationale": "Teks 'Error' akan tetap muncul terlebih dahulu karena operasi matematika ilegal (10/0) berhasil tertangkap oleh catch."
+      },
+      {
+        "text": "Runtime error di baris pertama",
+        "isCorrect": false,
+        "rationale": "Meskipun terjadi runtime error pembagian nol, program tidak langsung crash fatal karena sudah diproteksi oleh struktur try-catch."
+      },
+      {
+        "text": "Error lalu Selesai",
+        "isCorrect": true,
+        "rationale": "Pembagian 10/0 memicu ArithmeticException, alur langsung lompat ke blok catch yang mencetak 'Error'. Setelah itu, blok finally mengeksekusi tugasnya dengan mencetak 'Selesai'."
+      }
+    ]
+  },
+  {
+    "questionNumber": 90,
+    "question": "Kelas manakah di Java yang digunakan untuk membaca input dari file teks dengan menggunakan buffer?",
+    "answerOptions": [
+      {
+        "text": "FileReader",
+        "isCorrect": false,
+        "rationale": "FileReader membaca file secara langsung karakter demi karakter dari disk, sehingga kurang efisien jika tidak dibungkus buffer."
+      },
+      {
+        "text": "FileInputStream",
+        "isCorrect": false,
+        "rationale": "FileInputStream digunakan untuk membaca data mentah berupa byte (seperti gambar/audio), bukan dikhususkan untuk membaca stream teks berbasis karakter."
+      },
+      {
+        "text": "InputStreamReader",
+        "isCorrect": false,
+        "rationale": "InputStreamReader bertindak sebagai jembatan pengubah dari byte stream menjadi character stream, tetapi belum memiliki fungsi buffering bawaan secara internal."
+      },
+      {
+        "text": "BufferedReader",
+        "isCorrect": true,
+        "rationale": "BufferedReader menyimpan karakter di memori per segmen (buffering) sehingga proses pembacaan teks (seperti method readLine()) menjadi jauh lebih cepat dan efisien."
+      }
+    ]
+  },
+  {
+    "questionNumber": 91,
+    "question": "Apa kepanjangan dari GUI dalam pengembangan aplikasi desktop?",
+    "answerOptions": [
+      {
+        "text": "General User Interface",
+        "isCorrect": false,
+        "rationale": "Kata 'General' salah; istilah penamaan interaksi visual ini menggunakan kata deskriptif berbasis grafis."
+      },
+      {
+        "text": "Graphical User Interface",
+        "isCorrect": true,
+        "rationale": "GUI merupakan singkatan dari Graphical User Interface, sebuah konsep antarmuka ikonik yang mengizinkan user berinteraksi lewat elemen visual komputer."
+      },
+      {
+        "text": "Graphical Universal Interface",
+        "isCorrect": false,
+        "rationale": "Kata 'Universal' tidak tepat digunakan dalam akronim baku arsitektur antarmuka desktop ini."
+      },
+      {
+        "text": "General Universal Interface",
+        "isCorrect": false,
+        "rationale": "Kombinasi kata General dan Universal salah total dalam menerjemahkan singkatan komponen GUI."
+      }
+    ]
+  },
+  {
+    "questionNumber": 92,
+    "question": "Komponen Swing manakah yang digunakan untuk menampilkan teks dalam satu baris dan memiliki label?",
+    "answerOptions": [
+      {
+        "text": "JLabel",
+        "isCorrect": true,
+        "rationale": "JLabel adalah komponen grafis Java Swing yang khusus difungsikan untuk menampilkan teks statis pendek atau gambar pasif sebagai pemberi keterangan/label."
+      },
+      {
+        "text": "JTextArea",
+        "isCorrect": false,
+        "rationale": "JTextArea merupakan komponen penampung input teks multi-baris (banyak baris) yang bersifat interaktif bagi pengguna."
+      },
+      {
+        "text": "JTextField",
+        "isCorrect": false,
+        "rationale": "JTextField digunakan khusus sebagai field area kosong bagi pengguna untuk mengetikkan input teks satu baris."
+      },
+      {
+        "text": "JButton",
+        "isCorrect": false,
+        "rationale": "JButton adalah komponen berbentuk tombol mekanis visual yang digunakan untuk memicu suatu aksi (event klik)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 93,
+    "question": "Untuk menangani event klik tombol di Swing, interface yang harus diimplementasikan adalah?",
+    "answerOptions": [
+      {
+        "text": "ActionListener",
+        "isCorrect": true,
+        "rationale": "Interface ActionListener wajib diimplementasikan guna menangkap sinyal aksi penekanan tombol (klik) lewat method penanganan `actionPerformed()`."
+      },
+      {
+        "text": "MouseListener",
+        "isCorrect": false,
+        "rationale": "MouseListener melacak pergerakan fisik pointer mouse tingkat rendah seperti mouseEntered, mouseExited, atau mousePressed secara umum."
+      },
+      {
+        "text": "KeyListener",
+        "isCorrect": false,
+        "rationale": "KeyListener menangani event interaksi tombol papan ketik (keyboard), bukan penekanan tombol komponen visual GUI."
+      },
+      {
+        "text": "WindowListener",
+        "isCorrect": false,
+        "rationale": "WindowListener memonitor siklus status dari jendela aplikasi utama (seperti windowOpened, windowClosing, atau windowMinimized)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 94,
+    "question": "Method apa yang digunakan untuk mengatur agar jendela aplikasi Swing muncul di tengah layar?",
+    "answerOptions": [
+      {
+        "text": "frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE)",
+        "isCorrect": false,
+        "rationale": "Method ini berfungsi untuk mematikan proses background aplikasi secara total saat ikon 'X' (close) jendela diklik."
+      },
+      {
+        "text": "frame.setVisible(true)",
+        "isCorrect": false,
+        "rationale": "Method setVisible(true) dipanggil sekadar untuk memunculkan atau menampilkan objek jendela agar kelihatan di layar."
+      },
+      {
+        "text": "frame.setLocationRelativeTo(null)",
+        "isCorrect": true,
+        "rationale": "Memberikan argumen 'null' pada setLocationRelativeTo menginstruksikan komponen window Java agar memosisikan koordinat dirinya tepat di pusat tengah layar monitor."
+      },
+      {
+        "text": "frame.setSize(400, 300)",
+        "isCorrect": false,
+        "rationale": "Method setSize digunakan murni untuk menentukan ukuran dimensi lebar dan tinggi dari frame jendela dalam satuan piksel."
+      }
+    ]
+  },
+  {
+    "questionNumber": 95,
+    "question": "Apa fungsi dari layout manager BorderLayout dalam Swing?",
+    "answerOptions": [
+      {
+        "text": "Mengatur komponen dalam satu baris horizontal",
+        "isCorrect": false,
+        "rationale": "Menyusun komponen berjejer horizontal dari kiri ke kanan adalah pola kerja default dari FlowLayout."
+      },
+      {
+        "text": "Mengatur komponen dalam grid dengan ukuran sama",
+        "isCorrect": false,
+        "rationale": "Penyusunan komponen layaknya tabel dengan ukuran kotak presisi sama rata dikerjakan oleh GridLayout."
+      },
+      {
+        "text": "Mengatur komponen dalam lima region: Utara, Selatan, Timur, Barat, dan Tengah",
+        "isCorrect": true,
+        "rationale": "BorderLayout membagi area container menjadi 5 wilayah mata angin yang strategis yaitu North, South, East, West, dan Center."
+      },
+      {
+        "text": "Mengatur komponen dalam satu kolom vertikal",
+        "isCorrect": false,
+        "rationale": "Penyusunan tegak lurus satu kolom ke bawah biasanya menerapkan BoxLayout atau kustomisasi manager khusus lainnya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 96,
+    "question": "Dalam JDBC, langkah pertama yang harus dilakukan sebelum mengeksekusi query SQL adalah?",
+    "answerOptions": [
+      {
+        "text": "Membuat koneksi ke database",
+        "isCorrect": true,
+        "rationale": "Tanpa adanya pipa jembatan koneksi aktif (Connection object) yang terhubung ke server database, Java tidak akan pernah bisa mengirimkan perintah SQL apa pun."
+      },
+      {
+        "text": "Membuat objek statement",
+        "isCorrect": false,
+        "rationale": "Objek Statement baru bisa diciptakan apabila objek Connection sudah berhasil terbentuk terlebih dahulu."
+      },
+      {
+        "text": "Menutup koneksi",
+        "isCorrect": false,
+        "rationale": "Menutup koneksi merupakan langkah krusial paling akhir setelah semua urusan manipulasi data selesai dikerjakan."
+      },
+      {
+        "text": "Membaca hasil query",
+        "isCorrect": false,
+        "rationale": "Membaca hasil data (ResultSet) hanya bisa dilakukan sesudah query berhasil terkirim dan dieksekusi server."
+      }
+    ]
+  },
+  {
+    "questionNumber": 97,
+    "question": "Driver JDBC yang digunakan untuk menghubungkan Java dengan MySQL adalah?",
+    "answerOptions": [
+      {
+        "text": "com.mysql.jdbc.Driver",
+        "isCorrect": false,
+        "rationale": "Ini adalah path class driver MySQL versi lama (deprecated) yang lambat laun sudah digantikan oleh package sub-connector baru."
+      },
+      {
+        "text": "org.mysql.Driver",
+        "isCorrect": false,
+        "rationale": "Nama path library package ini keliru dan tidak terdaftar di skema penamaan driver MySQL resmi."
+      },
+      {
+        "text": "com.mysql.cj.jdbc.Driver",
+        "isCorrect": true,
+        "rationale": "Package `com.mysql.cj.jdbc.Driver` merupakan class driver JDBC Connector/J modern yang wajib digunakan untuk MySQL versi 6 ke atas."
+      },
+      {
+        "text": "mysql.Driver",
+        "isCorrect": false,
+        "rationale": "Format ini terlalu singkat dan tidak mengikuti standardisasi penamaan classpath Java package yang benar."
+      }
+    ]
+  },
+  {
+    "questionNumber": 98,
+    "question": "Method manakah dari interface Statement yang digunakan untuk menjalankan query SELECT di JDBC?",
+    "answerOptions": [
+      {
+        "text": "execute()",
+        "isCorrect": false,
+        "rationale": "Method `execute()` bersifat umum (bisa mengembalikan boolean) dan biasanya kurang spesifik untuk pembacaan data tabel standar."
+      },
+      {
+        "text": "executeUpdate()",
+        "isCorrect": false,
+        "rationale": "Method `executeUpdate()` digunakan eksklusif untuk perintah DML manipulasi data seperti INSERT, UPDATE, dan DELETE."
+      },
+      {
+        "text": "executeQuery()",
+        "isCorrect": true,
+        "rationale": "Method `executeQuery()` dirancang khusus untuk menjalankan query instruksi SELECT dan mengembalikan baris data dalam bentuk objek ResultSet."
+      },
+      {
+        "text": "executeInsert()",
+        "isCorrect": false,
+        "rationale": "Interface java.sql.Statement tidak memiliki method bernama `executeInsert()` di dalam dokumentasi API resminya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 99,
+    "question": "Apa yang dimaksud dengan SQL Injection dan cara pencegahannya?",
+    "answerOptions": [
+      {
+        "text": "Serangan dengan mengubah struktur database, dicegah dengan Statement",
+        "isCorrect": false,
+        "rationale": "Objek Statement biasa justru menjadi celah utama yang rawan ditembus serangan karena menyatukan string input secara mentah."
+      },
+      {
+        "text": "Serangan dengan menyisipkan kode SQL melalui input, dicegah dengan PreparedStatement",
+        "isCorrect": true,
+        "rationale": "SQL Injection memasukkan teks perintah SQL jahat ke kolom input aplikasi. Penggunaan PreparedStatement (parameter binding) akan membersihkan input tersebut sehingga dianggap sebagai teks string murni, bukan perintah eksekusi."
+      },
+      {
+        "text": "Serangan dengan menghapus tabel, dicegah dengan Connection",
+        "isCorrect": false,
+        "rationale": "Connection sekadar mengurus jembatan hak akses masuk, ia tidak punya fitur menyaring atau memvalidasi keamanan teks query."
+      },
+      {
+        "text": "Serangan dengan membaca semua data, dicegah dengan ResultSet",
+        "isCorrect": false,
+        "rationale": "ResultSet hanyalah objek kontainer penampung hasil data, tidak berperan aktif dalam proteksi keamanan siber."
+      }
+    ]
+  },
+  {
+    "questionNumber": 100,
+    "question": "Setelah selesai menggunakan koneksi database, langkah yang tepat adalah?",
+    "answerOptions": [
+      {
+        "text": "Menutup Connection, lalu Statement, lalu ResultSet",
+        "isCorrect": false,
+        "rationale": "Menutup Connection di awal akan memutus silsilah dependensi objek di bawahnya secara paksa dan berisiko menimbulkan error penutupan memori."
+      },
+      {
+        "text": "Menutup Connection, lalu Statement, lalu ResultSet",
+        "isCorrect": false,
+        "rationale": "Pilihan urutan ini salah karena Connection yang berada di posisi paling luar harus dimatikan paling akhir."
+      },
+      {
+        "text": "Menutup Statement, lalu ResultSet, lalu Connection",
+        "isCorrect": false,
+        "rationale": "ResultSet harus ditutup terlebih dahulu sebelum mematikan objek Statement yang melahirkannya."
+      },
+      {
+        "text": "Menutup ResultSet, lalu Statement, lalu Connection",
+        "isCorrect": true,
+        "rationale": "Urutan penutupan resource JDBC yang ideal adalah dari objek yang paling dalam/akhir dibuat (ResultSet), naik ke Statement, dan ditutup oleh objek paling luar (Connection). Langkah ini mencegah kebocoran memori (*memory leak*)."
+      }
+    ]
+  }
+]
+
+      function renderSoal() {
+    const container = document.getElementById('container');
+    soalList.forEach(soal => {
+      const soalDiv = document.createElement('div');
+      soalDiv.className = 'soal';
+      soalDiv.setAttribute('data-qnum', soal.questionNumber);
+      
+      let soalHTML = `<h3>Soal ${soal.questionNumber}.</h3>`;
+      soalHTML += `<p>${soal.question}</p>`;
+      soalHTML += `<div class="jawaban">`;
+      
+      soal.answerOptions.forEach((option, index) => {
+          const label = String.fromCharCode(65 + index); 
+          
+          soalHTML += `
+              <button 
+                  onclick="checkAnswer(this, ${soal.questionNumber}, ${option.isCorrect})"
+                  data-iscorrect="${option.isCorrect}"
+                  data-label="${label}">
+                  ${label}. ${option.text}
+              </button>
+              <div class="penjelasan-opsi">
+                <strong>Penjelasan Opsi ${label}:</strong> ${option.rationale}
+              </div>
+          `;
+      });
+      
+      soalHTML += `</div>`;
+      soalDiv.innerHTML = soalHTML;
+      container.appendChild(soalDiv);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', renderSoal);
+</script>
+
+</body>
+</html>

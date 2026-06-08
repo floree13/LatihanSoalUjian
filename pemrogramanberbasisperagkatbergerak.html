@@ -1,0 +1,2809 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal Ujian</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7f6;
+      margin: 0;
+      padding: 20px 10px;
+    }
+    h1 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    .soal {
+      background: #ffffff;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 5px solid #42a5f5;
+    }
+    h3 {
+      color: #3f51b5;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .jawaban button {
+      color: #2a2a2a;
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #c5cae9;
+      background: #e8eaf6;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .jawaban button:hover:not(:disabled) {
+      background: #c5cae9;
+    }
+    .jawaban button.benar {
+      background-color: #dcf9dc;
+      border-color: #388e3c;
+      font-weight: bold;
+    }
+    .jawaban button.salah {
+      background-color: #ffcdd2;
+      border-color: #d32f2f;
+      opacity: 0.7;
+    }
+
+    .penjelasan-opsi {
+      background: #f3e5f5;
+      color: #4a148c;
+      padding: 10px;
+      margin-top: -5px;
+      margin-bottom: 15px;
+      border-radius: 0 0 8px 8px;
+      border-top: none;
+      border-left: 5px solid #7b1fa2;
+      font-size: 14px;
+      display: none;
+    }
+    .counter {
+      position: sticky;
+      bottom: 0;
+      background: #1a237e;
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 20px; }
+      .jawaban button { font-size: 14px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Latihan Soal Pemrograman Berbasis Perangkat Bergerak UT</h1>
+
+<div id="container"></div>
+
+<div class="counter">
+  ✅ Jawaban Benar: <span id="benar">0</span> |
+  ❌ Jawaban Salah: <span id="salah">0</span>
+</div>
+
+<script>
+  let totalBenar = 0;
+  let totalSalah = 0;
+  let answeredQuestions = new Set();
+
+  function updateCounter() {
+     document.getElementById("benar").textContent = totalBenar;
+    document.getElementById("salah").textContent = totalSalah;
+  }
+
+  function checkAnswer(button, questionNumber, isCorrect) {
+      if (answeredQuestions.has(questionNumber)) {
+          return;
+      }
+
+      const soalElement = button.closest('.soal');
+      const buttons = soalElement.querySelectorAll('.jawaban button');
+      
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (isCorrect) {
+          button.classList.add('benar');
+          totalBenar++;
+      } else {
+          button.classList.add('salah');
+          totalSalah++;
+          
+          buttons.forEach(btn => {
+              if (btn.getAttribute('data-iscorrect') === 'true') {
+                  btn.classList.add('benar');
+              }
+          });
+      }
+
+      const allRationales = soalElement.querySelectorAll('.penjelasan-opsi');
+      allRationales.forEach(rationaleDiv => {
+          rationaleDiv.style.display = 'block';
+      });
+
+      answeredQuestions.add(questionNumber);
+      updateCounter();
+  }
+
+  const soalList = [
+    {
+    "questionNumber": 1,
+    "question": "Apa yang dimaksud dengan Hybrid App dalam pengembangan aplikasi perangkat bergerak...",
+    "answerOptions": [
+      {
+        "text": "Aplikasi yang hanya berjalan di platform Android",
+        "isCorrect": false,
+        "rationale": "Aplikasi yang hanya berjalan di Android merupakan aplikasi native Android, bukan hybrid."
+      },
+      {
+        "text": "Aplikasi yang dikembangkan dengan bahasa pemrograman Swift",
+        "isCorrect": false,
+        "rationale": "Swift digunakan khusus untuk mengembangkan aplikasi native platform iOS."
+      },
+      {
+        "text": "Aplikasi yang menggabungkan kode native dan web menggunakan WebView",
+        "isCorrect": true,
+        "rationale": "Hybrid App adalah aplikasi yang menggabungkan kode native dengan teknologi web melalui WebView sehingga dapat berjalan di berbagai platform."
+      },
+      {
+        "text": "Aplikasi yang hanya menggunakan komponen native tanpa web",
+        "isCorrect": false,
+        "rationale": "Aplikasi tanpa komponen web adalah definisi dari aplikasi native murni."
+      }
+    ]
+  },
+  {
+    "questionNumber": 2,
+    "question": "Fungsi utama dari Ionic Framework dalam pengembangan aplikasi mobile adalah..",
+    "answerOptions": [
+      {
+        "text": "Menyediakan backend server untuk aplikasi",
+        "isCorrect": false,
+        "rationale": "Ionic berfokus pada pengembangan sisi klien (frontend), bukan menyediakan infrastruktur backend."
+      },
+      {
+        "text": "Mengelola database lokal pada perangkat",
+        "isCorrect": false,
+        "rationale": "Pengelolaan database lokal merupakan tugas dari modul penyimpanan khusus seperti SQLite atau IndexedDB, bukan fungsi utama Ionic."
+      },
+      {
+        "text": "Mengkompilasi kode menjadi bahasa native secara langsung",
+        "isCorrect": false,
+        "rationale": "Proses ini biasanya dilakukan oleh framework seperti React Native atau Flutter, sedangkan Ionic berbasis web runtime."
+      },
+      {
+        "text": "Menyediakan komponen UI berbasis web yang dapat digunakan dengan framework frontend",
+        "isCorrect": true,
+        "rationale": "Ionic Framework menyediakan komponen UI berbasis web yang siap pakai dan dapat diintegrasikan dengan framework frontend seperti Vue."
+      }
+    ]
+  },
+  {
+    "questionNumber": 3,
+    "question": "Salah satu kelebihan utama dari Hybrid App dibandingkan aplikasi native adalah...",
+    "answerOptions": [
+      {
+        "text": "Performa lebih cepat dalam segala kondisi",
+        "isCorrect": false,
+        "rationale": "Aplikasi native umumnya memiliki performa yang lebih cepat dibandingkan hybrid karena berkomunikasi langsung dengan perangkat."
+      },
+      {
+        "text": "Dapat dikembangkan dengan satu basis kode untuk berbagai platform",
+        "isCorrect": true,
+        "rationale": "Hybrid App memungkinkan pengembangan dengan satu basis kode yang dapat digunakan di platform Android dan iOS sekaligus."
+      },
+      {
+        "text": "Memiliki akses penuh ke semua API perangkat tanpa batasan",
+        "isCorrect": false,
+        "rationale": "Akses API perangkat pada aplikasi hybrid dibatasi oleh jembatan wrapper (seperti Capacitor/Cordova) dan tidak sebebas aplikasi native."
+      },
+      {
+        "text": "Tidak memerlukan WebView dalam eksekusinya",
+        "isCorrect": false,
+        "rationale": "Aplikasi hybrid justru sangat bergantung pada WebView untuk merender komponen berbasis webnya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 4,
+    "question": "Dalam konteks lingkungan pengembangan aplikasi perangkat bergerak, peran WebView adalah...",
+    "answerOptions": [
+      {
+        "text": "Menyediakan antarmuka untuk menjalankan kode HTML, CSS, dan JavaScript",
+        "isCorrect": true,
+        "rationale": "WebView adalah komponen yang memungkinkan aplikasi native menjalankan konten web seperti HTML, CSS, dan JavaScript."
+      },
+      {
+        "text": "Mengatur jaringan komunikasi antar perangkat",
+        "isCorrect": false,
+        "rationale": "Komunikasi antar perangkat dikelola oleh protokol jaringan seperti HTTP atau WebSocket, bukan WebView."
+      },
+      {
+        "text": "Mengelola siklus hidup aplikasi native",
+        "isCorrect": false,
+        "rationale": "Siklus hidup aplikasi native diatur oleh sistem operasi bawaan perangkat (Android/iOS)."
+      },
+      {
+        "text": "Mengkompilasi kode TypeScript menjadi JavaScript",
+        "isCorrect": false,
+        "rationale": "Kompilasi TypeScript ke JavaScript merupakan tugas dari TypeScript Compiler (tsc), bukan komponen WebView."
+      }
+    ]
+  },
+  {
+    "questionNumber": 5,
+    "question": "Dalam TypeScript, tipe data yang dapat digunakan untuk variabel yang nilainya bisa berupa angka atau string adalah...",
+    "answerOptions": [
+      {
+        "text": "number",
+        "isCorrect": false,
+        "rationale": "Tipe data number hanya mengizinkan variabel untuk menyimpan nilai numerik saja."
+      },
+      {
+        "text": "string",
+        "isCorrect": false,
+        "rationale": "Tipe data string membatasi variabel untuk hanya menyimpan nilai berupa teks."
+      },
+      {
+        "text": "any",
+        "isCorrect": true,
+        "rationale": "Tipe any memungkinkan variabel menyimpan nilai dari tipe apa pun termasuk number dan string."
+      },
+      {
+        "text": "boolean",
+        "isCorrect": false,
+        "rationale": "Tipe boolean hanya dapat menyimpan nilai logika yaitu true atau false."
+      }
+    ]
+  },
+  {
+    "questionNumber": 6,
+    "question": "Fungsi dari deklarasi interface dalam TypeScript adalah...",
+    "answerOptions": [
+      {
+        "text": "Membuat variabel global",
+        "isCorrect": false,
+        "rationale": "Variabel global dibuat menggunakan kata kunci let, const, atau var di lingkup global, bukan dengan interface."
+      },
+      {
+        "text": "Menginisialisasi array",
+        "isCorrect": false,
+        "rationale": "Inisialisasi array dilakukan menggunakan sintaksis tanda kurung siku [] atau constructor Array."
+      },
+      {
+        "text": "Mendefinisikan kontrak atau struktur objek",
+        "isCorrect": true,
+        "rationale": "Interface digunakan untuk mendefinisikan struktur atau kontrak yang harus dipenuhi oleh suatu objek."
+      },
+      {
+        "text": "Mengubah tipe data secara otomatis",
+        "isCorrect": false,
+        "rationale": "Proses konversi tipe data disebut type casting atau coercion, bukan fungsi dari interface."
+      }
+    ]
+  },
+  {
+    "questionNumber": 7,
+    "question": "Perbedaan utama antara tipe data array dan tuple dalam TypeScript adalah...",
+    "answerOptions": [
+      {
+        "text": "Tuple memiliki tipe data yang sudah ditentukan untuk setiap elemen",
+        "isCorrect": true,
+        "rationale": "Tuple memiliki tipe data yang ditentukan untuk setiap elemen pada posisi tertentu, sementara array memiliki tipe data yang seragam."
+      },
+      {
+        "text": "Array memiliki panjang tetap",
+        "isCorrect": false,
+        "rationale": "Sebaliknya, array memiliki panjang yang dinamis sedangkan tuple memiliki panjang elemen yang tetap."
+      },
+      {
+        "text": "Tuple hanya bisa berisi angka",
+        "isCorrect": false,
+        "rationale": "Tuple dapat berisi kombinasi berbagai tipe data, tidak terbatas pada angka saja."
+      },
+      {
+        "text": "Array tidak bisa menyimpan string",
+        "isCorrect": false,
+        "rationale": "Array dapat menyimpan string apabila dideklarasikan dengan tipe data string[]."
+      }
+    ]
+  },
+  {
+    "questionNumber": 8,
+    "question": "Contoh deklarasi variabel dengan tipe data union yang benar dalam TypeScript adalah...",
+    "answerOptions": [
+      {
+        "text": "let x: number;",
+        "isCorrect": false,
+        "rationale": "Ini adalah deklarasi tipe data tunggal, bukan gabungan (union)."
+      },
+      {
+        "text": "let x: number | string;",
+        "isCorrect": true,
+        "rationale": "Union tipe menggunakan operator | untuk menggabungkan dua tipe atau lebih, misalnya number | string."
+      },
+      {
+        "text": "let x: number[];",
+        "isCorrect": false,
+        "rationale": "Sintaksis ini digunakan untuk mendeklarasikan array yang menampung sekumpulan angka."
+      },
+      {
+        "text": "let x: [number, string];",
+        "isCorrect": false,
+        "rationale": "Sintaksis ini merupakan struktur tipe data tuple, bukan union type."
+      }
+    ]
+  },
+  {
+    "questionNumber": 9,
+    "question": "Dalam TypeScript, fungsi yang tidak mengembalikan nilai memiliki tipe pengembalian...",
+    "answerOptions": [
+      {
+        "text": "undefined",
+        "isCorrect": false,
+        "rationale": "Meskipun fungsi tanpa return menghasilkan nilai undefined di JavaScript, TypeScript menyediakan tipe khusus untuk hal ini."
+      },
+      {
+        "text": "void",
+        "isCorrect": true,
+        "rationale": "Fnsi yang tidak mengembalikan nilai menggunakan tipe void sebagai tipe pengembaliannya."
+      },
+      {
+        "text": "null",
+        "isCorrect": false,
+        "rationale": "Null menyatakan nilai kosong yang disengaja, bukan penanda bahwa fungsi tidak mengembalikan apa pun."
+      },
+      {
+        "text": "never",
+        "isCorrect": false,
+        "rationale": "Tipe never digunakan untuk fungsi yang tidak pernah mencapai titik akhir pengembaliannya (misal: terjadi error terus-menerus atau loop tak terbatas)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 10,
+    "question": "Apa kegunaan dari dekorator (decorator) dalam TypeScript...",
+    "answerOptions": [
+      {
+        "text": "Mengubah tipe data variabel",
+        "isCorrect": false,
+        "rationale": "Mengubah tipe data variabel dilakukan menggunakan as (type assertion), bukan dekorator."
+      },
+      {
+        "text": "Mendeklarasikan variabel global",
+        "isCorrect": false,
+        "rationale": "Deklarasi variabel global tidak membutuhkan dekorator melainkan penataan ruang lingkup (scope) kode."
+      },
+      {
+        "text": "Mengimpor modul dari file lain",
+        "isCorrect": false,
+        "rationale": "Proses impor modul menggunakan kata kunci import, bukan menggunakan dekorator."
+      },
+      {
+        "text": "Menambahkan metadata atau fungsionalitas ekstra pada kelas dan anggota kelas",
+        "isCorrect": true,
+        "rationale": "Dekorator memungkinkan penambahan metadata dan fungsionalitas ekstra pada kelas, metode, properti, atau parameter."
+      }
+    ]
+  },
+  {
+    "questionNumber": 11,
+    "question": "Dalam TypeScript, tipe generics digunakan untuk...",
+    "answerOptions": [
+      {
+        "text": "Membuat komponen yang dapat bekerja dengan berbagai tipe data",
+        "isCorrect": true,
+        "rationale": "Generics memungkinkan pembuatan komponen yang dapat digunakan dengan berbagai tipe data tanpa mengorbankan keamanan tipe (type safety)."
+      },
+      {
+        "text": "Mendeklarasikan variabel dengan tipe tetap",
+        "isCorrect": false,
+        "rationale": "Deklarasi dengan tipe tetap adalah fitur dasar anotasi tipe statis biasa, bukan generics."
+      },
+      {
+        "text": "Mengubah tipe data saat runtime",
+        "isCorrect": false,
+        "rationale": "TypeScript bertindak pada tahap kompilasi; ia tidak mengubah perilaku data secara dinamis saat aplikasi berjalan (runtime)."
+      },
+      {
+        "text": "Membatasi penggunaan tipe data tertentu",
+        "isCorrect": false,
+        "rationale": "Meskipun generic dapat diberi batasan (constraints), fungsi utamanya adalah memberikan fleksibilitas penggunaan tipe data."
+      }
+    ]
+  },
+  {
+    "questionNumber": 12,
+    "question": "Fungsi dari kata kunci \"readonly\" dalam TypeScript adalah...",
+    "answerOptions": [
+      {
+        "text": "Mengizinkan properti diubah kapan saja",
+        "isCorrect": false,
+        "rationale": "Properti yang dapat diubah kapan saja merupakan karakteristik properti normal (mutable) tanpa readonly."
+      },
+      {
+        "text": "Mendeklarasikan properti sebagai publik",
+        "isCorrect": false,
+        "rationale": "Mengatur akses properti agar menjadi publik dilakukan dengan kata kunci access modifier public."
+      },
+      {
+        "text": "Membuat properti tidak dapat diubah setelah inisialisasi",
+        "isCorrect": true,
+        "rationale": "Readonly memastikan bahwa properti hanya dapat diberikan nilai saat inisialisasi dan tidak dapat diubah setelahnya."
+      },
+      {
+        "text": "Membuat properti bersifat statis",
+        "isCorrect": false,
+        "rationale": "Membuat properti terikat langsung pada kelas (bukan instans kelas) dilakukan dengan kata kunci static."
+      }
+    ]
+  },
+  {
+    "questionNumber": 13,
+    "question": "Dalam Vue, direktif yang digunakan untuk mengikat data ke atribut HTML adalah...",
+    "answerOptions": [
+      {
+        "text": "v-for",
+        "isCorrect": false,
+        "rationale": "Direktif v-for digunakan khusus untuk merender elemen dalam bentuk daftar berulang (looping)."
+      },
+      {
+        "text": "v-model",
+        "isCorrect": false,
+        "rationale": "Direktif v-model digunakan untuk membuat pengikatan data dua arah (two-way data binding) pada elemen input form."
+      },
+      {
+        "text": "v-if",
+        "isCorrect": false,
+        "rationale": "Direktif v-if digunakan untuk merender elemen secara kondisional berdasarkan nilai kebenaran (boolean)."
+      },
+      {
+        "text": "v-bind",
+        "isCorrect": true,
+        "rationale": "v-bind digunakan untuk mengikat data ke atribut elemen HTML secara dinamis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 14,
+    "question": "Fungsi dari properti 'computed' dalam Vue is...",
+    "answerOptions": [
+      {
+        "text": "Menyimpan data statis.",
+        "isCorrect": false,
+        "rationale": "Data statis atau reaktif awal disimpan di dalam opsi data() atau ref()/reactive() pada Composition API."
+      },
+      {
+        "text": "Mengelola event listener",
+        "isCorrect": false,
+        "rationale": "Pengelolaan event listener ditangani menggunakan direktif v-on atau shorthand @."
+      },
+      {
+        "text": "Mendefinisikan metode yang dapat dipanggil",
+        "isCorrect": false,
+        "rationale": "Metode atau fungsi biasa dideklarasikan di dalam properti methods pada Options API."
+      },
+      {
+        "text": "Menghitung nilai baru berdasarkan data reaktif yang dapat di-cache.",
+        "isCorrect": true,
+        "rationale": "Properti computed menghitung nilai yang bergantung pada data reaktif dan hasilnya di-cache hingga dependensi berubah."
+      }
+    ]
+  },
+  {
+    "questionNumber": 15,
+    "question": "Siklus hidup komponen Vue yang dijalankan setelah komponen di-mount adalah...",
+    "answerOptions": [
+      {
+        "text": "created",
+        "isCorrect": false,
+        "rationale": "Hook created dijalankan setelah instans aplikasi dibuat tetapi sebelum elemen dipasang ke DOM."
+      },
+      {
+        "text": "mounted",
+        "isCorrect": true,
+        "rationale": "Hook mounted dieksekusi setelah komponen berhasil dipasang ke DOM."
+      },
+      {
+        "text": "updated",
+        "isCorrect": false,
+        "rationale": "Hook updated dipanggil setelah ada perubahan data yang menyebabkan DOM virtual dirender ulang."
+      },
+      {
+        "text": "beforeDestroy",
+        "isCorrect": false,
+        "rationale": "Hook beforeDestroy (atau beforeUnmount di Vue 3) dipanggil tepat sebelum instans komponen dihancurkan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 16,
+    "question": "Direktif v-if dan v-show dalam Vue memiliki perbedaan pada..",
+    "answerOptions": [
+      {
+        "text": "v-if menghapus dan membuat ulang elemen, sedangkan v-show hanya mengubah visibilitas CSS",
+        "isCorrect": true,
+        "rationale": "v-if menghapus atau menambahkan elemen dari DOM secara nyata, sementara v-show hanya mengubah properti display CSS."
+      },
+      {
+        "text": "v-show menghapus elemen dari DOM",
+        "isCorrect": false,
+        "rationale": "Pernyataan ini salah karena v-show tidak pernah menghapus elemen dari struktur DOM pohon HTML."
+      },
+      {
+        "text": "v-if hanya bekerja pada elemen input",
+        "isCorrect": false,
+        "rationale": "Direktif v-if bersifat universal dan dapat diaplikasikan pada elemen HTML apa pun."
+      },
+      {
+        "text": "v-show lebih lambat daripada v-if",
+        "isCorrect": false,
+        "rationale": "Sebaliknya, v-show memiliki performa awal yang lebih lambat tetapi eksekusi toggle-nya jauh lebih cepat daripada v-if."
+      }
+    ]
+  },
+  {
+    "questionNumber": 17,
+    "question": "Dalam Vue lanjutan, fungsi dari provide/inject adalah...",
+    "answerOptions": [
+      {
+        "text": "Menyediakan data dari komponen induk ke komponen turunan tanpa props",
+        "isCorrect": true,
+        "rationale": "provide/inject memungkinkan komponen induk menyediakan data yang dapat diinjeksi ke komponen turunan di kedalaman mana pun tanpa melewati props bertingkat (prop drilling)."
+      },
+      {
+        "text": "Mengelola state global aplikasi",
+        "isCorrect": false,
+        "rationale": "Manajemen state global skala besar umumnya dikelola oleh pustaka resmi seperti Pinia atau Vuex."
+      },
+      {
+        "text": "Mendefinisikan route aplikasi",
+        "isCorrect": false,
+        "rationale": "Pengaturan route sistem navigasi aplikasi didefinisikan menggunakan Vue Router."
+      },
+      {
+        "text": "Mengelola event bus",
+        "isCorrect": false,
+        "rationale": "Event bus digunakan untuk komunikasi antar komponen acak melalui pustaka pihak ketiga, bukan fungsi utama provide/inject."
+      }
+    ]
+  },
+  {
+    "questionNumber": 18,
+    "question": "Dalam Vue, direktif yang digunakan untuk mengikat data ke atribut HTML adalah..",
+    "answerOptions": [
+      {
+        "text": "v-for",
+        "isCorrect": false,
+        "rationale": "Direktif v-for ditujukan untuk melakukan perulangan data pada elemen."
+      },
+      {
+        "text": "v-if",
+        "isCorrect": false,
+        "rationale": "Direktif v-if bertugas menyaring penampilan elemen lewat jalur pengondisian."
+      },
+      {
+        "text": "v-bind",
+        "isCorrect": true,
+        "rationale": "v-bind digunakan untuk mengikat data ke atribut HTML seperti src atau href secara dinamis."
+      },
+      {
+        "text": "v-model",
+        "isCorrect": false,
+        "rationale": "v-model bertugas menangani sinkronisasi data dua arah pada masukan pengguna."
+      }
+    ]
+  },
+  {
+    "questionNumber": 19,
+    "question": "Komponen dalam Vue dapat menerima data dari komponen induk melalui properti yang disebut...",
+    "answerOptions": [
+      {
+        "text": "refs",
+        "isCorrect": false,
+        "rationale": "Refs digunakan untuk mengakses referensi langsung ke elemen DOM atau instans komponen anak."
+      },
+      {
+        "text": "props",
+        "isCorrect": true,
+        "rationale": "Props adalah mekanisme resmi untuk mengirim data dari komponen induk ke komponen anak secara searah."
+      },
+      {
+        "text": "events",
+        "isCorrect": false,
+        "rationale": "Events mengalirkan sinyal atau data ke arah sebaliknya, yaitu dari komponen anak ke komponen induk."
+      },
+      {
+        "text": "slots",
+        "isCorrect": false,
+        "rationale": "Slots digunakan untuk mendistribusikan cuplikan konten template/HTML, bukan sekadar variabel data mentah."
+      }
+    ]
+  },
+  {
+    "questionNumber": 20,
+    "question": "Ketika menggunakan v-for, Vue memerlukan atribut kunci unik yang disebut...",
+    "answerOptions": [
+      {
+        "text": "id",
+        "isCorrect": false,
+        "rationale": "Atribut id adalah pengenal elemen HTML standar global, bukan pengenal spesifik untuk pelacakan internal loop Vue."
+      },
+      {
+        "text": "key",
+        "isCorrect": true,
+        "rationale": "Atribut key diperlukan oleh Vue untuk melacak identitas setiap elemen yang di-loop secara unik saat terjadi perubahan data."
+      },
+      {
+        "text": "ref",
+        "isCorrect": false,
+        "rationale": "Ref digunakan untuk menargetkan elemen DOM tertentu, bukan kunci pelacakan iterasi."
+      },
+      {
+        "text": "Index",
+        "isCorrect": false,
+        "rationale": "Index (posisi urutan) dapat dikirim ke atribut key, namun nama atribut resmi wajib yang dipasang di elemen adalah 'key'."
+      }
+    ]
+  },
+  {
+    "questionNumber": 21,
+    "question": "Siklus hidup komponen Vue yang dipanggil setelah data dan template dirender pertama kali adalah...",
+    "answerOptions": [
+      {
+        "text": "mounted",
+        "isCorrect": true,
+        "rationale": "Mounted dipanggil setelah komponen selesai dirender pertama kali dan elemen DOM fisik sudah tersedia untuk dimanipulasi."
+      },
+      {
+        "text": "created",
+        "isCorrect": false,
+        "rationale": "Created dipanggil sebelum proses render template diproses dan elemen DOM belum dibentuk."
+      },
+      {
+        "text": "updated",
+        "isCorrect": false,
+        "rationale": "Updated baru akan terpicu pada render kedua dan seterusnya saat data reaktif mengalami modifikasi."
+      },
+      {
+        "text": "beforeDestroy",
+        "isCorrect": false,
+        "rationale": "BeforeDestroy berjalan saat komponen akan dicopot atau dimusnahkan dari layar."
+      }
+    ]
+  },
+  {
+    "questionNumber": 22,
+    "question": "Dalam Vue computed properties, nilai yang dihasilkan akan di-cache berdasarkan dependensi reaktif sehingga..",
+    "answerOptions": [
+      {
+        "text": "selalu dihitung ulang setiap kali ada perubahan di komponen",
+        "isCorrect": false,
+        "rationale": "Sifat komputasi yang selalu menghitung ulang tanpa peduli perubahan dependensi adalah ciri dari metode (methods) biasa."
+      },
+      {
+        "text": "hanya dihitung ulang jika dependensi berubah",
+        "isCorrect": true,
+        "rationale": "Computed properties menghemat performa karena hanya dievaluasi ulang ketika dependensi reaktif yang digunakan di dalamnya berubah."
+      },
+      {
+        "text": "tidak pernah di-cache dan lambat",
+        "isCorrect": false,
+        "rationale": "Pernyataan ini keliru karena keunggulan utama computed property justru terletak pada mekanisme caching nilainya."
+      },
+      {
+        "text": "dihitung ulang setiap detik",
+        "isCorrect": false,
+        "rationale": "Sistem komputasi Vue digerakkan oleh perubahan data (reactive-driven), bukan berdasarkan interval waktu berkala (time-driven)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 23,
+    "question": "Watcher di Vue digunakan untuk...",
+    "answerOptions": [
+      {
+        "text": "mendeklarasikan data reaktif",
+        "isCorrect": false,
+        "rationale": "Mendeklarasikan data reaktif memakai opsi data() atau ref()."
+      },
+      {
+        "text": "mengikat event handler",
+        "isCorrect": false,
+        "rationale": "Mengikat event handler menggunakan direktif v-on."
+      },
+      {
+        "text": "menjalankan fungsi saat properti tertentu berubah",
+        "isCorrect": true,
+        "rationale": "Watcher digunakan untuk mengamati perubahan data dan menjalankan fungsi asinkron atau operasi berat sebagai respons atas perubahan nilai tersebut."
+      },
+      {
+        "text": "membuat template dinamis",
+        "isCorrect": false,
+        "rationale": "Template dinamis dibentuk lewat interpolasi teks {{ }} dan direktif struktural dasar."
+      }
+    ]
+  },
+  {
+    "questionNumber": 24,
+    "question": "Alih-alih menggunakan v-if dan v-for secara bersamaan pada elemen yang sama, praktik terbaik adalah...",
+    "answerOptions": [
+      {
+        "text": "menggunakan v-if di luar elemen",
+        "isCorrect": false,
+        "rationale": "Memindahkan v-if ke elemen pembungkus luar hanya berguna untuk menyembunyikan seluruh daftar, bukan memfilter item dalam daftar."
+      },
+      {
+        "text": "menambahkan v-else",
+        "isCorrect": false,
+        "rationale": "Penambahan v-else tidak menyelesaikan masalah tumpang tindih prioritas eksekusi antara v-if dan v-for."
+      },
+      {
+        "text": "menggabungkan v-if dan v-for dalam satu direktif",
+        "isCorrect": false,
+        "rationale": "Vue tidak mendukung penggabungan fungsionalitas dua direktif berbeda ke dalam satu nama direktif."
+      },
+      {
+        "text": "menggunakan v-for dengan filter di computed",
+        "isCorrect": true,
+        "rationale": "Praktik terbaik yang direkomendasikan panduan gaya Vue adalah menggunakan computed property untuk memfilter data sebelum diserahkan ke loop v-for."
+      }
+    ]
+  },
+  {
+    "questionNumber": 25,
+    "question": "Dalam membuat aplikasi command line dengan TypeScript, perintah untuk menjalankan file yang sudah dikompilasi adalah...",
+    "answerOptions": [
+      {
+        "text": "ts-node file.ts",
+        "isCorrect": false,
+        "rationale": "Perintah ts-node digunakan untuk mengeksekusi file TypeScript mentah secara langsung tanpa menghasilkan file keluaran terpisah."
+      },
+      {
+        "text": "tsc file.ts",
+        "isCorrect": false,
+        "rationale": "Perintah tsc bertugas untuk mengkompilasi file .ts menjadi file .js, bukan untuk menjalankannya."
+      },
+      {
+        "text": "npm start",
+        "isCorrect": false,
+        "rationale": "Perintah npm start adalah script package yang kustom dan tidak mengeksekusi file keluaran secara spesifik kecuali telah dikonfigurasi sebelumnya."
+      },
+      {
+        "text": "node file.js",
+        "isCorrect": true,
+        "rationale": "File TypeScript yang telah melewati tahap kompilasi akan berubah menjadi file JavaScript asli (.js), sehingga dieksekusi memakai engine Node.js."
+      }
+    ]
+  },
+  {
+    "questionNumber": 26,
+    "question": "Untuk menerima input dari pengguna di aplikasi command line TypeScript, kita menggunakan modul...",
+    "answerOptions": [
+      {
+        "text": "readline",
+        "isCorrect": true,
+        "rationale": "Modul bawaan Node.js bernama readline menyediakan antarmuka standar untuk membaca aliran data input baris demi baris dari terminal."
+      },
+      {
+        "text": "path",
+        "isCorrect": false,
+        "rationale": "Modul path digunakan untuk menangani operasi pengolahan string lokasi direktori file."
+      },
+      {
+        "text": "fs",
+        "isCorrect": false,
+        "rationale": "Modul fs (File System) bertugas melakukan aksi baca-tulis dokumen di penyimpanan cakram keras lokal."
+      },
+      {
+        "text": "http",
+        "isCorrect": false,
+        "rationale": "Modul http dipakai untuk membangun fungsionalitas jaringan server web."
+      }
+    ]
+  },
+  {
+    "questionNumber": 27,
+    "question": "Di TypeScript, tipe data yang memungkinkan suatu variabel memiliki nilai number atau string adalah...",
+    "answerOptions": [
+      {
+        "text": "enum",
+        "isCorrect": false,
+        "rationale": "Enum digunakan untuk mendefinisikan sekumpulan konstanta bernama yang bernilai tetap."
+      },
+      {
+        "text": "tuple",
+        "isCorrect": false,
+        "rationale": "Tuple adalah array dengan jumlah elemen terbatas yang urutan tiap tipe datanya sudah dipatok pasti."
+      },
+      {
+        "text": "union",
+        "isCorrect": true,
+        "rationale": "Union type memungkinkan penggabungan beberapa kemungkinan tipe data pada satu variabel menggunakan simbol pipa (|)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 28,
+    "question": "Fungsi async di TypeScript akan mengembalikan objek bertipe...",
+    "answerOptions": [
+      {
+        "text": "Promise",
+        "isCorrect": true,
+        "rationale": "Fungsi yang dibubuhi kata kunci async otomatis selalu mengemas nilai luarannya ke dalam objek kontainer Promise."
+      },
+      {
+        "text": "void",
+        "isCorrect": false,
+        "rationale": "Void menandakan ketiadaan nilai kembalian, sedangkan fungsi async tetap menghasilkan Promise."
+      },
+      {
+        "text": "Observable",
+        "isCorrect": false,
+        "rationale": "Observable adalah bagian dari ekosistem reactive programming (seperti RxJS), bukan luaran bawaan fungsi async javascript/typescript."
+      },
+      {
+        "text": "Callback",
+        "isCorrect": false,
+        "rationale": "Callback adalah argumen fungsi yang diumpankan ke dalam fungsi lain, bukan tipe objek kembalian asinkron modern."
+      }
+    ]
+  },
+  {
+    "questionNumber": 29,
+    "question": "Untuk membuat permintaan GET ke RESTful API di TypeScript, kita dapat menggunakan fetch, hasilnya berupa...",
+    "answerOptions": [
+      {
+        "text": "Promise",
+        "isCorrect": true,
+        "rationale": "Fungsi global fetch() bersifat asinkron dan mengembalikan Promise yang membungkus objek tanggapan (Response) HTTP."
+      },
+      {
+        "text": "JSON",
+        "isCorrect": false,
+        "rationale": "Data JSON baru diperoleh setelah mengekstrak objek Promise lewat pemanggilan metode lanjutan .json()."
+      },
+      {
+        "text": "string",
+        "isCorrect": false,
+        "rationale": "Hasil instan dari fetch bukanlah string teks langsung melainkan objek Response."
+      },
+      {
+        "text": "XML",
+        "isCorrect": false,
+        "rationale": "XML adalah format data struktural lama dan tidak mewakili objek kembalian langsung dari API fetch."
+      }
+    ]
+  },
+  {
+    "questionNumber": 30,
+    "question": "Metode HTTP yang digunakan untuk mengupdate data sepenuhnya di RESTful API adalah...",
+    "answerOptions": [
+      {
+        "text": "GET",
+        "isCorrect": false,
+        "rationale": "Metode GET murni digunakan untuk meminta atau mengambil data dari server, tidak untuk memodifikasinya."
+      },
+      {
+        "text": "POST",
+        "isCorrect": false,
+        "rationale": "Metode POST utamanya dikhususkan untuk mendaftarkan atau membuat entitas data baru di database."
+      },
+      {
+        "text": "PUT",
+        "isCorrect": true,
+        "rationale": "PUT digunakan untuk mengganti atau memperbarui seluruh isi sumber daya yang ditargetkan dengan data baru yang dikirim."
+      },
+      {
+        "text": "DELETE",
+        "isCorrect": false,
+        "rationale": "Metode DELETE dioperasikan untuk menghapus rekaman data tertentu dari sistem server."
+      }
+    ]
+  },
+  {
+    "questionNumber": 31,
+    "question": "Kode status HTTP 404 menunjukkan bahwa.",
+    "answerOptions": [
+      {
+        "text": "sumber daya tidak ditemukan",
+        "isCorrect": true,
+        "rationale": "Status 404 Not Found mengindikasikan bahwa server tidak dapat menemukan lokasi url sumber daya yang diminta oleh pengguna."
+      },
+      {
+        "text": "permintaan berhasil",
+        "isCorrect": false,
+        "rationale": "Permintaan yang sukses dinyatakan oleh rumpun kode status 2xx (misal: 200 OK)."
+      },
+      {
+        "text": "server mengalami error internal",
+        "isCorrect": false,
+        "rationale": "Kerusakan internal sistem server diwakili oleh rentang kode status 5xx (misal: 500 Internal Server Error)."
+      },
+      {
+        "text": "permintaan tidak valid",
+        "isCorrect": false,
+        "rationale": "Kesalahan format atau parameter permintaan yang tidak valid dilaporkan via kode status 400 Bad Request."
+      }
+    ]
+  },
+  {
+    "questionNumber": 32,
+    "question": "Untuk menghindari blocking pada operasi I/O, TypeScript mendukung pola asynchronous menggunakan...",
+    "answerOptions": [
+      {
+        "text": "forEach",
+        "isCorrect": false,
+        "rationale": "Metode forEach dijalankan secara sinkron biasa untuk menelusuri isi data array."
+      },
+      {
+        "text": "async/await",
+        "isCorrect": true,
+        "rationale": "Sintaksis async/await memudahkan penulisan alur kode asinkron non-blocking dengan gaya penulisan linear menyerupai kode sinkron."
+      },
+      {
+        "text": "setinterval",
+        "isCorrect": false,
+        "rationale": "SetInterval digunakan untuk penjadwalan eksekusi berulang berbasis pewaktu, bukan arsitektur utama pengolah operasi asinkron."
+      },
+      {
+        "text": "while loop",
+        "isCorrect": false,
+        "rationale": "Struktur while loop murni sinkron dan justru berpotensi besar memblokir thread eksekusi utama jika terjadi infinite loop."
+      }
+    ]
+  },
+  {
+    "questionNumber": 33,
+    "question": "Saat membuat instan aplikasi Vue dengan TypeScript, file konfigurasi utama adalah...",
+    "answerOptions": [
+      {
+        "text": "package.json",
+        "isCorrect": false,
+        "rationale": "Package.json bertugas mendata daftar dependensi modul NPM, bukan mengatur perilaku internal mesin TypeScript."
+      },
+      {
+        "text": "vue.config.js",
+        "isCorrect": false,
+        "rationale": "Vue.config.js mengatur penyusunan bundler webpack bawaan Vue CLI lama."
+      },
+      {
+        "text": "tsconfig.json",
+        "isCorrect": true,
+        "rationale": "File tsconfig.json memuat instruksi mutlak bagi kompiler TypeScript mengenai cara memproses berkas kode pada proyek Vue."
+      },
+      {
+        "text": "index.html",
+        "isCorrect": false,
+        "rationale": "Index.html berperan sebagai cetakan dokumen web utama tempat menempelkan aplikasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 34,
+    "question": "Di Vue dengan TypeScript, dekorator @Component digunakan untuk...",
+    "answerOptions": [
+      {
+        "text": "mengimpor modul",
+        "isCorrect": false,
+        "rationale": "Impor berkas modul tetap dikerjakan lewat ekspresi import standar JavaScript."
+      },
+      {
+        "text": "mendeklarasikan properti reaktif",
+        "isCorrect": false,
+        "rationale": "Data reaktif dideklarasikan sebagai properti kelas biasa (Options API) atau fungsi bawaan ref/reactive."
+      },
+      {
+        "text": "membuat mixin",
+        "isCorrect": false,
+        "rationale": "Penyusunan kode mixin menggunakan mekanisme pewarisan kelas (class inheritance) atau utilitas khusus pustaka."
+      },
+      {
+        "text": "menandai kelas sebagai komponen Vue",
+        "isCorrect": true,
+        "rationale": "Dekorator @Component yang diimpor dari modul vue-property-decorator bertugas menyuntikkan konfigurasi internal Vue ke dalam struktur kelas TypeScript."
+      }
+    ]
+  },
+  {
+    "questionNumber": 35,
+    "question": "Perintah untuk membuat proyek Vue baru dengan dukungan TypeScript secara otomatis menggunakan Vite adalah...",
+    "answerOptions": [
+      {
+        "text": "npm create vue@latest-typescript",
+        "isCorrect": false,
+        "rationale": "Sintaksis penamaan target paket ini tidak valid dalam skema perintah resmi registry NPM."
+      },
+      {
+        "text": "vue create my-app-template typescript",
+        "isCorrect": false,
+        "rationale": "Ini merupakan bagian dari argumen eksekusi Vue CLI lama, bukan berbasis alat modern Vite."
+      },
+      {
+        "text": "vite create my-app-typescript",
+        "isCorrect": false,
+        "rationale": "Vite tidak dieksekusi menggunakan perintah langsung kata kerja 'vite create'."
+      },
+      {
+        "text": "npm init vue@latest-typescript",
+        "isCorrect": true,
+        "rationale": "Perintah 'npm init vue@latest' (atau variasi konfigurasinya) digunakan untuk menginisialisasi perancangan sistem proyek Vue terintegrasi TypeScript secara otomatis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 36,
+    "question": "Dalam pembuatan instan aplikasi Vue menggunakan TypeScript, file konfigurasi TypeScript yang utama adalah...",
+    "answerOptions": [
+      {
+        "text": "tsconfig.json",
+        "isCorrect": true,
+        "rationale": "File tsconfig.json merupakan berkas kontrol utama yang memuat preferensi kompilasi compiler TypeScript pada proyek."
+      },
+      {
+        "text": "package.json",
+        "isCorrect": false,
+        "rationale": "Package.json hanya memuat manifesto informasi lisensi dan daftar pustaka dependensi node_modules."
+      },
+      {
+        "text": "vite.config.ts",
+        "isCorrect": false,
+        "rationale": "Vite.config.ts difungsikan untuk mendikte cara kerja server build development Vite, bukan kompilasi internal kode ts."
+      },
+      {
+        "text": "env.d.ts",
+        "isCorrect": false,
+        "rationale": "Env.d.ts memuat deklarasi tipe ambient (type definitions) untuk variabel lingkungan, bukan pusat konfigurasi utama compiler."
+      }
+    ]
+  },
+  {
+    "questionNumber": 37,
+    "question": "Langkah pertama yang harus dilakukan untuk menginstal Ionic Framework pada sistem operasi adalah...",
+    "answerOptions": [
+      {
+        "text": "menginstal Xcode",
+        "isCorrect": false,
+        "rationale": "Xcode hanya diwajibkan apabila pengembang hendak mendistribusikan kompilasi aplikasi ke platform iOS (macOS)."
+      },
+      {
+        "text": "menginstal Android Studio",
+        "isCorrect": false,
+        "rationale": "Android Studio dipasang belakangan untuk keperluan penyediaan SDK kompilasi paket .apk, bukan dasar instalasi CLI Ionic."
+      },
+      {
+        "text": "menginstal Node.js dan npm",
+        "isCorrect": true,
+        "rationale": "Node.js dan npm diperlukan sebagai fondasi utama untuk mengunduh serta menginstal modul ekosistem Ionic Framework melalui perintah terminal."
+      },
+      {
+        "text": "menginstal Visual Studio Code",
+        "isCorrect": false,
+        "rationale": "Visual Studio Code bertindak sebatas editor teks pengetik kode (IDE), bukan syarat mutlak berjalannya sistem ekosistem Ionic."
+      }
+    ]
+  },
+  {
+    "questionNumber": 38,
+    "question": "Perintah yang digunakan untuk menginstal Ionic CLI secara global melalui npm adalah..",
+    "answerOptions": [
+      {
+        "text": "npm install @ionic/cli",
+        "isCorrect": false,
+        "rationale": "Perintah tanpa opsi -g hanya akan memasang paket di lingkup lokal folder aktif saat itu saja."
+      },
+      {
+        "text": "npm install ionic",
+        "isCorrect": false,
+        "rationale": "Nama paket ini merujuk ke pustaka versi lama dan dipasang lokal, bukan alat bantu CLI global versi terbaru."
+      },
+      {
+        "text": "npm install -g ionic",
+        "isCorrect": false,
+        "rationale": "Nama modul 'ionic' di registry NPM sudah didepresiasi dan digantikan oleh penamaan ruang nama lingkup baru."
+      },
+      {
+        "text": "npm install -g @ionic/cli",
+        "isCorrect": true,
+        "rationale": "Perintah 'npm install -g @ionic/cli' memasang paket pengelola antarmuka baris perintah resmi Ionic secara global agar bisa dipanggil dari direktori mana pun."
+      }
+    ]
+  },
+  {
+    "questionNumber": 39,
+    "question": "Syarat minimal versi Node.js yang diperlukan untuk menjalankan Ionic Framework adalah...",
+    "answerOptions": [
+      {
+        "text": "Node.js 12 atau lebih baru",
+        "isCorrect": false,
+        "rationale": "Node.js versi 12 sudah usang dan tidak didukung lagi oleh pustaka dependensi inti Ionic versi modern."
+      },
+      {
+        "text": "Node.js 10 atau lebih baru",
+        "isCorrect": false,
+        "rationale": "Versi 10 terlalu lama dan akan memicu error kegagalan sintaksis saat instalasi CLI dilakukan."
+      },
+      {
+        "text": "Node.js 14 atau lebih baru",
+        "isCorrect": true,
+        "rationale": "Ionic Framework membutuhkan standar eksekusi minimum dari mesin Node.js versi 14 ke atas guna menjamin kestabilan pengerjaan aplikasi."
+      },
+      {
+        "text": "Node.js 16 atau lebih baru",
+        "isCorrect": false,
+        "rationale": "Meskipun versi 16 disarankan, syarat batas ambang paling bawah yang memungkinkannya tetap berjalan stabil adalah versi 14."
+      }
+    ]
+  },
+  {
+    "questionNumber": 40,
+    "question": "Alat bantu untuk menjalankan emulator perangkat bergerak saat pengembangan Ionic adalah...",
+    "answerOptions": [
+      {
+        "text": "Cordova",
+        "isCorrect": false,
+        "rationale": "Cordova berperan sebagai jembatan plugin aset, tidak memuat peranti lunak mesin emulator virtual."
+      },
+      {
+        "text": "Ionic DevApp",
+        "isCorrect": false,
+        "rationale": "Ionic DevApp adalah penampil pratinjau di gawai fisik langsung, bukan program simulator di komputer."
+      },
+      {
+        "text": "Capacitor",
+        "isCorrect": false,
+        "rationale": "Capacitor bertindak selaku runtime pembungkus web-to-native modern pengganti Cordova."
+      },
+      {
+        "text": "Android Studio",
+        "isCorrect": true,
+        "rationale": "Android Studio menyertakan modul perangkat bawaan AVD (Android Virtual Device) yang bertindak sebagai mesin emulator penguji aplikasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 41,
+    "question": "Alat bantu untuk menjalankan emulator perangkat bergerak saat pengembangan Ionic adalah...",
+    "answerOptions": [
+      {
+        "text": "Android Studio",
+        "isCorrect": true,
+        "rationale": "Android Studio menyediakan perangkat peniru sistem Android (emulator) terintegrasi demi kelancaran validasi visual aplikasi."
+      },
+      {
+        "text": "Cordova",
+        "isCorrect": false,
+        "rationale": "Cordova tidak menyediakan emulator melainkan bertindak sebagai jembatan kode."
+      },
+      {
+        "text": "Ionic DevApp",
+        "isCorrect": false,
+        "rationale": "Ionic DevApp adalah aplikasi pembantu di ponsel pintar riil, bukan bagian emulator ekosistem desktop."
+      },
+      {
+        "text": "Capacitor",
+        "isCorrect": false,
+        "rationale": "Capacitor adalah jembatan runtime pembungkus web modern, bukan emulator."
+      }
+    ]
+  },
+  {
+    "questionNumber": 42,
+    "question": "Untuk membuat proyek Ionic berbasis Vue, perintah yang digunakan adalah..",
+    "answerOptions": [
+      {
+        "text": "npm init ionic-vue",
+        "isCorrect": false,
+        "rationale": "Format eksekusi ini tidak terdaftar resmi pada dokumentasi perintah pembangunan struktur klaster Ionic."
+      },
+      {
+        "text": "ionic create myApp-vue",
+        "isCorrect": false,
+        "rationale": "Kata kerja pembentuk rancangan proyek di Ionic CLI menggunakan kata 'start', bukan 'create'."
+      },
+      {
+        "text": "ionic start myApp tabs --type=vue",
+        "isCorrect": true,
+        "rationale": "Perintah 'ionic start myApp tabs --type=vue' memicu pembuatan arsitektur templat menu tab dengan landasan kode utama Vue."
+      },
+      {
+        "text": "vue create myApp-ionic",
+        "isCorrect": false,
+        "rationale": "Perintah ini membuat aplikasi Vue murni standar tanpa konfigurasi komponen dan pustaka bawaan Ionic mobile."
+      }
+    ]
+  },
+  {
+    "questionNumber": 43,
+    "question": "Template default yang disediakan Ionic untuk memulai proyek berbasis Vue adalah..",
+    "answerOptions": [
+      {
+        "text": "blank, list, grid",
+        "isCorrect": false,
+        "rationale": "Grid bukan kategori skema arsitektur halaman dasar bawaan menu instan Ionic CLI."
+      },
+      {
+        "text": "blank, tabs, sidemenu",
+        "isCorrect": true,
+        "rationale": "Ionic secara resmi memaketkan opsi awal rancangan layout berupa blank (kosong), tabs (navigasi bawah), dan sidemenu (navigasi geser samping)."
+      },
+      {
+        "text": "tabs, grid, form",
+        "isCorrect": false,
+        "rationale": "Form bukan bagian dari arsitektur struktur navigasi global templat awal penginstalan."
+      },
+      {
+        "text": "sidemenu, list, blank",
+        "isCorrect": false,
+        "rationale": "Meskipun sidemenu dan blank benar, list tidak dikelompokkan ke dalam arsitektur template navigasi utama."
+      }
+    ]
+  },
+  {
+    "questionNumber": 44,
+    "question": "Setelah menjalankan perintah 'ionic start', folder proyek yang dibuat akan berisi file utama bernama...",
+    "answerOptions": [
+      {
+        "text": "App.vue",
+        "isCorrect": false,
+        "rationale": "App.vue adalah root komponen visual, namun bukan titik masuk utama (entry-point) pengeksekusi engine runtime skrip."
+      },
+      {
+        "text": "index.html",
+        "isCorrect": false,
+        "rationale": "Index.html adalah kerangka dokumen penampung, tetapi inisialisasi modul logika program dipicu dari skrip program."
+      },
+      {
+        "text": "main.ts",
+        "isCorrect": true,
+        "rationale": "File main.ts bertindak selaku gerbang masuk utama program yang bertugas memuat aplikasi Vue serta mendaftarkan modul-modul dasar Ionic."
+      },
+      {
+        "text": "home.vue",
+        "isCorrect": false,
+        "rationale": "Home.vue hanya lembar halaman konten biasa, bukan pondasi awal penggerak sistem."
+      }
+    ]
+  },
+  {
+    "questionNumber": 45,
+    "question": "Untuk menjalankan aplikasi Ionic di browser saat pengembangan, perintah yang digunakan is...",
+    "answerOptions": [
+      {
+        "text": "ionic run",
+        "isCorrect": false,
+        "rationale": "Perintah 'ionic run' (atau ionic cap run) digunakan untuk menggelar instalasi aplikasi langsung menuju gawai keras target."
+      },
+      {
+        "text": "ionic serve",
+        "isCorrect": true,
+        "rationale": "Perintah 'ionic serve' mengaktifkan server lokal pembangunan guna meninjau pratinjau jalannya aplikasi lewat aplikasi penjelajah web komputer (browser)."
+      },
+      {
+        "text": "npm start",
+        "isCorrect": false,
+        "rationale": "Meskipun bisa diarahkan ke skrip internal, perintah ini bukan perintah natif bawaan utilitas util CLI Ionic."
+      },
+      {
+        "text": "ionic dev",
+        "isCorrect": false,
+        "rationale": "Argumen perintah 'ionic dev' tidak dikenali di dalam daftar perkakas eksekusi utilitas CLI Ionic."
+      }
+    ]
+  },
+  {
+    "questionNumber": 46,
+    "question": "Dalam struktur direktori proyek Ionic berbasis Vue, folder tempat menyimpan komponen Vue adalah....",
+    "answerOptions": [
+      {
+        "text": "src/views",
+        "isCorrect": false,
+        "rationale": "Folder src/views dialokasikan khusus untuk menampung komponen yang bertindak langsung sebagai halaman penuh (views/pages) dari rute navigasi."
+      },
+      {
+        "text": "src/components",
+        "isCorrect": true,
+        "rationale": "Folder src/components digunakan untuk menyimpan komponen Vue yang dapat digunakan kembali (reusable components) di berbagai halaman."
+      },
+      {
+        "text": "src/pages",
+        "isCorrect": false,
+        "rationale": "Struktur standar proyek Ionic Vue mengandalkan folder views ketimbang penamaan folder pages."
+      },
+      {
+        "text": "src/layouts",
+        "isCorrect": false,
+        "rationale": "Folder layouts dipakai jika menggunakan arsitektur pembuat layout global terpisah, bukan bawaan dasar Ionic."
+      }
+    ]
+  },
+  {
+    "questionNumber": 47,
+    "question": "Elemen Ionic yang digunakan untuk membuat navigasi tab di bagian bawah layar adalah...",
+    "answerOptions": [
+      {
+        "text": "ion-menu",
+        "isCorrect": false,
+        "rationale": "Ion-menu dioperasikan untuk menyusun struktur menu laci navigasi yang tersembunyi di tepian samping."
+      },
+      {
+        "text": "ion-toolbar",
+        "isCorrect": false,
+        "rationale": "Ion-toolbar adalah wadah penampung tombol aksi atau judul yang bertengger di atas maupun bawah halaman."
+      },
+      {
+        "text": "ion-nav",
+        "isCorrect": false,
+        "rationale": "Ion-nav melayani sistem navigasi berbasis tumpukan kartu halaman (stack-based navigation) model lama."
+      },
+      {
+        "text": "ion-tab-bar",
+        "isCorrect": true,
+        "rationale": "ion-tab-bar adalah komponen navigasi khusus yang bertugas merajut deretan tombol tabulasi di bagian bawah layar aplikasi mobile."
+      }
+    ]
+  },
+  {
+    "questionNumber": 48,
+    "question": "Cara mendaftarkan komponen Ionic ke dalam aplikasi Vue adalah dengan...",
+    "answerOptions": [
+      {
+        "text": "menulis di package.json",
+        "isCorrect": false,
+        "rationale": "Package.json hanya mendaftarkan versi library pustaka, bukan meregistrasikan komponen komponen ke mesin internal Vue."
+      },
+      {
+        "text": "menambahkan di App.vue",
+        "isCorrect": false,
+        "rationale": "Menambahkan di App.vue hanya mendaftarkannya di lingkup komponen akar saja, tidak otomatis terbuka global ke seluruh file lain."
+      },
+      {
+        "text": "menggunakan plugin otomatis",
+        "isCorrect": false,
+        "rationale": "Meskipun ada ekstensi pembantu, standar baku integrasi pemrograman Ionic Vue memerlukan deklarasi manual yang konsisten."
+      },
+      {
+        "text": "mengimpor dan mendaftarkan di main.ts",
+        "isCorrect": true,
+        "rationale": "Komponen Ionic diimpor dan didaftarkan pada file main.ts melalui plugin IonicVue agar fungsionalitasnya dapat diakses secara global di seluruh aplikasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 49,
+    "question": "Komponen Ionic yang berfungsi sebagai wadah utama halaman aplikasi adalah..",
+    "answerOptions": [
+      {
+        "text": "ion-app",
+        "isCorrect": true,
+        "rationale": "ion-app adalah komponen root mutlak yang wajib membungkus seluruh elemen visual aplikasi tanpa terkecuali."
+      },
+      {
+        "text": "ion-page",
+        "isCorrect": false,
+        "rationale": "Ion-page berfungsi membungkus satu halaman spesifik agar transisi navigasi berjalan mulus, bukan membungkus keseluruhan aplikasi."
+      },
+      {
+        "text": "ion-content",
+        "isCorrect": false,
+        "rationale": "Ion-content bertindak selaku area konten tengah tempat di mana komponen teks dan gambar diletakkan dan dapat digulir."
+      },
+      {
+        "text": "ion-router",
+        "isCorrect": false,
+        "rationale": "Ion-router bertugas memetakan rute logis komponen, bukan komponen wadah visual luar."
+      }
+    ]
+  },
+  {
+    "questionNumber": 50,
+    "question": "Untuk membuat tata letak grid responsif di Ionic, digunakan kombinasi komponen...",
+    "answerOptions": [
+      {
+        "text": "ion-list, ion-item, ion-label",
+        "isCorrect": false,
+        "rationale": "Kombinasi ini ditujukan khusus untuk memproduksi struktur daftar data vertikal beruntun."
+      },
+      {
+        "text": "ion-grid, ion-row, ion-col",
+        "isCorrect": true,
+        "rationale": "ion-grid, ion-row, dan ion-col berkolaborasi membentuk struktur grid matriks responsif yang membagi porsi lebar layar secara proporsional."
+      },
+      {
+        "text": "ion-card, ion-card-content",
+        "isCorrect": false,
+        "rationale": "Kombinasi elemen ini dipakai untuk menyajikan visual komponen berbentuk kartu informasi tersendiri."
+      },
+      {
+        "text": "ion-flex, ion-item, ion-col",
+        "isCorrect": false,
+        "rationale": "Sintaksis tag 'ion-flex' tidak eksis di dalam kamus komponen pustaka Ionic UI."
+      }
+    ]
+  },
+  {
+    "questionNumber": 51,
+    "question": "Atribut pada ion-col yang digunakan untuk menentukan lebar kolom pada ukuran layar kecil adalah...",
+    "answerOptions": [
+      {
+        "text": "size-xs",
+        "isCorrect": true,
+        "rationale": "Atribut size-xs mengontrol lebar kolom pada ukuran layar sangat kecil (extra small), yang merupakan dasar penataan responsif mobile-first."
+      },
+      {
+        "text": "size-sm",
+        "isCorrect": false,
+        "rationale": "Size-sm menargetkan ukuran layar kelas menengah-rendah (small) seperti perangkat tablet kecil."
+      },
+      {
+        "text": "size-md",
+        "isCorrect": false,
+        "rationale": "Size-md mematok dimensi lebar pada layar monitor komputer ukuran medium."
+      },
+      {
+        "text": "size-lg",
+        "isCorrect": false,
+        "rationale": "Size-lg diberlakukan guna memodifikasi tampilan pada layar monitor beresolusi tinggi (large)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 52,
+    "question": "Cara membuat layout kustom dengan lebar kolom yang berbeda pada setiap ukuran layar di Ionic adalah...",
+    "answerOptions": [
+      {
+        "text": "menggunakan CSS manual di setiap komponen",
+        "isCorrect": false,
+        "rationale": "Menulis aturan CSS manual secara masif tidak efektif dan mengabaikan utilitas responsif bawaan framework."
+      },
+      {
+        "text": "menggunakan atribut size-(breakpoint) pada ion-col",
+        "isCorrect": true,
+        "rationale": "Atribut size-(breakpoint) seperti size-sm, size-md memungkinkan pengaturan lebar kolom spesifik per ukuran layar secara dinamis."
+      },
+      {
+        "text": "mengubah properti grid secara global",
+        "isCorrect": false,
+        "rationale": "Mengubah setting grid global akan merusak proporsi seluruh layout halaman lain yang tidak sejenis."
+      },
+      {
+        "text": "menggunakan template bawaan Ionic",
+        "isCorrect": false,
+        "rationale": "Template bawaan hanya memberi modal awal, pengaturan lebar kolom detail tetap menuntut intervensi atribut sintaksis pengembang."
+      }
+    ]
+  },
+  {
+    "questionNumber": 53,
+    "question": "Dalam Ionic, komponen yang digunakan untuk mengatur tata letak (layout) baris dan kolom dengan sistem grid responsif adalah...",
+    "answerOptions": [
+      {
+        "text": "ion-Content",
+        "isCorrect": false,
+        "rationale": "Ion-Content adalah wadah penggulir konten utama, bukan pengendali sistem kisi baris kolom."
+      },
+      {
+        "text": "ion-Grid",
+        "isCorrect": true,
+        "rationale": "ion-Grid adalah komponen utama yang menyediakan sistem grid responsif untuk mengatur tata letak baris dan kolom di Ionic."
+      },
+      {
+        "text": "ion-Row",
+        "isCorrect": false,
+        "rationale": "Ion-Row adalah anak komponen dari ion-grid yang bertugas membuat baris baru, bukan pengatur sistem grid secara utuh."
+      },
+      {
+        "text": "ion-Col",
+        "isCorrect": false,
+        "rationale": "Ion-Col merupakan wadah kolom spesifik tempat menaruh item, bukan induk sistem grid."
+      }
+    ]
+  },
+  {
+    "questionNumber": 54,
+    "question": "Untuk mengubah warna latar belakang suatu halaman Ionic secara global, properti CSS yang digunakan adalah...",
+    "answerOptions": [
+      {
+        "text": "--ion-background-color",
+        "isCorrect": true,
+        "rationale": "Variable CSS custom --ion-background-color digunakan untuk mengatur warna latar belakang secara global di Ionic."
+      },
+      {
+        "text": "background-color",
+        "isCorrect": false,
+        "rationale": "Properti background-color standar sering kali terhalang oleh shadow DOM komponen Ionic, sehingga tidak berubah secara global."
+      },
+      {
+        "text": "--ion-color-primary",
+        "isCorrect": false,
+        "rationale": "--ion-color-primary bertugas menyimpan kode warna tema utama (seperti biru standar), bukan warna latar belakang dasar."
+      },
+      {
+        "text": "color",
+        "isCorrect": false,
+        "rationale": "Properti color di dalam CSS berfungsi memanipulasi warna teks, bukan warna latar belakang."
+      }
+    ]
+  },
+  {
+    "questionNumber": 55,
+    "question": "Variable CSS di Ionic yang digunakan untuk mengubah warna teks utama pada suatu komponen adalah...",
+    "answerOptions": [
+      {
+        "text": "--ion-text-color",
+        "isCorrect": true,
+        "rationale": "--ion-text-color adalah variable CSS yang mengatur warna teks utama pada komponen Ionic secara konsisten."
+      },
+      {
+        "text": "ion-color-base",
+        "isCorrect": false,
+        "rationale": "Sintaksis variabel ini tidak terdaftar sebagai pengatur warna teks global default di Ionic."
+      },
+      {
+        "text": "color",
+        "isCorrect": false,
+        "rationale": "Color standar tidak mampu menembus enkapsulasi komponen berbasis Web Components milik Ionic dengan baik."
+      },
+      {
+        "text": "--ion-background-color",
+        "isCorrect": false,
+        "rationale": "Variabel ini didedikasikan penuh untuk mewarnai bidang latar belakang."
+      }
+    ]
+  },
+  {
+    "questionNumber": 56,
+    "question": "Untuk menambahkan tema gelap (dark theme) pada aplikasi Ionic, properti CSS yang digunakan adalah...",
+    "answerOptions": [
+      {
+        "text": "--ion-color-light",
+        "isCorrect": false,
+        "rationale": "Variabel warna ini digunakan untuk memberikan aksen warna terang, berkebalikan dari tema gelap."
+      },
+      {
+        "text": "--ion-background-color",
+        "isCorrect": false,
+        "rationale": "Meskipun bisa diubah ke hitam, mengubah variabel ini saja tidak otomatis menyesuaikan warna teks dan kontras komponen lainnya."
+      },
+      {
+        "text": "--ion-color-dark",
+        "isCorrect": true,
+        "rationale": "Pemanfaatan variabel serta blok media query dengan kaitan --ion-color-dark mendominasi pemetaan skema visual lingkungan tema gelap aplikasi."
+      },
+      {
+        "text": "--ion-text-color",
+        "isCorrect": false,
+        "rationale": "Ini hanya memodifikasi warna dari elemen teks, tidak merombak ekosistem warna komponen secara utuh."
+      }
+    ]
+  },
+  {
+    "questionNumber": 57,
+    "question": "Untuk mengatur warna aksen (accent) yang konsisten di seluruh aplikasi Ionic, kita mendefinisikan variable CSS dengan nama....",
+    "answerOptions": [
+      {
+        "text": "--ion-color-tertiary",
+        "isCorrect": false,
+        "rationale": "Tertiary merupakan pilihan warna pendukung ketiga dan bukan corak identitas aksen yang paling utama."
+      },
+      {
+        "text": "--ion-color-secondary",
+        "isCorrect": false,
+        "rationale": "Secondary ditugaskan menyimpan opsi ragam warna sekunder (pendamping)."
+      },
+      {
+        "text": "--ion-color-primary",
+        "isCorrect": true,
+        "rationale": "--ion-color-primary adalah variabel CSS utama untuk menampung warna aksen primer yang menjadi ciri khas identitas visual aplikasi."
+      },
+      {
+        "text": "--ion-color-success",
+        "isCorrect": false,
+        "rationale": "Success digunakan khusus sebagai indikator visual keberhasilan tindakan (umumnya berwarna hijau)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 58,
+    "question": "Komponen Ionic yang digunakan untuk menampilkan daftar (list) dengan item yang dapat diklik dan memiliki efek sentuh adalah...",
+    "answerOptions": [
+      {
+        "text": "ion-Card",
+        "isCorrect": false,
+        "rationale": "Ion-Card menyajikan data terisolasi dalam wujud kotak blok tunggal, bukan deretan daftar baris beruntun."
+      },
+      {
+        "text": "ion-Item",
+        "isCorrect": false,
+        "rationale": "Ion-Item hanyalah komponen baris tunggal yang harus ditaruh di dalam komponen induk pembungkus daftar."
+      },
+      {
+        "text": "ion-Button",
+        "isCorrect": false,
+        "rationale": "Ion-Button memicu pemicuan aksi tombol perintah tunggal, bukan media penampung rincian daftar informasi."
+      },
+      {
+        "text": "ion-List",
+        "isCorrect": true,
+        "rationale": "ion-List adalah komponen kolektif yang menyediakan wadah daftar item terstruktur lengkap dengan interaksi umpan balik sentuhan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 59,
+    "question": "Untuk menampilkan tombol dengan ikon sebelah kiri teks, properti yang digunakan pada komponen ion-Button adalah...",
+    "answerOptions": [
+      {
+        "text": "icon-end",
+        "isCorrect": false,
+        "rationale": "Icon-end memosisikan objek gambar ikon bertengger di sisi kanan dari teks."
+      },
+      {
+        "text": "icon-start",
+        "isCorrect": false,
+        "rationale": "Sintaksis penamaan properti langsung 'icon-start' tidak didukung pada struktur penulisan tombol versi terkini."
+      },
+      {
+        "text": "slot='end'",
+        "isCorrect": false,
+        "rationale": "Slot bernilai 'end' akan membuang penempatan elemen anak menuju sudut paling kanan dari komponen."
+      },
+      {
+        "text": "slot='start'",
+        "isCorrect": true,
+        "rationale": "Slot 'start' pada komponen penampung dalam ion-Button memosisikan ikon berada di sebelah kiri teks tombol."
+      }
+    ]
+  },
+  {
+    "questionNumber": 60,
+    "question": "Komponen Ionic yang digunakan untuk menampilkan konten dalam bentuk kartu (card) dengan bayangan dan sudut melengkung adalah...",
+    "answerOptions": [
+      {
+        "text": "ion-Card",
+        "isCorrect": true,
+        "rationale": "ion-Card adalah komponen kosmetik visual khusus untuk membungkus konten dalam format kartu elegan berhiaskan drop-shadow dan rounded corner."
+      },
+      {
+        "text": "ion-content",
+        "isCorrect": false,
+        "rationale": "Ion-content bertindak selaku kanvas penggulir lembar kerja putih biasa tanpa ornamen kartu."
+      },
+      {
+        "text": "ion-Header",
+        "isCorrect": false,
+        "rationale": "Ion-Header menetap di bagian paling atas guna mengunci komponen bar menu judul."
+      },
+      {
+        "text": "ion-Footer",
+        "isCorrect": false,
+        "rationale": "Ion-Footer menjadi penutup area terbawah halaman aplikasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 61,
+    "question": "Untuk membuat navigasi antar halaman di aplikasi Ionic, komponen yang digunakan adalah...",
+    "answerOptions": [
+      {
+        "text": "ion-Router",
+        "isCorrect": true,
+        "rationale": "ion-Router (terintegrasi dengan Vue Router) bertugas memegang kendali perpindahan dan pencocokan komponen antar halaman."
+      },
+      {
+        "text": "ion-Nav",
+        "isCorrect": false,
+        "rationale": "Ion-Nav kurang disarankan pada aplikasi terintegrasi framework modern karena penanganan rute lebih baik diserahkan ke pustaka router bawaan framework."
+      },
+      {
+        "text": "ion-Page",
+        "isCorrect": false,
+        "rationale": "Ion-Page hanya penanda batas visual selembar halaman, tidak mempunyai mekanisme pengubah alamat rute url."
+      },
+      {
+        "text": "ion-View",
+        "isCorrect": false,
+        "rationale": "Tag komponen 'ion-view' merupakan bagian dari ekosistem usang Ionic versi 1."
+      }
+    ]
+  },
+  {
+    "questionNumber": 62,
+    "question": "Langkah pertama yang dilakukan saat mengantarkan integrasi Ionic dengan Vue dalam praktikum adalah...",
+    "answerOptions": [
+      {
+        "text": "Menulis kode komponen pertama",
+        "isCorrect": false,
+        "rationale": "Menulis kode belum bisa dikerjakan selama instalasi direktori proyek dan library pendukung belum terpasang."
+      },
+      {
+        "text": "Menginstal Node.js",
+        "isCorrect": false,
+        "rationale": "Penginstalan Node.js merupakan langkah penyiapan lingkungan komputer global, bukan tahapan awal langkah praktikum spesifik."
+      },
+      {
+        "text": "Menginstal Android Studio",
+        "isCorrect": false,
+        "rationale": "Android Studio merupakan langkah akhir pengerjaan aplikasi menuju kompilasi mobile fisik."
+      },
+      {
+        "text": "Membuat proyek Vue baru lalu menambahkan Ionic",
+        "isCorrect": true,
+        "rationale": "Alur praktikum diawali dengan mendirikan folder proyek Vue baru, baru kemudian mengeksekusi penambahan paket pustaka Ionic ke dalamnya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 63,
+    "question": "Perintah untuk membuat proyek Ionic dengan template Vue adalah...",
+    "answerOptions": [
+      {
+        "text": "vue create nama-app",
+        "isCorrect": false,
+        "rationale": "Ini hanya menghasilkan kerangka web Vue kosongan tanpa ada berkas bawaan ekosistem mobile Ionic."
+      },
+      {
+        "text": "ionic start nama-app blank --type=vue",
+        "isCorrect": true,
+        "rationale": "Perintah 'ionic start nama-app blank --type=vue' menginstruksikan pembuatan basis data proyek berbekal pustaka inti Vue dan template kosong."
+      },
+      {
+        "text": "npm init ionic",
+        "isCorrect": false,
+        "rationale": "Perintah npm ini tidak merujuk secara akurat ke penyusunan template terintegrasi Vue."
+      },
+      {
+        "text": "ionic start nama-app tabs",
+        "isCorrect": false,
+        "rationale": "Tanpa menyertakan bendera --type=vue, CLI secara acak akan memilih framework default (biasanya Angular)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 64,
+    "question": "Setelah membuat proyek, untuk menjalankan aplikasi Ionic di browser, perintah yang digunakan adalah...",
+    "answerOptions": [
+      {
+        "text": "ionic start",
+        "isCorrect": false,
+        "rationale": "Ionic start dipakai untuk melahirkan folder proyek baru, bukan memicu server penayang."
+      },
+      {
+        "text": "npm run dev",
+        "isCorrect": false,
+        "rationale": "Meskipun bisa memicu server lokal penggerak bawaan (Vite), perintah resmi yang mengekspos fitur pengujian proxy Ionic di peramban secara optimal adalah ionic serve."
+      },
+      {
+        "text": "ionic serve",
+        "isCorrect": true,
+        "rationale": "Perintah 'ionic serve' digunakan untuk menyalakan web server lokal demi mempermudah pemantauan via browser sepanjang masa koding."
+      },
+      {
+        "text": "npm build",
+        "isCorrect": false,
+        "rationale": "Npm build (atau npm run build) dioperasikan untuk memproduksi rilis folder aset final tingkat produksi (dist)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 65,
+    "question": "File yang digunakan untuk mengkonfigurasi tema dan variable CSS global di proyek Ionic adalah...",
+    "answerOptions": [
+      {
+        "text": "global.css",
+        "isCorrect": false,
+        "rationale": "Global.css memuat aturan penulisan style umum tambahan, bukan tempat terpusat berkumpulnya variabel skema warna inti Ionic."
+      },
+      {
+        "text": "variables.css",
+        "isCorrect": true,
+        "rationale": "File variables.css terletak di dalam folder src/theme dan menjadi jantung pengaturan nilai variabel warna palet global Ionic."
+      },
+      {
+        "text": "theme.css",
+        "isCorrect": false,
+        "rationale": "Secara bawaan konfigurasi terstruktur proyek Ionic, file ini dinamai variables.css, bukan theme.css."
+      },
+      {
+        "text": "style.css",
+        "isCorrect": false,
+        "rationale": "Style.css merupakan penamaan berkas style generik biasa dan bukan standar bawaan arsitektur Ionic."
+      }
+    ]
+  },
+  {
+    "questionNumber": 66,
+    "question": "Dalam praktikum teknik layout, untuk membuat baris dengan tiga kolom yang sama lebar, kode yang tepat adalah...",
+    "answerOptions": [
+      {
+        "text": "ion-Grid kemudian ion-row dan tiga ion-col tanpa properti size",
+        "isCorrect": true,
+        "rationale": "Tanpa properti size, ion-col secara otomatis membagi sisa ruang lebar yang tersedia secara adil rata, menghasilkan format tiga kolom simetris."
+      },
+      {
+        "text": "ion-List dengan tiga ion-item",
+        "isCorrect": false,
+        "rationale": "Susunan ini akan menampilkan item menumpuk tegak lurus secara vertikal, bukan berjejer horizontal sebagai kolom."
+      },
+      {
+        "text": "ion-Content dengan tiga ion-card",
+        "isCorrect": false,
+        "rationale": "Ion-card di dalam ion-content akan mengambil porsi lebar penuh halaman secara berurutan ke bawah."
+      },
+      {
+        "text": "ion-Row dengan tiga ion-grid",
+        "isCorrect": false,
+        "rationale": "Menaruh ion-grid di dalam ion-row merupakan bentuk kekeliruan struktur hierarki tata letak grid yang terbalik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 67,
+    "question": "Untuk mengubah tema aplikasi Ionic menjadi tema tertentu (misalnya tema gelap) secara keseluruhan, kita dapat mengatur properti CSS di file...",
+    "answerOptions": [
+      {
+        "text": "main.ts.",
+        "isCorrect": false,
+        "rationale": "Main.ts mengurusi deklarasi file logika TypeScript dan dilarang disisipi deklarasi deklarasi aturan CSS murni."
+      },
+      {
+        "text": "variables.css",
+        "isCorrect": false,
+        "rationale": "Variables.css menyimpan deklarasi variabel mentah, tetapi penyuntikan kelas skema global aktif biasanya ditangani di lembar style utama root."
+      },
+      {
+        "text": "App.vue",
+        "isCorrect": false,
+        "rationale": "App.vue menampung markup struktur visual utama, kurang ideal sebagai wadah modifikasi selektor global stylesheet."
+      },
+      {
+        "text": "global.css",
+        "isCorrect": true,
+        "rationale": "File global.css menampung aturan penerapan gaya mencakup keseluruhan dokumen, termasuk aktivasi aturan selektor pembalik warna tema gelap."
+      }
+    ]
+  },
+  {
+    "questionNumber": 68,
+    "question": "Komponen Ionic yang digunakan untuk menampilkan tombol navigasi kembali di toolbar adalah...",
+    "answerOptions": [
+      {
+        "text": "ion-Button",
+        "isCorrect": false,
+        "rationale": "Ion-Button merupakan tombol generik dan tidak mengusung kecerdasan melacak histori riwayat rute mundur otomatis."
+      },
+      {
+        "text": "ion-Back-Button",
+        "isCorrect": true,
+        "rationale": "ion-Back-Button adalah komponen khusus tombol kembali yang cerdas mendeteksi riwayat navigasi dan menyesuaikan tampilan ikon sesuai OS (Android/iOS)."
+      },
+      {
+        "text": "ion-Nav",
+        "isCorrect": false,
+        "rationale": "Ion-Nav bertugas sebagai komponen penampung tumpukan halaman, bukan tombol fisik."
+      },
+      {
+        "text": "ion-Router",
+        "isCorrect": false,
+        "rationale": "Ion-Router bertindak di balik layar mengatur alur data alamat url, bukan komponen visual tombol."
+      }
+    ]
+  },
+  {
+    "questionNumber": 69,
+    "question": "Dalam praktikum komponen antarmuka, untuk menampilkan input teks dengan label mengambang (floating label), komponen yang digunakan adalah.",
+    "answerOptions": [
+      {
+        "text": "ion-Label",
+        "isCorrect": false,
+        "rationale": "Ion-Label mandiri hanya menyajikan baris teks label statis biasa saja tanpa fungsi interaksi form."
+      },
+      {
+        "text": "ion-Textarea",
+        "isCorrect": false,
+        "rationale": "Ion-Textarea ditujukan untuk menampung inputan paragraf teks panjang berbaris-baris."
+      },
+      {
+        "text": "ion-Input dengan properti label-placement=\"floating\"",
+        "isCorrect": true,
+        "rationale": "Menyematkan properti label-placement=\"floating\" pada elemen ion-Input memicu transisi label bergerak mengambang ke atas begitu kolom disorot."
+      },
+      {
+        "text": "ion-Item dengan ion-label",
+        "isCorrect": false,
+        "rationale": "Pola penulisan lama ini sudah tidak lagi disarankan pada dokumentasi implementasi komponen input Ionic termutakhir."
+      }
+    ]
+  },
+  {
+    "questionNumber": 70,
+    "question": "Saat praktikum Komponen Antarmuka Ionic, komponen yang digunakan untuk menampilkan daftar item yang dapat digulir disebut...",
+    "answerOptions": [
+      {
+        "text": "ion-List",
+        "isCorrect": true,
+        "rationale": "ion-List didesain khusus guna membungkus sekelompok deretan data agar tersaji rapi dan dapat digulir dengan mulus di layar smartphone."
+      },
+      {
+        "text": "ion-List-Card",
+        "isCorrect": false,
+        "rationale": "Nama komponen 'ion-list-card' tidak dikenal di dalam ragam dokumentasi resmi komponen UI Ionic."
+      },
+      {
+        "text": "ion-Item",
+        "isCorrect": false,
+        "rationale": "Ion-Item sebatas merepresentasikan satu baris tunggal dari isi komponen list, bukan daftar utuh."
+      },
+      {
+        "text": "ion-Content",
+        "isCorrect": false,
+        "rationale": "Ion-Content mengurusi area pengguliran wilayah jendela aplikasi global, bukan list spesifik data."
+      }
+    ]
+  },
+  {
+    "questionNumber": 71,
+    "question": "Komponen ion-button pada Ionic digunakan untuk...",
+    "answerOptions": [
+      {
+        "text": "Menampilkan teks",
+        "isCorrect": false,
+        "rationale": "Menampilkan baris teks biasa merupakan fungsi dari elemen ion-text atau p/span standar."
+      },
+      {
+        "text": "Membuat tombol",
+        "isCorrect": true,
+        "rationale": "ion-button adalah komponen khusus yang bertugas merender tombol interaktif yang siap menerima aksi klik pengguna."
+      },
+      {
+        "text": "Menyembunyikan elemen",
+        "isCorrect": false,
+        "rationale": "Menyembunyikan elemen dilakukan dengan memanipulasi direktif v-show/v-if atau atribut tersembunyi CSS."
+      },
+      {
+        "text": "Menampilkan gambar",
+        "isCorrect": false,
+        "rationale": "Menampilkan berkas grafis/gambar dikerjakan memakai komponen ion-img atau tag img."
+      }
+    ]
+  },
+  {
+    "questionNumber": 72,
+    "question": "Dalam praktikum komponen antarmuka Ionic, properti yang digunakan untuk mengatur ukuran ion-button menjadi besar adalah...",
+    "answerOptions": [
+      {
+        "text": "size=\"small\"",
+        "isCorrect": false,
+        "rationale": "Atribut size=\"small\" justru akan memperkecil dimensi fisik tombol dari ukuran standar."
+      },
+      {
+        "text": "size=\"large\"",
+        "isCorrect": true,
+        "rationale": "Menetapkan nilai properti size=\"large\" melebarkan skala komponen tombol hingga berukuran lebih besar."
+      },
+      {
+        "text": "expand=\"block\"",
+        "isCorrect": false,
+        "rationale": "Expand=\"block\" berfungsi membuat tombol membentang selebar ruang pembungkusnya namun dengan sudut yang tetap melengkung."
+      },
+      {
+        "text": "expand=\"full\"",
+        "isCorrect": false,
+        "rationale": "Expand=\"full\" membuat tombol mengambil porsi lebar penuh layar gawai sekaligus menghilangkan lengkungan di sudut-sudutnya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 73,
+    "question": "Fungsi dari komponen ion-alert di Ionic adalah...",
+    "answerOptions": [
+      {
+        "text": "Menampilkan menu navigasi",
+        "isCorrect": false,
+        "rationale": "Menampilkan laci menu navigasi dikerjakan lewat bantuan komponen ion-menu."
+      },
+      {
+        "text": "Menampilkan daftar",
+        "isCorrect": false,
+        "rationale": "Menyajikan daftar beruntun diurusi oleh komponen ion-list."
+      },
+      {
+        "text": "Menampilkan dialog peringatan",
+        "isCorrect": true,
+        "rationale": "ion-alert bertugas memunculkan jendela pop-up dialog peringatan overlay di tengah layar untuk menyampaikan pesan krusial kepada pengguna."
+      },
+      {
+        "text": "Menampilkan tab",
+        "isCorrect": false,
+        "rationale": "Menyusun tab navigasi bawah dikelola via komponen ion-tab-bar."
+      }
+    ]
+  },
+  {
+    "questionNumber": 74,
+    "question": "Untuk menambahkan platform Android pada proyek Ionic, perintah yang digunakan adalah...",
+    "answerOptions": [
+      {
+        "text": "ionic platform add android",
+        "isCorrect": false,
+        "rationale": "Sintaksis ini adalah bagian dari ekosistem CLI Ionic versi lama yang sudah usang."
+      },
+      {
+        "text": "ionic generate platform android",
+        "isCorrect": false,
+        "rationale": "Kata kunci 'generate' (g) ditujukan untuk melahirkan lembar komponen, halaman, atau service baru, bukan platform OS."
+      },
+      {
+        "text": "ionic build android",
+        "isCorrect": false,
+        "rationale": "Tidak ada perintah langsung bernama 'ionic build android' untuk mendaftarkan modul SDK platform baru."
+      },
+      {
+        "text": "ionic cordova platform add android",
+        "isCorrect": true,
+        "rationale": "Perintah 'ionic cordova platform add android' mendaftarkan folder aset platform native Android ke dalam manajemen proyek berbasis Cordova."
+      }
+    ]
+  },
+  {
+    "questionNumber": 74,
+    "question": "Setelah menambahkan platform Android, langkah awal untuk menjalankan aplikasi di emulator adalah...",
+    "answerOptions": [
+      {
+        "text": "ionic serve",
+        "isCorrect": false,
+        "rationale": "Perintah ini digunakan untuk menjalankan server pengembangan lokal dan memantau aplikasi melalui browser, bukan untuk emulator."
+      },
+      {
+        "text": "ionic deploy android",
+        "isCorrect": false,
+        "rationale": "Perintah ini tidak valid untuk langsung menjalankan aplikasi ke emulator bawaan Cordova."
+      },
+      {
+        "text": "ionic build android",
+        "isCorrect": false,
+        "rationale": "Perintah ini hanya melakukan kompilasi proyek menjadi berkas APK Android, tetapi tidak otomatis menjalankannya di emulator."
+      },
+      {
+        "text": "ionic cordova platform run android",
+        "isCorrect": true,
+        "rationale": "Perintah run android akan mengompilasi sekaligus meluncurkan aplikasi ke emulator Android yang aktif atau perangkat yang terhubung."
+      }
+    ]
+  },
+  {
+    "questionNumber": 75,
+    "question": "Berkas konfigurasi utama untuk platform Android di proyek lonic adalah...",
+    "answerOptions": [
+      {
+        "text": "android.json",
+        "isCorrect": false,
+        "rationale": "Berkas ini berisi catatan internal berkas plugin Cordova untuk Android, bukan konfigurasi utama proyek."
+      },
+      {
+        "text": "config.xml",
+        "isCorrect": true,
+        "rationale": "Config.xml adalah berkas konfigurasi utama yang mengatur preferensi, nama aplikasi, paket id, dan pengaturan platform Android di proyek Ionic Cordova."
+      },
+      {
+        "text": "build.gradle",
+        "isCorrect": false,
+        "rationale": "Berkas ini spesifik untuk konfigurasi sistem build Gradle milik native Android, bukan konfigurasi global dari sisi proyek Ionic."
+      },
+      {
+        "text": "settings.xml",
+        "isCorrect": false,
+        "rationale": "Berkas ini tidak digunakan sebagai file konfigurasi utama platform pada struktur framework Ionic."
+      }
+    ]
+  },
+  {
+    "questionNumber": 76,
+    "question": "Untuk menguji aplikasi lonic pada perangkat Android secara langsung, perintah yang digunakan adalah...",
+    "answerOptions": [
+      {
+        "text": "ionic serve-android",
+        "isCorrect": false,
+        "rationale": "Sintaks perintah ini keliru dan tidak dikenali oleh Ionic CLI untuk menjangkau perangkat fisik."
+      },
+      {
+        "text": "ionic cordova emulate android",
+        "isCorrect": false,
+        "rationale": "Perintah emulate digunakan khusus untuk menjalankan aplikasi pada simulator/emulator di komputer, bukan perangkat fisik."
+      },
+      {
+        "text": "ionic cordova run android --device",
+        "isCorrect": true,
+        "rationale": "Perintah ionic cordova run android --device digunakan untuk mendeteksi, mentransfer, dan menguji aplikasi langsung pada perangkat Android fisik yang terhubung."
+      },
+      {
+        "text": "ionic test android",
+        "isCorrect": false,
+        "rationale": "Perintah ini digunakan untuk menjalankan unit testing pada kode proyek, bukan untuk memasang aplikasi ke perangkat."
+      }
+    ]
+  },
+  {
+    "questionNumber": 77,
+    "question": "Plugin lonic yang digunakan untuk mengakses fitur kamera perangkat adalah...",
+    "answerOptions": [
+      {
+        "text": "Ionic Native Camera",
+        "isCorrect": true,
+        "rationale": "Ionic Native Camera adalah wrapper pembungkus plugin yang menyediakan akses terstruktur ke fitur kamera perangkat menggunakan TypeScript."
+      },
+      {
+        "text": "Ionic Camera Plugin",
+        "isCorrect": false,
+        "rationale": "Nama ini bukan merupakan penamaan resmi dari library ekosistem Ionic Native."
+      },
+      {
+        "text": "Cordova Camera Plugin",
+        "isCorrect": false,
+        "rationale": "Meskipun merupakan basis core pluginnya, di lingkungan Ionic ia dibungkus kembali oleh Ionic Native agar berbasis framework."
+      },
+      {
+        "text": "Native Camera API",
+        "isCorrect": false,
+        "rationale": "Ini adalah istilah umum untuk antarmuka pemograman kamera bawaan OS, bukan nama komponen plugin Ionic."
+      }
+    ]
+  },
+  {
+    "questionNumber": 78,
+    "question": "Untuk menggunakan plugin Native API di lonic, langkah pertama yang harus dilakukan adalah..",
+    "answerOptions": [
+      {
+        "text": "Instal plugin melalui npm",
+        "isCorrect": true,
+        "rationale": "Langkah awal yang mutlak adalah menginstal paket kode plugin yang diinginkan ke dalam dependensi proyek melalui npm atau Ionic CLI."
+      },
+      {
+        "text": "Tulis kode secara manual",
+        "isCorrect": false,
+        "rationale": "Menulis kode implementasi tidak akan berhasil sebelum library pihak ketiga diunduh ke dalam sistem proyek."
+      },
+      {
+        "text": "Impor modul di aplikasi",
+        "isCorrect": false,
+        "rationale": "Proses impor modul dilakukan di dalam kode program setelah library plugin selesai terpasang di folder node_modules."
+      },
+      {
+        "text": "Konfigurasi file build",
+        "isCorrect": false,
+        "rationale": "Konfigurasi tingkat lanjut pada berkas build umumnya dilakukan otomatis oleh sistem CLI setelah instalasi package."
+      }
+    ]
+  },
+  {
+    "questionNumber": 79,
+    "question": "Plugin lonic yang menyediakan akses ke fitur geolokasi perangkat adalah...",
+    "answerOptions": [
+      {
+        "text": "Native Geolocation API",
+        "isCorrect": false,
+        "rationale": "Nama ini merujuk pada spesifikasi API bawaan web/perangkat global, bukan plugin spesifik Ionic."
+      },
+      {
+        "text": "Ionic Location",
+        "isCorrect": false,
+        "rationale": "Tidak ada nama plugin resmi Ionic yang hanya menggunakan identitas tunggal tersebut."
+      },
+      {
+        "text": "Cordova GPS Plugin",
+        "isCorrect": false,
+        "rationale": "Nama ini tidak akurat dan tidak merujuk pada dokumentasi library Ionic Native."
+      },
+      {
+        "text": "Ionic Native Geolocation",
+        "isCorrect": true,
+        "rationale": "Ionic Native Geolocation adalah paket plugin resmi dari Ionic untuk menjangkau koordinat lokasi latitude dan longitude pengguna."
+      }
+    ]
+  },
+  {
+    "questionNumber": 80,
+    "question": "Pada akses data di lonic, metode HTTP yang digunakan untuk mengambil data dari server adalah...",
+    "answerOptions": [
+      {
+        "text": "DELETE",
+        "isCorrect": false,
+        "rationale": "Metode HTTP DELETE digunakan secara khusus untuk menghapus data atau entitas tertentu yang ada di server."
+      },
+      {
+        "text": "POST",
+        "isCorrect": false,
+        "rationale": "Metode HTTP POST dimanfaatkan untuk mengirimkan data baru ke server guna disimpan ke dalam database."
+      },
+      {
+        "text": "PUT",
+        "isCorrect": false,
+        "rationale": "Metode HTTP PUT digunakan untuk memperbarui data yang sudah ada sebelumnya secara menyeluruh di server."
+      },
+      {
+        "text": "GET",
+        "isCorrect": true,
+        "rationale": "Metode GET adalah standar dalam arsitektur RESTful API yang berfungsi meminta dan mengambil data dari server."
+      }
+    ]
+  },
+  {
+    "questionNumber": 81,
+    "question": "Untuk menyimpan data secara lokal di perangkat, lonic menyediakan plugin..",
+    "answerOptions": [
+      {
+        "text": "Ionic Storage",
+        "isCorrect": true,
+        "rationale": "Ionic Storage adalah solusi penyimpanan lokal resmi yang mudah digunakan, memadukan SQLite dan IndexedDB di latar belakang."
+      },
+      {
+        "text": "Ionic Database",
+        "isCorrect": false,
+        "rationale": "Nama komponen ini keliru karena Ionic tidak mengemas plugin penyimpanan lokal dengan nama tersebut."
+      },
+      {
+        "text": "Cordova Storage",
+        "isCorrect": false,
+        "rationale": "Ini bukan nama paket pustaka bawaan yang disediakan langsung secara default oleh framework Ionic."
+      },
+      {
+        "text": "LocalStorage API",
+        "isCorrect": false,
+        "rationale": "LocalStorage adalah API standar bawaan browser web, bukan modul plugin khusus kembangan platform Ionic."
+      }
+    ]
+  },
+  {
+    "questionNumber": 82,
+    "question": "Dalam akses data menggunakan fetch API, kode untuk mengirim permintaan POST adalah...",
+    "answerOptions": [
+      {
+        "text": "HTTP.post(url, data)",
+        "isCorrect": false,
+        "rationale": "Sintaks ini tidak sesuai dengan struktur penulisan native JavaScript Fetch API."
+      },
+      {
+        "text": "fetch.post(url, data)",
+        "isCorrect": false,
+        "rationale": "Fungsi fetch tidak memiliki metode turunan langsung berupa properti dot-notation seperti fetch.post()."
+      },
+      {
+        "text": "fetch(url, {method: 'POST', body: data})",
+        "isCorrect": true,
+        "rationale": "Metode fetch menggunakan objek konfigurasi sebagai parameter kedua, di mana properti `method` diisi 'POST' dan data dikirim lewat `body`."
+      },
+      {
+        "text": "fetch(url, {type:'POST', data: data})",
+        "isCorrect": false,
+        "rationale": "Penulisan opsi properti `type` dan `data` tidak valid dalam aturan baku Fetch API JavaScript."
+      }
+    ]
+  },
+  {
+    "questionNumber": 83,
+    "question": "Tips untuk mengoptimalkan performa aplikasi lonic pada Android adalah...",
+    "answerOptions": [
+      {
+        "text": "Menggunakan komponen yang berat",
+        "isCorrect": false,
+        "rationale": "Komponen yang berat justru akan membebani konsumsi memori dan memperlambat render UI di ponsel pintar."
+      },
+      {
+        "text": "Menambahkan animasi berlebihan",
+        "isCorrect": false,
+        "rationale": "Animasi yang terlalu ramai dapat menurunkan performa grafis dan memicu penurunan frame rate (patah-patah)."
+      },
+      {
+        "text": "Mengurangi penggunaan plugin yang tidak perlu",
+        "isCorrect": true,
+        "rationale": "Membatasi jumlah plugin native yang tidak esensial akan meringankan beban ukuran paket aplikasi dan mempercepat waktu inisialisasi."
+      },
+      {
+        "text": "Memuat semua data sekaligus",
+        "isCorrect": false,
+        "rationale": "Mengambil seluruh timbunan data dari server secara bersamaan akan menguras kuota bandwidth internet dan merusak responsivitas app."
+      }
+    ]
+  },
+  {
+    "questionNumber": 84,
+    "question": "Untuk mengatasi masalah loading lambat di aplikasi lonic, disarankan menggunakan teknik...",
+    "answerOptions": [
+      {
+        "text": "Eager loading",
+        "isCorrect": false,
+        "rationale": "Teknik ini memuat semua resource di awal startup, sehingga justru berisiko memperlama durasi layar pemuatan pertama aplikasi."
+      },
+      {
+        "text": "Lazy loading",
+        "isCorrect": true,
+        "rationale": "Lazy loading membagi modul aplikasi menjadi bagian kecil dan memuatnya hanya saat diakses pengguna, menghemat konsumsi memori start awal."
+      },
+      {
+        "text": "Synchronous loading",
+        "isCorrect": false,
+        "rationale": "Pemuatan sinkron memblokir eksekusi baris kode lain hingga tugas selesai, yang bisa mengakibatkan aplikasi hang/beku sejenak."
+      },
+      {
+        "text": "Full loading",
+        "isCorrect": false,
+        "rationale": "Istilah ini tidak dikenal dalam pola optimasi arsitektur performansi aplikasi web modern."
+      }
+    ]
+  },
+  {
+    "questionNumber": 85,
+    "question": "Salah satu tips untuk meningkatkan performa aplikasi lonic adalah...",
+    "answerOptions": [
+      {
+        "text": "menggunakan gambar resolusi tinggi",
+        "isCorrect": false,
+        "rationale": "Gambar beresolusi terlampau tinggi memperlambat pemuatan halaman dan meningkatkan konsumsi data."
+      },
+      {
+        "text": "memuat semua data sekaligus",
+        "isCorrect": false,
+        "rationale": "Memuat tumpukan data masif secara instan memicu lag pada elemen antarmuka pengguna."
+      },
+      {
+        "text": "menonaktifkan cache browser",
+        "isCorrect": false,
+        "rationale": "Mematikan cache memaksa aplikasi mengunduh ulang aset konstan secara terus-menerus, memperlambat kinerja."
+      },
+      {
+        "text": "menggunakan lazy loading pada modul",
+        "isCorrect": true,
+        "rationale": "Implementasi teknik lazy loading memotong waktu tunda muat awal dengan memilah pembukaan modul sesuai kebutuhan riil user."
+      }
+    ]
+  },
+  {
+    "questionNumber": 86,
+    "question": "Untuk mengakses data dari Restful-API menggunakan Typescript, langkah pertama yang harus dilakukan adalah...",
+    "answerOptions": [
+      {
+        "text": "mengimpor HttpClientModule di modul utama",
+        "isCorrect": true,
+        "rationale": "HttpClientModule wajib didaftarkan di modul utama (seperti app.module.ts) agar service penanganan HTTP dapat diinjeksikan secara global."
+      },
+      {
+        "text": "membuat service untuk menangani permintaan HTTP",
+        "isCorrect": false,
+        "rationale": "Pembuatan berkas service baru baru bisa diimplementasikan secara fungsional setelah modul dependensi HTTP-nya terimpor di sistem."
+      },
+      {
+        "text": "menulis kode di dalam komponen Vue",
+        "isCorrect": false,
+        "rationale": "Langkah ini kurang tepat karena basis framework yang dimaksud pada umumnya mengacu pada Angular/TypeScript pada ekosistem dasar Ionic."
+      },
+      {
+        "text": "mendefinisikan model data",
+        "isCorrect": false,
+        "rationale": "Pembuatan model interface data berguna untuk tipe data statis, tetapi bukan prasyarat teknis utama agar fitur koneksi HTTP bekerja."
+      }
+    ]
+  },
+  {
+    "questionNumber": 87,
+    "question": "Dalam Typescript, untuk membuat permintaan GET ke endpoint API, method yang digunakan adalah...",
+    "answerOptions": [
+      {
+        "text": "this.http.request()",
+        "isCorrect": false,
+        "rationale": "Ini adalah metode generik tingkat rendah, bukan fungsi spesifik dan ringkas untuk skenario GET request."
+      },
+      {
+        "text": "this.http.get()",
+        "isCorrect": true,
+        "rationale": "Method http.get() adalah metode bawaan instance HttpClient yang secara khusus dirancang guna menarik data dari server jarak jauh."
+      },
+      {
+        "text": "this.http.post()",
+        "isCorrect": false,
+        "rationale": "Method http.post() bertugas mengirim muatan data baru ke server, bukan menarik data."
+      },
+      {
+        "text": "this.http.send()",
+        "isCorrect": false,
+        "rationale": "Fungsi `.send()` bukan bagian dari interface API utama objek HttpClient bentukan framework Angular-TypeScript."
+      }
+    ]
+  },
+  {
+    "questionNumber": 88,
+    "question": "Agar data dari Restful-API dapat diakses secara asinkron, Typescript biasanya menggunakan...",
+    "answerOptions": [
+      {
+        "text": "callback",
+        "isCorrect": false,
+        "rationale": "Fungsi callback cenderung menghasilkan struktur kode yang rumit dan sulit dirawat (callback hell) dibanding fitur modern."
+      },
+      {
+        "text": "variabel global",
+        "isCorrect": false,
+        "rationale": "Variabel global bukan merupakan mekanisme kontrol operasi asinkron dalam pemrograman alur JavaScript."
+      },
+      {
+        "text": "loop",
+        "isCorrect": false,
+        "rationale": "Pernyataan perulangan (loop) dipakai untuk iterasi urutan koleksi data, bukan mengendalikan proses asinkronus jaringan."
+      },
+      {
+        "text": "Promises dan async/await",
+        "isCorrect": true,
+        "rationale": "Promises dan sintaks modern async/await merupakan mekanisme andalan untuk mengelola proses tunggu jaringan (asinkron) secara rapi dan runut."
+      }
+    ]
+  },
+  {
+    "questionNumber": 89,
+    "question": "Saat mengakses Restful-API, untuk mengirim data ke server menggunakan method POST, kode yang benar adalah...",
+    "answerOptions": [
+      {
+        "text": "this.http.get(url, data)",
+        "isCorrect": false,
+        "rationale": "Metode GET tidak diperkenankan membawa muatan body data dalam standar komunikasi RESTful."
+      },
+      {
+        "text": "this.http.put(url, data)",
+        "isCorrect": false,
+        "rationale": "Metode PUT difungsikan untuk memperbarui/mengganti entitas data yang telah ada di database server."
+      },
+      {
+        "text": "this.http.post(url, data)",
+        "isCorrect": true,
+        "rationale": "Method http.post() digunakan untuk mengirimkan payload data baru ke server endpoint."
+      },
+      {
+        "text": "this.http.delete(url, data)",
+        "isCorrect": false,
+        "rationale": "Metode DELETE ditujukan murni untuk menghapus entitas data spesifik di server target."
+      }
+    ]
+  },
+  {
+    "questionNumber": 90,
+    "question": "Pada aplikasi mobile dengan akses Restful-API, untuk menampilkan data dalam daftar, komponen lonic yang cocok digunakan adalah....",
+    "answerOptions": [
+      {
+        "text": "ion-list dan ion-item",
+        "isCorrect": true,
+        "rationale": "Pasangan tag ion-list dan ion-item adalah standar komponen UI milik Ionic untuk menyusun struktur data bertipe daftar urut ke bawah."
+      },
+      {
+        "text": "ion-button",
+        "isCorrect": false,
+        "rationale": "Komponen ion-button bertindak sebagai tombol interaksi klik aksi, bukan penampung daftar informasi."
+      },
+      {
+        "text": "ion-card",
+        "isCorrect": false,
+        "rationale": "Komponen ion-card dipakai untuk menampilkan visual kotak info terpadu tunggal, kurang efisien untuk kumpulan ratusan baris record linear."
+      },
+      {
+        "text": "ion-input",
+        "isCorrect": false,
+        "rationale": "Komponen ion-input berperan sebagai kolom isian formulir tempat pengguna mengetikkan teks masukan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 91,
+    "question": "Untuk menangani error saat memanggil API di aplikasi mobile, langkah yang tepat adalah...",
+    "answerOptions": [
+      {
+        "text": "mengabaikan error",
+        "isCorrect": false,
+        "rationale": "Mengabaikan error membuat aplikasi tampak tidak responsif tanpa kejelasan jika terjadi putus koneksi jaringan."
+      },
+      {
+        "text": "menghentikan aplikasi",
+        "isCorrect": false,
+        "rationale": "Menutup paksa (crash) aplikasi secara sengaja merusak pengalaman pengguna dan menurunkan reputasi aplikasi."
+      },
+      {
+        "text": "menampilkan pesan error di console",
+        "isCorrect": false,
+        "rationale": "Pesan di console log hanya terbaca oleh developer saat proses debug, pengguna biasa tidak mendapatkan informasi apa pun."
+      },
+      {
+        "text": "menggunakan catch dalam promise",
+        "isCorrect": true,
+        "rationale": "Blok `.catch()` dalam arsitektur promise berfungsi menangkap galat kegagalan respons jaringan, sehingga program bisa mengalihkan ke penanganan ramah bagi user."
+      }
+    ]
+  },
+  {
+    "questionNumber": 92,
+    "question": "Saat implementasi Restful-API di aplikasi mobile, untuk menyimpan token autentikasi secara lokal, penyimpanan yang aman digunakan adalah...",
+    "answerOptions": [
+      {
+        "text": "localStorage",
+        "isCorrect": false,
+        "rationale": "LocalStorage rentan terhadap serangan Cross-Site Scripting (XSS) di lingkungan aplikasi web hybrid."
+      },
+      {
+        "text": "sessionStorage",
+        "isCorrect": false,
+        "rationale": "Data di sessionStorage akan terhapus otomatis seketika aplikasi ditutup atau berganti session, tidak cocok bagi token login persisten."
+      },
+      {
+        "text": "Ionic Storage",
+        "isCorrect": true,
+        "rationale": "Ionic Storage menyediakan enkapsulasi penyimpanan lokal terstruktur yang memanfaatkan SQLite pada perangkat mobile asli sehingga jauh lebih aman."
+      },
+      {
+        "text": "cookie",
+        "isCorrect": false,
+        "rationale": "Manajemen cookie kurang efisien serta memiliki keterbatasan ruang tampung di ranah pengembangan aplikasi mobile native/hybrid."
+      }
+    ]
+  },
+  {
+    "questionNumber": 93,
+    "question": "Dalam praktikum akses data, untuk menguji endpoint API secara lokal, alat yang biasa digunakan adalah...",
+    "answerOptions": [
+      {
+        "text": "Ionic Lab",
+        "isCorrect": false,
+        "rationale": "Ionic Lab dipakai untuk melihat pratinjau tampilan visual antarmuka aplikasi di berbagai OS secara simultan."
+      },
+      {
+        "text": "Android Studio",
+        "isCorrect": false,
+        "rationale": "Android Studio adalah IDE untuk mengompilasi dan mengedit basis kode native Android, bukan alat pengetes HTTP request khusus."
+      },
+      {
+        "text": "Xcode",
+        "isCorrect": false,
+        "rationale": "Xcode digunakan khusus untuk merakit aplikasi untuk lingkungan ekosistem perangkat Apple iOS."
+      },
+      {
+        "text": "Postman",
+        "isCorrect": true,
+        "rationale": "Postman adalah aplikasi utilitas paling populer yang dirancang khusus untuk menguji fungsionalitas pengiriman endpoint RESTful API."
+      }
+    ]
+  },
+  {
+    "questionNumber": 94,
+    "question": "Saat mengakses data dari API, jika server mengembalikan status code 404, artinya...",
+    "answerOptions": [
+      {
+        "text": "sumber daya tidak ditemukan",
+        "isCorrect": true,
+        "rationale": "HTTP status code 404 Not Found menandakan jalur URL endpoint atau data sumber daya yang diminta tidak ada/tidak ditemukan di server."
+      },
+      {
+        "text": "server berhasil memproses permintaan",
+        "isCorrect": false,
+        "rationale": "Permintaan yang berhasil diproses ditandai dengan kelompok status code sukses berkepala 2xx (misalnya 200 OK)."
+      },
+      {
+        "text": "permintaan tidak valid",
+        "isCorrect": false,
+        "rationale": "Permintaan klien yang tidak valid atau cacat parameter ditunjukkan oleh status code 400 Bad Request."
+      },
+      {
+        "text": "server mengalami error internal",
+        "isCorrect": false,
+        "rationale": "Gangguan teknis di sisi server internal ditandakan oleh kelompok status code 5xx (misalnya 500 Internal Server Error)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 95,
+    "question": "Untuk memparsing data JSON dari respons API di Typescript, method yang digunakan adalah...",
+    "answerOptions": [
+      {
+        "text": "JSON.stringify()",
+        "isCorrect": false,
+        "rationale": "Fungsi ini justru bekerja sebaliknya, yaitu mengonversi objek JavaScript menjadi string JSON teks."
+      },
+      {
+        "text": "JSON.parse()",
+        "isCorrect": true,
+        "rationale": "JSON.parse() bertugas memparsing string teks mentah berformat JSON dari server menjadi objek JavaScript asli yang dapat dimanipulasi kodenya."
+      },
+      {
+        "text": "JSON.convert()",
+        "isCorrect": false,
+        "rationale": "Metode bernama JSON.convert() tidak ada dalam pustaka global standar bawaan bahasa JavaScript/TypeScript."
+      },
+      {
+        "text": "JSON.format()",
+        "isCorrect": false,
+        "rationale": "Fungsi ini fiktif dan tidak didefinisikan dalam objek global pustaka penanganan JSON standar."
+      }
+    ]
+  },
+  {
+    "questionNumber": 96,
+    "question": "Pada praktikum Native API Plugins di lonic, untuk mengakses kamera perangkat, plugin yang digunakan adalah....",
+    "answerOptions": [
+      {
+        "text": "Ionic Native Geolocation",
+        "isCorrect": false,
+        "rationale": "Plugin ini ditujukan mendeteksi titik koordinat peta posisi pengguna lewat GPS."
+      },
+      {
+        "text": "lonic Native Camera",
+        "isCorrect": true,
+        "rationale": "Ionic Native Camera merupakan modul plugin resmi yang membuka akses hardware lensa kamera ponsel pintar lewat aplikasi hybrid."
+      },
+      {
+        "text": "Ionic Native Storage",
+        "isCorrect": false,
+        "rationale": "Modul ini digunakan untuk administrasi penyimpanan data persisten lokal di storage internal ponsel."
+      },
+      {
+        "text": "Ionic Native Network",
+        "isCorrect": false,
+        "rationale": "Plugin ini berfungsi memonitor status koneksi data internet aktif perangkat (online/offline)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 97,
+    "question": "Setelah menginstal plugin Native API, langkah selanjutnya agar plugin dapat digunakan adalah...",
+    "answerOptions": [
+      {
+        "text": "merestart aplikasi",
+        "isCorrect": false,
+        "rationale": "Memulai ulang pengerjaan running text aplikasi tidak mendaftarkan dependensi plugin ke sistem Angular."
+      },
+      {
+        "text": "menghapus plugin",
+        "isCorrect": false,
+        "rationale": "Tindakan ini justru melenyapkan berkas library plugin yang baru saja diunduh dari dependensi proyek."
+      },
+      {
+        "text": "menambahkan kode di app.module.ts",
+        "isCorrect": true,
+        "rationale": "Plugin native yang dipasang harus diimpor dan didaftarkan ke array `providers` di dalam berkas app.module.ts agar siap dipakai komponen lain."
+      },
+      {
+        "text": "mengupdate sistem operasi",
+        "isCorrect": false,
+        "rationale": "Pembaruan versi OS ponsel tidak berhubungan dengan registrasi dependensi perangkat lunak di dalam proyek Ionic."
+      }
+    ]
+  },
+  {
+    "questionNumber": 98,
+    "question": "Untuk mendapatkan lokasi geografis pengguna di aplikasi lonic, plugin yang tepat adalah...",
+    "answerOptions": [
+      {
+        "text": "Ionic Native Camera",
+        "isCorrect": false,
+        "rationale": "Plugin ini mengurusi fitur penangkapan citra gambar dan perekaman video lewat lensa kamera."
+      },
+      {
+        "text": "Ionic Native Geolocation",
+        "isCorrect": true,
+        "rationale": "Ionic Native Geolocation adalah plugin yang tepat untuk membaca data garis lintang dan bujur lokasi user dari satelit/pemancar seluler."
+      },
+      {
+        "text": "Ionic Native Battery",
+        "isCorrect": false,
+        "rationale": "Plugin ini dipakai untuk memantau sisa daya baterai dan status pengisian daya baterai gawai."
+      },
+      {
+        "text": "Ionic Native Vibration",
+        "isCorrect": false,
+        "rationale": "Plugin ini digunakan untuk memicu motor getar fisik internal yang tersemat pada hardware ponsel."
+      }
+    ]
+  },
+  {
+    "questionNumber": 99,
+    "question": "Pada praktikum membangun aplikasi terintegrasi, langkah pertama yang dilakukan adalah...",
+    "answerOptions": [
+      {
+        "text": "merancang arsitektur aplikasi",
+        "isCorrect": true,
+        "rationale": "Merancang cetak biru arsitektur aplikasi di awal krusial demi menjamin kejelasan alur data, komponen, dan efisiensi waktu implementasi."
+      },
+      {
+        "text": "membuat halaman login",
+        "isCorrect": false,
+        "rationale": "Pembuatan view spesifik seperti login merupakan bagian dari tahap koding teknis, yang harus berlandaskan desain arsitektur yang matang terlebih dahulu."
+      },
+      {
+        "text": "menulis kode komponen",
+        "isCorrect": false,
+        "rationale": "Menulis program tanpa acuan arsitektur yang jelas di awal berisiko memicu ketidaksinkronan fungsi antarmodul."
+      },
+      {
+        "text": "menginstal plugin",
+        "isCorrect": false,
+        "rationale": "Pemasangan plugin penunjang dilakukan sesuai dengan blueprint kebutuhan arsitektur sistem yang telah ditentukan sebelumnya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 100,
+    "question": "Untuk mengintegrasikan Restful-API dengan aplikasi lonic, data biasanya dikirim dalam format...",
+    "answerOptions": [
+      {
+        "text": "XML",
+        "isCorrect": false,
+        "rationale": "XML cenderung berukuran besar dan lebih kompleks untuk diparsing di JavaScript dibandingkan dengan format modern."
+      },
+      {
+        "text": "CSV",
+        "isCorrect": false,
+        "rationale": "Format nilai yang dipisahkan koma (CSV) kurang ideal untuk menstrukturkan hierarki data objek kompleks yang saling bertingkat."
+      },
+      {
+        "text": "JSON",
+        "isCorrect": true,
+        "rationale": "JSON (JavaScript Object Notation) adalah format standar industri yang sangat ringan, ringkas, dan kompatibel asli dengan ekosistem JavaScript/TypeScript."
+      },
+      {
+        "text": "HTML",
+        "isCorrect": false,
+        "rationale": "HTML merupakan bahasa penanda struktur visual halaman web, bukan perantara murni pertukaran data mentah objek terstruktur API."
+      }
+    ]
+  }
+]
+
+      function renderSoal() {
+    const container = document.getElementById('container');
+    soalList.forEach(soal => {
+      const soalDiv = document.createElement('div');
+      soalDiv.className = 'soal';
+      soalDiv.setAttribute('data-qnum', soal.questionNumber);
+      
+      let soalHTML = `<h3>Soal ${soal.questionNumber}.</h3>`;
+      soalHTML += `<p>${soal.question}</p>`;
+      soalHTML += `<div class="jawaban">`;
+      
+      soal.answerOptions.forEach((option, index) => {
+          const label = String.fromCharCode(65 + index); 
+          
+          soalHTML += `
+              <button 
+                  onclick="checkAnswer(this, ${soal.questionNumber}, ${option.isCorrect})"
+                  data-iscorrect="${option.isCorrect}"
+                  data-label="${label}">
+                  ${label}. ${option.text}
+              </button>
+              <div class="penjelasan-opsi">
+                <strong>Penjelasan Opsi ${label}:</strong> ${option.rationale}
+              </div>
+          `;
+      });
+      
+      soalHTML += `</div>`;
+      soalDiv.innerHTML = soalHTML;
+      container.appendChild(soalDiv);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', renderSoal);
+</script>
+
+</body>
+</html>
