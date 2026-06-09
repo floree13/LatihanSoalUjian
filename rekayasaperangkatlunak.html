@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediksi Soal Rekayasa Perangkat Lunak- UT</title>
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            --primary-hover: #18216e;
+            --background-color: #f4f7f6;
+            --card-background: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --accent-bg: #e8eaf6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 1.5rem;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .question-card {
+            background-color: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+            transition: transform 0.2s;
+            border-left: 5px solid #42a5f5;
+        }
+
+        .question-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .question-number {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .sub-version {
+            font-size: 0.85rem;
+            background-color: var(--accent-bg);
+            color: var(--primary-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        .answer-container {
+            display: none;
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            background-color: var(--background-color);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 0 6px 6px 0;
+            animation: fadeIn 0.3s ease-in-out;
+            background: #e7e9fc;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        .toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border: none;
+            padding: 0.65rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s, cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+            outline: none;
+        }
+
+        .toggle-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .answer-container {
+            display: none;
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            background-color: var(--background-color);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 0 6px 6px 0;
+            animation: fadeIn 0.3s ease-in-out;
+            background: #e7e9fc;
+        }
+
+        .answer-container h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Lists styling inside answers */
+        .answer-container ul, .answer-container ol {
+            padding-left: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .answer-container li {
+            margin-bottom: 0.5rem;
+        }
+
+        .answer-container strong {
+            color: #0f172a;
+        }
+
+        /* Table Styling */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--card-background);
+        }
+
+        /* Inner sections for DFD or multiple answers */
+        .answer-section {
+            margin-bottom: 1.25rem;
+        }
+        .answer-section:last-child {
+            margin-bottom: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Prediksi Soal Rekayasa Perangkat Lunak</h1>
+        <p>Materi : Jaminan Kualitas Perangkat Lunak, Dokumentasi, Use Case, dan DFD</p>
+    </header>
+
+    <!-- SOAL 1A -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-number">Soal 1 - A</span>
+            <span class="sub-version">Versi Teks</span>
+        </div>
+        <div class="question-text">
+            Pengendalian Jaminan Kualitas Perangkat Lunak (Software Quality Assurance - SQA) merupakan aktivitas penting yang harus dilakukan oleh pengembang produk perangkat lunak. Sebutkan dan jelaskan sasaran pragmatis yang menjadi capaian digelarnya pekerjaan SQA!
+        </div>
+        <button class="toggle-btn" onclick="toggleAnswer(this)">Tampilkan Jawaban</button>
+        <div class="answer-container">
+            <h4>Jawaban:</h4>
+            <p>Sasaran pragmatis yang ingin dicapai melalui penerapan SQA adalah:</p>
+            <ul>
+                <li><strong>Kualitas Produk (Product Quality):</strong> Menjamin perangkat lunak dapat berfungsi dengan baik, andal, bebas dari eror fatal, dan sepenuhnya sesuai dengan kebutuhan pelanggan.</li>
+                <li><strong>Kepatuhan Proses (Process Compliance):</strong> Memastikan seluruh tim pengembang mengikuti standar, prosedur, dan metodologi rekayasa perangkat lunak yang telah disepakati.</li>
+                <li><strong>Efisiensi Biaya dan Waktu (Cost & Time Efficiency):</strong> Menemukan dan memperbaiki cacat/eror sedini mungkin sebelum produk dirilis, sehingga mengurangi biaya perbaikan (rework) dan mencegah keterlambatan jadwal.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- SOAL 1B -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-number">Soal 1 - B</span>
+            <span class="sub-version">Versi Gambar</span>
+        </div>
+        <div class="question-text">
+            Sebutkan dan jelaskan pekerjaan atau tugas dari tim SQA dalam organisasi pengembangan perangkat lunak sehingga dapat menghasilkan produk yang berkualitas tinggi!
+        </div>
+        <button class="toggle-btn" onclick="toggleAnswer(this)">Tampilkan Jawaban</button>
+        <div class="answer-container">
+            <h4>Jawaban:</h4>
+            <p>Tugas utama tim SQA meliputi:</p>
+            <ul>
+                <li><strong>Menetapkan Standar dan Prosedur:</strong> Menyusun rencana SQA (SQA Plan) yang mendefinisikan standar pengkodean, metode tinjauan, dan perangkat yang akan digunakan.</li>
+                <li><strong>Melakukan Audit dan Peninjauan (Review & Audit):</strong> Memeriksa secara berkala dokumen spesifikasi (SRS), arsitektur desain, serta kode program untuk memastikan kepatuhan standar.</li>
+                <li><strong>Mengelola Pengujian (Testing Oversight):</strong> Mengawasi proses pengujian perangkat lunak guna memastikan seluruh skenario uji dijalankan dengan benar.</li>
+                <li><strong>Analisis dan Pelaporan Cacat (Defect Tracking):</strong> Mencatat, menganalisis pola kesalahan, dan melaporkan status kualitas kepada manajemen untuk menentukan kelayakan rilis produk.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- SOAL 2 -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-number">Soal 2</span>
+            <span class="sub-version">Analisis Perbandingan</span>
+        </div>
+        <div class="question-text">
+            Dalam pengembangan perangkat lunak yang baik, keberadaan dokumentasi produk tidak dapat dipisahkan. Coba Anda analisis perbedaan antara dokumentasi deskripsi fungsi perangkat lunak (functional description) dengan dokumentasi petunjuk pengenalan (introductory manual)!
+        </div>
+        <button class="toggle-btn" onclick="toggleAnswer(this)">Tampilkan Jawaban</button>
+        <div class="answer-container">
+            <h4>Jawaban:</h4>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Karakteristik</th>
+                            <th>Dokumentasi Deskripsi Fungsi (Functional Description)</th>
+                            <th>Dokumentasi Petunjuk Pengenalan (Introductory Manual)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Fokus Utama</strong></td>
+                            <td>Menjelaskan apa yang dilakukan oleh sistem (fitur, kapabilitas, input, output, dan logika bisnis).</td>
+                            <td>Menjelaskan bagaimana cara memulai penggunaan sistem untuk pertama kali.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Target Pembaca</strong></td>
+                            <td>Pengembang, analis sistem, penguji (tester), atau pengguna tingkat mahir (advanced user).</td>
+                            <td>Pengguna baru (novice user) atau pelanggan umum.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Isi Dokumen</strong></td>
+                            <td>Spesifikasi teknis, arsitektur modul, definisi fungsi, dan relasi antar komponen perangkat lunak.</td>
+                            <td>Panduan instalasi, cara login, pengenalan antarmuka (UI), dan navigasi dasar aplikasi.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- SOAL 3A -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-number">Soal 3 - A</span>
+            <span class="sub-version">Aplikasi Knowledge Management UT</span>
+        </div>
+        <div class="question-text">
+            Sebuah aplikasi manajemen pengetahuan berbasis web memiliki dua aktor: Pengguna (User) dan Administrator.<br>
+            <strong>Pengguna:</strong> Preview file, note file, pencarian file, download file.<br>
+            <strong>Administrator:</strong> Akses seluruh fungsi pengguna + upload data, edit data, edit folder, edit kategori.<br><br>
+            Buatkan Use Case Diagram berdasarkan studi kasus di atas!
+        </div>
+        <button class="toggle-btn" onclick="toggleAnswer(this)">Tampilkan Jawaban</button>
+        <div class="answer-container">
+            <h4>Jawaban (Representasi Konseptual Diagram):</h4>
+            <p><strong>Aktor:</strong> Pengguna (User) dan Administrator (Aktor Administrator memiliki garis Generalisasi/Inheritance menuju Pengguna, yang berarti Admin mewarisi semua hak akses Pengguna).</p>
+            <br>
+            <p><strong>Daftar Use Case:</strong></p>
+            <ul>
+                <li><strong>Diakses oleh Pengguna & Admin:</strong> Preview File, Note File, Pencarian File, Download File.</li>
+                <li><strong>Hanya diakses oleh Admin:</strong> Upload Data, Edit Data, Edit Folder, Edit Kategori.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- SOAL 3B -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-number">Soal 3 - B</span>
+            <span class="sub-version">Aplikasi Alih Kredit UT</span>
+        </div>
+        <div class="question-text">
+            Sebuah aplikasi alih kredit dikembangkan di UT. Aktor yang terlibat: Admin, Ketua Program Studi (Kaprodi), Dosen, dan Staf Fakultas. Buatlah use case dari kasus di atas!
+        </div>
+        <button class="toggle-btn" onclick="toggleAnswer(this)">Tampilkan Jawaban</button>
+        <div class="answer-container">
+            <h4>Jawaban (Representasi Konseptual Diagram):</h4>
+            <p><strong>Aktor:</strong> Staf Fakultas, Dosen, Ketua Program Studi, dan Admin.</p>
+            <br>
+            <p><strong>Daftar Use Case berdasarkan Hak Akses:</strong></p>
+            <ul>
+                <li><strong>Staf Fakultas:</strong> Input PT, Input Prodi, Input Mahasiswa, Input MK Ajuan, Input MK Prodi SI.</li>
+                <li><strong>Dosen & Ketua Program Studi:</strong> Verifikasi MK Ajuan.</li>
+                <li><strong>Ketua Program Studi:</strong> Menerima/Melihat Laporan Alih Kredit.</li>
+                <li><strong>Admin:</strong> Mengakses seluruh use case di atas ditambah use case khusus: Input Aturan Alih Kredit dan Input Deskripsi MK.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- SOAL 4 -->
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-number">Soal 4</span>
+            <span class="sub-version">Sistem Informasi Perpustakaan</span>
+        </div>
+        <div class="question-text">
+            Sebuah perpustakaan ingin mengembangkan aplikasi manajemen perpustakaan yang melibatkan member dan pengurus perpustakaan... Buatlah Diagram Konteks (DFD Level 0) dan DFD Level 1 untuk kasus perpustakaan di atas!
+        </div>
+        <button class="toggle-btn" onclick="toggleAnswer(this)">Tampilkan Jawaban</button>
+        <div class="answer-container">
+            <h4>Jawaban:</h4>
+            
+            <div class="answer-section">
+                <h5>1. Diagram Konteks (DFD Level 0)</h5>
+                <ul>
+                    <li><strong>Proses Utama:</strong> 0. Sistem Informasi Perpustakaan</li>
+                    <li><strong>Entitas Eksternal:</strong> Member Perpustakaan dan Pengurus Perpustakaan.</li>
+                    <li><strong>Aliran Data (Data Flow):</strong>
+                        <ul>
+                            <li>Member &rarr; Sistem: Formulir Pendaftaran, Kartu Anggota, Buku yang Dipinjam/Dikembalikan.</li>
+                            <li>Sistem &rarr; Member: Kartu Anggota, Informasi Sanksi Denda.</li>
+                            <li>Pengurus &rarr; Sistem: Request Laporan.</li>
+                            <li>Sistem &rarr; Pengurus: Laporan Anggota, Laporan Buku, Laporan Transaksi Buku, Laporan Pemasukan Denda.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="answer-section" style="margin-top: 1rem;">
+                <h5>2. DFD Level 1 (Dekomposisi Proses)</h5>
+                <ul>
+                    <li><strong>Proses 1.0: Pendaftaran Anggota</strong>
+                        <ul>
+                            <li>Input: Formulir Pendaftaran dari Member.</li>
+                            <li>Aksi: Sistem menyimpan data ke Data Store: Member.</li>
+                            <li>Output: Menghasilkan Kartu Anggota ke Member.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Proses 2.0: Peminjaman Buku</strong>
+                        <ul>
+                            <li>Input: Kartu Anggota dan Buku dari Member.</li>
+                            <li>Aksi: Sistem memvalidasi data ke Data Store: Member & Data Store: Buku, lalu mencatatnya ke Data Store: Transaksi Buku.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Proses 3.0: Pengembalian Buku & Sanksi</strong>
+                        <ul>
+                            <li>Input: Kartu Anggota dan Buku yang dikembalikan.</li>
+                            <li>Aksi: Sistem memeriksa tanggal kembali di Data Store: Transaksi Buku. Jika terlambat, hitung denda dan perbarui status transaksi.</li>
+                            <li>Output: Informasi Denda ke Member.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Proses 4.0: Pembuatan Laporan</strong>
+                        <ul>
+                            <li>Input: Menarik data dari Data Store: Member, Data Store: Buku, dan Data Store: Transaksi Buku.</li>
+                            <li>Output: Menghasilkan 4 jenis laporan (Anggota, Buku, Transaksi, Denda) ke Pengurus Perpustakaan.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleAnswer(button) {
+        const answerContainer = button.nextElementSibling;
+        if (answerContainer.style.display === "block") {
+            answerContainer.style.display = "none";
+            button.textContent = "Tampilkan Jawaban";
+        } else {
+            answerContainer.style.display = "block";
+            button.textContent = "Sembunyikan Jawaban";
+        }
+    }
+</script>
+
+</body>
+</html>

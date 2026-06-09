@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediksi Soal Rekayasa Perangkat Lunak- UT</title>
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            --primary-hover: #18216e;
+            --background-color: #f4f7f6;
+            --card-background: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --accent-bg: #e8eaf6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 1.5rem;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .question-card {
+            background-color: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+            transition: transform 0.2s;
+            border-left: 5px solid #42a5f5;
+        }
+
+        .question-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .question-number {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .sub-version {
+            font-size: 0.85rem;
+            background-color: var(--accent-bg);
+            color: var(--primary-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        .answer-container {
+            display: none;
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            background-color: var(--background-color);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 0 6px 6px 0;
+            animation: fadeIn 0.3s ease-in-out;
+            background: #e7e9fc;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        .toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border: none;
+            padding: 0.65rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s, cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+            outline: none;
+        }
+
+        .toggle-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .answer-container {
+            display: none;
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            background-color: var(--background-color);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 0 6px 6px 0;
+            animation: fadeIn 0.3s ease-in-out;
+            background: #e7e9fc;
+        }
+
+        .answer-container h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .question-text p,
+        .question-text ul,
+        .question-text ol,
+        .answer-container p,
+        .answer-container ul,
+        .answer-container ol {
+            margin-bottom: 1rem;
+        }
+
+        .question-text ul,
+        .answer-container ul {
+            padding-left: 1.35rem;
+            list-style: disc;
+        }
+
+        .question-text ol,
+        .answer-container ol {
+            padding-left: 1.35rem;
+            list-style: decimal;
+        }
+
+        .question-card + .question-card {
+            margin-top: 1.25rem;
+        }
+
+        .answer-container li {
+            margin-bottom: 0.5rem;
+        }
+
+        .answer-container strong {
+            color: #0f172a;
+        }
+
+        pre {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-main);
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            line-height: 1.5;
+            font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+        }
+
+        /* Table Styling */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--card-background);
+        }
+
+        /* Inner sections for DFD or multiple answers */
+        .answer-section {
+            margin-bottom: 1.25rem;
+        }
+        .answer-section:last-child {
+            margin-bottom: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Simulasi Soal Sistem Pendukung Keputusan (SPK)</h1>
+        <p>Materi : Metode SAW, WP, dan AHP</p>
+    </header>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-number">Soal 1</span>
+            <span class="sub-version">Metode SAW</span>
+        </div>
+        <div class="question-text">
+            <p>Sebuah perusahaan penyedia layanan teknologi informasi menggunakan 4 (empat) perangkat lunak RDBMS pada sistem utamanya. Chief Information Officer (CIO) membuat keputusan untuk menghentikan penggunaan salah satu perangkat lunak RDBMS. Anda sebagai staf ahli diminta memilih perangkat lunak RDBMS yang akan dihentikan penggunaannya dengan ketentuan:</p>
+            <ul>
+                <li>Memberikan 4 (empat) alternatif pilihan perangkat lunak RDBMS (D1, D2, D3, dan D4)</li>
+                <li>Menggunakan 3 (tiga) kriteria pemilihan (KP1, KP2, KP3) di mana 1 kriteria di antaranya adalah kriteria Cost</li>
+                <li>CIO menentukan bahwa kriteria Cost berbobot 20%</li>
+                <li>4 (empat) perangkat lunak RDBMS yang digunakan tidak memerlukan biaya support</li>
+            </ul>
+            <p>Simulasikan pemilihan perangkat lunak RDBMS tersebut menggunakan metode analisis Simple Additive Weighting (SAW) dengan langkah-langkah penyelesaian menurut Kusumadewi (2006)!</p>
+        </div>
+        <button class="toggle-btn" onclick="toggleAnswer(this)">Tampilkan Jawaban</button>
+        <div class="answer-container">
+            <h4>Jawaban:</h4>
+            <p><strong>1. Menentukan Kriteria dan Bobot (W):</strong></p>
+            <ul>
+                <li>KP<sub>1</sub> (Cost): Bobot W<sub>1</sub> = 20% = 0.2 (Atribut: Cost)</li>
+                <li>KP<sub>2</sub> (Performa): Bobot W<sub>2</sub> = 40% = 0.4 (Atribut: Benefit)</li>
+                <li>KP<sub>3</sub> (Keandalan): Bobot W<sub>3</sub> = 40% = 0.4 (Atribut: Benefit)</li>
+            </ul>
+
+            <p><strong>2. Matriks Keputusan (X) — <em>Nilai Simulasi Skala 1-5</em>:</strong></p>
+            <div class="table-responsive">
+                <table>
+                    <tr>
+                        <th>Alternatif</th>
+                        <th>KP<sub>1</sub> (Cost)</th>
+                        <th>KP<sub>2</sub> (Benefit)</th>
+                        <th>KP<sub>3</sub> (Benefit)</th>
+                    </tr>
+                    <tr><td><strong>D<sub>1</sub></strong></td><td align="center">3</td><td align="center">4</td><td align="center">5</td></tr>
+                    <tr><td><strong>D<sub>2</sub></strong></td><td align="center">2</td><td align="center">5</td><td align="center">4</td></tr>
+                    <tr><td><strong>D<sub>3</sub></strong></td><td align="center">5</td><td align="center">3</td><td align="center">3</td></tr>
+                    <tr><td><strong>D<sub>4</sub></strong></td><td align="center">4</td><td align="center">4</td><td align="center">3</td></tr>
+                </table>
+            </div>
+
+            <p><strong>3. Normalisasi Matriks (R):</strong></p>
+            <ul>
+                <li>Kolom KP<sub>1</sub> (Cost): r<sub>ij</sub> = min(X) / x<sub>ij</sub> &rarr; min = 2 <br>
+                    r<sub>11</sub> = 2/3 = 0.67; r<sub>21</sub> = 2/2 = 1.0; r<sub>31</sub> = 2/5 = 0.4; r<sub>41</sub> = 2/4 = 0.5
+                </li>
+                <li>Kolom KP<sub>2</sub> & KP<sub>3</sub> (Benefit): r<sub>ij</sub> = x<sub>ij</sub> / max(X) &rarr; max = 5 <br>
+                    Kolom 2: r<sub>12</sub> = 0.8; r<sub>22</sub> = 1.0; r<sub>32</sub> = 0.6; r<sub>42</sub> = 0.8 <br>
+                    Kolom 3: r<sub>13</sub> = 1.0; r<sub>23</sub> = 0.8; r<sub>33</sub> = 0.6; r<sub>43</sub> = 0.6
+                </li>
+            </ul>
+
+            <p><strong>4. Menghitung Nilai Preferensi (V<sub>i</sub>):</strong></p>
+            <ul>
+                <li>V<sub>1</sub> = (0.2 &times; 0.67) + (0.4 &times; 0.8) + (0.4 &times; 1.0) = <strong>0.854</strong></li>
+                <li>V<sub>2</sub> = (0.2 &times; 1.0) + (0.4 &times; 1.0) + (0.4 &times; 0.8) = <strong>0.920</strong></li>
+                <li>V<sub>3</sub> = (0.2 &times; 0.4) + (0.4 &times; 0.6) + (0.4 &times; 0.6) = <strong>0.560</strong></li>
+                <li>V<sub>4</sub> = (0.2 &times; 0.5) + (0.4 &times; 0.8) + (0.4 &times; 0.6) = <strong>0.660</strong></li>
+            </ul>
+            <p><strong>Kesimpulan:</strong> Karena tujuannya adalah mencari RDBMS untuk <strong>dihentikan</strong>, maka dipilih alternatif dengan nilai kinerja terendah. Berdasarkan simulasi, <strong>D<sub>3</sub></strong> memiliki nilai terendah (0.560), sehingga <strong>D<sub>3</sub> adalah RDBMS yang akan dihentikan</strong>.</p>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-number">Soal 2</span>
+            <span class="sub-version">Metode Weighted Product (WP)</span>
+        </div>
+        <div class="question-text">
+            <p>Sebuah perusahaan penyedia layanan teknologi informasi menggunakan 4 (empat) perangkat lunak RDBMS pada sistem utamanya. Chief Information Officer (CIO) membuat keputusan untuk menghentikan penggunaan salah satu perangkat lunak RDBMS. Anda sebagai staf ahli diminta memilih perangkat lunak RDBMS yang dapat akan dihentikan penggunaannya dengan ketentuan:</p>
+            <ul>
+                <li>Memberikan 4 (empat) alternatif pilihan perangkat lunak RDBMS (D1, D2, D3, dan D4)</li>
+                <li>Menggunakan 3 (tiga) kriteria pemilihan (KP1, KP2, KP3) di mana 1 kriteria di antaranya adalah kriteria Cost</li>
+                <li>Tingkat kepentingan setiap kriteria, diberikan nilai dengan 1 sampai 5, sebagai berikut:<br>
+                    1 = Sangat rendah, 2 = Rendah, 3 = Cukup, 4 = Tinggi, 5 = Sangat Tinggi</li>
+                <li>Bobot setiap kriteria adalah W = (4, 3, 2)</li>
+                <li>4 (empat) perangkat lunak RDBMS yang digunakan tidak memerlukan biaya support.</li>
+            </ul>
+            <p>Silahkan Anda simulasikan pemilihan perangkat lunak RDBMS tersebut menggunakan metode analisis Weighted Product (WP)!</p>
+        </div>
+        <button class="toggle-btn" onclick="toggleAnswer(this)">Tampilkan Jawaban</button>
+        <div class="answer-container">
+            <h4>Jawaban:</h4>
+            <p><strong>1. Perbaikan/Normalisasi Bobot (w<sub>j</sub>):</strong></p>
+            <p>Total bobot = 4 + 3 + 2 = 9</p>
+            <ul>
+                <li>w<sub>1</sub> = 4/9 = -0.44 <em>(Pangkat negatif karena kriteria Cost)</em></li>
+                <li>w<sub>2</sub> = 3/9 = +0.33 <em>(Pangkat positif karena kriteria Benefit)</em></li>
+                <li>w<sub>3</sub> = 2/9 = +0.22 <em>(Pangkat positif karena kriteria Benefit)</em></li>
+            </ul>
+
+            <p><strong>2. Matriks Keputusan (X) — <em>Nilai Simulasi Skala 1-5</em>:</strong></p>
+            <div class="table-responsive">
+                <table>
+                    <tr>
+                        <th>Alternatif</th>
+                        <th>KP<sub>1</sub> (Cost)</th>
+                        <th>KP<sub>2</sub> (Benefit)</th>
+                        <th>KP<sub>3</sub> (Benefit)</th>
+                    </tr>
+                    <tr><td><strong>D<sub>1</sub></strong></td><td align="center">2</td><td align="center">4</td><td align="center">4</td></tr>
+                    <tr><td><strong>D<sub>2</sub></strong></td><td align="center">4</td><td align="center">5</td><td align="center">4</td></tr>
+                    <tr><td><strong>D<sub>3</sub></strong></td><td align="center">3</td><td align="center">3</td><td align="center">3</td></tr>
+                    <tr><td><strong>D<sub>4</sub></strong></td><td align="center">1</td><td align="center">2</td><td align="center">2</td></tr>
+                </table>
+            </div>
+
+            <p><strong>3. Menghitung Vektor S<sub>i</sub>:</strong></p>
+            <ul>
+                <li>S<sub>1</sub> = 2<sup>-0.44</sup> &times; 4<sup>0.33</sup> &times; 4<sup>0.22</sup> = <strong>1.587</strong></li>
+                <li>S<sub>2</sub> = 4<sup>-0.44</sup> &times; 5<sup>0.33</sup> &times; 4<sup>0.22</sup> = <strong>1.257</strong></li>
+                <li>S<sub>3</sub> = 3<sup>-0.44</sup> &times; 3<sup>0.33</sup> &times; 3<sup>0.22</sup> = <strong>1.130</strong></li>
+                <li>S<sub>4</sub> = 1<sup>-0.44</sup> &times; 2<sup>0.33</sup> &times; 2<sup>0.22</sup> = <strong>1.470</strong></li>
+                <li>Total &Sigma;S<sub>i</sub> = 1.587 + 1.257 + 1.130 + 1.470 = <strong>5.444</strong></li>
+            </ul>
+
+            <p><strong>4. Menghitung Nilai Preferensi (V<sub>i</sub>):</strong></p>
+            <ul>
+                <li>V<sub>1</sub> = 1.587 / 5.444 = <strong>0.292</strong></li>
+                <li>V<sub>2</sub> = 1.257 / 5.444 = <strong>0.231</strong></li>
+                <li>V<sub>3</sub> = 1.130 / 5.444 = <strong>0.208</strong></li>
+                <li>V<sub>4</sub> = 1.470 / 5.444 = <strong>0.270</strong></li>
+            </ul>
+            <p><strong>Kesimpulan:</strong> RDBMS dengan nilai preferensi paling kecil menunjukkan performa sistem paling buruk/tidak efisien. Berdasarkan hasil akhir, <strong>D<sub>3</sub></strong> memiliki nilai terkecil (0.208), sehingga <strong>D<sub>3</sub> terpilih untuk dihentikan penggunaannya</strong>.</p>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-number">Soal 3</span>
+            <span class="sub-version">Metode AHP</span>
+        </div>
+        <div class="question-text">
+            <p>Sebuah perusahaan memerlukan penyedia makan siang/makam malam untuk karyawan. Manajemen menetapkan bahwa pemilihan jasa penyedia makan siang/makam malam yang paling tepat adalah dengan menggunakan metode Analytic Hierarchy Process (AHP), di mana telah ditentukan beberapa hal sebagai berikut:</p>
+            <ol type="a">
+                <li>Alternatif yang dapat dipilih antara lain: GreenCafe, BlueCatering, RedResto.</li>
+                <li>Kriteria yang digunakan adalah Harga, Rasa, Kemasan, dan Menu.</li>
+                <li>Perbandingan antar kriteria adalah sebagai berikut:
+                    <ul>
+                        <li>Rasa 3x lebih penting dari pada Harga</li>
+                        <li>Rasa sama pentingnya dengan Menu</li>
+                        <li>Rasa 3x lebih penting dari pada Kemasan</li>
+                        <li>Kemasan 2x lebih penting dari pada Harga</li>
+                        <li>Kemasan sama pentingnya dengan Menu</li>
+                        <li>Harga sama pentingnya dengan Menu</li>
+                    </ul>
+                </li>
+                <li>Variasi menu yang dimaksud dalam kriteria Menu untuk semua penyedia diasumsikan sama.</li>
+            </ol>
+            <p>1. Buatlah bagan atau matriks yang menggambarkan hierarki pemilihan smartphone! <em>(Catatan: redaksi soal tertulis smartphone, namun studi kasus merujuk pada penyedia makanan)</em></p>
+            <p>2. Simulasikan proses pemilihan menggunakan Metode Analytical Hierarchy Process (AHP)!</p>
+        </div>
+        <button class="toggle-btn" onclick="toggleAnswer(this)">Tampilkan Jawaban</button>
+        <div class="answer-container">
+            <h4>Jawaban:</h4>
+            <p><strong>1. Bagan Hierarki Pemilihan:</strong></p>
+            <pre>
+                  [ GOAL: Memilih Penyedia Makan Terbaik ]
+                                     |
+         ---------------------------------------------------------
+         |                 |                  |                  |
+    [Harga (H)]       [Rasa (R)]        [Kemasan (K)]        [Menu (M)]
+         |                 |                  |                  |
+         ---------------------------------------------------------
+                                     |
+                [ GreenCafe | BlueCatering | RedResto ]
+            </pre>
+
+            <p><strong>2. Simulasi Proses Pemilihan (AHP):</strong></p>
+            <p><strong>Matriks Perbandingan Berpasangan Kriteria:</strong></p>
+            <div class="table-responsive">
+                <table>
+                    <tr>
+                        <th>Kriteria</th>
+                        <th>Harga</th>
+                        <th>Rasa</th>
+                        <th>Kemasan</th>
+                        <th>Menu</th>
+                    </tr>
+                    <tr><td><strong>Harga</strong></td><td align="center">1</td><td align="center">1/3</td><td align="center">1/2</td><td align="center">1</td></tr>
+                    <tr><td><strong>Rasa</strong></td><td align="center">3</td><td align="center">1</td><td align="center">3</td><td align="center">1</td></tr>
+                    <tr><td><strong>Kemasan</strong></td><td align="center">2</td><td align="center">1/3</td><td align="center">1</td><td align="center">1</td></tr>
+                    <tr><td><strong>Menu</strong></td><td align="center">1</td><td align="center">1</td><td align="center">1</td><td align="center">1</td></tr>
+                    <tr><td><em>Jumlah</em></td><td align="center"><em>7</em></td><td align="center"><em>2.67</em></td><td align="center"><em>5.5</em></td><td align="center"><em>4</em></td></tr>
+                </table>
+            </div>
+
+            <p><strong>Hasil Perhitungan Bobot Prioritas Kriteria (Normalisasi):</strong></p>
+            <p><em>(Dihitung dari rata-rata baris matriks yang telah dinormalisasi per kolom)</em></p>
+            <ul>
+                <li>Bobot <strong>Harga</strong> = <strong>0.152</strong></li>
+                <li>Bobot <strong>Rasa</strong> = <strong>0.400</strong></li>
+                <li>Bobot <strong>Kemasan</strong> = <strong>0.211</strong></li>
+                <li>Bobot <strong>Menu</strong> = <strong>0.237</strong></li>
+            </ul>
+            <p><em>(Uji Konsistensi: &lambda;<sub>max</sub> = 4.215, CI = 0.072, CR = 0.080 < 0.1 &rarr; <strong>KONSISTEN</strong>)</em></p>
+
+            <p><strong>Simulasi Penilaian Alternatif & Hasil Akhir (Perkalian Bobot):</strong></p>
+            <p><em>(Asumsi matriks penilaian alternatif terhadap kriteria setelah dikalikan bobot)</em></p>
+            <div class="table-responsive">
+                <table>
+                    <tr>
+                        <th>Alternatif</th>
+                        <th>Harga (0.152)</th>
+                        <th>Rasa (0.400)</th>
+                        <th>Kemasan (0.211)</th>
+                        <th>Menu (0.237)</th>
+                        <th>Skor Akhir</th>
+                    </tr>
+                    <tr><td><strong>GreenCafe</strong></td><td align="center">0.50</td><td align="center">0.30</td><td align="center">0.20</td><td align="center">0.33</td><td align="center"><strong>0.316</strong></td></tr>
+                    <tr><td><strong>BlueCatering</strong></td><td align="center">0.30</td><td align="center">0.50</td><td align="center">0.40</td><td align="center">0.33</td><td align="center"><strong>0.408</strong></td></tr>
+                    <tr><td><strong>RedResto</strong></td><td align="center">0.20</td><td align="center">0.20</td><td align="center">0.40</td><td align="center">0.33</td><td align="center"><strong>0.272</strong></td></tr>
+                </table>
+            </div>
+
+            <p><strong>Kesimpulan:</strong> Berdasarkan hasil simulasi perhitungan AHP, <strong>BlueCatering</strong> mendapatkan skor tertinggi (0.408), sehingga terpilih sebagai penyedia makan siang/malam terbaik untuk karyawan.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleAnswer(button) {
+        const answerContainer = button.nextElementSibling;
+        if (answerContainer.style.display === "block") {
+            answerContainer.style.display = "none";
+            button.textContent = "Tampilkan Jawaban";
+        } else {
+            answerContainer.style.display = "block";
+            button.textContent = "Sembunyikan Jawaban";
+        }
+    }
+</script>
+
+</body>
+</html>
