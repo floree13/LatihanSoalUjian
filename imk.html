@@ -145,6 +145,17 @@
       updateCounter();
   }
 
+    function shuffleArray(array) {
+    let currentIndex = array.length, randomIndex;
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+    return array;
+  }
+
+
   const soalList = [
   {
     "questionNumber": 1,
@@ -2748,40 +2759,50 @@
   }
 ]
 
-      function renderSoal() {
+  function renderQuiz() {
     const container = document.getElementById('container');
-    soalList.forEach(soal => {
+    container.innerHTML = '';
+
+    soalList.forEach((soal) => {
       const soalDiv = document.createElement('div');
       soalDiv.className = 'soal';
-      soalDiv.setAttribute('data-qnum', soal.questionNumber);
-      
-      let soalHTML = `<h3>Soal ${soal.questionNumber}.</h3>`;
-      soalHTML += `<p>${soal.question}</p>`;
-      soalHTML += `<div class="jawaban">`;
-      
-      soal.answerOptions.forEach((option, index) => {
-          const label = String.fromCharCode(65 + index); 
-          
-          soalHTML += `
-              <button 
-                  onclick="checkAnswer(this, ${soal.questionNumber}, ${option.isCorrect})"
-                  data-iscorrect="${option.isCorrect}"
-                  data-label="${label}">
-                  ${label}. ${option.text}
-              </button>
-              <div class="penjelasan-opsi">
-                <strong>Penjelasan Opsi ${label}:</strong> ${option.rationale}
-              </div>
-          `;
+
+      const questionTitle = document.createElement('h3');
+      questionTitle.textContent = `Soal ${soal.questionNumber}`;
+      soalDiv.appendChild(questionTitle);
+
+      const questionText = document.createElement('p');
+      questionText.textContent = soal.question;
+      soalDiv.appendChild(questionText);
+
+      const jawabanDiv = document.createElement('div');
+      jawabanDiv.className = 'jawaban';
+
+      const acakOptions = shuffleArray([...soal.answerOptions]);
+
+      acakOptions.forEach((opt, index) => {
+        const hurufAbjad = String.fromCharCode(65 + index);
+
+        const btn = document.createElement('button');
+        btn.textContent = `${hurufAbjad}. ${opt.text}`;
+        btn.setAttribute('data-iscorrect', opt.isCorrect);
+        btn.onclick = function() {
+          checkAnswer(this, soal.questionNumber, opt.isCorrect);
+        };
+        jawabanDiv.appendChild(btn);
+
+        const penjelasanDiv = document.createElement('div');
+        penjelasanDiv.className = 'penjelasan-opsi';
+        penjelasanDiv.textContent = opt.rationale;
+        jawabanDiv.appendChild(penjelasanDiv);
       });
-      
-      soalHTML += `</div>`;
-      soalDiv.innerHTML = soalHTML;
+
+      soalDiv.appendChild(jawabanDiv);
       container.appendChild(soalDiv);
     });
   }
 
-  document.addEventListener('DOMContentLoaded', renderSoal);
+  window.onload = renderQuiz;
 </script>
 
 </body>
