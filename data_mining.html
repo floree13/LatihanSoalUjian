@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediksi Soal UAS Data Mining- UT</title>
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            --primary-hover: #18216e;
+            --background-color: #f4f7f6;
+            --card-background: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --accent-bg: #e8eaf6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 1.5rem;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        header h2 {
+            text-align: center;
+            padding: 10px 0;
+            font-size: 24px;
+            color: #1a237e;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .question-card {
+            background-color: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+            transition: transform 0.2s;
+            border-left: 5px solid #42a5f5;
+        }
+
+        .question-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .question-number {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .sub-version {
+            font-size: 0.85rem;
+            background-color: var(--accent-bg);
+            color: var(--primary-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        .answer-container {
+            display: none;
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            background-color: var(--background-color);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 0 6px 6px 0;
+            animation: fadeIn 0.3s ease-in-out;
+            background: #e7e9fc;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        .toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border: none;
+            padding: 0.65rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s, cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+            outline: none;
+        }
+
+        .toggle-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .answer-container {
+            display: none;
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            background-color: var(--background-color);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 0 6px 6px 0;
+            animation: fadeIn 0.3s ease-in-out;
+            background: #e7e9fc;
+        }
+
+        .answer-container h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .question-text p,
+        .question-text ul,
+        .question-text ol,
+        .answer-container p,
+        .answer-container ul,
+        .answer-container ol {
+            margin-bottom: 1rem;
+        }
+
+        .question-text ul,
+        .answer-container ul {
+            padding-left: 1.35rem;
+            list-style: disc;
+        }
+
+        .question-text ol,
+        .answer-container ol {
+            padding-left: 1.35rem;
+            list-style: decimal;
+        }
+
+        .question-card + .question-card {
+            margin-top: 1.25rem;
+        }
+
+        .answer-container li {
+            margin-bottom: 0.5rem;
+        }
+
+        .answer-container strong {
+            color: #0f172a;
+        }
+
+        pre {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-main);
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            line-height: 1.5;
+            font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+        }
+
+        /* Table Styling */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.95rem;
+            table-layout: auto;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+            white-space: nowrap;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--card-background);
+        }
+
+        /* Styling untuk pecahan atas-bawah */
+        .rumus-baris {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 16px;
+        }
+
+        .pecahan {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .pecahan .atas {
+            border-bottom: 1.5px solid #222;
+            padding: 0 6px 3px 6px;
+            width: 100%;
+        }
+
+        .pecahan .bawah {
+            padding: 3px 6px 0 6px;
+            width: 100%;
+        }
+
+        /* Styling untuk tanda akar dengan garis atas (overline) */
+        .akar {
+            display: inline-flex;
+            align-items: stretch;
+        }
+
+        .akar-simbol {
+            font-size: 1.2em;
+            line-height: 1;
+            margin-right: 1px;
+        }
+
+        .akar-isi {
+        border-top: 1.5px solid #222;
+        padding: 1px 4px 0 3px;
+        }
+
+        .rumus-grid {
+            display: grid;
+            grid-template-columns: max-content 1fr; /* Kolom 1 selebar teks variabel, Kolom 2 sisanya */
+            column-gap: 8px;
+            row-gap: 12px;
+            align-items: center;
+            margin-bottom: 15px;
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 16px;
+        }
+
+        .rumus-grid .langkah {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Inner sections for DFD or multiple answers */
+        .answer-section {
+            margin-bottom: 1.25rem;
+        }
+        .answer-section:last-child {
+            margin-bottom: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h2>Prediksi Soal UO Esay</h22>
+        <h1>Data Mining</h1>
+    </header>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-number">Soal 1</span>
+            <span class="sub-version">Konsep Dasar & Teknik Data Mining</span>
+        </div>
+        <div class="question-text">
+            <p>Sebuah perusahaan asuransi ingin memprediksi jumlah tunggakan premi nasabah untuk 3 bulan ke depan.</p>
+            <ul>
+                <p>a. Sebutkan teknik dan algoritma apa yang dipakai!</p>
+                <p>b. Jelaskan secara umum, bagaimana algoritma tersebut bekerja!</p>
+            </ul>
+        </div>
+        <button class="toggle-btn" onclick="toggleAnswer(this)">Tampilkan Jawaban</button>
+        <div class="answer-container">
+            <h4>Jawaban:</h4>
+            <p>a. Teknik yang dapat digunakan adalah <strong>Prediktif (Predictive)</strong> dengan algoritma <strong>Neural Network</strong></p>
+            <p>b. Algoritma Neural Network bekerja melalui jaringan simpul (neuron) yang berlapis-lapis untuk memproses dan mengenali pola data historis. Secara umum, tahapannya meliputi:</p>
+            <ul>
+                <li><strong>Menerima Data (Input Layer):</strong> Memasukkan data historis berupa catatan jumlah tunggakan premi bulan-bulan sebelumnya beserta variabel pendukung (seperti nominal premi, riwayat keterlambatan, dan jenis polis).</li>
+                <li><strong>Pola (Hidden Layer):</strong> Data dihitung menggunakan bobot (weight), bias, dan fungsi aktivasi di dalam lapisan tersembunyi untuk mengenali pola fluktuasi tunggakan yang kompleks dan non-linier.</li>
+                <li><strong>Evaluasi dan Penyesuaian:</strong> Algoritma membandingkan hasil prediksi sementara dengan data aktual untuk menghitung tingkat kesalahan (error), lalu memperbarui nilai bobot secara otomatis melalui proses backpropagation hingga tingkat kesalahannya minimal.</li>
+                <li><strong>Menghasilkan Prediksi (Output Layer):</strong> Setelah bobot model optimal, jaringan memproyeksikan data baru untuk menghasilkan angka estimasi jumlah tunggakan premi nasabah selama 3 bulan ke depan.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-number">Soal 2</span>
+            <span class="sub-version">Regresi Linear Sederhana & Korelasi</span>
+        </div>
+        <div class="question-text">
+            <p>Sebuah peneliian dilakukan terhadap tanaman jagung, di mana akan diteliti tentang hubungan antara jumlah pemberian pupuk dengan tinggi batas pohon, dengan artian apakah ada pengaruh jumlah pemberian pupuk terhdap tinggi batang pohon tersebut. Sampel diambil secara acak untuk sejumlah 10 (sepuluh) pohon.</p>
+            <ul>
+                <p align="center">Tabel Tinggi Pohon</p>
+                <div class="table-responsive">
+                <table>
+                    <tr>
+                        <th>No</th>
+                        <th>Jumlah Pupuk (ml)</th>
+                        <th>Tinggi (m)</th>
+                    </tr>
+                    <tr><td>1</td><td>0,5</td><td>10</td></tr>
+                    <tr><td>2</td><td>0,7</td><td>11</td></tr>
+                    <tr><td>3</td><td>0,8</td><td>14</td></tr>
+                    <tr><td>4</td><td>0,8</td><td>16</td></tr>
+                    <tr><td>5</td><td>1</td><td>20</td></tr>
+                    <tr><td>6</td><td>1,2</td><td>22</td></tr>
+                    <tr><td>7</td><td>1,4</td><td>23</td></tr>
+                    <tr><td>8</td><td>1,5</td><td>25</td></tr>
+                    <tr><td>9</td><td>1,6</td><td>26</td></tr>
+                    <tr><td>10</td><td>1,7</td><td>28</td></tr>
+                </table>
+                </div>
+            <p></p>
+            <p>a. Berdasarkan persoalan tersebut, tentukan nilai a dan b, kemudian tuliskan model persamaan regresinya!</p>
+            <p>b. Hitunglah tinggi pohon, jika diberi pupuk sejumlah 2 ml!</p>
+            <p>c. Hitunglah nilai koefisien korelasi dan jelaskan makna dari nilai tersebut!</p>
+            </ul>
+        </div>
+        <button class="toggle-btn" onclick="toggleAnswer(this)">Tampilkan Jawaban</button>
+        <div class="answer-container">
+            <h4>Jawaban:</h4>
+            <div class="table-wrapper" style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <th>No</th>
+                    <th>Jumlah Pupuk (X)</th>
+                    <th>Tinggi (Y)</th>
+                    <th>X<sup>2</sup></th>
+                    <th>Y<sup>2</sup></th>
+                    <th>XY</th>
+                </tr>
+                <tbody>
+                    <tr><td>1</td><td>0,5</td><td>10</td><td>0,25</td><td>100</td><td>5</td></tr>
+                    <tr><td>2</td><td>0,7</td><td>11</td><td>0,49</td><td>121</td><td>7,7</td></tr>
+                    <tr><td>3</td><td>0,8</td><td>14</td><td>0,64</td><td>196</td><td>11,2</td></tr>
+                    <tr><td>4</td><td>0,8</td><td>16</td><td>0,64</td><td>256</td><td>12,8</td></tr>
+                    <tr><td>5</td><td>1</td><td>20</td><td>1</td><td>400</td><td>20</td></tr>
+                    <tr><td>6</td><td>1,2</td><td>22</td><td>1,44</td><td>484</td><td>26,4</td></tr>
+                    <tr><td>7</td><td>1,4</td><td>23</td><td>1,96</td><td>529</td><td>32,2</td></tr>
+                    <tr><td>8</td><td>1,5</td><td>25</td><td>2,25</td><td>625</td><td>37,5</td></tr>
+                    <tr><td>9</td><td>1,6</td><td>26</td><td>2,56</td><td>676</td><td>41,6</td></tr>
+                    <tr><td>10</td><td>1,7</td><td>28</td><td>2,89</td><td>784</td><td>47,6</td></tr>
+                </tbody>
+                <tr>
+                    <td></td>
+                    <td>&Sigma;X = 11,2</td>
+                    <td>&Sigma;Y = 195</td>
+                    <td>&Sigma;X<sup>2</sup> = 14,12</td>
+                    <td>&Sigma;Y<sup>2</sup> = 4.171</td>
+                    <td>&Sigma;XY = 242</td>
+                </tr>
+            </table>
+            </div>
+            <p><strong>a. Menentukan Persamaan Regresi Linier (Y = a + bX)</strong></p>
+            <p><em>1) Mencari nilai konstanta b:</em></p>
+                <div style="margin-left: 15px; margin-bottom: 20px;">
+                    <div class="rumus-baris">
+                    <span>b =</span>
+                        <div class="pecahan">
+                            <span class="atas">n(&Sigma;XY) &minus; (&Sigma;X)(&Sigma;Y)</span>
+                            <span class="bawah">n&Sigma;X<sup>2</sup> &minus; (&Sigma;X)<sup>2</sup></span>
+                        </div>
+                    </div>
+                    <div class="rumus-baris">
+                    <span>&nbsp;&nbsp;&nbsp;=</span>
+                        <div class="pecahan">
+                            <span class="atas">10(242) &minus; (11,2)(195)</span>
+                            <span class="bawah">10(14,12) &minus; (11,2)<sup>2</sup></span>
+                        </div>
+                    </div>
+                    <div class="rumus-baris">
+                    <span>&nbsp;&nbsp;&nbsp;=</span>
+                        <div class="pecahan">
+                            <span class="atas">2420 &minus; 2184</span>
+                            <span class="bawah">141,2 &minus; 125,44</span>
+                        </div>
+                    </div>
+                    <div class="rumus-baris">
+                    <span>&nbsp;&nbsp;&nbsp;=</span>
+                        <div class="pecahan">
+                            <span class="atas">236</span>
+                            <span class="bawah">15,76</span>
+                        </div>
+                    </div>
+                    <div class="rumus-baris">
+                    <span>&nbsp;&nbsp;&nbsp;= <strong>14,97</strong></span>
+                    </div>
+                </div>
+
+        <p><em>2) Mencari nilai konstanta a:</em></p>
+        <div style="margin-left: 15px; margin-bottom: 15px;">
+            <div class="rumus-baris">
+                <span>a =</span>
+                <div class="pecahan">
+                    <span class="atas">&Sigma;Y &minus; b(&Sigma;X)</span>
+                    <span class="bawah">n</span>
+                </div>
+            </div>
+
+            <div class="rumus-baris">
+                <span>&nbsp;&nbsp;&nbsp;=</span>
+                <div class="pecahan">
+                    <span class="atas">195 &minus; 14,97(11,2)</span>
+                    <span class="bawah">10</span>
+                </div>
+            </div>
+
+            <div class="rumus-baris">
+                <span>&nbsp;&nbsp;&nbsp;=</span>
+                <div class="pecahan">
+                    <span class="atas">195 &minus; 165,648</span>
+                    <span class="bawah">10</span>
+                </div>
+            </div>
+
+            <div class="rumus-baris">
+                <span>&nbsp;&nbsp;&nbsp;=</span>
+                <div class="pecahan">
+                    <span class="atas">29,352</span>
+                    <span class="bawah">10</span>
+                </div>
+            </div>
+
+            <div class="rumus-baris">
+                <span>&nbsp;&nbsp;&nbsp;= <strong>2,94</strong></span>
+            </div>
+        </div>
+        
+        <p>Jadi, persamaan regresinya adalah: <strong>Y = 2,94 + 14,97X</strong></p>
+
+        <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
+
+        <p><strong>b. Prediksi Tinggi Pohon Jika Diberi Pupuk 2 ml (X = 2)</strong></p>
+        <div style="margin-left: 15px; margin-bottom: 10px; font-family: 'Cambria Math', 'Times New Roman', serif; font-size: 16px; line-height: 1.7;">
+            Y = 2,94 + 14,97(2)<br>
+            &nbsp;&nbsp;&nbsp;= 2,94 + 29,94<br>
+            &nbsp;&nbsp;&nbsp;= <strong>32,88</strong>
+        </div>
+        <p>Jadi, tinggi pohon jika diberi pupuk 2 ml adalah <strong>32,88 m</strong>.</p>
+
+        <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
+
+        <p><strong>c. Menghitung Nilai Koefisien Korelasi (r)</strong></p>
+        <div style="margin-left: 15px; margin-bottom: 15px;">
+            <div class="rumus-baris">
+                <span>r =</span>
+                <div class="pecahan">
+                    <span class="atas">n&Sigma;XY &minus; (&Sigma;X)(&Sigma;Y)</span>
+                    <span class="bawah">
+                        <span class="akar">
+                            <span class="akar-simbol">&radic;</span>
+                            <span class="akar-isi">[n&Sigma;X<sup>2</sup> &minus; (&Sigma;X)<sup>2</sup>][n&Sigma;Y<sup>2</sup> &minus; (&Sigma;Y)<sup>2</sup>]</span>
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <div class="rumus-baris">
+                <span>&nbsp;&nbsp;=</span>
+                <div class="pecahan">
+                    <span class="atas">10(242) &minus; 2184</span>
+                    <span class="bawah">
+                        <span class="akar">
+                            <span class="akar-simbol">&radic;</span>
+                            <span class="akar-isi">(10(14,12) &minus; 125,44)(10(4.171) &minus; 38.025)</span>
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <div class="rumus-baris">
+                <span>&nbsp;&nbsp;=</span>
+                <div class="pecahan">
+                    <span class="atas">2420 &minus; 2184</span>
+                    <span class="bawah">
+                        <span class="akar">
+                            <span class="akar-simbol">&radic;</span>
+                            <span class="akar-isi">(15,76)(3.685)</span>
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <div class="rumus-baris">
+                <span>&nbsp;&nbsp;=</span>
+                <div class="pecahan">
+                    <span class="atas">236</span>
+                    <span class="bawah">
+                        <span class="akar">
+                            <span class="akar-simbol">&radic;</span>
+                            <span class="akar-isi">58075,6</span>
+                        </span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="rumus-baris">
+                <span>&nbsp;&nbsp;=</span>
+                <div class="pecahan">
+                    <span class="atas">236</span>
+                    <span class="bawah">240,99</span>
+                </div>
+            </div>
+
+            <div class="rumus-baris">
+                <span>&nbsp;&nbsp;= <strong>0,98</strong></span>
+            </div>
+        </div>
+        <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
+        <p><strong>Kesimpulan:</strong></p>
+        <p>Nilai korelasi <strong>r = 0,98</strong> menunjukkan adanya <strong>hubungan linier positif yang sangat kuat</strong>. Artinya, semakin banyak pupuk yang diberikan, pohon akan tumbuh semakin tinggi.</p>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-number">Soal 3</span>
+            <span class="sub-version">Klasifikasi: Algoritma Naive Bayes</span>
+        </div>
+        <div class="question-text">
+            <p>Perhatikan tabel dari dataset mahasiswa berikut.</p>
+            <div class="table-responsive">
+                <table>
+                    <tr>
+                        <th>Nama</th>
+                        <th>IPK</th>
+                        <th>Penghasilan Orang Tua (Juta)</th>
+                        <th>Jumlah Saudara yang Masih Sekolah</th>
+                        <th>Status Layak</th>
+                    </tr>
+                    <tr><td>Ani</td><td>> 3,5</td><td>2</td><td>4</td><td>Layak</td></tr>
+                    <tr><td>Budi</td><td>3.00 - 3,5</td><td>5</td><td>>5</td><td>Layak</td></tr>
+                    <tr><td>Cici</td><td>3.00 - 3,5</td><td>3</td><td>3</td><td>Layak</td></tr>
+                    <tr><td>Didi</td><td>> 3,5</td><td>5</td><td>2</td><td>Tidak</td></tr>
+                    <tr><td>Eni</td><td>< 3</td><td>4</td><td>2</td><td>Tidak</td></tr>
+                    <tr><td>Fina</td><td>3.00 - 3,5</td><td>4</td><td>4</td><td>Layak</td></tr>
+                    <tr><td>Geri</td><td>3.00 - 3,5</td><td>3</td><td>1</td><td>Tidak</td></tr>
+                </table>
+                </div>
+            <p></p>
+            <p>Berdasarkan tabel di atas, terapkan algoritma Bayesian untuk menentukan apakah mahasiswa berikut layak (True) atau tidak (False) untuk menerima beasiswa:</p>
+            <ul>
+                <p>Nama : Hani</p>
+                <p>IPK : > 3,5</p>
+                <p>Penghasilan Orang Tua : 4 juta</p>
+                <p>Jumlah Saudara yang Masih Sekolah : 3</p>
+            </ul>
+        </div>
+        <button class="toggle-btn" onclick="toggleAnswer(this)">Tampilkan Jawaban</button>
+        <div class="answer-container">
+            <h4>Jawaban:</h4>
+            <p><strong>1. Probabilitas Prior P(C<sub>i</sub>)</strong></p>
+        <p>Total dataset = 7 sampel &rarr; 4 True dan 3 False</p>   
+        <div class="rumus-baris">
+            <span>P(True) =</span>
+            <div class="pecahan">
+                <span class="atas">4</span>
+                <span class="bawah">7</span>
+            </div>
+            <span>= <strong>0,57</strong></span>
+        </div>
+        <div class="rumus-baris">
+            <span>P(False) =</span>
+            <div class="pecahan">
+                <span class="atas">3</span>
+                <span class="bawah">7</span>
+            </div>
+            <span>= <strong>0,43</strong></span>
+        </div>
+        <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
+        <p><strong>2. Probabilitas Likelihood P(X<sub>k</sub> | C<sub>i</sub>)</strong></p>
+        <ul>
+            <li>
+                <strong>Atribut IPK &gt; 3,5</strong>
+                <div class="rumus-baris">
+                    <span>&ndash; P(&gt; 3,5 | True) =</span>
+                    <div class="pecahan">
+                        <span class="atas">1</span>
+                        <span class="bawah">4</span>
+                    </div>
+                    <span>= 0,25 <em>(Ani)</em></span>
+                </div>
+                <div class="rumus-baris">
+                    <span>&ndash; P(&gt; 3,5 | False) =</span>
+                    <div class="pecahan">
+                        <span class="atas">1</span>
+                        <span class="bawah">3</span>
+                    </div>
+                    <span>= 0,33 <em>(Didi)</em></span>
+                </div>
+            </li>
+            <li>
+                <strong>Atribut Penghasilan Orang Tua = 4</strong>
+                <div class="rumus-baris">
+                    <span>&ndash; P(4 | True) =</span>
+                    <div class="pecahan">
+                        <span class="atas">1</span>
+                        <span class="bawah">4</span>
+                    </div>
+                    <span>= 0,25 <em>(Fina)</em></span>
+                </div>
+                <div class="rumus-baris">
+                    <span>&ndash; P(4 | False) =</span>
+                    <div class="pecahan">
+                        <span class="atas">1</span>
+                        <span class="bawah">3</span>
+                    </div>
+                    <span>= 0,33 <em>(Eni)</em></span>
+                </div>
+            </li>
+            <li>
+                <strong>Atribut Jumlah Saudara yang masih sekolah = 3</strong>
+                <div class="rumus-baris">
+                    <span>&ndash; P(3 | True) =</span>
+                    <div class="pecahan">
+                        <span class="atas">1</span>
+                        <span class="bawah">4</span>
+                    </div>
+                    <span>= 0,25 <em>(Cici)</em></span>
+                </div>
+                <div class="rumus-baris">
+                    <span>&ndash; P(3 | False) =</span>
+                    <div class="pecahan">
+                        <span class="atas">0</span>
+                        <span class="bawah">3</span>
+                    </div>
+                    <span>= 0</span>
+                </div>
+            </li>
+        </ul>
+        <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
+        <p><strong>3. Probabilitas Akhir</strong></p>
+            <p>P(X | True) &times; P(True)</p>
+            <p>= (0,25 &times; 0,25 &times; 0,25)(0,57)</p>
+            <p>= <strong>0,93</strong><br></p>
+            <p>P(X | False) &times; P(False)</p>
+            <p>= (0,33 &times; 0,33 &times; 0)(0,43)</p>
+            <p>= <strong>0</strong></p>
+        <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
+        <p><strong>Kesimpulan:</strong></p>
+        <p>Karena hasil nilai <strong>True</strong> lebih besar dibanding nilai <strong>False</strong>, maka <strong>Hani layak mendapatkan beasiswa</strong>.</p>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-number">Soal 4</span>
+            <span class="sub-version">Evaluasi Model Regresi (MAE &amp; RMSE)</span>
+        </div>
+        <div class="question-text">
+            <p>Sebuah penelitian terhadap pohon Jati, yang meneliti tentang hubungan antara tinggi pohon dengan diameter batang pohon, dengan artian apakah ada pengaruh diameter batang pohon terhadap tinggi pohon tersebut. Sampel diambil secara acak dari sejumlah sepuluh pohon Jati.</p>
+            <p>Berdasarkan algoritma regresi linear sederhana, diperoleh formula regresi linear adalah</p>
+            <p>Y = &minus;2,228 &plus; 2,132X</p>
+            <p>Berikut adalah data aktual dan prediksi tinggi pohon berdasarkan dari formula regresi linear yang dihasilkan.</p>
+            <div class="table-responsive">
+                <table>
+                    <tr>
+                        <th>No</th>
+                        <th>Diameter Batang (cm)</th>
+                        <th>Tinggi (m)</th>
+                        <th>Prediksi Tinggi (m)</th>
+                    </tr>
+                    <tr><td>1</td><td>2</td><td>4</td><td>2,036</td></tr>
+                    <tr><td>2</td><td>4</td><td>6</td><td>6,3</td></tr>
+                    <tr><td>3</td><td>5</td><td>7</td><td>8,432</td></tr>
+                    <tr><td>4</td><td>7</td><td>12</td><td>12,696</td></tr>
+                    <tr><td>5</td><td>8</td><td>14</td><td>14,828</td></tr>
+                    <tr><td>6</td><td>9</td><td>17</td><td>16,96</td></tr>
+                    <tr><td>7</td><td>10</td><td>20</td><td>19,092</td></tr>
+                    <tr><td>8</td><td>10</td><td>18</td><td>19,092</td></tr>
+                    <tr><td>9</td><td>11</td><td>21</td><td>21,224</td></tr>
+                    <tr><td>10</td><td>12</td><td>25</td><td>23,356</td></tr>
+                </table>
+            </div>
+            <p></p>
+            <p>Lakukan perhitungan Root Mean Squared Error (RMSE) dan Mean Absolute Error (MAE) untuk menentukan kualitas hasil algoritma regresi linear yang digunakan untuk menentukan tinggi pohon!</p>
+        </div>
+        <button class="toggle-btn" onclick="toggleAnswer(this)">Tampilkan Jawaban</button>
+        <div class="answer-container">
+            <h4>Jawaban:</h4>
+            <div class="table-wrapper" style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Diameter Batang (X)</th>
+                        <th>Tinggi (Y)</th>
+                        <th>Prediksi Tinggi (&Ycirc;)</th>
+                        <th>Error
+                            <p>Y &minus; &Ycirc;</p></th>
+                        <th>Absolut Error
+                            <p>|Y &minus; &Ycirc;|</p></th>
+                        <th>Squared Error
+                            <p>(Y &minus; &Ycirc;)<sup>2</sup></p></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>2</td><td>4</td><td>2,036</td><td>1,964</td><td>1,964</td><td>3,857296</td></tr>
+                    <tr><td>2</td><td>4</td><td>6</td><td>6,3</td><td>-0,3</td><td>0,3</td><td>0,09</td></tr>
+                    <tr><td>3</td><td>5</td><td>7</td><td>8,432</td><td>-1,432</td><td>1,432</td><td>2,050624</td></tr>
+                    <tr><td>4</td><td>7</td><td>12</td><td>12,696</td><td>-0,696</td><td>0,696</td><td>0,484416</td></tr>
+                    <tr><td>5</td><td>8</td><td>14</td><td>14,828</td><td>-0,828</td><td>0,828</td><td>0,685584</td></tr>
+                    <tr><td>6</td><td>9</td><td>17</td><td>16,96</td><td>0,04</td><td>0,04</td><td>0,0016</td></tr>
+                    <tr><td>7</td><td>10</td><td>20</td><td>19,092</td><td>0,908</td><td>0,908</td><td>0,824464</td></tr>
+                    <tr><td>8</td><td>10</td><td>18</td><td>19,092</td><td>-1,092</td><td>1,092</td><td>1,192464</td></tr>
+                    <tr><td>9</td><td>11</td><td>21</td><td>21,224</td><td>-0,224</td><td>0,224</td><td>0,050176</td></tr>
+                    <tr><td>10</td><td>12</td><td>25</td><td>23,356</td><td>1,644</td><td>1,644</td><td>2,702736</td></tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5"><strong>Total</strong></td>
+                        <td><strong>9,128</strong></td>
+                        <td><strong>11,939</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+            </div>
+            <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
+            <p><strong>1. Menghitung Mean Absolute Error (MAE)</strong></p>
+            <div class="rumus-grid">
+                <div>MAE</div>
+                <div class="langkah">
+                    <span>=</span>
+                    <div class="pecahan">
+                        <span class="atas">&Sigma;|Y &minus; &Ycirc;|</span>
+                        <span class="bawah">n</span>
+                    </div>
+                </div>
+                <div></div>
+                <div class="langkah">
+                    <span>=</span>
+                    <div class="pecahan">
+                        <span class="atas">9,128</span>
+                        <span class="bawah">10</span>
+                    </div>
+                </div>
+                <div></div>
+                <div class="langkah">
+                    <span>=</span>
+                    <strong>0,9128</strong>
+                </div>
+            </div>
+            <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
+            <p><strong>2. Menghitung Root Mean Squared Error (RMSE)</strong></p>
+            <div class="rumus-grid">
+                <div>RMSE</div>
+                <div class="langkah">
+                    <span>=</span>
+                    <span class="akar">
+                        <span class="akar-simbol">&radic;</span>
+                        <span class="akar-isi">
+                            <div class="pecahan">
+                                <span class="atas">&Sigma;(Y &minus; &Ycirc;)<sup>2</sup></span>
+                                <span class="bawah">n</span>
+                            </div>
+                        </span>
+                    </span>
+                </div>
+                <div></div>
+                <div class="langkah">
+                    <span>=</span>
+                    <span class="akar">
+                        <span class="akar-simbol">&radic;</span>
+                        <span class="akar-isi">
+                            <div class="pecahan">
+                                <span class="atas">11,939</span>
+                                <span class="bawah">10</span>
+                            </div>
+                        </span>
+                    </span>
+                </div>
+                <div></div>
+                <div class="langkah">
+                    <span>=</span>
+                    <span class="akar">
+                        <span class="akar-simbol">&radic;</span>
+                        <span class="akar-isi">1,1939</span>
+                    </span>
+                </div>
+                <div></div>
+                <div class="langkah">
+                    <span>=</span>
+                    <strong>1,0927</strong>
+                </div>
+            </div>
+            <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
+            <p><strong>Kesimpulan:</strong></p>
+            <p>Nilai MAE sebesar 0,9128 meter dan RMSE sebesar 1,0927 meter menunjukkan bahwa rata-rata selisih kesalahan prediksi tinggi pohon Jati terhadap data aktualnya sangat kecil (hanya berkisar sekitar 0,91 hingga 1,09 meter dibandingkan rentang tinggi pohon 4 hingga 25 meter). Oleh karena itu, model regresi linear Y = &minus;2,228 + 2,132X memiliki kinerja prediksi yang baik dan akurat untuk mengestimasi tinggi pohon Jati berdasarkan diameter batangnya.</p>
+        </div>
+    </div>
+    
+    <div class="question-card">
+        <div class="question-header">
+            <span class="question-number">Soal 5</span>
+            <span class="sub-version">Klasterisasi Algoritma K-Means (k = 2)</span>
+        </div>
+        <div class="question-text">
+            <p>Berikut ini adalah tabel data potensi desa.</p>
+            <div class="table-responsive">
+                <table>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Desa</th>
+                        <th>Jagung (ton)</th>
+                        <th>Singkong (ton)</th>
+                        <th>Padi (ton)</th>
+                    </tr>
+                    <tr><td>1</td><td>Ramai</td><td>8,5</td><td>9</td><td>7</td></tr>
+                    <tr><td>2</td><td>Maju Raya</td><td>7</td><td>7</td><td>8</td></tr>
+                    <tr><td>3</td><td>Mekar Jaya</td><td>8,5</td><td>6,5</td><td>8</td></tr>
+                    <tr><td>4</td><td>Tanjung</td><td>7</td><td>7</td><td>7,5</td></tr>
+                    <tr><td>5</td><td>Muara Indah</td><td>6</td><td>5,5</td><td>4</td></tr>
+                    <tr><td>6</td><td>Lubuk Hilir</td><td>5</td><td>6</td><td>6</td></tr>
+                    <tr><td>7</td><td>Dataran Landai</td><td>7</td><td>8</td><td>8</td></tr>
+                    <tr><td>8</td><td>Bengawan</td><td>8</td><td>7</td><td>8</td></tr>
+                    <tr><td>9</td><td>Tegal Sari</td><td>7</td><td>6</td><td>6</td></tr>
+                    <tr><td>10</td><td>Harum Sari</td><td>5</td><td>7</td><td>6</td></tr>
+                </table>
+            </div>
+            <p></p>
+            <p>Lakukan klasterisasi menggunakan algoritma K-Means dengan k = 2, dimana centroid awal adalah Mekar Jaya dan Harum Sari!</p>
+        </div>
+        <button class="toggle-btn" onclick="toggleAnswer(this)">Tampilkan Jawaban</button>
+        <div class="answer-container">
+            <h4>Jawaban:</h4>
+            <p><strong>1. Menentukan Centroid Awal &amp; Rumus Jarak (Euclidean Distance)</strong></p>
+            <ul>
+                <li><strong>Centroid 1 (C<sub>1</sub> &mdash; Mekar Jaya):</strong> (8,5 ; 6,5 ; 8)</li>
+                <li><strong>Centroid 2 (C<sub>2</sub> &mdash; Harum Sari):</strong> (5 ; 7 ; 6)</li>
+            </ul>
+            <div class="rumus-baris">
+                <span>d(x, c) =</span>
+                <span class="akar">
+                    <span class="akar-simbol">&radic;</span>
+                    <span class="akar-isi">(x<sub>1</sub> &minus; c<sub>1</sub>)<sup>2</sup> + (x<sub>2</sub> &minus; c<sub>2</sub>)<sup>2</sup> + (x<sub>3</sub> &minus; c<sub>3</sub>)<sup>2</sup></span>
+                </span>
+            </div>
+            <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
+            <p><strong>2. Iterasi 1: Menghitung Jarak Setiap Desa ke C<sub>1</sub> dan C<sub>2</sub></strong></p>
+            <p><em>Contoh perhitungan Data 1 &mdash; Desa Ramai (8,5 ; 9 ; 7):</em></p>
+            <div class="rumus-baris">
+                <span>d(1, C<sub>1</sub>) =</span>
+                <span class="akar">
+                    <span class="akar-simbol">&radic;</span>
+                    <span class="akar-isi">(8,5 &minus; 8,5)<sup>2</sup> + (9 &minus; 6,5)<sup>2</sup> + (7 &minus; 8)<sup>2</sup></span>
+                </span>
+                <span>=</span>
+                <span class="akar">
+                    <span class="akar-simbol">&radic;</span>
+                    <span class="akar-isi">0 + 6,25 + 1</span>
+                </span>
+                <span>=</span>
+                <span class="akar">
+                    <span class="akar-simbol">&radic;</span>
+                    <span class="akar-isi">7,25</span>
+                </span>
+                <span>= <strong>2,69</strong></span>
+            </div>
+            <div class="rumus-baris">
+                <span>d(1, C<sub>2</sub>) =</span>
+                <span class="akar">
+                    <span class="akar-simbol">&radic;</span>
+                    <span class="akar-isi">(8,5 &minus; 5)<sup>2</sup> + (9 &minus; 7)<sup>2</sup> + (7 &minus; 6)<sup>2</sup></span>
+                </span>
+                <span>=</span>
+                <span class="akar">
+                    <span class="akar-simbol">&radic;</span>
+                    <span class="akar-isi">12,25 + 4 + 1</span>
+                </span>
+                <span>=</span>
+                <span class="akar">
+                    <span class="akar-simbol">&radic;</span>
+                    <span class="akar-isi">17,25</span>
+                </span>
+                <span>= <strong>4,15</strong></span>
+            </div>
+            <div class="table-wrapper" style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="white-space: nowrap;">No</th>
+                        <th style="white-space: nowrap;">Nama Desa</th>
+                        <th style="white-space: nowrap;">Data (J, S, P)</th>
+                        <th style="white-space: nowrap;">Jarak ke C<sub>1</sub> (8,5 ; 6,5 ; 8)</th>
+                        <th style="white-space: nowrap;">Jarak ke C<sub>2</sub> (5 ; 7 ; 6)</th>
+                        <th style="white-space: nowrap;">Klaster</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td style="white-space: nowrap;">Ramai</td>
+                        <td style="white-space: nowrap;">8,5 ; 9 ; 7</td>
+                        <td style="white-space: nowrap;">&radic;(0<sup>2</sup> + 2,5<sup>2</sup> + (&minus;1)<sup>2</sup>)<br>= &radic;7,25 = <strong>2,69</strong></td>
+                        <td style="white-space: nowrap;">&radic;(3,5<sup>2</sup> + 2<sup>2</sup> + 1<sup>2</sup>)<br>= &radic;17,25 = 4,15</td>
+                        <td><strong>C<sub>1</sub></strong></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td style="white-space: nowrap;">Maju Raya</td>
+                        <td style="white-space: nowrap;">7 ; 7 ; 8</td>
+                        <td style="white-space: nowrap;">&radic;((&minus;1,5)<sup>2</sup> + 0,5<sup>2</sup> + 0<sup>2</sup>)<br>= &radic;2,50 = <strong>1,58</strong></td>
+                        <td style="white-space: nowrap;">&radic;(2<sup>2</sup> + 0<sup>2</sup> + 2<sup>2</sup>)<br>= &radic;8,00 = 2,83</td>
+                        <td><strong>C<sub>1</sub></strong></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td style="white-space: nowrap;">Mekar Jaya</td>
+                        <td style="white-space: nowrap;">8,5 ; 6,5 ; 8</td>
+                        <td style="white-space: nowrap;">&radic;(0<sup>2</sup> + 0<sup>2</sup> + 0<sup>2</sup>)<br>= <strong>0,00</strong></td>
+                        <td style="white-space: nowrap;">&radic;(3,5<sup>2</sup> + (&minus;0,5)<sup>2</sup> + 2<sup>2</sup>)<br>= &radic;16,50 = 4,06</td>
+                        <td><strong>C<sub>1</sub></strong></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td style="white-space: nowrap;">Tanjung</td>
+                        <td style="white-space: nowrap;">7 ; 7 ; 7,5</td>
+                        <td style="white-space: nowrap;">&radic;((&minus;1,5)<sup>2</sup> + 0,5<sup>2</sup> + (&minus;0,5)<sup>2</sup>)<br>= &radic;2,75 = <strong>1,66</strong></td>
+                        <td style="white-space: nowrap;">&radic;(2<sup>2</sup> + 0<sup>2</sup> + 1,5<sup>2</sup>)<br>= &radic;6,25 = 2,50</td>
+                        <td><strong>C<sub>1</sub></strong></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td style="white-space: nowrap;">Muara Indah</td>
+                        <td style="white-space: nowrap;">6 ; 5,5 ; 4</td>
+                        <td style="white-space: nowrap;">&radic;((&minus;2,5)<sup>2</sup> + (&minus;1)<sup>2</sup> + (&minus;4)<sup>2</sup>)<br>= &radic;23,25 = 4,82</td>
+                        <td style="white-space: nowrap;">&radic;(1<sup>2</sup> + (&minus;1,5)<sup>2</sup> + (&minus;2)<sup>2</sup>)<br>= &radic;7,25 = <strong>2,69</strong></td>
+                        <td><strong>C<sub>2</sub></strong></td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td style="white-space: nowrap;">Lubuk Hilir</td>
+                        <td style="white-space: nowrap;">5 ; 6 ; 6</td>
+                        <td style="white-space: nowrap;">&radic;((&minus;3,5)<sup>2</sup> + (&minus;0,5)<sup>2</sup> + (&minus;2)<sup>2</sup>)<br>= &radic;16,50 = 4,06</td>
+                        <td style="white-space: nowrap;">&radic;(0<sup>2</sup> + (&minus;1)<sup>2</sup> + 0<sup>2</sup>)<br>= &radic;1,00 = <strong>1,00</strong></td>
+                        <td><strong>C<sub>2</sub></strong></td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td style="white-space: nowrap;">Dataran Landai</td>
+                        <td style="white-space: nowrap;">7 ; 8 ; 8</td>
+                        <td style="white-space: nowrap;">&radic;((&minus;1,5)<sup>2</sup> + 1,5<sup>2</sup> + 0<sup>2</sup>)<br>= &radic;4,50 = <strong>2,12</strong></td>
+                        <td style="white-space: nowrap;">&radic;(2<sup>2</sup> + 1<sup>2</sup> + 2<sup>2</sup>)<br>= &radic;9,00 = 3,00</td>
+                        <td><strong>C<sub>1</sub></strong></td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td style="white-space: nowrap;">Bengawan</td>
+                        <td style="white-space: nowrap;">8 ; 7 ; 8</td>
+                        <td style="white-space: nowrap;">&radic;((&minus;0,5)<sup>2</sup> + 0,5<sup>2</sup> + 0<sup>2</sup>)<br>= &radic;0,50 = <strong>0,71</strong></td>
+                        <td style="white-space: nowrap;">&radic;(3<sup>2</sup> + 0<sup>2</sup> + 2<sup>2</sup>)<br>= &radic;13,00 = 3,61</td>
+                        <td><strong>C<sub>1</sub></strong></td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td style="white-space: nowrap;">Tegal Sari</td>
+                        <td style="white-space: nowrap;">7 ; 6 ; 6</td>
+                        <td style="white-space: nowrap;">&radic;((&minus;1,5)<sup>2</sup> + (&minus;0,5)<sup>2</sup> + (&minus;2)<sup>2</sup>)<br>= &radic;6,50 = 2,55</td>
+                        <td style="white-space: nowrap;">&radic;(2<sup>2</sup> + (&minus;1)<sup>2</sup> + 0<sup>2</sup>)<br>= &radic;5,00 = <strong>2,24</strong></td>
+                        <td><strong>C<sub>2</sub></strong></td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td style="white-space: nowrap;">Harum Sari</td>
+                        <td style="white-space: nowrap;">5 ; 7 ; 6</td>
+                        <td style="white-space: nowrap;">&radic;((&minus;3,5)<sup>2</sup> + 0,5<sup>2</sup> + (&minus;2)<sup>2</sup>)<br>= &radic;16,50 = 4,06</td>
+                        <td style="white-space: nowrap;">&radic;(0<sup>2</sup> + 0<sup>2</sup> + 0<sup>2</sup>)<br>= <strong>0,00</strong></td>
+                        <td><strong>C<sub>2</sub></strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+            <p style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;"><strong>Hasil Pengelompokan Iterasi 1:</strong></p>
+            <ul>
+                <li><strong>Anggota C<sub>1</sub> (6 desa):</strong> Ramai, Maju Raya, Mekar Jaya, Tanjung, Dataran Landai, Bengawan.</li>
+                <li><strong>Anggota C<sub>2</sub> (4 desa):</strong> Muara Indah, Lubuk Hilir, Tegal Sari, Harum Sari.</li>
+            </ul>
+            <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
+            <p><strong>3. Menentukan Centroid Baru (Rata-rata Anggota Klaster)</strong></p>
+            <p><strong>Centroid 1 Baru (C<sub>1</sub> &mdash; dibagi 6 desa):</strong></p>
+            <div class="rumus-grid">
+                <div>Jagung</div>
+                <div class="langkah">
+                    <span>=</span>
+                    <div class="pecahan">
+                        <span class="atas">8,5 + 7 + 8,5 + 7 + 7 + 8</span>
+                        <span class="bawah">6</span>
+                    </div>
+                </div>
+                <div></div>
+                <div class="langkah">
+                    <span>=</span>
+                    <div class="pecahan">
+                        <span class="atas">46</span>
+                        <span class="bawah">6</span>
+                    </div>
+                </div>
+                <div></div>
+                <div class="langkah">
+                    <span>=</span>
+                    <strong>7,67</strong>
+                </div>
+            </div>
+            <div class="rumus-grid">
+                <div>Singkong</div>
+                <div class="langkah">
+                    <span>=</span>
+                    <div class="pecahan">
+                        <span class="atas">9 + 7 + 6,5 + 7 + 8 + 7</span>
+                        <span class="bawah">6</span>
+                    </div>
+                </div>
+                <div></div>
+                <div class="langkah">
+                    <span>=</span>
+                    <div class="pecahan">
+                        <span class="atas">44,5</span>
+                        <span class="bawah">6</span>
+                    </div>
+                </div>
+                <div></div>
+                <div class="langkah">
+                    <span>=</span>
+                    <strong>7,42</strong>
+                </div>
+            </div>
+            <div class="rumus-grid">
+                <div>Padi</div>
+                <div class="langkah">
+                    <span>=</span>
+                    <div class="pecahan">
+                        <span class="atas">7 + 8 + 8 + 7,5 + 8 + 8</span>
+                        <span class="bawah">6</span>
+                    </div>
+                </div>
+                <div></div>
+                <div class="langkah">
+                    <span>=</span>
+                    <div class="pecahan">
+                        <span class="atas">46,5</span>
+                        <span class="bawah">6</span>
+                    </div>
+                </div>
+                <div></div>
+                <div class="langkah">
+                    <span>=</span>
+                    <strong>7,75</strong>
+                </div>
+            </div>
+            <p>&rarr; <strong>C<sub>1</sub> baru = (7,67 ; 7,42 ; 7,75)</strong></p>
+            <p><strong>Centroid 2 Baru (C<sub>2</sub> &mdash; dibagi 4 desa):</strong></p>
+            <div class="rumus-grid">
+                <div>Jagung</div>
+                <div class="langkah">
+                    <span>=</span>
+                    <div class="pecahan">
+                        <span class="atas">6 + 5 + 7 + 5</span>
+                        <span class="bawah">4</span>
+                    </div>
+                </div>
+
+                <div></div>
+                <div class="langkah">
+                    <span>=</span>
+                    <div class="pecahan">
+                        <span class="atas">23</span>
+                        <span class="bawah">4</span>
+                    </div>
+                </div>
+
+                <div></div>
+                <div class="langkah">
+                    <span>=</span>
+                    <strong>5,75</strong>
+                </div>
+
+                <div>Singkong</div>
+                <div class="langkah">
+                    <span>=</span>
+                    <div class="pecahan">
+                        <span class="atas">5,5 + 6 + 6 + 7</span>
+                        <span class="bawah">4</span>
+                    </div>
+                </div>
+
+                <div></div>
+                <div class="langkah">
+                    <span>=</span>
+                    <div class="pecahan">
+                        <span class="atas">24,5</span>
+                        <span class="bawah">4</span>
+                    </div>
+                </div>
+
+                <div></div>
+                <div class="langkah">
+                    <span>=</span>
+                    <strong>6,13</strong>
+                </div>
+
+                <div>Padi</div>
+                <div class="langkah">
+                    <span>=</span>
+                    <div class="pecahan">
+                        <span class="atas">4 + 6 + 6 + 6</span>
+                        <span class="bawah">4</span>
+                    </div>
+                </div>
+
+                <div></div>
+                <div class="langkah">
+                    <span>=</span>
+                    <div class="pecahan">
+                        <span class="atas">22</span>
+                        <span class="bawah">4</span>
+                    </div>
+                </div>
+
+                <div></div>
+                <div class="langkah">
+                    <span>=</span>
+                    <strong>5,50</strong>
+                </div>
+            </div>
+            <p>&rarr; <strong>C<sub>2</sub> baru = (5,75 ; 6,13 ; 5,50)</strong></p>
+            <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
+            <p><strong>4. Iterasi 2: Menghitung Ulang Jarak dengan Centroid Baru</strong></p>
+            <div class="table-wrapper" style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="white-space: nowrap;">No</th>
+                        <th style="white-space: nowrap;">Nama Desa</th>
+                        <th style="white-space: nowrap;">Jarak ke C<sub>1</sub> Baru (7,67 ; 7,42 ; 7,75)</th>
+                        <th style="white-space: nowrap;">Jarak ke C<sub>2</sub> Baru (5,75 ; 6,13 ; 5,50)</th>
+                        <th style="white-space: nowrap;">Klaster</th>
+                        <th style="white-space: nowrap;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td style="white-space: nowrap;">Ramai</td>
+                        <td style="white-space: nowrap;">&radic;(0,83<sup>2</sup> + 1,58<sup>2</sup> + (&minus;0,75)<sup>2</sup>)<br>= &radic;3,75 = <strong>1,94</strong></td>
+                        <td style="white-space: nowrap;">&radic;(2,75<sup>2</sup> + 2,87<sup>2</sup> + 1,50<sup>2</sup>)<br>= &radic;18,05 = 4,25</td>
+                        <td><strong>C<sub>1</sub></strong></td>
+                        <td>Tetap</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td style="white-space: nowrap;">Maju Raya</td>
+                        <td style="white-space: nowrap;">&radic;((&minus;0,67)<sup>2</sup> + (&minus;0,42)<sup>2</sup> + 0,25<sup>2</sup>)<br>= &radic;0,69 = <strong>0,83</strong></td>
+                        <td style="white-space: nowrap;">&radic;(1,25<sup>2</sup> + 0,87<sup>2</sup> + 2,50<sup>2</sup>)<br>= &radic;8,57 = 2,93</td>
+                        <td><strong>C<sub>1</sub></strong></td>
+                        <td>Tetap</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td style="white-space: nowrap;">Mekar Jaya</td>
+                        <td style="white-space: nowrap;">&radic;(0,83<sup>2</sup> + (&minus;0,92)<sup>2</sup> + 0,25<sup>2</sup>)<br>= &radic;1,60 = <strong>1,26</strong></td>
+                        <td style="white-space: nowrap;">&radic;(2,75<sup>2</sup> + 0,37<sup>2</sup> + 2,50<sup>2</sup>)<br>= &radic;13,95 = 3,73</td>
+                        <td><strong>C<sub>1</sub></strong></td>
+                        <td>Tetap</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td style="white-space: nowrap;">Tanjung</td>
+                        <td style="white-space: nowrap;">&radic;((&minus;0,67)<sup>2</sup> + (&minus;0,42)<sup>2</sup> + (&minus;0,25)<sup>2</sup>)<br>= &radic;0,69 = <strong>0,83</strong></td>
+                        <td style="white-space: nowrap;">&radic;(1,25<sup>2</sup> + 0,87<sup>2</sup> + 2,00<sup>2</sup>)<br>= &radic;6,32 = 2,51</td>
+                        <td><strong>C<sub>1</sub></strong></td>
+                        <td>Tetap</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td style="white-space: nowrap;">Muara Indah</td>
+                        <td style="white-space: nowrap;">&radic;((&minus;1,67)<sup>2</sup> + (&minus;1,92)<sup>2</sup> + (&minus;3,75)<sup>2</sup>)<br>= &radic;20,54 = 4,53</td>
+                        <td style="white-space: nowrap;">&radic;(0,25<sup>2</sup> + (&minus;0,63)<sup>2</sup> + (&minus;1,50)<sup>2</sup>)<br>= &radic;2,71 = <strong>1,65</strong></td>
+                        <td><strong>C<sub>2</sub></strong></td>
+                        <td>Tetap</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td style="white-space: nowrap;">Lubuk Hilir</td>
+                        <td style="white-space: nowrap;">&radic;((&minus;2,67)<sup>2</sup> + (&minus;1,42)<sup>2</sup> + (&minus;1,75)<sup>2</sup>)<br>= &radic;12,21 = 3,49</td>
+                        <td style="white-space: nowrap;">&radic;((&minus;0,75)<sup>2</sup> + (&minus;0,13)<sup>2</sup> + 0,50<sup>2</sup>)<br>= &radic;0,83 = <strong>0,91</strong></td>
+                        <td><strong>C<sub>2</sub></strong></td>
+                        <td>Tetap</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td style="white-space: nowrap;">Dataran Landai</td>
+                        <td style="white-space: nowrap;">&radic;((&minus;0,67)<sup>2</sup> + 0,58<sup>2</sup> + 0,25<sup>2</sup>)<br>= &radic;0,85 = <strong>0,92</strong></td>
+                        <td style="white-space: nowrap;">&radic;(1,25<sup>2</sup> + 1,87<sup>2</sup> + 2,50<sup>2</sup>)<br>= &radic;11,31 = 3,36</td>
+                        <td><strong>C<sub>1</sub></strong></td>
+                        <td>Tetap</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td style="white-space: nowrap;">Bengawan</td>
+                        <td style="white-space: nowrap;">&radic;(0,33<sup>2</sup> + (&minus;0,42)<sup>2</sup> + 0,25<sup>2</sup>)<br>= &radic;0,35 = <strong>0,59</strong></td>
+                        <td style="white-space: nowrap;">&radic;(2,25<sup>2</sup> + 0,87<sup>2</sup> + 2,50<sup>2</sup>)<br>= &radic;12,07 = 3,47</td>
+                        <td><strong>C<sub>1</sub></strong></td>
+                        <td>Tetap</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td style="white-space: nowrap;">Tegal Sari</td>
+                        <td style="white-space: nowrap;">&radic;((&minus;0,67)<sup>2</sup> + (&minus;1,42)<sup>2</sup> + (&minus;1,75)<sup>2</sup>)<br>= &radic;5,53 = 2,35</td>
+                        <td style="white-space: nowrap;">&radic;(1,25<sup>2</sup> + (&minus;0,13)<sup>2</sup> + 0,50<sup>2</sup>)<br>= &radic;1,83 = <strong>1,35</strong></td>
+                        <td><strong>C<sub>2</sub></strong></td>
+                        <td>Tetap</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td style="white-space: nowrap;">Harum Sari</td>
+                        <td style="white-space: nowrap;">&radic;((&minus;2,67)<sup>2</sup> + (&minus;0,42)<sup>2</sup> + (&minus;1,75)<sup>2</sup>)<br>= &radic;10,37 = 3,22</td>
+                        <td style="white-space: nowrap;">&radic;((&minus;0,75)<sup>2</sup> + 0,87<sup>2</sup> + 0,50<sup>2</sup>)<br>= &radic;1,57 = <strong>1,25</strong></td>
+                        <td><strong>C<sub>2</sub></strong></td>
+                        <td>Tetap</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+            <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
+            <p><strong>Kesimpulan:</strong></p>
+            <p>Karena anggota klaster pada Iterasi 2 sama persis dengan Iterasi 1 (tidak ada desa yang berpindah klaster), maka proses iterasi algoritma K-Means berhenti (konvergen). Hasil akhir pengelompokan potensi desa terbagi menjadi dua klaster, yaitu <strong>Klaster 1 (C<sub>1</sub>)</strong> beranggotakan 6 desa (Ramai, Maju Raya, Mekar Jaya, Tanjung, Dataran Landai, dan Bengawan) serta <strong>Klaster 2 (C<sub>2</sub>)</strong> beranggotakan 4 desa (Muara Indah, Lubuk Hilir, Tegal Sari, dan Harum Sari).</p>
+        </div>
+    </div>
+        
+
+
+
+<script>
+    function toggleAnswer(button) {
+        const answerContainer = button.nextElementSibling;
+        if (answerContainer.style.display === "block") {
+            answerContainer.style.display = "none";
+            button.textContent = "Tampilkan Jawaban";
+        } else {
+            answerContainer.style.display = "block";
+            button.textContent = "Sembunyikan Jawaban";
+        }
+    }
+</script>
+
+</body>
+</html>

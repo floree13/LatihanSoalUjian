@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal Ujian</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7f6;
+      margin: 0;
+      padding: 20px 10px;
+    }
+    h1 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    h2 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    .setup-box {
+      background: #ffffff;
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      text-align: center;
+      border-top: 5px solid #1a237e;
+    }
+    .setup-box h2 {
+      margin-top: 0;
+      color: #1a237e;
+      font-size: 18px;
+    }
+    .setup-box p {
+      color: #555;
+      font-size: 14px;
+    }
+    .opsi-acak {
+      margin: 15px 0;
+      padding: 10px;
+      background: #f3e5f5;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #4a148c;
+      cursor: pointer;
+    }
+    .opsi-acak input {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    .pilihan-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 15px;
+    }
+    .btn-jumlah {
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 8px;
+      border: 1px solid #3f51b5;
+      background: #e8eaf6;
+      color: #1a237e;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-jumlah:hover:not(:disabled) {
+      background: #3f51b5;
+      color: #ffffff;
+    }
+    .btn-jumlah:disabled {
+      background: #e0e0e0;
+      border-color: #bdbdbd;
+      color: #9e9e9e;
+      cursor: not-allowed;
+    }
+    .soal {
+      background: #ffffff;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 5px solid #42a5f5;
+    }
+    h3 {
+      color: #3f51b5;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .jawaban button {
+      color: #2a2a2a;
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #c5cae9;
+      background: #e8eaf6;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .jawaban button:hover:not(:disabled) {
+      background: #c5cae9;
+    }
+    .jawaban button.benar {
+      background-color: #dcf9dc;
+      border-color: #388e3c;
+      font-weight: bold;
+    }
+    .jawaban button.salah {
+      background-color: #ffcdd2;
+      border-color: #d32f2f;
+      opacity: 0.7;
+    }
+    .penjelasan-opsi {
+      background: #f3e5f5;
+      color: #4a148c;
+      padding: 10px;
+      margin-top: -5px;
+      margin-bottom: 15px;
+      border-radius: 0 0 8px 8px;
+      border-top: none;
+      border-left: 5px solid #7b1fa2;
+      font-size: 14px;
+      display: none;
+    }
+    .counter {
+      position: sticky;
+      bottom: 0;
+      background: #1a237e;
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      display: none;
+    }
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 20px; }
+      .jawaban button { font-size: 14px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Latihan Soal UO UT</h1>
+<h2>Arsitektur dan Perencanaan Sistem Enterprise</h2>
+
+<div id="setup-container" class="setup-box">
+  <h2>Pilih Jumlah Soal</h2>
+  <p>Total soal tersedia: <strong id="total-tersedia">0</strong> soal</p>
+  
+  <label class="opsi-acak">
+    <input type="checkbox" id="checkbox-acak" checked />
+    Acak Urutan Soal & Opsi Jawaban
+  </label>
+
+  <div class="pilihan-grid" id="pilihan-jumlah">
+    <button class="btn-jumlah" data-jumlah="25" onclick="mulaiUjian(25)">25 Soal</button>
+    <button class="btn-jumlah" data-jumlah="35" onclick="mulaiUjian(35)">35 Soal</button>
+    <button class="btn-jumlah" data-jumlah="45" onclick="mulaiUjian(25)">45 Soal</button>
+    <button class="btn-jumlah" data-jumlah="50" onclick="mulaiUjian(50)">50 Soal</button>
+    <button class="btn-jumlah" data-jumlah="100" style="grid-column: span 2;" onclick="mulaiUjian('100')">100 Soal</button>
+  </div>
+</div>
+
+<div id="container" style="display: none;"></div>
+
+<div id="counter" class="counter">
+  ✅ Jawaban Benar: <span id="benar">0</span> |
+  ❌ Jawaban Salah: <span id="salah">0</span>
+</div>
+
+<script>
+const soalList = [
+  {
+    "questionNumber": 1,
+    "question": "Arsitektur enterprise secara umum didefinisikan sebagai suatu disiplin ilmu yang digunakan untuk menggambarkan struktur dan perilaku suatu organisasi dalam konteks...",
+    "answerOptions": [
+      {
+        "text": "Pengelolaan sumber daya manusia dan keuangan organisasi secara terpadu",
+        "isCorrect": false,
+        "rationale": "Pengelolaan SDM dan keuangan merupakan fungsi operasional administratif, bukan cakupan utama definisi arsitektur enterprise."
+      },
+      {
+        "text": "Proses bisnis, sistem informasi, teknologi, dan hubungan antar komponen organisasi",
+        "isCorrect": true,
+        "rationale": "Arsitektur enterprise mencakup gambaran menyeluruh mengenai proses bisnis, sistem informasi, teknologi, serta keterkaitan antar komponen organisasi untuk mencapai tujuan strategis."
+      },
+      {
+        "text": "Perencanaan anggaran dan strategi pemasaran organisasi jangka panjang",
+        "isCorrect": false,
+        "rationale": "Perencanaan anggaran dan strategi pemasaran adalah bagian dari manajemen keuangan dan pemasaran, bukan kerangka arsitektur sistem enterprise."
+      },
+      {
+        "text": "Pengembangan infrastruktur fisik dan jaringan komunikasi organisasi",
+        "isCorrect": false,
+        "rationale": "Infrastruktur fisik dan jaringan hanyalah bagian dari domain arsitektur teknologi, bukan gambaran menyeluruh arsitektur enterprise."
+      }
+    ]
+  },
+  {
+    "questionNumber": 2,
+    "question": "Istilah \"enterprise\" dalam konteks arsitektur enterprise merujuk pada...",
+    "answerOptions": [
+      {
+        "text": "Suatu organisasi atau entitas yang memiliki sekumpulan tujuan dan sumber daya untuk mencapainya",
+        "isCorrect": true,
+        "rationale": "Dalam konteks arsitektur enterprise, \"enterprise\" tidak terbatas pada perusahaan besar, melainkan mencakup setiap organisasi atau entitas dengan tujuan dan sumber daya tertentu."
+      },
+      {
+        "text": "Perusahaan multinasional yang beroperasi di lebih dari satu negara",
+        "isCorrect": false,
+        "rationale": "Istilah enterprise tidak dibatasi oleh skala geografis atau status perusahaan multinasional."
+      },
+      {
+        "text": "Sistem perangkat lunak skala besar yang digunakan oleh korporasi besar",
+        "isCorrect": false,
+        "rationale": "Enterprise merujuk pada entitas organisasinya, bukan pada perangkat lunak (enterprise software) yang digunakannya."
+      },
+      {
+        "text": "Divisi teknologi informasi dalam suatu perusahaan swasta",
+        "isCorrect": false,
+        "rationale": "Enterprise mencakup keseluruhan organisasi maupun instansi pemerintah, bukan hanya divisi TI atau perusahaan swasta."
+      }
+    ]
+  },
+  {
+    "questionNumber": 3,
+    "question": "Salah satu manfaat utama penerapan arsitektur enterprise bagi suatu organisasi adalah...",
+    "answerOptions": [
+      {
+        "text": "Meningkatkan jumlah karyawan di divisi teknologi informasi secara signifikan",
+        "isCorrect": false,
+        "rationale": "Penerapan arsitektur enterprise bertujuan mengoptimalkan sumber daya, bukan sekadar menambah jumlah staf TI."
+      },
+      {
+        "text": "Mempercepat proses rekrutmen dan seleksi sumber daya manusia",
+        "isCorrect": false,
+        "rationale": "Proses rekrutmen merupakan fungsi spesifik departemen SDM dan bukan manfaat strategis utama dari arsitektur enterprise."
+      },
+      {
+        "text": "Menyelaraskan strategi bisnis dengan kapabilitas teknologi informasi organisasi",
+        "isCorrect": true,
+        "rationale": "Arsitektur enterprise berfungsi sebagai jembatan antara strategi bisnis dan implementasi teknologi informasi sehingga keduanya dapat berjalan selaras dan saling mendukung."
+      },
+      {
+        "text": "Mengurangi kebutuhan akan perencanaan strategis jangka panjang",
+        "isCorrect": false,
+        "rationale": "Arsitektur enterprise justru mendukung dan memperkuat pelaksanaan perencanaan strategis jangka panjang organisasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 4,
+    "question": "Dalam kerangka kerja arsitektur enterprise, domain arsitektur yang berfokus pada struktur organisasi, fungsi bisnis, dan alur informasi disebut...",
+    "answerOptions": [
+      {
+        "text": "Arsitektur teknologi",
+        "isCorrect": false,
+        "rationale": "Arsitektur teknologi berfokus pada infrastruktur perangkat keras, perangkat lunak sistem, dan jaringan."
+      },
+      {
+        "text": "Arsitektur aplikasi",
+        "isCorrect": false,
+        "rationale": "Arsitektur aplikasi berfokus pada sistem perangkat lunak yang digunakan dan interaksinya."
+      },
+      {
+        "text": "Arsitektur data",
+        "isCorrect": false,
+        "rationale": "Arsitektur data berfokus pada struktur aset data fisik maupun logis serta pengelolaannya."
+      },
+      {
+        "text": "Arsitektur bisnis",
+        "isCorrect": true,
+        "rationale": "Arsitektur bisnis menggambarkan struktur organisasi, proses bisnis, fungsi, dan alur informasi yang mendukung tujuan strategis organisasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 5,
+    "question": "Kerangka kerja Zachman membagi arsitektur enterprise berdasarkan dua dimensi utama, yaitu perspektif pemangku kepentingan dan...",
+    "answerOptions": [
+      {
+        "text": "Tingkat teknologi yang digunakan dalam organisasi",
+        "isCorrect": false,
+        "rationale": "Tingkat teknologi bukan merupakan dimensi utama matriks klasifikasi Zachman."
+      },
+      {
+        "text": "Aspek atau pertanyaan fundamental yang dijawab (apa, bagaimana, di mana, siapa, kapan, mengapa)",
+        "isCorrect": true,
+        "rationale": "Kerangka kerja Zachman menggunakan matriks dua dimensi berupa perspektif pemangku kepentingan (baris) dan aspek pertanyaan fundamental (kolom) untuk mendokumentasikan arsitektur enterprise secara komprehensif."
+      },
+      {
+        "text": "Anggaran yang tersedia untuk pengembangan sistem",
+        "isCorrect": false,
+        "rationale": "Anggaran pengembangan sistem tidak menjadi dimensi klasifikasi dalam matriks kerangka kerja Zachman."
+      },
+      {
+        "text": "Skala operasional organisasi secara geografis",
+        "isCorrect": false,
+        "rationale": "Skala geografis hanya bagian kecil dari aspek 'di mana' (where), bukan dimensi kedua secara keseluruhan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 6,
+    "question": "TOGAF merupakan singkatan dari...",
+    "answerOptions": [
+      {
+        "text": "Technology Oriented General Architecture Framework",
+        "isCorrect": false,
+        "rationale": "Kepanjangan ini tidak tepat; TOGAF bukan berfokus pada orientasi teknologi semata."
+      },
+      {
+        "text": "Total Organizational Governance and Architecture Foundation",
+        "isCorrect": false,
+        "rationale": "Kepanjangan ini salah; huruf G pada TOGAF merujuk pada organisasi pengembangnya, yaitu The Open Group."
+      },
+      {
+        "text": "The Open Group Architecture Framework",
+        "isCorrect": true,
+        "rationale": "TOGAF adalah singkatan dari The Open Group Architecture Framework, sebuah kerangka kerja arsitektur enterprise yang dikembangkan dan dikelola oleh The Open Group."
+      },
+      {
+        "text": "Theoretical Open Group Architecture Formation",
+        "isCorrect": false,
+        "rationale": "Kepanjangan ini salah; TOGAF adalah framework praktis, bukan sekadar formasi teoretis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 7,
+    "question": "Komponen utama dalam TOGAF yang berfungsi sebagai metode pengembangan dan pemeliharaan arsitektur enterprise secara berulang disebut...",
+    "answerOptions": [
+      {
+        "text": "Architecture Development Method (ADM)",
+        "isCorrect": true,
+        "rationale": "ADM adalah inti dari TOGAF yang menyediakan proses berulang dan bertahap untuk mengembangkan serta mengelola arsitektur enterprise dari fase awal hingga implementasi."
+      },
+      {
+        "text": "Enterprise Continuum",
+        "isCorrect": false,
+        "rationale": "Enterprise Continuum adalah mekanisme klasifikasi aset arsitektur, bukan siklus metode pengembangannya."
+      },
+      {
+        "text": "Architecture Repository",
+        "isCorrect": false,
+        "rationale": "Architecture Repository adalah tempat penyimpanan berbagai keluaran dan aset arsitektur yang dihasilkan selama proses ADM."
+      },
+      {
+        "text": "Architecture Governance Framework",
+        "isCorrect": false,
+        "rationale": "Architecture Governance Framework berfokus pada tata kelola dan pengawasan kepatuhan arsitektur."
+      }
+    ]
+  },
+  {
+    "questionNumber": 8,
+    "question": "Dalam TOGAF ADM, fase yang bertujuan untuk memastikan kesiapan dan kapasitas organisasi dalam menjalankan proyek arsitektur disebut fase...",
+    "answerOptions": [
+      {
+        "text": "Fase A: Architecture Vision",
+        "isCorrect": false,
+        "rationale": "Fase A berfokus pada penetapan ruang lingkup, visi arsitektur, dan persetujuan proyek arsitektur."
+      },
+      {
+        "text": "Fase B: Business Architecture",
+        "isCorrect": false,
+        "rationale": "Fase B berfokus pada pengembangan arsitektur bisnis baseline dan target."
+      },
+      {
+        "text": "Fase H: Architecture Change Management",
+        "isCorrect": false,
+        "rationale": "Fase H berada di akhir siklus untuk mengelola perubahan arsitektur secara berkelanjutan."
+      },
+      {
+        "text": "Fase Preliminary",
+        "isCorrect": true,
+        "rationale": "Fase Preliminary dalam TOGAF ADM merupakan tahap persiapan yang memastikan kesiapan organisasi, termasuk menetapkan prinsip arsitektur dan konteks organisasi sebelum pengembangan arsitektur dimulai."
+      }
+    ]
+  },
+  {
+    "questionNumber": 9,
+    "question": "Enterprise Continuum dalam TOGAF berfungsi sebagai...",
+    "answerOptions": [
+      {
+        "text": "Metode evaluasi kinerja sistem informasi organisasi secara berkala",
+        "isCorrect": false,
+        "rationale": "Evaluasi kinerja sistem bukan fungsi utama dari Enterprise Continuum."
+      },
+      {
+        "text": "Sistem klasifikasi dan repositori aset arsitektur dari yang paling umum hingga yang spesifik bagi organisasi",
+        "isCorrect": true,
+        "rationale": "Enterprise Continuum mengklasifikasikan aset arsitektur mulai dari solusi generik (Foundation Architecture) hingga solusi yang spesifik dan disesuaikan dengan kebutuhan organisasi tertentu."
+      },
+      {
+        "text": "Panduan tata kelola teknologi informasi untuk perusahaan multinasional",
+        "isCorrect": false,
+        "rationale": "Tata kelola TI diatur melalui Architecture Governance, bukan Enterprise Continuum."
+      },
+      {
+        "text": "Kerangka pengukuran kematangan implementasi TOGAF dalam organisasi",
+        "isCorrect": false,
+        "rationale": "Pengukuran kematangan arsitektur menggunakan Architecture Capability Framework atau maturity models."
+      }
+    ]
+  },
+  {
+    "questionNumber": 10,
+    "question": "Dalam TOGAF ADM, fase yang menghasilkan keluaran berupa dokumen visi arsitektur (Architecture Vision) serta pernyataan pekerjaan arsitektur adalah fase...",
+    "answerOptions": [
+      {
+        "text": "Fase Preliminary",
+        "isCorrect": false,
+        "rationale": "Fase Preliminary menghasilkan prinsip-prinsip arsitektur dan kerangka kerja kapabilitas organisasi."
+      },
+      {
+        "text": "Fase B: Business Architecture",
+        "isCorrect": false,
+        "rationale": "Fase B menghasilkan dokumen definisi arsitektur bisnis dan hasil analisis kesenjangan bisnis."
+      },
+      {
+        "text": "Fase A: Architecture Vision",
+        "isCorrect": true,
+        "rationale": "Fase A menghasilkan dokumen Architecture Vision yang mendefinisikan ruang lingkup, batasan, dan visi arsitektur target, serta Statement of Architecture Work sebagai persetujuan untuk melanjutkan proyek."
+      },
+      {
+        "text": "Fase G: Implementation Governance",
+        "isCorrect": false,
+        "rationale": "Fase G menghasilkan kontrak arsitektur dan penilaian kepatuhan implementasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 11,
+    "question": "Proses bisnis didefinisikan sebagai serangkaian aktivitas yang terstruktur dan terukur yang dirancang untuk menghasilkan keluaran tertentu bagi...",
+    "answerOptions": [
+      {
+        "text": "Pelanggan atau pasar tertentu",
+        "isCorrect": true,
+        "rationale": "Proses bisnis dirancang untuk menghasilkan nilai berupa produk atau layanan yang ditujukan kepada pelanggan atau pasar tertentu sebagai penerima manfaat utama."
+      },
+      {
+        "text": "Pemerintah dan regulator industri",
+        "isCorrect": false,
+        "rationale": "Kepatuhan terhadap regulator merupakan batasan atau persyaratan, bukan tujuan keluaran utama proses bisnis."
+      },
+      {
+        "text": "Pemegang saham dan investor perusahaan",
+        "isCorrect": false,
+        "rationale": "Keuntungan bagi pemegang saham adalah dampak finansial dari keberhasilan memenuhi kebutuhan pelanggan."
+      },
+      {
+        "text": "Departemen keuangan dan akuntansi organisasi",
+        "isCorrect": false,
+        "rationale": "Departemen keuangan adalah unit pendukung internal, bukan penerima keluaran akhir proses bisnis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 12,
+    "question": "Jenis proses bisnis yang secara langsung menciptakan nilai bagi pelanggan dan menjadi inti dari operasional organisasi disebut...",
+    "answerOptions": [
+      {
+        "text": "Proses pendukung (support process)",
+        "isCorrect": false,
+        "rationale": "Proses pendukung membantu kelancaran proses inti (seperti SDM atau TI), namun tidak langsung memberi nilai ke pelanggan."
+      },
+      {
+        "text": "Proses manajemen (management process)",
+        "isCorrect": false,
+        "rationale": "Proses manajemen mengatur perencanaan, pengendalian, dan tata kelola keseluruhan organisasi."
+      },
+      {
+        "text": "Proses administratif (administrative process)",
+        "isCorrect": false,
+        "rationale": "Proses administratif berfokus pada pengelolaan dokumen dan urusan internal perkantoran."
+      },
+      {
+        "text": "Proses inti (core process)",
+        "isCorrect": true,
+        "rationale": "Proses inti adalah proses yang langsung berhubungan dengan penciptaan produk atau layanan bagi pelanggan, menjadikannya sebagai inti dari kegiatan operasional organisasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 13,
+    "question": "Sistem informasi dalam konteks enterprise berfungsi untuk mendukung pengambilan keputusan manajerial dengan cara...",
+    "answerOptions": [
+      {
+        "text": "Menggantikan peran manajer dalam setiap proses bisnis organisasi",
+        "isCorrect": false,
+        "rationale": "Sistem informasi bertugas membantu manajer mengambil keputusan strategis, bukan menggantikan peran manusia sepenuhnya."
+      },
+      {
+        "text": "Mengumpulkan, mengolah, menyimpan, dan mendistribusikan informasi yang relevan dan tepat waktu",
+        "isCorrect": true,
+        "rationale": "Sistem informasi berperan dalam mengelola data menjadi informasi yang berguna, sehingga mendukung proses pengambilan keputusan di berbagai tingkatan manajemen organisasi."
+      },
+      {
+        "text": "Mengurangi jumlah tenaga kerja yang dibutuhkan dalam operasional harian",
+        "isCorrect": false,
+        "rationale": "Pengurangan tenaga kerja hanyalah potensi efisiensi operasional, bukan fungsi utama dalam mendukung keputusan manajerial."
+      },
+      {
+        "text": "Mengotomatisasi seluruh proses bisnis tanpa campur tangan manusia",
+        "isCorrect": false,
+        "rationale": "Otomatisasi penuh tidak selalu terjadi pada keputusan manajerial yang kompleks dan membutuhkan pertimbangan manusia."
+      }
+    ]
+  },
+  {
+    "questionNumber": 14,
+    "question": "Perencanaan strategis dalam konteks enterprise merupakan proses yang digunakan untuk...",
+    "answerOptions": [
+      {
+        "text": "Mengatur jadwal operasional harian seluruh divisi organisasi",
+        "isCorrect": false,
+        "rationale": "Pengaturan jadwal harian termasuk dalam perencanaan operasional jangka pendek."
+      },
+      {
+        "text": "Menyusun laporan keuangan tahunan organisasi kepada pemangku kepentingan",
+        "isCorrect": false,
+        "rationale": "Penyusunan laporan keuangan adalah bagian dari pelaporan akuntansi, bukan perumusan strategi."
+      },
+      {
+        "text": "Menetapkan arah jangka panjang organisasi, tujuan, serta cara mencapainya",
+        "isCorrect": true,
+        "rationale": "Perencanaan strategis adalah proses menentukan visi, misi, tujuan jangka panjang, serta strategi yang akan digunakan organisasi untuk mencapai tujuan tersebut."
+      },
+      {
+        "text": "Mengevaluasi kinerja individu karyawan secara periodik",
+        "isCorrect": false,
+        "rationale": "Evaluasi kinerja individu merupakan bagian dari manajemen sumber daya manusia."
+      }
+    ]
+  },
+  {
+    "questionNumber": 15,
+    "question": "Analisis SWOT dalam perencanaan strategis digunakan untuk mengidentifikasi...",
+    "answerOptions": [
+      {
+        "text": "Kekuatan, kelemahan, peluang, dan ancaman yang dihadapi organisasi",
+        "isCorrect": true,
+        "rationale": "SWOT merupakan akronim dari Strengths (kekuatan), Weaknesses (kelemahan), Opportunities (peluang), dan Threats (ancaman), yang digunakan sebagai alat analisis lingkungan internal dan eksternal organisasi."
+      },
+      {
+        "text": "Strategi, taktik, operasional, dan target kinerja organisasi",
+        "isCorrect": false,
+        "rationale": "Istilah-istilah tersebut merupakan tingkatan perencanaan, bukan komponen analisis SWOT."
+      },
+      {
+        "text": "Sistem, workflow, objek, dan teknologi yang digunakan organisasi",
+        "isCorrect": false,
+        "rationale": "Istilah-istilah tersebut berkaitan dengan komponen teknis sistem informasi, bukan akronim SWOT."
+      },
+      {
+        "text": "Standar, wawasan, orientasi, dan taktik pengembangan produk",
+        "isCorrect": false,
+        "rationale": "Kepanjangan ini tidak sesuai dengan konsep analisis SWOT dalam manajemen strategis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 16,
+    "question": "Perumusan strategi komprehensif dalam perencanaan strategis enterprise melibatkan penyelarasan antara...",
+    "answerOptions": [
+      {
+        "text": "Anggaran tahunan dengan kebutuhan pelatihan karyawan",
+        "isCorrect": false,
+        "rationale": "Hal ini merupakan aspek perencanaan operasional SDM, bukan perumusan strategi enterprise secara komprehensif."
+      },
+      {
+        "text": "Jumlah produk dengan kapasitas distribusi pasar",
+        "isCorrect": false,
+        "rationale": "Hal ini berfokus pada manajemen rantai pasok dan logistik semata."
+      },
+      {
+        "text": "Struktur organisasi dengan prosedur operasional standar",
+        "isCorrect": false,
+        "rationale": "SOP merupakan panduan pelaksanaan tugas harian, bukan penyelarasan strategis tingkat enterprise."
+      },
+      {
+        "text": "Tujuan strategis organisasi dengan sumber daya dan kapabilitas yang dimiliki",
+        "isCorrect": true,
+        "rationale": "Perumusan strategi komprehensif memerlukan keselarasan antara tujuan yang ingin dicapai dengan sumber daya dan kapabilitas nyata yang dimiliki organisasi agar strategi dapat diimplementasikan secara efektif."
+      }
+    ]
+  },
+  {
+    "questionNumber": 17,
+    "question": "Keunggulan kompetitif (competitive advantage) suatu organisasi didefinisikan sebagai kemampuan organisasi untuk...",
+    "answerOptions": [
+      {
+        "text": "Memproduksi barang dengan biaya paling rendah di antara semua produsen",
+        "isCorrect": false,
+        "rationale": "Kepemimpinan biaya rendah hanyalah salah satu jenis strategi generik untuk mencapai keunggulan kompetitif, bukan definisi keseluruhannya."
+      },
+      {
+        "text": "Menciptakan nilai lebih bagi pelanggan dibandingkan dengan pesaing",
+        "isCorrect": true,
+        "rationale": "Keunggulan kompetitif merujuk pada kemampuan organisasi menghasilkan nilai yang lebih tinggi atau berbeda bagi pelanggan dibandingkan pesaing, sehingga posisi organisasi di pasar menjadi lebih kuat."
+      },
+      {
+        "text": "Mendominasi pasar melalui akuisisi dan merger perusahaan pesaing",
+        "isCorrect": false,
+        "rationale": "Akuisisi dan merger adalah strategi pertumbuhan korporat, bukan definisi dari keunggulan kompetitif."
+      },
+      {
+        "text": "Mempertahankan pangsa pasar yang sama selama periode tertentu",
+        "isCorrect": false,
+        "rationale": "Mempertahankan pangsa pasar yang stagnan tidak mencerminkan kemampuan mengungguli pesaing dalam menciptakan nilai."
+      }
+    ]
+  },
+  {
+    "questionNumber": 18,
+    "question": "Balanced Scorecard (BSC) digunakan dalam manajemen strategi sebagai alat untuk...",
+    "answerOptions": [
+      {
+        "text": "Menyusun laporan keuangan organisasi berdasarkan standar akuntansi internasional",
+        "isCorrect": false,
+        "rationale": "BSC tidak hanya mengukur aspek keuangan, melainkan melengkapinya dengan perspektif non-keuangan."
+      },
+      {
+        "text": "Mengelola portofolio investasi teknologi informasi organisasi",
+        "isCorrect": false,
+        "rationale": "Pengelolaan portofolio TI biasanya menggunakan matriks portofolio aplikasi seperti model Ward dan Peppard."
+      },
+      {
+        "text": "Mengukur kinerja organisasi dari berbagai perspektif secara seimbang",
+        "isCorrect": true,
+        "rationale": "Balanced Scorecard mengukur kinerja organisasi dari empat perspektif, yaitu keuangan, pelanggan, proses bisnis internal, serta pembelajaran dan pertumbuhan, secara seimbang dan terpadu."
+      },
+      {
+        "text": "Menentukan prioritas pengembangan produk baru berdasarkan permintaan pasar",
+        "isCorrect": false,
+        "rationale": "Penentuan prioritas produk merupakan bagian dari manajemen produk dan riset pasar."
+      }
+    ]
+  },
+  {
+    "questionNumber": 19,
+    "question": "Key Performance Indicator (KPI) dalam pengukuran kinerja organisasi merupakan...",
+    "answerOptions": [
+      {
+        "text": "Ukuran terukur yang digunakan untuk mengevaluasi seberapa baik organisasi mencapai tujuannya",
+        "isCorrect": true,
+        "rationale": "KPI adalah indikator kuantitatif maupun kualitatif yang terukur dan digunakan untuk menilai tingkat keberhasilan organisasi dalam mencapai target dan tujuan strategisnya."
+      },
+      {
+        "text": "Laporan keuangan yang mencerminkan kondisi aset dan kewajiban organisasi",
+        "isCorrect": false,
+        "rationale": "Laporan yang mencerminkan aset dan kewajiban disebut neraca keuangan (balance sheet)."
+      },
+      {
+        "text": "Standar teknis yang digunakan untuk menilai kualitas perangkat lunak",
+        "isCorrect": false,
+        "rationale": "Standar kualitas perangkat lunak diatur melalui kerangka seperti ISO/IEC 25010, bukan KPI organisasi."
+      },
+      {
+        "text": "Prosedur operasional yang menjamin konsistensi layanan pelanggan",
+        "isCorrect": false,
+        "rationale": "Prosedur operasional adalah SOP, sedangkan KPI adalah alat ukur keberhasilan dari pelaksanaan prosedur tersebut."
+      }
+    ]
+  },
+  {
+    "questionNumber": 20,
+    "question": "Diagram proses bisnis yang menggambarkan alur aktivitas secara berurutan beserta percabangan kondisi disebut...",
+    "answerOptions": [
+      {
+        "text": "Diagram kelas (class diagram)",
+        "isCorrect": false,
+        "rationale": "Class diagram menggambarkan struktur statis kelas, atribut, dan relasinya dalam pemrograman berorientasi objek."
+      },
+      {
+        "text": "Diagram sekuens (sequence diagram)",
+        "isCorrect": false,
+        "rationale": "Sequence diagram berfokus pada urutan pengiriman pesan antar objek berdasarkan waktu."
+      },
+      {
+        "text": "Diagram komponen (component diagram)",
+        "isCorrect": false,
+        "rationale": "Component diagram menggambarkan ketergantungan antar komponen fisik perangkat lunak."
+      },
+      {
+        "text": "Diagram alur (flowchart)",
+        "isCorrect": true,
+        "rationale": "Flowchart adalah diagram yang menggambarkan urutan langkah atau aktivitas dalam suatu proses beserta percabangan berdasarkan kondisi tertentu, sehingga alur proses bisnis dapat dipahami dengan mudah."
+      }
+    ]
+  },
+  {
+    "questionNumber": 21,
+    "question": "Dalam pemodelan proses menggunakan notasi UML, diagram yang paling tepat digunakan untuk menggambarkan urutan interaksi antara objek dalam suatu proses bisnis adalah...",
+    "answerOptions": [
+      {
+        "text": "Use case diagram",
+        "isCorrect": false,
+        "rationale": "Use case diagram hanya memperlihatkan fungsionalitas sistem secara umum dari sudut pandang aktor tanpa urutan waktu."
+      },
+      {
+        "text": "Sequence diagram",
+        "isCorrect": true,
+        "rationale": "Sequence diagram dalam UML menggambarkan interaksi antar objek secara berurutan berdasarkan waktu, sehingga cocok digunakan untuk memodelkan alur komunikasi dalam suatu proses bisnis."
+      },
+      {
+        "text": "Class diagram",
+        "isCorrect": false,
+        "rationale": "Class diagram memodelkan struktur statis sistem, bukan alur interaksi dinamis."
+      },
+      {
+        "text": "Deployment diagram",
+        "isCorrect": false,
+        "rationale": "Deployment diagram memodelkan arsitektur fisik perangkat keras dan penempatan artefak perangkat lunak."
+      }
+    ]
+  },
+  {
+    "questionNumber": 22,
+    "question": "Use case diagram dalam UML digunakan untuk menggambarkan...",
+    "answerOptions": [
+      {
+        "text": "Struktur data dan hubungan antar tabel dalam basis data",
+        "isCorrect": false,
+        "rationale": "Struktur tabel basis data digambarkan menggunakan Entity Relationship Diagram (ERD)."
+      },
+      {
+        "text": "Alur eksekusi kode program secara terperinci",
+        "isCorrect": false,
+        "rationale": "Alur eksekusi terperinci digambarkan menggunakan activity diagram atau flowchart."
+      },
+      {
+        "text": "Interaksi antara pengguna (aktor) dengan fungsionalitas sistem",
+        "isCorrect": true,
+        "rationale": "Use case diagram menggambarkan hubungan antara aktor (pengguna atau sistem luar) dengan use case (fungsionalitas) yang tersedia dalam sistem, sehingga kebutuhan fungsional dapat dipahami secara visual."
+      },
+      {
+        "text": "Topologi jaringan dan infrastruktur perangkat keras sistem",
+        "isCorrect": false,
+        "rationale": "Topologi infrastruktur digambarkan melalui deployment diagram."
+      }
+    ]
+  },
+  {
+    "questionNumber": 23,
+    "question": "Business Process Model and Notation (BPMN) dikembangkan dengan tujuan utama untuk...",
+    "answerOptions": [
+      {
+        "text": "Menyediakan notasi standar yang mudah dipahami oleh pemangku kepentingan bisnis maupun teknis",
+        "isCorrect": true,
+        "rationale": "BPMN dirancang sebagai notasi standar pemodelan proses bisnis yang dapat dipahami oleh analis bisnis, pengembang sistem, maupun manajer, sehingga komunikasi lintas fungsi menjadi lebih efektif."
+      },
+      {
+        "text": "Menggantikan seluruh diagram UML dalam pemodelan sistem informasi enterprise",
+        "isCorrect": false,
+        "rationale": "BPMN melengkapi UML untuk pemodelan proses bisnis, bukan menggantikan diagram teknis UML."
+      },
+      {
+        "text": "Mendokumentasikan struktur basis data relasional secara visual",
+        "isCorrect": false,
+        "rationale": "Struktur basis data relasional didokumentasikan menggunakan ERD, bukan BPMN."
+      },
+      {
+        "text": "Mengotomatisasi pembuatan kode program dari diagram proses bisnis",
+        "isCorrect": false,
+        "rationale": "Meskipun dapat dieksekusi oleh mesin BPMS tertentu, tujuan utama BPMN adalah standarisasi pemahaman visual proses bisnis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 24,
+    "question": "Perencanaan strategis sistem dan teknologi informasi (SI/TI) pada tingkat enterprise bertujuan untuk...",
+    "answerOptions": [
+      {
+        "text": "Menentukan spesifikasi teknis perangkat keras yang akan dibeli organisasi",
+        "isCorrect": false,
+        "rationale": "Spesifikasi teknis perangkat keras berada pada level perencanaan teknis/pengadaan, bukan perencanaan strategis."
+      },
+      {
+        "text": "Menetapkan anggaran operasional departemen teknologi informasi",
+        "isCorrect": false,
+        "rationale": "Penetapan anggaran merupakan bagian dari pengelolaan keuangan TI, bukan tujuan utama perencanaan strategis SI/TI."
+      },
+      {
+        "text": "Memilih vendor perangkat lunak terbaik berdasarkan evaluasi teknis",
+        "isCorrect": false,
+        "rationale": "Pemilihan vendor adalah tahapan implementasi/pengadaan setelah strategi SI/TI ditetapkan."
+      },
+      {
+        "text": "Memastikan investasi SI/TI mendukung dan selaras dengan strategi bisnis organisasi",
+        "isCorrect": true,
+        "rationale": "Perencanaan strategis SI/TI berfokus pada penyelarasan antara rencana pengembangan sistem informasi dengan strategi dan kebutuhan bisnis jangka panjang organisasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 25,
+    "question": "Model Ward dan Peppard dalam perencanaan strategis SI/TI mengklasifikasikan aplikasi ke dalam empat kuadran berdasarkan...",
+    "answerOptions": [
+      {
+        "text": "Biaya pengembangan dan tingkat kerumitan teknis aplikasi",
+        "isCorrect": false,
+        "rationale": "Matriks McFarlan/Ward dan Peppard tidak menilai berdasarkan biaya maupun kerumitan teknis."
+      },
+      {
+        "text": "Kontribusi strategis dan nilai bisnis aplikasi saat ini maupun di masa depan",
+        "isCorrect": true,
+        "rationale": "Model Ward dan Peppard menggunakan matriks portofolio aplikasi yang mengklasifikasikan aplikasi berdasarkan kontribusi strategisnya ke dalam kuadran strategic, key operational, support, dan high potential."
+      },
+      {
+        "text": "Jumlah pengguna aktif dan frekuensi penggunaan aplikasi harian",
+        "isCorrect": false,
+        "rationale": "Jumlah pengguna aktif mengukur tingkat adopsi operasional, bukan posisi strategis dalam portofolio Ward dan Peppard."
+      },
+      {
+        "text": "Usia aplikasi dan tingkat kematangan teknologi yang digunakan",
+        "isCorrect": false,
+        "rationale": "Usia aplikasi berkaitan dengan manajemen siklus hidup perangkat lunak, bukan pengelompokan kuadran strategis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 26,
+    "question": "Master Plan sistem dan teknologi informasi merupakan dokumen yang berisi...",
+    "answerOptions": [
+      {
+        "text": "Rincian teknis konfigurasi jaringan dan server yang akan digunakan",
+        "isCorrect": false,
+        "rationale": "Rincian konfigurasi teknis dimuat dalam dokumen desain teknis sistem (System Design Document)."
+      },
+      {
+        "text": "Laporan audit keamanan sistem informasi organisasi secara berkala",
+        "isCorrect": false,
+        "rationale": "Laporan audit merupakan hasil evaluasi kepatuhan keamanan, bukan rencana induk pengembangan SI/TI."
+      },
+      {
+        "text": "Rencana pengembangan SI/TI jangka panjang yang terstruktur dan terukur bagi organisasi",
+        "isCorrect": true,
+        "rationale": "Master Plan SI/TI adalah dokumen strategis yang memuat arah, prioritas, dan rencana pengembangan sistem dan teknologi informasi organisasi dalam jangka panjang secara terstruktur."
+      },
+      {
+        "text": "Prosedur pemulihan bencana dan backup data organisasi",
+        "isCorrect": false,
+        "rationale": "Prosedur pemulihan bencana dimuat dalam dokumen Disaster Recovery Plan (DRP)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 27,
+    "question": "EAP (Enterprise Architecture Planning) dikembangkan oleh Steven Spewak dengan tujuan utama untuk...",
+    "answerOptions": [
+      {
+        "text": "Mendefinisikan arsitektur data, aplikasi, dan teknologi sebagai fondasi implementasi visi bisnis",
+        "isCorrect": true,
+        "rationale": "EAP yang dikembangkan Spewak berfokus pada perencanaan arsitektur enterprise dengan mendefinisikan arsitektur data, aplikasi, dan teknologi yang diperlukan untuk mewujudkan visi dan misi bisnis organisasi."
+      },
+      {
+        "text": "Mengembangkan sistem informasi berbasis web untuk organisasi pemerintahan",
+        "isCorrect": false,
+        "rationale": "EAP adalah metodologi perencanaan arsitektur menyeluruh dan tidak terbatas pada sistem berbasis web atau instansi pemerintah."
+      },
+      {
+        "text": "Menstandarisasi bahasa pemrograman yang digunakan dalam pengembangan sistem enterprise",
+        "isCorrect": false,
+        "rationale": "EAP berada pada level perencanaan arsitektur, bukan pada penentuan standar sintaks bahasa pemrograman."
+      },
+      {
+        "text": "Mengelola sumber daya manusia di bidang teknologi informasi secara efisien",
+        "isCorrect": false,
+        "rationale": "Pengelolaan SDM TI bukan merupakan fokus utama dari metodologi EAP Spewak."
+      }
+    ]
+  },
+  {
+    "questionNumber": 28,
+    "question": "Dalam metodologi EAP, lapisan pertama yang harus diselesaikan sebelum lapisan lainnya adalah...",
+    "answerOptions": [
+      {
+        "text": "Arsitektur aplikasi",
+        "isCorrect": false,
+        "rationale": "Arsitektur aplikasi berada pada lapisan ke-3 dalam metodologi EAP setelah arsitektur data."
+      },
+      {
+        "text": "Arsitektur teknologi",
+        "isCorrect": false,
+        "rationale": "Arsitektur teknologi juga berada pada lapisan ke-3 bersama dengan arsitektur data dan aplikasi."
+      },
+      {
+        "text": "Rencana implementasi dan migrasi",
+        "isCorrect": false,
+        "rationale": "Rencana implementasi dan migrasi merupakan lapisan terakhir (lapisan ke-4) dalam EAP."
+      },
+      {
+        "text": "Pemodelan bisnis dan inventaris data saat ini",
+        "isCorrect": true,
+        "rationale": "Dalam EAP, lapisan pertama mencakup inisiasi perencanaan, pemodelan bisnis, serta inventarisasi sistem dan teknologi saat ini, yang menjadi dasar bagi pengembangan arsitektur pada lapisan berikutnya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 29,
+    "question": "Lapisan arsitektur dalam EAP yang mendefinisikan jenis data utama yang dibutuhkan untuk mendukung fungsi bisnis organisasi disebut...",
+    "answerOptions": [
+      {
+        "text": "Arsitektur teknologi",
+        "isCorrect": false,
+        "rationale": "Arsitektur teknologi menentukan platform perangkat keras dan jaringan pendukung."
+      },
+      {
+        "text": "Arsitektur data",
+        "isCorrect": true,
+        "rationale": "Arsitektur data dalam EAP mendefinisikan entitas data utama yang dibutuhkan organisasi beserta hubungannya, sebagai landasan bagi pengembangan arsitektur aplikasi dan teknologi."
+      },
+      {
+        "text": "Arsitektur aplikasi",
+        "isCorrect": false,
+        "rationale": "Arsitektur aplikasi mendefinisikan sistem perangkat lunak yang mengelola entitas data tersebut."
+      },
+      {
+        "text": "Arsitektur bisnis",
+        "isCorrect": false,
+        "rationale": "Dalam EAP, pemodelan bisnis berada di lapisan dasar sebelum pendefinisian arsitektur data."
+      }
+    ]
+  },
+  {
+    "questionNumber": 30,
+    "question": "Dalam EAP lapisan 2, arsitektur aplikasi berfungsi untuk mendefinisikan...",
+    "answerOptions": [
+      {
+        "text": "Platform perangkat keras yang akan digunakan dalam pengembangan sistem",
+        "isCorrect": false,
+        "rationale": "Platform perangkat keras didefinisikan dalam arsitektur teknologi."
+      },
+      {
+        "text": "Prosedur keamanan dan backup data organisasi secara teknis",
+        "isCorrect": false,
+        "rationale": "Prosedur teknis keamanan dan backup masuk ke dalam ranah operasional dan arsitektur teknologi."
+      },
+      {
+        "text": "Aplikasi yang diperlukan untuk mengelola data dan mendukung fungsi bisnis",
+        "isCorrect": true,
+        "rationale": "Arsitektur aplikasi dalam EAP mengidentifikasi dan mendefinisikan jenis-jenis aplikasi yang dibutuhkan untuk mengelola data serta mendukung berbagai fungsi bisnis organisasi secara efektif."
+      },
+      {
+        "text": "Kebijakan penggunaan teknologi informasi bagi seluruh pegawai",
+        "isCorrect": false,
+        "rationale": "Kebijakan penggunaan TI merupakan bagian dari tata kelola (IT governance), bukan arsitektur aplikasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 31,
+    "question": "Arsitektur teknologi dalam EAP lapisan 2 bertujuan untuk mendefinisikan...",
+    "answerOptions": [
+      {
+        "text": "Platform teknologi yang diperlukan untuk mendukung aplikasi dan data organisasi",
+        "isCorrect": true,
+        "rationale": "Arsitektur teknologi dalam EAP mengidentifikasi platform teknologi, standar teknis, dan infrastruktur yang diperlukan untuk mendukung arsitektur data dan aplikasi yang telah didefinisikan sebelumnya."
+      },
+      {
+        "text": "Metodologi pengembangan perangkat lunak yang akan digunakan tim",
+        "isCorrect": false,
+        "rationale": "Metodologi pengembangan perangkat lunak (seperti Agile atau Waterfall) adalah bagian dari manajemen proyek rekayasa perangkat lunak."
+      },
+      {
+        "text": "Standar antarmuka pengguna untuk semua aplikasi enterprise",
+        "isCorrect": false,
+        "rationale": "Standar UI/UX berkaitan dengan perancangan antarmuka aplikasi, bukan arsitektur teknologi."
+      },
+      {
+        "text": "Kebijakan tata kelola data dan privasi informasi organisasi",
+        "isCorrect": false,
+        "rationale": "Tata kelola dan privasi data berkaitan dengan arsitektur data dan kepatuhan regulasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 32,
+    "question": "Pada praktik EAP lapisan 1, pemodelan bisnis dilakukan dengan menggunakan pendekatan...",
+    "answerOptions": [
+      {
+        "text": "Analisis keuangan dan proyeksi laba rugi organisasi jangka panjang",
+        "isCorrect": false,
+        "rationale": "Analisis keuangan dan laba rugi merupakan aktivitas akuntansi dan manajemen keuangan."
+      },
+      {
+        "text": "Evaluasi kinerja individu karyawan berbasis kompetensi",
+        "isCorrect": false,
+        "rationale": "Evaluasi kinerja individu merupakan bagian dari manajemen sumber daya manusia."
+      },
+      {
+        "text": "Pemetaan proses rekrutmen dan seleksi sumber daya manusia",
+        "isCorrect": false,
+        "rationale": "Pemetaan rekrutmen hanya mencakup satu fungsi pendukung kecil dari keseluruhan bisnis organisasi."
+      },
+      {
+        "text": "Dekomposisi fungsi bisnis menjadi area dan fungsi yang lebih spesifik",
+        "isCorrect": true,
+        "rationale": "Pemodelan bisnis dalam EAP lapisan 1 menggunakan teknik dekomposisi fungsional untuk mengidentifikasi dan merinci seluruh fungsi bisnis organisasi ke dalam hierarki yang lebih terstruktur."
+      }
+    ]
+  },
+  {
+    "questionNumber": 33,
+    "question": "Dalam TOGAF ADM, fase yang bertanggung jawab untuk mendefinisikan arsitektur bisnis target (target business architecture) adalah fase...",
+    "answerOptions": [
+      {
+        "text": "Fase A: Architecture Vision",
+        "isCorrect": false,
+        "rationale": "Fase A hanya menyusun gambaran visi tingkat tinggi, belum merinci arsitektur bisnis target."
+      },
+      {
+        "text": "Fase B: Business Architecture",
+        "isCorrect": true,
+        "rationale": "Fase B dalam TOGAF ADM secara khusus berfokus pada pengembangan arsitektur bisnis target yang mendukung visi arsitektur, meliputi proses bisnis, fungsi organisasi, dan arus informasi."
+      },
+      {
+        "text": "Fase C: Information Systems Architecture",
+        "isCorrect": false,
+        "rationale": "Fase C berfokus pada pengembangan arsitektur data dan arsitektur aplikasi target."
+      },
+      {
+        "text": "Fase D: Technology Architecture",
+        "isCorrect": false,
+        "rationale": "Fase D berfokus pada pengembangan arsitektur teknologi target."
+      }
+    ]
+  },
+  {
+    "questionNumber": 34,
+    "question": "TOGAF ADM fase E (Opportunities and Solutions) bertujuan untuk...",
+    "answerOptions": [
+      {
+        "text": "Mengidentifikasi kesenjangan antara arsitektur saat ini dan arsitektur target",
+        "isCorrect": false,
+        "rationale": "Analisis kesenjangan dilakukan pada masing-masing fase domain (Fase B, C, dan D) sebelum masuk ke Fase E."
+      },
+      {
+        "text": "Memantau pelaksanaan tata kelola arsitektur selama implementasi",
+        "isCorrect": false,
+        "rationale": "Pemantauan tata kelola selama implementasi merupakan tugas Fase G (Implementation Governance)."
+      },
+      {
+        "text": "Mengidentifikasi peluang dan solusi implementasi untuk menjembatani kesenjangan arsitektur",
+        "isCorrect": true,
+        "rationale": "Fase E bertujuan mengidentifikasi solusi implementasi yang tersedia, mengevaluasi peluang, dan menyusun rencana transisi untuk menjembatani kesenjangan antara kondisi saat ini dengan arsitektur target."
+      },
+      {
+        "text": "Mendefinisikan arsitektur teknologi yang diperlukan organisasi",
+        "isCorrect": false,
+        "rationale": "Pendefinisian arsitektur teknologi dilakukan pada Fase D (Technology Architecture)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 35,
+    "question": "Sebuah perusahaan manufaktur ingin menerapkan TOGAF ADM untuk merencanakan transformasi digitalnya. Fase mana yang paling tepat untuk mulai mengidentifikasi stakeholder utama dan menetapkan ruang lingkup proyek arsitektur?",
+    "answerOptions": [
+      {
+        "text": "Fase Preliminary dan Fase A: Architecture Vision",
+        "isCorrect": true,
+        "rationale": "Fase Preliminary mempersiapkan organisasi untuk proyek arsitektur termasuk identifikasi pemangku kepentingan, sedangkan Fase A menetapkan ruang lingkup, visi, dan pernyataan pekerjaan arsitektur yang menjadi pedoman seluruh proyek."
+      },
+      {
+        "text": "Fase B: Business Architecture dan Fase C: Information Systems Architecture",
+        "isCorrect": false,
+        "rationale": "Fase B dan C merupakan fase perancangan detail domain arsitektur setelah ruang lingkup disetujui di Fase A."
+      },
+      {
+        "text": "Fase E: Opportunities and Solutions dan Fase F: Migration Planning",
+        "isCorrect": false,
+        "rationale": "Fase E dan F adalah tahap perencanaan solusi dan jadwal migrasi setelah seluruh arsitektur target selesai dirancang."
+      },
+      {
+        "text": "Fase G: Implementation Governance dan Fase H: Architecture Change Management",
+        "isCorrect": false,
+        "rationale": "Fase G dan H merupakan fase pengawasan implementasi dan pemeliharaan pasca-perancangan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 36,
+    "question": "Suatu universitas ingin meningkatkan layanan akademiknya dengan mengintegrasikan sistem informasi akademik, keuangan, dan kepegawaian. Pendekatan arsitektur enterprise yang paling sesuai untuk menangani integrasi lintas domain ini adalah...",
+    "answerOptions": [
+      {
+        "text": "Mengembangkan setiap sistem secara terpisah tanpa mempertimbangkan integrasi",
+        "isCorrect": false,
+        "rationale": "Pengembangan terpisah akan menciptakan silo sistem dan memperparah kesulitan pertukaran data."
+      },
+      {
+        "text": "Memilih satu vendor tunggal untuk semua sistem tanpa analisis kebutuhan",
+        "isCorrect": false,
+        "rationale": "Pemilihan vendor tanpa analisis kebutuhan berisiko menghasilkan sistem yang tidak sesuai dengan proses bisnis unik universitas."
+      },
+      {
+        "text": "Menerapkan sistem ERP generik tanpa menyesuaikan dengan proses bisnis universitas",
+        "isCorrect": false,
+        "rationale": "Menerapkan ERP generik tanpa penyelarasan proses bisnis dapat mengganggu operasional akademik yang spesifik."
+      },
+      {
+        "text": "Menggunakan kerangka kerja arsitektur enterprise untuk mendefinisikan arsitektur bisnis, data, aplikasi, dan teknologi secara terpadu",
+        "isCorrect": true,
+        "rationale": "Untuk integrasi sistem lintas domain yang kompleks, pendekatan arsitektur enterprise secara terpadu memastikan keselarasan antara proses bisnis, data, aplikasi, dan teknologi sehingga integrasi dapat berjalan secara sistematis dan efektif."
+      }
+    ]
+  },
+  {
+    "questionNumber": 37,
+    "question": "Dalam perencanaan SI/TI menggunakan TOGAF ADM untuk perguruan tinggi, fase yang berfokus pada pendefinisian arsitektur sistem informasi akademik (data dan aplikasi) adalah fase...",
+    "answerOptions": [
+      {
+        "text": "Fase B: Business Architecture",
+        "isCorrect": false,
+        "rationale": "Fase B berfokus pada proses bisnis akademik dan struktur organisasi perguruan tinggi, bukan pada struktur data dan aplikasi."
+      },
+      {
+        "text": "Fase C: Information Systems Architecture",
+        "isCorrect": true,
+        "rationale": "Fase C dalam TOGAF ADM mencakup pengembangan arsitektur data dan arsitektur aplikasi, sehingga fase ini paling tepat untuk mendefinisikan arsitektur sistem informasi akademik suatu perguruan tinggi."
+      },
+      {
+        "text": "Fase D: Technology Architecture",
+        "isCorrect": false,
+        "rationale": "Fase D berfokus pada server, jaringan, dan infrastruktur pendukung sistem akademik."
+      },
+      {
+        "text": "Fase F: Migration Planning",
+        "isCorrect": false,
+        "rationale": "Fase F berfokus pada penyusunan peta jalan (roadmap) dan urutan proyek implementasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 38,
+    "question": "Sebuah organisasi pemerintah sedang melakukan analisis kesenjangan (gap analysis) dalam proses TOGAF ADM. Hasil analisis menunjukkan bahwa terdapat aplikasi legacy yang tidak dapat mendukung arsitektur target. Langkah yang paling tepat selanjutnya adalah...",
+    "answerOptions": [
+      {
+        "text": "Menghentikan proyek arsitektur enterprise dan kembali ke kondisi semula",
+        "isCorrect": false,
+        "rationale": "Menghentikan proyek justru menghambat modernisasi layanan organisasi."
+      },
+      {
+        "text": "Merevisi arsitektur target agar sesuai dengan keterbatasan aplikasi legacy",
+        "isCorrect": false,
+        "rationale": "Menurunkan standar arsitektur target demi mempertahankan sistem usang akan menghambat pencapaian tujuan strategis."
+      },
+      {
+        "text": "Menyusun rencana migrasi untuk mengganti atau meningkatkan aplikasi legacy secara bertahap",
+        "isCorrect": true,
+        "rationale": "Setelah gap analysis mengidentifikasi aplikasi legacy yang tidak memadai, langkah tepat adalah menyusun rencana migrasi (Fase F TOGAF ADM) yang mengatur penggantian atau peningkatan sistem secara bertahap dan terencana."
+      },
+      {
+        "text": "Mengabaikan kesenjangan dan melanjutkan implementasi tanpa perubahan",
+        "isCorrect": false,
+        "rationale": "Mengabaikan kesenjangan akan menyebabkan kegagalan integrasi dan tidak tercapainya arsitektur target."
+      }
+    ]
+  },
+  {
+    "questionNumber": 39,
+    "question": "Dalam konteks perencanaan SI/TI perguruan tinggi menggunakan TOGAF ADM, arsitektur teknologi informasi yang didefinisikan pada fase D mencakup...",
+    "answerOptions": [
+      {
+        "text": "Platform perangkat keras, perangkat lunak, jaringan, dan standar teknologi yang mendukung aplikasi",
+        "isCorrect": true,
+        "rationale": "Fase D Technology Architecture dalam TOGAF ADM mendefinisikan infrastruktur teknologi yang diperlukan, mencakup platform perangkat keras, perangkat lunak sistem, jaringan, dan standar teknologi untuk mendukung arsitektur aplikasi dan data."
+      },
+      {
+        "text": "Struktur organisasi dan hierarki jabatan unit teknologi informasi",
+        "isCorrect": false,
+        "rationale": "Struktur organisasi dan hierarki jabatan didefinisikan pada Fase B (Business Architecture)."
+      },
+      {
+        "text": "Anggaran dan rencana pengadaan perangkat teknologi informasi",
+        "isCorrect": false,
+        "rationale": "Analisis biaya dan rencana pengadaan proyek disusun pada Fase E dan Fase F."
+      },
+      {
+        "text": "Prosedur penggajian dan tunjangan staf teknologi informasi",
+        "isCorrect": false,
+        "rationale": "Prosedur penggajian merupakan bagian dari administrasi SDM, bukan domain arsitektur teknologi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 40,
+    "question": "Seorang arsitek enterprise sedang membandingkan penggunaan TOGAF dengan kerangka kerja Zachman. Perbedaan mendasar antara keduanya adalah...",
+    "answerOptions": [
+      {
+        "text": "TOGAF hanya dapat digunakan oleh perusahaan swasta, sementara Zachman khusus untuk organisasi pemerintah",
+        "isCorrect": false,
+        "rationale": "Baik TOGAF maupun Zachman bersifat generik dan dapat diterapkan di berbagai jenis organisasi swasta maupun pemerintah."
+      },
+      {
+        "text": "Zachman lebih berfokus pada teknologi informasi, sementara TOGAF mencakup seluruh aspek organisasi",
+        "isCorrect": false,
+        "rationale": "Keduanya mencakup perspektif bisnis hingga teknologi secara menyeluruh, bukan hanya aspek TI."
+      },
+      {
+        "text": "TOGAF tidak memiliki metode pengembangan, sementara Zachman menyediakan ADM yang lengkap",
+        "isCorrect": false,
+        "rationale": "Pernyataan ini terbalik; ADM (Architecture Development Method) adalah komponen inti dari TOGAF."
+      },
+      {
+        "text": "TOGAF menyediakan metode pengembangan (ADM) yang preskriptif, sementara Zachman merupakan kerangka klasifikasi deskriptif",
+        "isCorrect": true,
+        "rationale": "TOGAF dilengkapi ADM sebagai panduan proses yang preskriptif untuk mengembangkan arsitektur enterprise, sedangkan Zachman Framework bersifat deskriptif sebagai alat klasifikasi dan dokumentasi arsitektur tanpa menetapkan metode pengembangan tertentu."
+      }
+    ]
+  },
+  {
+    "questionNumber": 41,
+    "question": "Apabila suatu organisasi menerapkan EAP dan menemukan bahwa terdapat duplikasi data yang signifikan antar departemen, masalah ini paling tepat diselesaikan melalui pendekatan...",
+    "answerOptions": [
+      {
+        "text": "Penambahan kapasitas penyimpanan data pada setiap departemen",
+        "isCorrect": false,
+        "rationale": "Menambah kapasitas penyimpanan tidak mengatasi akar masalah inkonsistensi dan duplikasi data."
+      },
+      {
+        "text": "Pendefinisian arsitektur data terpusat yang menstandarisasi entitas dan kepemilikan data",
+        "isCorrect": true,
+        "rationale": "Duplikasi data antar departemen diselesaikan melalui arsitektur data yang mendefinisikan entitas data secara terpusat, menetapkan standar dan kepemilikan data yang jelas sehingga redundansi dapat dieliminasi."
+      },
+      {
+        "text": "Penggantian seluruh sistem lama dengan sistem baru secara serentak",
+        "isCorrect": false,
+        "rationale": "Penggantian sistem secara serentak (big bang) berisiko tinggi dan tanpa arsitektur data yang jelas tetap berpotensi menimbulkan duplikasi."
+      },
+      {
+        "text": "Pembatasan akses data hanya kepada divisi teknologi informasi",
+        "isCorrect": false,
+        "rationale": "Membatasi akses data justru menghambat kelancaran operasional departemen bisnis yang membutuhkan informasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 42,
+    "question": "Sebuah perusahaan ritel ingin meningkatkan keunggulan kompetitifnya. Berdasarkan konsep manajemen strategi, tindakan yang paling tepat adalah...",
+    "answerOptions": [
+      {
+        "text": "Meniru strategi pesaing yang paling sukses di pasar yang sama",
+        "isCorrect": false,
+        "rationale": "Meniru pesaing hanya menghasilkan kesetaraan kompetitif, bukan keunggulan yang membedakan perusahaan di mata pelanggan."
+      },
+      {
+        "text": "Menurunkan harga produk serendah mungkin tanpa mempertimbangkan profitabilitas",
+        "isCorrect": false,
+        "rationale": "Menurunkan harga tanpa memperhitungkan profitabilitas akan mengancam keberlangsungan finansial perusahaan."
+      },
+      {
+        "text": "Mengidentifikasi dan mengembangkan kapabilitas inti yang sulit ditiru pesaing",
+        "isCorrect": true,
+        "rationale": "Keunggulan kompetitif yang berkelanjutan dibangun melalui pengembangan kapabilitas inti yang unik dan sulit ditiru pesaing, bukan sekadar peniruan strategi atau pemotongan harga semata."
+      },
+      {
+        "text": "Meningkatkan jumlah produk sebanyak-banyaknya tanpa analisis pasar",
+        "isCorrect": false,
+        "rationale": "Menambah variasi produk tanpa analisis pasar dapat memicu pemborosan biaya inventaris dan tidak menjawab kebutuhan pelanggan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 43,
+    "question": "Dalam konteks pemodelan proses dengan BPMN, simbol \"gateway\" berbentuk belah ketupat digunakan untuk menggambarkan...",
+    "answerOptions": [
+      {
+        "text": "Titik percabangan atau penggabungan alur proses berdasarkan kondisi tertentu",
+        "isCorrect": true,
+        "rationale": "Dalam BPMN, simbol gateway berbentuk belah ketupat digunakan untuk menggambarkan titik keputusan dalam proses, di mana alur dapat bercabang atau bergabung berdasarkan kondisi atau aturan bisnis tertentu."
+      },
+      {
+        "text": "Aktivitas atau tugas yang dilakukan dalam proses bisnis",
+        "isCorrect": false,
+        "rationale": "Aktivitas atau tugas (task/activity) dalam BPMN digambarkan dengan persegi panjang bersudut tumpul."
+      },
+      {
+        "text": "Peristiwa yang memicu dimulainya atau berakhirnya proses",
+        "isCorrect": false,
+        "rationale": "Peristiwa (event) awal, tengah, atau akhir digambarkan dengan simbol lingkaran."
+      },
+      {
+        "text": "Pool atau lane yang memisahkan tanggung jawab antar peserta proses",
+        "isCorrect": false,
+        "rationale": "Pool dan lane digambarkan dengan kotak besar memanjang (swimlane) yang membagi peran aktor/departemen."
+      }
+    ]
+  },
+  {
+    "questionNumber": 44,
+    "question": "Jika hasil analisis kesenjangan dalam TOGAF ADM menunjukkan bahwa arsitektur saat ini sudah memenuhi sebagian besar kebutuhan arsitektur target, maka implikasinya adalah...",
+    "answerOptions": [
+      {
+        "text": "Proyek arsitektur enterprise dapat dihentikan karena tidak diperlukan",
+        "isCorrect": false,
+        "rationale": "Komponen yang masih memiliki kesenjangan tetap perlu diselesaikan agar arsitektur target tercapai sepenuhnya."
+      },
+      {
+        "text": "Seluruh sistem harus diganti dengan sistem baru yang lebih modern",
+        "isCorrect": false,
+        "rationale": "Mengganti seluruh sistem yang sudah memenuhi syarat merupakan pemborosan anggaran dan sumber daya."
+      },
+      {
+        "text": "Fase Preliminary harus diulang dari awal untuk mendefinisikan ulang visi",
+        "isCorrect": false,
+        "rationale": "Visi arsitektur tetap valid dan tidak perlu diulang dari Fase Preliminary."
+      },
+      {
+        "text": "Rencana migrasi dapat difokuskan pada penyempurnaan komponen yang belum memenuhi syarat",
+        "isCorrect": true,
+        "rationale": "Jika sebagian besar kebutuhan sudah terpenuhi, rencana migrasi cukup difokuskan pada komponen yang masih memiliki kesenjangan, sehingga upaya dan sumber daya dapat dioptimalkan secara efisien."
+      }
+    ]
+  },
+  {
+    "questionNumber": 45,
+    "question": "Perbedaan utama antara arsitektur enterprise saat ini (baseline architecture) dan arsitektur enterprise target (target architecture) adalah...",
+    "answerOptions": [
+      {
+        "text": "Baseline architecture selalu lebih baik dari target architecture dalam hal efisiensi",
+        "isCorrect": false,
+        "rationale": "Target architecture dirancang untuk memperbaiki kelemahan dan meningkatkan efisiensi dari kondisi baseline."
+      },
+      {
+        "text": "Baseline architecture menggambarkan kondisi yang ada sekarang, sementara target architecture menggambarkan kondisi yang diinginkan di masa depan",
+        "isCorrect": true,
+        "rationale": "Dalam TOGAF ADM, baseline architecture mendokumentasikan kondisi arsitektur organisasi saat ini, sedangkan target architecture mendefinisikan kondisi ideal yang ingin dicapai, dengan gap analysis mengidentifikasi selisih di antara keduanya."
+      },
+      {
+        "text": "Target architecture hanya mencakup aspek teknologi, sementara baseline mencakup seluruh domain",
+        "isCorrect": false,
+        "rationale": "Baik baseline maupun target architecture mencakup keempat domain arsitektur (bisnis, data, aplikasi, dan teknologi)."
+      },
+      {
+        "text": "Baseline architecture selalu didefinisikan setelah target architecture selesai disusun",
+        "isCorrect": false,
+        "rationale": "Urutan pengerjaan dapat fleksibel, namun umumnya baseline dipahami terlebih dahulu atau bersamaan untuk melakukan gap analysis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 46,
+    "question": "Dalam TOGAF ADM fase H (Architecture Change Management), perubahan yang bersifat minor dan tidak memerlukan siklus ADM penuh biasanya ditangani melalui...",
+    "answerOptions": [
+      {
+        "text": "Penghentian seluruh proyek arsitektur dan perencanaan ulang dari awal",
+        "isCorrect": false,
+        "rationale": "Perubahan minor tidak memerlukan penghentian sistem atau perencanaan ulang besar-besaran."
+      },
+      {
+        "text": "Pengajuan proposal anggaran baru kepada dewan direksi organisasi",
+        "isCorrect": false,
+        "rationale": "Perubahan skala kecil biasanya masuk dalam anggaran pemeliharaan rutin tanpa proposal strategis baru."
+      },
+      {
+        "text": "Proses Architecture Change Request yang dikelola melalui tata kelola arsitektur",
+        "isCorrect": true,
+        "rationale": "Perubahan minor dalam fase H ditangani melalui mekanisme Architecture Change Request yang formal, dikelola dalam kerangka tata kelola arsitektur tanpa harus mengulang siklus ADM secara penuh."
+      },
+      {
+        "text": "Penggantian seluruh tim arsitek enterprise dengan tim yang baru",
+        "isCorrect": false,
+        "rationale": "Perubahan arsitektur dikelola oleh komite tata kelola arsitektur yang ada, bukan dengan mengganti tim."
+      }
+    ]
+  },
+  {
+    "questionNumber": 47,
+    "question": "Dalam perencanaan SI/TI perguruan tinggi menggunakan TOGAF ADM, fase Arsitektur Teknologi Informasi bertujuan untuk mendefinisikan infrastruktur yang mendukung arsitektur sistem informasi. Manakah komponen yang paling tepat diidentifikasi pada fase ini?",
+    "answerOptions": [
+      {
+        "text": "Platform server, jaringan, middleware, dan standar keamanan informasi",
+        "isCorrect": true,
+        "rationale": "Arsitektur teknologi informasi pada TOGAF ADM mencakup pendefinisian platform server, infrastruktur jaringan, middleware, dan standar keamanan yang dibutuhkan untuk mendukung sistem informasi perguruan tinggi."
+      },
+      {
+        "text": "Struktur kurikulum dan sistem penilaian akademik mahasiswa",
+        "isCorrect": false,
+        "rationale": "Struktur kurikulum dan sistem penilaian merupakan domain proses bisnis akademik (Fase B)."
+      },
+      {
+        "text": "Kebijakan penerimaan mahasiswa baru dan prosedur registrasi ulang",
+        "isCorrect": false,
+        "rationale": "Kebijakan dan prosedur operasional akademik termasuk dalam arsitektur bisnis."
+      },
+      {
+        "text": "Anggaran penelitian dan pengabdian masyarakat dosen",
+        "isCorrect": false,
+        "rationale": "Anggaran penelitian merupakan perencanaan keuangan tridharma perguruan tinggi, bukan komponen infrastruktur TI."
+      }
+    ]
+  },
+  {
+    "questionNumber": 48,
+    "question": "Apabila suatu organisasi memiliki banyak kerangka kerja arsitektur enterprise yang berbeda di setiap divisinya, kondisi ini dapat menyebabkan masalah berupa...",
+    "answerOptions": [
+      {
+        "text": "Peningkatan efisiensi karena setiap divisi menggunakan pendekatan terbaiknya",
+        "isCorrect": false,
+        "rationale": "Standar yang berbeda-beda antardivisi justru menurunkan efisiensi di tingkat enterprise."
+      },
+      {
+        "text": "Kemudahan integrasi sistem karena variasi metodologi yang kaya",
+        "isCorrect": false,
+        "rationale": "Perbedaan metodologi dan terminologi membuat integrasi sistem menjadi jauh lebih rumit."
+      },
+      {
+        "text": "Percepatan proses pengambilan keputusan di tingkat manajemen puncak",
+        "isCorrect": false,
+        "rationale": "Manajemen puncak akan kesulitan membandingkan laporan dan menyelaraskan strategi jika kerangkanya tidak seragam."
+      },
+      {
+        "text": "Ketidakselarasan antar sistem, duplikasi upaya, dan kesulitan integrasi data lintas divisi",
+        "isCorrect": true,
+        "rationale": "Penggunaan kerangka kerja yang berbeda-beda di setiap divisi menciptakan silo sistem yang tidak terintegrasi, mengakibatkan duplikasi data, pemborosan sumber daya, dan hambatan dalam pertukaran informasi lintas divisi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 49,
+    "question": "Dalam perencanaan arsitektur manajemen perubahan menggunakan TOGAF ADM, faktor terpenting yang harus dikelola agar implementasi arsitektur baru berhasil adalah...",
+    "answerOptions": [
+      {
+        "text": "Pemilihan teknologi terbaru yang tersedia di pasaran global",
+        "isCorrect": false,
+        "rationale": "Teknologi canggih tidak akan berhasil diterapkan tanpa kesiapan budaya dan dukungan dari orang-orang di dalam organisasi."
+      },
+      {
+        "text": "Komitmen dan dukungan pemimpin organisasi serta komunikasi perubahan yang efektif",
+        "isCorrect": true,
+        "rationale": "Keberhasilan implementasi arsitektur baru sangat bergantung pada komitmen pimpinan organisasi sebagai sponsor perubahan dan komunikasi yang efektif kepada seluruh pemangku kepentingan agar resistensi dapat diminimalkan."
+      },
+      {
+        "text": "Penggantian seluruh sistem lama dalam waktu sesingkat mungkin",
+        "isCorrect": false,
+        "rationale": "Perubahan terburu-buru tanpa kesiapan pengguna justru meningkatkan risiko kegagalan operasional."
+      },
+      {
+        "text": "Pengurangan jumlah pemangku kepentingan yang terlibat dalam proyek",
+        "isCorrect": false,
+        "rationale": "Pemangku kepentingan justru harus dilibatkan secara aktif untuk memastikan kebutuhan mereka terakomodasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 50,
+    "question": "Dalam TOGAF ADM, fase G (Implementation Governance) bertanggung jawab untuk memastikan bahwa...",
+    "answerOptions": [
+      {
+        "text": "Visi arsitektur direvisi sesuai dengan perubahan strategi bisnis terbaru",
+        "isCorrect": false,
+        "rationale": "Penyesuaian arsitektur terhadap perubahan strategi bisnis dilakukan pada Fase H (Architecture Change Management)."
+      },
+      {
+        "text": "Rencana migrasi disusun ulang apabila anggaran implementasi melebihi batas",
+        "isCorrect": false,
+        "rationale": "Penyusunan rencana migrasi berada pada Fase F (Migration Planning)."
+      },
+      {
+        "text": "Proyek implementasi berjalan sesuai dengan arsitektur yang telah disepakati dan kontrak arsitektur terpenuhi",
+        "isCorrect": true,
+        "rationale": "Fase G bertujuan memberikan pengawasan tata kelola arsitektur selama implementasi, memastikan proyek-proyek yang berjalan sesuai dengan arsitektur yang telah disetujui dan memenuhi seluruh ketentuan dalam kontrak arsitektur."
+      },
+      {
+        "text": "Seluruh karyawan mendapatkan pelatihan teknis terkait sistem baru yang diimplementasikan",
+        "isCorrect": false,
+        "rationale": "Pelatihan pengguna merupakan bagian dari manajemen perubahan operasional, bukan fokus utama tata kelola arsitektur di Fase G."
+      }
+    ]
+  }
+];
+
+  let totalBenar = 0;
+  let totalSalah = 0;
+  let answeredQuestions = new Set();
+
+  function acakArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function initSetup() {
+    const totalSoal = soalList.length;
+    document.getElementById('total-tersedia').textContent = totalSoal;
+
+    const buttons = document.querySelectorAll('.btn-jumlah[data-jumlah]');
+    buttons.forEach(btn => {
+      const jumlah = parseInt(btn.getAttribute('data-jumlah'), 10);
+      if (jumlah > totalSoal) {
+        btn.disabled = true;
+      }
+    });
+
+    const btnSemua = document.getElementById('btn-semua');
+    if (totalSoal === 0) {
+      btnSemua.disabled = true;
+    } else {
+      btnSemua.textContent = `Semua Soal (${totalSoal})`;
+    }
+  }
+
+  function mulaiUjian(jumlah) {
+    const isAcak = document.getElementById('checkbox-acak').checked;
+
+    document.getElementById('setup-container').style.display = 'none';
+    document.getElementById('container').style.display = 'block';
+    document.getElementById('counter').style.display = 'block';
+
+    let daftarSoal = isAcak ? acakArray(soalList) : [...soalList];
+    const soalTerpilih = jumlah === 'all' ? daftarSoal : daftarSoal.slice(0, jumlah);
+
+    renderSoal(soalTerpilih, isAcak);
+  }
+
+  function updateCounter() {
+    document.getElementById("benar").textContent = totalBenar;
+    document.getElementById("salah").textContent = totalSalah;
+  }
+
+  function checkAnswer(button, questionId, isCorrect) {
+    if (answeredQuestions.has(questionId)) {
+      return;
+    }
+
+    const soalElement = button.closest('.soal');
+    const buttons = soalElement.querySelectorAll('.jawaban button');
+    
+    buttons.forEach(btn => btn.disabled = true);
+
+    if (isCorrect) {
+      button.classList.add('benar');
+      totalBenar++;
+    } else {
+      button.classList.add('salah');
+      totalSalah++;
+      
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-iscorrect') === 'true') {
+          btn.classList.add('benar');
+        }
+      });
+    }
+
+    const allRationales = soalElement.querySelectorAll('.penjelasan-opsi');
+    allRationales.forEach(rationaleDiv => {
+      rationaleDiv.style.display = 'block';
+    });
+
+    answeredQuestions.add(questionId);
+    updateCounter();
+  }
+
+  function renderSoal(daftarSoal, isAcak) {
+    const container = document.getElementById('container');
+    container.innerHTML = '';
+
+    daftarSoal.forEach((soal, idx) => {
+      const nomorUrut = idx + 1;
+      const soalDiv = document.createElement('div');
+      soalDiv.className = 'soal';
+      soalDiv.setAttribute('data-qnum', nomorUrut);
+      
+      let soalHTML = `<h3>Soal ${nomorUrut}.</h3>`;
+      soalHTML += `<p>${soal.question}</p>`;
+      soalHTML += `<div class="jawaban">`;
+      
+      const opsiJawaban = isAcak ? acakArray(soal.answerOptions) : soal.answerOptions;
+
+      opsiJawaban.forEach((option, index) => {
+        const label = String.fromCharCode(65 + index); 
+        
+        soalHTML += `
+          <button 
+            onclick="checkAnswer(this, ${nomorUrut}, ${option.isCorrect})"
+            data-iscorrect="${option.isCorrect}"
+            data-label="${label}">
+            ${label}. ${option.text}
+          </button>
+          <div class="penjelasan-opsi">
+            <strong>Penjelasan Opsi ${label}:</strong> ${option.rationale}
+          </div>
+        `;
+      });
+      
+      soalHTML += `</div>`;
+      soalDiv.innerHTML = soalHTML;
+      container.appendChild(soalDiv);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initSetup);
+</script>
+
+</body>
+</html>

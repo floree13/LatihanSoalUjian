@@ -1,0 +1,2924 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal Ujian</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7f6;
+      margin: 0;
+      padding: 20px 10px;
+    }
+    h1 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    h2 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    .setup-box {
+      background: #ffffff;
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      text-align: center;
+      border-top: 5px solid #1a237e;
+    }
+    .setup-box h2 {
+      margin-top: 0;
+      color: #1a237e;
+      font-size: 18px;
+    }
+    .setup-box p {
+      color: #555;
+      font-size: 14px;
+    }
+    .opsi-acak {
+      margin: 15px 0;
+      padding: 10px;
+      background: #f3e5f5;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #4a148c;
+      cursor: pointer;
+    }
+    .opsi-acak input {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    .pilihan-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 15px;
+    }
+    .btn-jumlah {
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 8px;
+      border: 1px solid #3f51b5;
+      background: #e8eaf6;
+      color: #1a237e;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-jumlah:hover:not(:disabled) {
+      background: #3f51b5;
+      color: #ffffff;
+    }
+    .btn-jumlah:disabled {
+      background: #e0e0e0;
+      border-color: #bdbdbd;
+      color: #9e9e9e;
+      cursor: not-allowed;
+    }
+    .soal {
+      background: #ffffff;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 5px solid #42a5f5;
+    }
+    h3 {
+      color: #3f51b5;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .jawaban button {
+      color: #2a2a2a;
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #c5cae9;
+      background: #e8eaf6;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .jawaban button:hover:not(:disabled) {
+      background: #c5cae9;
+    }
+    .jawaban button.benar {
+      background-color: #dcf9dc;
+      border-color: #388e3c;
+      font-weight: bold;
+    }
+    .jawaban button.salah {
+      background-color: #ffcdd2;
+      border-color: #d32f2f;
+      opacity: 0.7;
+    }
+    .penjelasan-opsi {
+      background: #f3e5f5;
+      color: #4a148c;
+      padding: 10px;
+      margin-top: -5px;
+      margin-bottom: 15px;
+      border-radius: 0 0 8px 8px;
+      border-top: none;
+      border-left: 5px solid #7b1fa2;
+      font-size: 14px;
+      display: none;
+    }
+    .counter {
+      position: sticky;
+      bottom: 0;
+      background: #1a237e;
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      display: none;
+    }
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 20px; }
+      .jawaban button { font-size: 14px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Latihan Soal UO UT</h1>
+<h2>Dasar infrastruktur TI</h2>
+
+<div id="setup-container" class="setup-box">
+  <h2>Pilih Jumlah Soal</h2>
+  <p>Total soal tersedia: <strong id="total-tersedia">0</strong> soal</p>
+  
+  <label class="opsi-acak">
+    <input type="checkbox" id="checkbox-acak" checked />
+    Acak Urutan Soal & Opsi Jawaban
+  </label>
+
+  <div class="pilihan-grid" id="pilihan-jumlah">
+    <button class="btn-jumlah" data-jumlah="25" onclick="mulaiUjian(25)">25 Soal</button>
+    <button class="btn-jumlah" data-jumlah="35" onclick="mulaiUjian(35)">35 Soal</button>
+    <button class="btn-jumlah" data-jumlah="45" onclick="mulaiUjian(25)">45 Soal</button>
+    <button class="btn-jumlah" data-jumlah="50" onclick="mulaiUjian(50)">50 Soal</button>
+    <button class="btn-jumlah" data-jumlah="100" style="grid-column: span 2;" onclick="mulaiUjian('100')">100 Soal</button>
+  </div>
+</div>
+
+<div id="container" style="display: none;"></div>
+
+<div id="counter" class="counter">
+  ✅ Jawaban Benar: <span id="benar">0</span> |
+  ❌ Jawaban Salah: <span id="salah">0</span>
+</div>
+
+<script>
+const soalList = [
+  {
+    "questionNumber": 1,
+    "question": "Keseluruhan fondasi komponen yang mencakup perangkat keras, perangkat lunak, dan layanan untuk mendukung operasi lingkungan TI suatu organisasi merupakan definisi dari...",
+    "answerOptions": [
+      {
+        "text": "Infrastruktur TI",
+        "isCorrect": true,
+        "rationale": "Infrastruktur TI adalah keseluruhan fondasi komponen fisik, perangkat lunak, dan layanan yang dibutuhkan untuk mendukung operasi dan manajemen lingkungan TI organisasi. Arsitektur TI lebih berfokus pada rancangan dan cetak biru sistem, bukan fondasi komponen."
+      },
+      {
+        "text": "Arsitektur TI",
+        "isCorrect": false,
+        "rationale": "Arsitektur TI lebih berfokus pada rancangan konseptual dan cetak biru sistem, bukan fondasi komponen fisik dan layanan operasional."
+      },
+      {
+        "text": "Tata kelola TI",
+        "isCorrect": false,
+        "rationale": "Tata kelola TI berkaitan dengan kerangka pengambilan keputusan, kebijakan, dan pengendalian strategis TI dalam organisasi."
+      },
+      {
+        "text": "Manajemen layanan TI",
+        "isCorrect": false,
+        "rationale": "Manajemen layanan TI berfokus pada pengelolaan pengiriman dan dukungan layanan TI kepada pengguna sesuai kebutuhan bisnis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 2,
+    "question": "Komponen utama infrastruktur TI yang berfungsi sebagai pusat penyimpanan dan pengelolaan data dalam skala besar adalah...",
+    "answerOptions": [
+      {
+        "text": "Router",
+        "isCorrect": false,
+        "rationale": "Router adalah perangkat jaringan yang bertugas menghubungkan dan merutekan paket data antar jaringan berbeda."
+      },
+      {
+        "text": "Data center",
+        "isCorrect": true,
+        "rationale": "Data center merupakan komponen utama infrastruktur TI yang berfungsi sebagai pusat penyimpanan dan pengelolaan data skala besar. Router adalah perangkat jaringan, sistem operasi adalah perangkat lunak pengelola sumber daya, dan perangkat lunak aplikasi membantu tugas spesifik pengguna."
+      },
+      {
+        "text": "Sistem operasi",
+        "isCorrect": false,
+        "rationale": "Sistem operasi adalah perangkat lunak inti yang mengelola sumber daya perangkat keras komputer."
+      },
+      {
+        "text": "Perangkat lunak aplikasi",
+        "isCorrect": false,
+        "rationale": "Perangkat lunak aplikasi digunakan untuk membantu pengguna akhir menyelesaikan tugas spesifik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 3,
+    "question": "Ruang lingkup infrastruktur TI mencakup aktivitas berikut, kecuali...",
+    "answerOptions": [
+      {
+        "text": "Perencanaan sumber daya TI",
+        "isCorrect": false,
+        "rationale": "Perencanaan sumber daya TI merupakan bagian dari ruang lingkup pengelolaan infrastruktur TI."
+      },
+      {
+        "text": "Penetapan visi dan misi organisasi",
+        "isCorrect": true,
+        "rationale": "Ruang lingkup infrastruktur TI meliputi perencanaan, implementasi, pengelolaan, dan evaluasi sumber daya TI yang terintegrasi. Penetapan visi dan misi organisasi merupakan aktivitas manajemen strategis secara umum, bukan bagian dari ruang lingkup infrastruktur TI."
+      },
+      {
+        "text": "Evaluasi kinerja sistem TI",
+        "isCorrect": false,
+        "rationale": "Evaluasi kinerja sistem TI termasuk dalam ruang lingkup pemantauan dan perbaikan infrastruktur TI."
+      },
+      {
+        "text": "Implementasi komponen TI",
+        "isCorrect": false,
+        "rationale": "Implementasi komponen perangkat keras, perangkat lunak, dan jaringan termasuk dalam ruang lingkup infrastruktur TI."
+      }
+    ]
+  },
+  {
+    "questionNumber": 4,
+    "question": "Infrastruktur TI dibedakan dari arsitektur TI berdasarkan fokus utamanya pada...",
+    "answerOptions": [
+      {
+        "text": "Cetak biru dan prinsip desain sistem",
+        "isCorrect": false,
+        "rationale": "Cetak biru dan prinsip desain sistem merupakan fokus utama dari arsitektur TI."
+      },
+      {
+        "text": "Aturan dan kebijakan organisasi",
+        "isCorrect": false,
+        "rationale": "Aturan dan kebijakan organisasi berkaitan dengan tata kelola TI (IT Governance)."
+      },
+      {
+        "text": "Komponen fisik dan operasional nyata",
+        "isCorrect": true,
+        "rationale": "Infrastruktur TI berfokus pada komponen fisik dan operasional yang nyata seperti perangkat keras, jaringan, dan data center. Sementara arsitektur TI lebih berfokus pada cetak biru, prinsip desain, dan kerangka konseptual sistem."
+      },
+      {
+        "text": "Metodologi pengembangan perangkat lunak",
+        "isCorrect": false,
+        "rationale": "Metodologi pengembangan perangkat lunak termasuk dalam ranah rekayasa perangkat lunak (SDLC)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 5,
+    "question": "Unsur yang membedakan infrastruktur TI dari sekadar kumpulan perangkat keras adalah adanya...",
+    "answerOptions": [
+      {
+        "text": "Dokumen spesifikasi teknis",
+        "isCorrect": false,
+        "rationale": "Dokumen spesifikasi teknis hanyalah catatan deskripsi perangkat, tidak menyatukan fungsi antar komponen."
+      },
+      {
+        "text": "Integrasi antar komponen dan layanan",
+        "isCorrect": true,
+        "rationale": "Infrastruktur TI bukan hanya kumpulan perangkat keras, melainkan keseluruhan komponen yang saling terintegrasi termasuk perangkat lunak, jaringan, dan layanan. Integrasi inilah yang membedakannya dari sekadar perangkat keras yang berdiri sendiri."
+      },
+      {
+        "text": "Garansi dari vendor perangkat",
+        "isCorrect": false,
+        "rationale": "Garansi vendor merupakan jaminan purnajual, bukan unsur pembentuk sistem infrastruktur TI."
+      },
+      {
+        "text": "Ruang penyimpanan perangkat",
+        "isCorrect": false,
+        "rationale": "Ruang penyimpanan hanyalah tempat fisik meletakkan perangkat keras."
+      }
+    ]
+  },
+  {
+    "questionNumber": 6,
+    "question": "Perangkat lunak dan jaringan dalam infrastruktur TI berperan sebagai...",
+    "answerOptions": [
+      {
+        "text": "Elemen dasar pembangun lingkungan TI",
+        "isCorrect": true,
+        "rationale": "Perangkat lunak dan jaringan merupakan elemen dasar pembangun lingkungan TI bersama perangkat keras dan data center. Semua komponen ini wajib ada sebagai fondasi operasional TI organisasi, bukan opsional."
+      },
+      {
+        "text": "Pengganti fungsi perangkat keras",
+        "isCorrect": false,
+        "rationale": "Perangkat lunak dan jaringan bekerja bersama perangkat keras, bukan menggantikannya."
+      },
+      {
+        "text": "Bagian opsional yang dapat diabaikan",
+        "isCorrect": false,
+        "rationale": "Tanpa perangkat lunak dan jaringan, perangkat keras tidak dapat menjalankan layanan TI organisasi."
+      },
+      {
+        "text": "Dokumentasi pendukung sistem",
+        "isCorrect": false,
+        "rationale": "Perangkat lunak dan jaringan adalah komponen aktif operasional, bukan sekadar dokumentasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 7,
+    "question": "Proses memastikan seluruh sumber daya TI dalam organisasi saling terintegrasi merupakan bagian dari...",
+    "answerOptions": [
+      {
+        "text": "Pengadaan perangkat TI",
+        "isCorrect": false,
+        "rationale": "Pengadaan berfokus pada proses pembelian atau penyediaan perangkat."
+      },
+      {
+        "text": "Pelatihan pengguna akhir",
+        "isCorrect": false,
+        "rationale": "Pelatihan pengguna akhir bertujuan meningkatkan kemampuan staf dalam mengoperasikan sistem."
+      },
+      {
+        "text": "Pemasaran produk TI",
+        "isCorrect": false,
+        "rationale": "Pemasaran produk TI merupakan kegiatan komersial, bukan pengelolaan infrastruktur internal."
+      },
+      {
+        "text": "Pengelolaan infrastruktur TI",
+        "isCorrect": true,
+        "rationale": "Pengelolaan infrastruktur TI mencakup proses memastikan seluruh sumber daya TI saling terintegrasi. Ini meliputi koordinasi antar komponen perangkat keras, perangkat lunak, jaringan, dan data center agar bekerja sebagai satu kesatuan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 8,
+    "question": "Tahap evaluasi dalam ruang lingkup infrastruktur TI bertujuan untuk...",
+    "answerOptions": [
+      {
+        "text": "Menilai kinerja dan efektivitas sumber daya TI",
+        "isCorrect": true,
+        "rationale": "Evaluasi dalam ruang lingkup infrastruktur TI bertujuan menilai kinerja dan efektivitas sumber daya TI yang telah diimplementasikan. Hasil evaluasi menjadi dasar perbaikan berkelanjutan, bukan penghapusan atau penggantian total tanpa dasar."
+      },
+      {
+        "text": "Menambah jumlah perangkat tanpa analisis",
+        "isCorrect": false,
+        "rationale": "Penambahan perangkat tanpa analisis justru menimbulkan pemborosan anggaran."
+      },
+      {
+        "text": "Menghapus seluruh sistem yang ada",
+        "isCorrect": false,
+        "rationale": "Evaluasi dilakukan untuk perbaikan berkelanjutan, bukan penghapusan sistem secara menyeluruh."
+      },
+      {
+        "text": "Mengganti semua vendor perangkat",
+        "isCorrect": false,
+        "rationale": "Penggantian vendor hanya dilakukan apabila terbukti tidak memenuhi standar layanan berdasarkan hasil evaluasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 9,
+    "question": "Sebuah perusahaan baru memulai membangun infrastruktur TI. Langkah pertama yang harus dilakukan sesuai ruang lingkupnya adalah...",
+    "answerOptions": [
+      {
+        "text": "Membeli perangkat termahal yang tersedia",
+        "isCorrect": false,
+        "rationale": "Perangkat termahal belum tentu sesuai dengan skala dan kebutuhan operasional perusahaan."
+      },
+      {
+        "text": "Merekrut seluruh staf TI yang ada di pasaran",
+        "isCorrect": false,
+        "rationale": "Perekrutan staf harus disesuaikan dengan rancangan kebutuhan sistem yang telah direncanakan."
+      },
+      {
+        "text": "Melakukan perencanaan kebutuhan sumber daya TI",
+        "isCorrect": true,
+        "rationale": "Sesuai ruang lingkup infrastruktur TI, langkah pertama adalah perencanaan kebutuhan sumber daya TI. Perencanaan memastikan investasi tepat sasaran dan sesuai kebutuhan organisasi, bukan sekadar membeli perangkat atau meniru pesaing."
+      },
+      {
+        "text": "Menyalin infrastruktur perusahaan pesaing",
+        "isCorrect": false,
+        "rationale": "Setiap organisasi memiliki proses bisnis dan kebutuhan kapasitas yang berbeda sehingga tidak bisa sekadar menyalin pesaing."
+      }
+    ]
+  },
+  {
+    "questionNumber": 10,
+    "question": "Teknologi informasi berperan sebagai enabler bisnis dengan cara...",
+    "answerOptions": [
+      {
+        "text": "Menggantikan seluruh tenaga kerja manusia",
+        "isCorrect": false,
+        "rationale": "TI berfungsi membantu dan memberdayakan pekerjaan manusia, bukan menggantikan seluruh tenaga kerja."
+      },
+      {
+        "text": "Menjamin keuntungan tanpa risiko",
+        "isCorrect": false,
+        "rationale": "Setiap investasi bisnis dan teknologi tetap memiliki risiko yang perlu dikelola."
+      },
+      {
+        "text": "Menghilangkan kebutuhan perencanaan strategis",
+        "isCorrect": false,
+        "rationale": "Penerapan TI justru membutuhkan perencanaan strategis agar selaras dengan tujuan bisnis."
+      },
+      {
+        "text": "Meningkatkan efisiensi operasional dan keunggulan kompetitif",
+        "isCorrect": true,
+        "rationale": "Peran strategis TI sebagai enabler bisnis adalah meningkatkan efisiensi operasional dan menciptakan keunggulan kompetitif. TI mendukung bisnis, bukan menggantikan seluruh tenaga manusia atau menjamin keuntungan mutlak."
+      }
+    ]
+  },
+  {
+    "questionNumber": 11,
+    "question": "Pembelajaran jarak jauh yang fleksibel dalam bidang pendidikan dimungkinkan oleh peran TI dalam menyediakan...",
+    "answerOptions": [
+      {
+        "text": "Perangkat keras yang mahal",
+        "isCorrect": false,
+        "rationale": "Pembelajaran jarak jauh tidak mengharuskan penggunaan perangkat mahal, melainkan akses konektivitas dan platform digital."
+      },
+      {
+        "text": "Kurikulum yang tidak berubah",
+        "isCorrect": false,
+        "rationale": "Kurikulum pendidikan terus berkembang menyesuaikan kebutuhan zaman dan teknologi."
+      },
+      {
+        "text": "Ruang kelas fisik yang lebih besar",
+        "isCorrect": false,
+        "rationale": "Pembelajaran jarak jauh mengatasi keterbatasan ruang kelas fisik melalui lingkungan virtual."
+      },
+      {
+        "text": "Akses sumber belajar digital dan sistem manajemen pembelajaran",
+        "isCorrect": true,
+        "rationale": "TI dalam pendidikan memungkinkan akses sumber belajar digital, pembelajaran jarak jauh, dan sistem manajemen pembelajaran yang fleksibel. Ini tidak bergantung pada ruang kelas fisik atau perangkat keras mahal semata."
+      }
+    ]
+  },
+  {
+    "questionNumber": 12,
+    "question": "Media sosial sebagai peran TI dalam bidang sosial telah menghilangkan batasan...",
+    "answerOptions": [
+      {
+        "text": "Waktu penggunaan perangkat",
+        "isCorrect": false,
+        "rationale": "Batasan waktu penggunaan perangkat bergantung pada manajemen diri pengguna dan daya baterai."
+      },
+      {
+        "text": "Geografis dalam interaksi sosial",
+        "isCorrect": true,
+        "rationale": "TI dalam bidang sosial memfasilitasi interaksi melalui media sosial dan platform komunikasi digital yang menghilangkan batasan geografis. Orang dari lokasi berbeda dapat berinteraksi tanpa terhalang jarak fisik."
+      },
+      {
+        "text": "Harga perangkat teknologi",
+        "isCorrect": false,
+        "rationale": "Harga perangkat dipengaruhi oleh biaya produksi dan mekanisme pasar."
+      },
+      {
+        "text": "Kapasitas memori perangkat",
+        "isCorrect": false,
+        "rationale": "Kapasitas memori ditentukan oleh spesifikasi perangkat keras."
+      }
+    ]
+  },
+  {
+    "questionNumber": 13,
+    "question": "Dampak negatif TI yang melibatkan penyebaran berita tidak benar secara masif disebut...",
+    "answerOptions": [
+      {
+        "text": "Penyebaran informasi palsu",
+        "isCorrect": true,
+        "rationale": "Penyebaran informasi palsu merupakan dampak negatif TI berupa berita tidak benar yang tersebar masif melalui platform digital. Kecanduan digital berkaitan dengan ketergantungan, dan pelanggaran privasi terkait data pribadi."
+      },
+      {
+        "text": "Pelanggaran privasi",
+        "isCorrect": false,
+        "rationale": "Pelanggaran privasi berkaitan dengan pengambilan atau penyebaran data pribadi tanpa izin."
+      },
+      {
+        "text": "Kecanduan digital",
+        "isCorrect": false,
+        "rationale": "Kecanduan digital adalah ketergantungan psikologis akibat penggunaan perangkat atau internet secara berlebihan."
+      },
+      {
+        "text": "Kerusakan perangkat keras",
+        "isCorrect": false,
+        "rationale": "Kerusakan perangkat keras merupakan gangguan teknis fisik, bukan dampak sosial penyebaran informasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 14,
+    "question": "Risiko pelanggaran privasi sebagai dampak negatif TI terjadi ketika...",
+    "answerOptions": [
+      {
+        "text": "Koneksi internet terputus sementara",
+        "isCorrect": false,
+        "rationale": "Terputusnya koneksi internet merupakan gangguan ketersediaan layanan jaringan."
+      },
+      {
+        "text": "Pengguna menghabiskan waktu terlalu lama di depan layar",
+        "isCorrect": false,
+        "rationale": "Durasi penggunaan layar berlebihan berkaitan dengan kecanduan digital dan kesehatan mata."
+      },
+      {
+        "text": "Perangkat keras mengalami kerusakan teknis",
+        "isCorrect": false,
+        "rationale": "Kerusakan teknis perangkat keras merupakan masalah pemeliharaan fisik."
+      },
+      {
+        "text": "Data pribadi pengguna diakses tanpa izin",
+        "isCorrect": true,
+        "rationale": "Pelanggaran privasi terjadi ketika data pribadi diakses tanpa izin oleh pihak yang tidak berwenang. Ini berbeda dari kecanduan digital yang terkait durasi penggunaan, atau kerusakan teknis yang bersifat fisik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 15,
+    "question": "Keunggulan kompetitif yang diciptakan oleh TI bagi perusahaan terutama diperoleh melalui...",
+    "answerOptions": [
+      {
+        "text": "Pengurangan seluruh biaya hingga nol",
+        "isCorrect": false,
+        "rationale": "Operasional bisnis tetap memerlukan biaya; TI hanya mengefisiensikannya."
+      },
+      {
+        "text": "Penghapusan semua proses manual tanpa pengecualian",
+        "isCorrect": false,
+        "rationale": "Tidak semua proses dapat atau perlu diotomatisasi sepenuhnya tanpa keterlibatan manusia."
+      },
+      {
+        "text": "Peningkatan efisiensi dan inovasi layanan",
+        "isCorrect": true,
+        "rationale": "TI menciptakan keunggulan kompetitif melalui peningkatan efisiensi operasional dan inovasi layanan yang membedakan perusahaan dari pesaing. Ini bukan tentang penghapusan total biaya atau proses, melainkan optimalisasi dan diferensiasi."
+      },
+      {
+        "text": "Penyeragaman produk dengan pesaing",
+        "isCorrect": false,
+        "rationale": "Keunggulan kompetitif justru dicapai melalui diferensiasi dan keunikan nilai tambah dibanding pesaing."
+      }
+    ]
+  },
+  {
+    "questionNumber": 16,
+    "question": "Seorang siswa menggunakan platform digital untuk mengakses modul dan berdiskusi dengan guru di luar jam sekolah. Peran TI yang paling sesuai dengan situasi ini adalah...",
+    "answerOptions": [
+      {
+        "text": "Enabler bisnis",
+        "isCorrect": false,
+        "rationale": "Enabler bisnis merujuk pada peran TI dalam mendorong efisiensi dan daya saing perusahaan komersial."
+      },
+      {
+        "text": "Fasilitator interaksi sosial",
+        "isCorrect": false,
+        "rationale": "Konteks kegiatan pada soal adalah pembelajaran akademik antara siswa dan guru, bukan interaksi sosial umum."
+      },
+      {
+        "text": "Pendukung pembelajaran fleksibel",
+        "isCorrect": true,
+        "rationale": "Akses modul digital dan diskusi dengan guru di luar jam sekolah mencerminkan peran TI sebagai pendukung pembelajaran fleksibel. TI memungkinkan kegiatan belajar melampaui batasan waktu dan tempat tanpa menggantikan institusi formal."
+      },
+      {
+        "text": "Pengganti sekolah formal",
+        "isCorrect": false,
+        "rationale": "Platform digital melengkapi dan memperluas jangkauan pembelajaran sekolah, bukan menggantikan eksistensi sekolah formal."
+      }
+    ]
+  },
+  {
+    "questionNumber": 17,
+    "question": "Dampak negatif TI berikut yang paling terkait dengan gangguan psikologis adalah...",
+    "answerOptions": [
+      {
+        "text": "Kecanduan digital",
+        "isCorrect": true,
+        "rationale": "Kecanduan digital merupakan dampak negatif TI yang terkait gangguan psikologis karena menyebabkan ketergantungan berlebihan pada perangkat digital. Dampak lainnya lebih bersifat teknis atau finansial, bukan psikologis."
+      },
+      {
+        "text": "Kerusakan perangkat keras",
+        "isCorrect": false,
+        "rationale": "Kerusakan perangkat keras merupakan masalah fisik pada komponen elektronik."
+      },
+      {
+        "text": "Kenaikan tagihan listrik",
+        "isCorrect": false,
+        "rationale": "Kenaikan tagihan listrik merupakan dampak finansial dari konsumsi energi perangkat."
+      },
+      {
+        "text": "Kompatibilitas perangkat lunak",
+        "isCorrect": false,
+        "rationale": "Kompatibilitas perangkat lunak adalah persoalan teknis integrasi sistem."
+      }
+    ]
+  },
+  {
+    "questionNumber": 18,
+    "question": "Peran TI dalam bidang bisnis yang memungkinkan perusahaan mengurangi biaya operasional dan mempercepat proses kerja disebut...",
+    "answerOptions": [
+      {
+        "text": "Disruptor pasar",
+        "isCorrect": false,
+        "rationale": "Disruptor pasar merujuk pada inovasi yang mengubah model bisnis industri secara radikal."
+      },
+      {
+        "text": "Enabler bisnis",
+        "isCorrect": true,
+        "rationale": "TI sebagai enabler bisnis meningkatkan efisiensi operasional sehingga biaya dapat ditekan dan proses kerja menjadi lebih cepat."
+      },
+      {
+        "text": "Stabilisator organisasi",
+        "isCorrect": false,
+        "rationale": "Stabilisator organisasi bukan istilah baku untuk peran strategis TI dalam efisiensi operasional."
+      },
+      {
+        "text": "Regulator industri",
+        "isCorrect": false,
+        "rationale": "Regulator industri adalah lembaga pemerintah atau otoritas pembuat aturan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 19,
+    "question": "Komponen perangkat keras yang berfungsi mengeksekusi instruksi dan melakukan perhitungan aritmatika serta logika adalah...",
+    "answerOptions": [
+      {
+        "text": "RAM",
+        "isCorrect": false,
+        "rationale": "RAM berfungsi sebagai tempat penyimpanan sementara data dan instruksi yang sedang aktif digunakan."
+      },
+      {
+        "text": "Hard disk",
+        "isCorrect": false,
+        "rationale": "Hard disk berfungsi sebagai media penyimpanan data permanen berkapasitas besar."
+      },
+      {
+        "text": "Motherboard",
+        "isCorrect": false,
+        "rationale": "Motherboard adalah papan sirkuit utama tempat terhubungnya seluruh komponen perangkat keras komputer."
+      },
+      {
+        "text": "Central Processing Unit",
+        "isCorrect": true,
+        "rationale": "CPU merupakan otak komputer yang bertugas mengeksekusi instruksi program serta melakukan operasi aritmatika dan logika."
+      }
+    ]
+  },
+  {
+    "questionNumber": 20,
+    "question": "Data dan instruksi yang sedang aktif diproses oleh CPU disimpan sementara pada...",
+    "answerOptions": [
+      {
+        "text": "SSD",
+        "isCorrect": false,
+        "rationale": "SSD merupakan penyimpanan sekunder non-volatil untuk menyimpan sistem operasi dan berkas secara permanen."
+      },
+      {
+        "text": "Memori utama",
+        "isCorrect": true,
+        "rationale": "Memori utama seperti RAM bersifat volatile dan menyimpan data serta instruksi yang sedang dikerjakan CPU agar akses berlangsung cepat."
+      },
+      {
+        "text": "Flash drive",
+        "isCorrect": false,
+        "rationale": "Flash drive adalah media penyimpanan eksternal portabel berbasis memori flash."
+      },
+      {
+        "text": "Optical disc",
+        "isCorrect": false,
+        "rationale": "Optical disc (CD/DVD) adalah media penyimpanan sekunder optik yang memiliki kecepatan baca jauh lebih lambat dibanding memori utama."
+      }
+    ]
+  },
+  {
+    "questionNumber": 21,
+    "question": "Keyboard dan scanner termasuk dalam kategori perangkat...",
+    "answerOptions": [
+      {
+        "text": "Pemrosesan",
+        "isCorrect": false,
+        "rationale": "Perangkat pemrosesan contohnya adalah CPU dan GPU."
+      },
+      {
+        "text": "Penyimpanan",
+        "isCorrect": false,
+        "rationale": "Perangkat penyimpanan contohnya adalah HDD, SSD, dan RAM."
+      },
+      {
+        "text": "Output",
+        "isCorrect": false,
+        "rationale": "Perangkat output contohnya adalah monitor, printer, dan speaker."
+      },
+      {
+        "text": "Input",
+        "isCorrect": true,
+        "rationale": "Perangkat input digunakan untuk memasukkan data ke dalam sistem komputer, contohnya keyboard untuk teks dan scanner untuk gambar."
+      }
+    ]
+  },
+  {
+    "questionNumber": 22,
+    "question": "Monitor dan printer diklasifikasikan sebagai perangkat...",
+    "answerOptions": [
+      {
+        "text": "Output",
+        "isCorrect": true,
+        "rationale": "Perangkat output menampilkan atau menghasilkan hasil pemrosesan data dari komputer, seperti tampilan visual pada monitor dan cetakan pada printer."
+      },
+      {
+        "text": "Jaringan",
+        "isCorrect": false,
+        "rationale": "Perangkat jaringan contohnya adalah router, switch, dan modem."
+      },
+      {
+        "text": "Penyimpanan",
+        "isCorrect": false,
+        "rationale": "Perangkat penyimpanan bertugas menyimpan data digital, bukan menampilkan keluaran informasi."
+      },
+      {
+        "text": "Input",
+        "isCorrect": false,
+        "rationale": "Perangkat input berfungsi menerima masukan perintah atau data dari pengguna ke komputer."
+      }
+    ]
+  },
+  {
+    "questionNumber": 23,
+    "question": "Jenis penyimpanan yang menyimpan data secara permanen dan tidak terhapus saat komputer dimatikan disebut...",
+    "answerOptions": [
+      {
+        "text": "Memori volatil",
+        "isCorrect": false,
+        "rationale": "Memori volatil seperti RAM akan kehilangan seluruh isinya ketika aliran listrik terputus."
+      },
+      {
+        "text": "Penyimpanan sekunder",
+        "isCorrect": true,
+        "rationale": "Penyimpanan sekunder seperti hard disk dan SSD bersifat non-volatile sehingga data tetap tersimpan meskipun daya listrik dimatikan."
+      },
+      {
+        "text": "Memori cache",
+        "isCorrect": false,
+        "rationale": "Memori cache adalah memori berkecepatan sangat tinggi di dalam/dekat CPU yang bersifat volatil."
+      },
+      {
+        "text": "Register CPU",
+        "isCorrect": false,
+        "rationale": "Register CPU adalah unit penyimpanan kecil berkecepatan tinggi di dalam prosesor yang bersifat sementara (volatil)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 24,
+    "question": "Perbedaan utama antara RAM dan ROM terletak pada...",
+    "answerOptions": [
+      {
+        "text": "Kecepatan akses data",
+        "isCorrect": false,
+        "rationale": "Pembeda konseptual paling mendasar antara RAM dan ROM adalah sifat penyimpanan datanya saat daya dimatikan."
+      },
+      {
+        "text": "Lokasi fisik pada motherboard",
+        "isCorrect": false,
+        "rationale": "Keduanya sama-sama terpasang pada motherboard."
+      },
+      {
+        "text": "Kapasitas penyimpanan maksimum",
+        "isCorrect": false,
+        "rationale": "Perbedaan kapasitas adalah konsekuensi fungsi, bukan definisi perbedaan utamanya."
+      },
+      {
+        "text": "Sifat volatil dan non-volatil",
+        "isCorrect": true,
+        "rationale": "RAM bersifat volatil sehingga data hilang saat daya mati, sedangkan ROM non-volatil dan menyimpan data secara permanen."
+      }
+    ]
+  },
+  {
+    "questionNumber": 25,
+    "question": "Dibandingkan dengan HDD, keunggulan utama SSD adalah...",
+    "answerOptions": [
+      {
+        "text": "Kapasitas penyimpanan lebih besar",
+        "isCorrect": false,
+        "rationale": "HDD umumnya menawarkan kapasitas penyimpanan yang lebih besar pada kisaran harga yang sama."
+      },
+      {
+        "text": "Harga per gigabyte lebih murah",
+        "isCorrect": false,
+        "rationale": "Harga per gigabyte HDD masih lebih ekonomis dibandingkan SSD."
+      },
+      {
+        "text": "Kecepatan baca/tulis lebih tinggi",
+        "isCorrect": true,
+        "rationale": "SSD menggunakan memori flash tanpa komponen mekanis sehingga kecepatan baca dan tulis data jauh lebih tinggi daripada HDD yang menggunakan piringan magnetik."
+      },
+      {
+        "text": "Kompatibilitas dengan semua motherboard",
+        "isCorrect": false,
+        "rationale": "Baik HDD maupun SSD menggunakan standar antarmuka tertentu (seperti SATA atau NVMe) sesuai dukungan motherboard."
+      }
+    ]
+  },
+  {
+    "questionNumber": 26,
+    "question": "Ketika seorang teknisi memasang prosesor pada soket yang sesuai di motherboard, ia sedang menangani komponen yang tergolong sebagai...",
+    "answerOptions": [
+      {
+        "text": "Perangkat input",
+        "isCorrect": false,
+        "rationale": "Perangkat input bertugas memasukkan data ke komputer."
+      },
+      {
+        "text": "Perangkat output",
+        "isCorrect": false,
+        "rationale": "Perangkat output menampilkan hasil pengolahan data."
+      },
+      {
+        "text": "Media penyimpanan sekunder",
+        "isCorrect": false,
+        "rationale": "Media penyimpanan sekunder seperti SSD atau HDD dipasang pada slot/port penyimpanan, bukan soket prosesor."
+      },
+      {
+        "text": "Unit pemrosesan sentral",
+        "isCorrect": true,
+        "rationale": "Prosesor adalah wujud fisik dari CPU yang berfungsi sebagai unit pemrosesan sentral, bertugas mengeksekusi instruksi dan mengolah data."
+      }
+    ]
+  },
+  {
+    "questionNumber": 27,
+    "question": "Komponen perangkat keras berikut yang bukan termasuk perangkat input adalah...",
+    "answerOptions": [
+      {
+        "text": "Scanner",
+        "isCorrect": false,
+        "rationale": "Scanner adalah perangkat input untuk memindai dokumen fisik menjadi citra digital."
+      },
+      {
+        "text": "Joystick",
+        "isCorrect": false,
+        "rationale": "Joystick adalah perangkat input pengendali arah dan gerakan."
+      },
+      {
+        "text": "Plotter",
+        "isCorrect": true,
+        "rationale": "Plotter termasuk perangkat output yang berfungsi mencetak gambar berukuran besar, sedangkan scanner, joystick, dan mikrofon merupakan perangkat input."
+      },
+      {
+        "text": "Mikrofon",
+        "isCorrect": false,
+        "rationale": "Mikrofon adalah perangkat input untuk memasukkan sinyal suara ke komputer."
+      }
+    ]
+  },
+  {
+    "questionNumber": 28,
+    "question": "Perangkat yang menghubungkan dua jaringan berbeda dan mengarahkan paket data berdasarkan alamat IP tujuan adalah...",
+    "answerOptions": [
+      {
+        "text": "Router",
+        "isCorrect": true,
+        "rationale": "Router bekerja pada lapisan jaringan dan bertugas menghubungkan jaringan berbeda serta menentukan rute terbaik untuk paket data berdasarkan alamat IP."
+      },
+      {
+        "text": "Hub",
+        "isCorrect": false,
+        "rationale": "Hub bekerja di lapisan fisik dan meneruskan sinyal ke seluruh port tanpa membaca alamat IP."
+      },
+      {
+        "text": "Access point",
+        "isCorrect": false,
+        "rationale": "Access point berfungsi memancarkan sinyal nirkabel (WiFi) untuk menghubungkan klien ke jaringan lokal."
+      },
+      {
+        "text": "Switch",
+        "isCorrect": false,
+        "rationale": "Switch menghubungkan perangkat dalam satu jaringan lokal menggunakan MAC address."
+      }
+    ]
+  },
+  {
+    "questionNumber": 29,
+    "question": "Perangkat yang meneruskan data hanya ke port tujuan dalam satu jaringan lokal berdasarkan MAC address disebut...",
+    "answerOptions": [
+      {
+        "text": "Switch",
+        "isCorrect": true,
+        "rationale": "Switch bekerja pada lapisan data link dan meneruskan frame hanya ke port yang terhubung dengan perangkat tujuan, berbeda dengan hub yang menyebar ke semua port."
+      },
+      {
+        "text": "Modem",
+        "isCorrect": false,
+        "rationale": "Modem mengubah sinyal digital menjadi analog dan sebaliknya untuk koneksi ke penyedia layanan internet."
+      },
+      {
+        "text": "Router",
+        "isCorrect": false,
+        "rationale": "Router meneruskan paket antar jaringan berbeda berdasarkan alamat IP, bukan MAC address dalam satu LAN."
+      },
+      {
+        "text": "Repeater",
+        "isCorrect": false,
+        "rationale": "Repeater hanya memperkuat sinyal fisik untuk memperpanjang jangkauan transmisi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 30,
+    "question": "Perbedaan mendasar antara hub dan switch dalam jaringan adalah...",
+    "answerOptions": [
+      {
+        "text": "Hub menggunakan alamat IP, switch menggunakan MAC address",
+        "isCorrect": false,
+        "rationale": "Hub sama sekali tidak membaca alamat IP maupun MAC address."
+      },
+      {
+        "text": "Hub bekerja pada lapisan network, switch pada lapisan transport",
+        "isCorrect": false,
+        "rationale": "Hub bekerja pada lapisan physical (layer 1), sedangkan switch bekerja pada lapisan data link (layer 2)."
+      },
+      {
+        "text": "Hub menyebarkan data ke semua port, switch hanya ke port tujuan",
+        "isCorrect": true,
+        "rationale": "Hub meneruskan data yang diterima ke seluruh port tanpa seleksi, sedangkan switch mempelajari MAC address dan meneruskan data hanya ke port yang sesuai."
+      },
+      {
+        "text": "Hub memerlukan konfigurasi, switch bersifat plug-and-play",
+        "isCorrect": false,
+        "rationale": "Hub tidak memerlukan konfigurasi (unmanaged), sedangkan switch ada yang unmanaged maupun managed."
+      }
+    ]
+  },
+  {
+    "questionNumber": 31,
+    "question": "Modem berfungsi menghubungkan jaringan lokal ke internet dengan cara melakukan...",
+    "answerOptions": [
+      {
+        "text": "Modulasi dan demodulasi sinyal",
+        "isCorrect": true,
+        "rationale": "Modem mengubah sinyal digital dari komputer menjadi sinyal analog untuk transmisi dan sebaliknya, proses yang disebut modulasi dan demodulasi."
+      },
+      {
+        "text": "Enkripsi dan dekripsi paket data",
+        "isCorrect": false,
+        "rationale": "Enkripsi dan dekripsi adalah mekanisme pengamanan data, bukan fungsi utama modem."
+      },
+      {
+        "text": "Filtering dan forwarding frame",
+        "isCorrect": false,
+        "rationale": "Filtering dan forwarding frame berdasarkan MAC address merupakan fungsi utama switch."
+      },
+      {
+        "text": "Routing dan switching paket",
+        "isCorrect": false,
+        "rationale": "Routing dan switching dilakukan oleh router dan switch."
+      }
+    ]
+  },
+  {
+    "questionNumber": 32,
+    "question": "Sebuah kafe menyediakan WiFi bagi pelanggannya. Perangkat yang memancarkan sinyal nirkabel agar perangkat pelanggan dapat terhubung ke jaringan kafe adalah...",
+    "answerOptions": [
+      {
+        "text": "Access point",
+        "isCorrect": true,
+        "rationale": "Access point berfungsi menyediakan konektivitas nirkabel sehingga perangkat klien dapat terhubung ke jaringan kabel melalui sinyal WiFi."
+      },
+      {
+        "text": "Modem",
+        "isCorrect": false,
+        "rationale": "Modem menghubungkan jaringan lokal ke jalur komunikasi ISP, bukan memancarkan sinyal WiFi secara spesifik."
+      },
+      {
+        "text": "Router",
+        "isCorrect": false,
+        "rationale": "Router bertugas mengatur lalu lintas antar jaringan; fungsi pemancar WiFi dijalankan oleh komponen access point."
+      },
+      {
+        "text": "Switch",
+        "isCorrect": false,
+        "rationale": "Switch menghubungkan perangkat menggunakan kabel jaringan (Ethernet)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 33,
+    "question": "Dalam memilih perangkat untuk menghubungkan beberapa komputer dalam satu ruangan agar dapat berbagi file dengan efisien, perangkat yang paling tepat adalah...",
+    "answerOptions": [
+      {
+        "text": "Modem",
+        "isCorrect": false,
+        "rationale": "Modem digunakan untuk menghubungkan jaringan ke internet melalui ISP."
+      },
+      {
+        "text": "Switch",
+        "isCorrect": true,
+        "rationale": "Switch tepat untuk menghubungkan beberapa perangkat dalam satu jaringan lokal karena meneruskan data hanya ke port tujuan sehingga lebih efisien daripada hub."
+      },
+      {
+        "text": "Router",
+        "isCorrect": false,
+        "rationale": "Router digunakan untuk menghubungkan segmen jaringan yang berbeda."
+      },
+      {
+        "text": "Access point",
+        "isCorrect": false,
+        "rationale": "Access point digunakan untuk koneksi nirkabel, sedangkan untuk koneksi antar komputer ruangan yang stabil dan efisien digunakan switch."
+      }
+    ]
+  },
+  {
+    "questionNumber": 34,
+    "question": "Fungsi utama router berbeda dari switch karena router...",
+    "answerOptions": [
+      {
+        "text": "Menghubungkan perangkat dalam satu jaringan lokal",
+        "isCorrect": false,
+        "rationale": "Menghubungkan perangkat dalam satu jaringan lokal adalah fungsi utama switch."
+      },
+      {
+        "text": "Meneruskan data berdasarkan MAC address",
+        "isCorrect": false,
+        "rationale": "Penerusan frame berdasarkan MAC address dilakukan oleh switch."
+      },
+      {
+        "text": "Menghubungkan jaringan berbeda dan merutekan paket data",
+        "isCorrect": true,
+        "rationale": "Router menghubungkan dua atau lebih jaringan berbeda dan menggunakan alamat IP untuk menentukan jalur paket data, sedangkan switch beroperasi dalam satu jaringan lokal menggunakan MAC address."
+      },
+      {
+        "text": "Meneruskan data ke semua port yang terhubung",
+        "isCorrect": false,
+        "rationale": "Meneruskan data ke semua port adalah cara kerja hub."
+      }
+    ]
+  },
+  {
+    "questionNumber": 35,
+    "question": "Salah satu perbedaan utama antara router dan switch adalah bahwa selain beroperasi pada lapisan OSI yang berbeda, router juga memiliki kemampuan spesifik untuk...",
+    "answerOptions": [
+      {
+        "text": "Meneruskan frame berdasarkan MAC address",
+        "isCorrect": false,
+        "rationale": "Meneruskan frame berdasarkan MAC address adalah kemampuan spesifik switch di lapisan data link."
+      },
+      {
+        "text": "Menghubungkan dua jaringan dengan alamat network berbeda",
+        "isCorrect": true,
+        "rationale": "Router beroperasi di lapisan network dan menggunakan alamat IP untuk menghubungkan serta merutekan paket antar jaringan yang berbeda, sedangkan switch bekerja di lapisan data link dalam satu jaringan lokal menggunakan MAC address."
+      },
+      {
+        "text": "Mempelajari alamat perangkat yang terhubung ke setiap port",
+        "isCorrect": false,
+        "rationale": "Mempelajari MAC address perangkat pada setiap port untuk membentuk MAC address table adalah mekanisme kerja switch."
+      },
+      {
+        "text": "Mengirim data secara broadcast ke seluruh port",
+        "isCorrect": false,
+        "rationale": "Router secara bawaan membatasi domain broadcast dan tidak meneruskan lalu lintas broadcast antar jaringan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 36,
+    "question": "Access point pada jaringan WiFi memiliki fungsi utama yang membedakannya dari switch, yaitu...",
+    "answerOptions": [
+      {
+        "text": "Menyediakan konektivitas nirkabel bagi klien",
+        "isCorrect": true,
+        "rationale": "Access point dirancang khusus untuk menyediakan akses jaringan nirkabel bagi perangkat klien, menjembatani komunikasi antara jaringan kabel dan perangkat tanpa kabel."
+      },
+      {
+        "text": "Mengelola lalu lintas data antar VLAN",
+        "isCorrect": false,
+        "rationale": "Pengelolaan lalu lintas antar VLAN dilakukan oleh router atau switch layer 3."
+      },
+      {
+        "text": "Melakukan routing antar subnet berbeda",
+        "isCorrect": false,
+        "rationale": "Routing antar subnet berbeda merupakan fungsi router."
+      },
+      {
+        "text": "Memodulasi sinyal analog ke digital",
+        "isCorrect": false,
+        "rationale": "Modulasi dan demodulasi sinyal saluran telekomunikasi dilakukan oleh modem."
+      }
+    ]
+  },
+  {
+    "questionNumber": 37,
+    "question": "Subnetting pada jaringan komputer merupakan teknik yang bertujuan untuk...",
+    "answerOptions": [
+      {
+        "text": "Menggabungkan beberapa jaringan kecil menjadi satu jaringan besar",
+        "isCorrect": false,
+        "rationale": "Menggabungkan beberapa jaringan kecil menjadi satu rute ringkasan disebut supernetting atau route summarization."
+      },
+      {
+        "text": "Mengubah alamat IP privat menjadi alamat IP publik",
+        "isCorrect": false,
+        "rationale": "Penerjemahan alamat IP privat ke IP publik merupakan fungsi Network Address Translation (NAT)."
+      },
+      {
+        "text": "Mempercepat transmisi data dengan mengurangi ukuran paket",
+        "isCorrect": false,
+        "rationale": "Pengurangan ukuran paket berkaitan dengan pengaturan MTU (Maximum Transmission Unit), bukan subnetting."
+      },
+      {
+        "text": "Membagi jaringan besar menjadi sub-jaringan lebih kecil",
+        "isCorrect": true,
+        "rationale": "Subnetting adalah proses mempartisi satu network besar menjadi beberapa subnet yang lebih kecil untuk meningkatkan efisiensi pengalamatan IP dan keamanan lalu lintas data."
+      }
+    ]
+  },
+  {
+    "questionNumber": 38,
+    "question": "Dalam pemodelan arsitektur jaringan, susunan geometris yang menggambarkan pola hubungan fisik antar perangkat dalam suatu jaringan disebut...",
+    "answerOptions": [
+      {
+        "text": "Model referensi",
+        "isCorrect": false,
+        "rationale": "Model referensi seperti OSI atau TCP/IP menjelaskan lapisan fungsi komunikasi data, bukan susunan fisik perangkat."
+      },
+      {
+        "text": "Protokol komunikasi",
+        "isCorrect": false,
+        "rationale": "Protokol adalah aturan baku format dan tata cara pertukaran data antar perangkat."
+      },
+      {
+        "text": "Topologi jaringan",
+        "isCorrect": true,
+        "rationale": "Topologi jaringan merujuk pada pengaturan fisik atau logis bagaimana perangkat-perangkat dalam jaringan saling terhubung, yang mempengaruhi kinerja dan keandalan jaringan."
+      },
+      {
+        "text": "Arsitektur klien-server",
+        "isCorrect": false,
+        "rationale": "Arsitektur klien-server menjelaskan pembagian peran antara penyedia layanan dan peminta layanan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 39,
+    "question": "Lapisan pada model OSI yang bertanggung jawab untuk menentukan rute terbaik dan meneruskan paket data antar jaringan adalah...",
+    "answerOptions": [
+      {
+        "text": "Physical layer",
+        "isCorrect": false,
+        "rationale": "Physical layer menangani transmisi bit mentah melalui media fisik seperti kabel dan gelombang radio."
+      },
+      {
+        "text": "Data link layer",
+        "isCorrect": false,
+        "rationale": "Data link layer menangani pengiriman frame antar node yang terhubung langsung menggunakan pengalamatan fisik (MAC)."
+      },
+      {
+        "text": "Network layer",
+        "isCorrect": true,
+        "rationale": "Network layer (lapisan ketiga OSI) menangani pengalamatan logis dan routing, yaitu menentukan jalur terbaik untuk mengirimkan paket dari sumber ke tujuan melintasi berbagai jaringan."
+      },
+      {
+        "text": "Transport layer",
+        "isCorrect": false,
+        "rationale": "Transport layer memastikan keandalan pengiriman data end-to-end antar aplikasi (seperti TCP/UDP)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 40,
+    "question": "Teknik subnetting menghasilkan efisiensi pengalamatan karena subnet mask berfungsi untuk...",
+    "answerOptions": [
+      {
+        "text": "Memisahkan bagian network dan bagian host dari sebuah alamat IP",
+        "isCorrect": true,
+        "rationale": "Subnet mask digunakan untuk menentukan porsi network dan porsi host dalam suatu alamat IP, sehingga administrator dapat mengalokasikan alamat secara lebih presisi dan menghindari pemborosan."
+      },
+      {
+        "text": "Menyembunyikan alamat IP asli dari jaringan publik",
+        "isCorrect": false,
+        "rationale": "Menyembunyikan IP privat di balik IP publik adalah fungsi dari NAT."
+      },
+      {
+        "text": "Mengonversi alamat IPv4 menjadi format IPv6",
+        "isCorrect": false,
+        "rationale": "Konversi atau penerjemahan protokol dilakukan oleh mekanisme transisi IPv6 seperti NAT64 atau dual-stack."
+      },
+      {
+        "text": "Mengenkripsi data yang dikirim antar subnet",
+        "isCorrect": false,
+        "rationale": "Enkripsi dilakukan oleh protokol keamanan seperti IPsec atau TLS, bukan oleh subnet mask."
+      }
+    ]
+  },
+  {
+    "questionNumber": 41,
+    "question": "Berikut ini yang bukan merupakan karakteristik dari model OSI adalah...",
+    "answerOptions": [
+      {
+        "text": "Terdiri dari tujuh lapisan dengan fungsi spesifik",
+        "isCorrect": false,
+        "rationale": "Model OSI memang tersusun atas tujuh lapisan mulai dari Physical hingga Application."
+      },
+      {
+        "text": "Mendefinisikan protokol spesifik yang wajib digunakan pada setiap lapisan",
+        "isCorrect": true,
+        "rationale": "Model OSI adalah kerangka konseptual yang menggambarkan fungsi komunikasi jaringan dalam tujuh lapisan, tetapi tidak menetapkan protokol spesifik yang harus digunakan; protokol justru dikembangkan secara terpisah."
+      },
+      {
+        "text": "Memisahkan fungsi jaringan ke dalam lapisan-lapisan yang modular",
+        "isCorrect": false,
+        "rationale": "Modularitas lapisan merupakan karakteristik inti model OSI agar perubahan satu lapisan tidak merusak lapisan lain."
+      },
+      {
+        "text": "Berfungsi sebagai kerangka standar untuk memahami komunikasi data",
+        "isCorrect": false,
+        "rationale": "Model OSI berfungsi sebagai acuan konseptual dalam pembelajaran dan analisis komunikasi jaringan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 42,
+    "question": "Topologi logis berbeda dari topologi fisik karena topologi logis menggambarkan...",
+    "answerOptions": [
+      {
+        "text": "Letak geografis perangkat dalam ruangan server",
+        "isCorrect": false,
+        "rationale": "Tata letak fisik perangkat di ruangan termasuk dalam ranah topologi fisik."
+      },
+      {
+        "text": "Merek dan tipe perangkat yang terpasang di jaringan",
+        "isCorrect": false,
+        "rationale": "Spesifikasi vendor dan tipe perangkat adalah informasi inventaris aset, bukan topologi."
+      },
+      {
+        "text": "Jenis kabel yang digunakan untuk menghubungkan perangkat",
+        "isCorrect": false,
+        "rationale": "Media perkabelan merupakan komponen fisik jaringan."
+      },
+      {
+        "text": "Jalur aliran data aktual antar perangkat dalam jaringan",
+        "isCorrect": true,
+        "rationale": "Topologi logis merepresentasikan bagaimana data mengalir dalam jaringan tanpa memperhatikan susunan fisik kabel atau perangkat, sementara topologi fisik menunjukkan tata letak sebenarnya dari perangkat dan media transmisi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 43,
+    "question": "Penggunaan IPv6 semakin didorong karena keterbatasan utama IPv4, yaitu...",
+    "answerOptions": [
+      {
+        "text": "Jumlah alamat yang tersedia terbatas",
+        "isCorrect": true,
+        "rationale": "IPv4 menggunakan alamat 32-bit yang hanya menyediakan sekitar 4,3 miliar alamat, jumlah yang tidak mencukupi untuk pertumbuhan perangkat internet saat ini, sehingga IPv6 dengan alamat 128-bit dikembangkan untuk mengatasi keterbatasan tersebut."
+      },
+      {
+        "text": "Tidak mendukung enkripsi end-to-end",
+        "isCorrect": false,
+        "rationale": "IPv4 tetap dapat menjalankan enkripsi end-to-end melalui IPsec maupun TLS."
+      },
+      {
+        "text": "Kecepatan transmisi data yang lebih rendah",
+        "isCorrect": false,
+        "rationale": "Kecepatan transmisi ditentukan oleh media fisik dan perangkat keras jaringan, bukan sekadar versi alamat IP."
+      },
+      {
+        "text": "Hanya bekerja pada jaringan kabel",
+        "isCorrect": false,
+        "rationale": "IPv4 bekerja dengan baik pada jaringan kabel maupun nirkabel."
+      }
+    ]
+  },
+  {
+    "questionNumber": 44,
+    "question": "Seorang administrator perlu menghubungkan tiga departemen dalam satu gedung ke jaringan yang sama, namun ia ingin lalu lintas data antar departemen tetap terisolasi. Teknik pengalamatan yang paling tepat diterapkan adalah...",
+    "answerOptions": [
+      {
+        "text": "NAT overload",
+        "isCorrect": false,
+        "rationale": "NAT overload (PAT) digunakan untuk berbagi satu alamat IP publik ke banyak perangkat lokal agar dapat mengakses internet."
+      },
+      {
+        "text": "Subnetting",
+        "isCorrect": true,
+        "rationale": "Subnetting memungkinkan administrator membagi satu jaringan menjadi beberapa subnet, masing-masing untuk satu departemen, sehingga lalu lintas broadcast terisolasi dan keamanan antar departemen lebih terjaga."
+      },
+      {
+        "text": "DHCP reservation",
+        "isCorrect": false,
+        "rationale": "DHCP reservation hanya memastikan perangkat tertentu selalu memperoleh alamat IP yang tetap dari server DHCP."
+      },
+      {
+        "text": "MAC filtering",
+        "isCorrect": false,
+        "rationale": "MAC filtering membatasi perangkat yang boleh terhubung ke jaringan berdasarkan alamat fisik kartu jaringannya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 45,
+    "question": "Langkah awal yang dilakukan dalam merancang jaringan skala kecil untuk sebuah kantor dengan 20 komputer adalah...",
+    "answerOptions": [
+      {
+        "text": "Memasang kabel dan menghubungkan semua perangkat",
+        "isCorrect": false,
+        "rationale": "Pemasangan kabel adalah tahap implementasi fisik yang dilakukan setelah desain topologi selesai."
+      },
+      {
+        "text": "Mengkonfigurasi firewall dan aturan akses",
+        "isCorrect": false,
+        "rationale": "Konfigurasi keamanan dilakukan setelah perangkat keras terpasang dan skema IP ditetapkan."
+      },
+      {
+        "text": "Menentukan topologi dan perangkat yang sesuai",
+        "isCorrect": true,
+        "rationale": "Tahap perancangan dimulai dengan menentukan topologi, jenis perangkat seperti switch dan router, serta skema pengalamatan yang akan digunakan sebelum masuk ke tahap implementasi fisik."
+      },
+      {
+        "text": "Melakukan troubleshooting koneksi jaringan",
+        "isCorrect": false,
+        "rationale": "Troubleshooting dilakukan saat pengujian atau ketika terjadi gangguan operasional."
+      }
+    ]
+  },
+  {
+    "questionNumber": 46,
+    "question": "Pada konfigurasi dasar router, perintah untuk menetapkan alamat IP pada interface serial dan mengaktifkannya melibatkan kombinasi...",
+    "answerOptions": [
+      {
+        "text": "ip address diikuti no shutdown",
+        "isCorrect": true,
+        "rationale": "Setelah menetapkan alamat IP pada interface router dengan perintah 'ip address', administrator harus menjalankan perintah 'no shutdown' untuk mengaktifkan interface tersebut secara administratif."
+      },
+      {
+        "text": "ip default-gateway diikuti enable",
+        "isCorrect": false,
+        "rationale": "Perintah 'ip default-gateway' digunakan pada switch layer 2 untuk menentukan jalur keluar, bukan untuk mengaktifkan interface serial router."
+      },
+      {
+        "text": "ip route diikuti network",
+        "isCorrect": false,
+        "rationale": "Perintah 'ip route' digunakan untuk menambahkan entri routing statis pada tabel routing."
+      },
+      {
+        "text": "ip config diikuti interface up",
+        "isCorrect": false,
+        "rationale": "Sintaks tersebut tidak valid dalam antarmuka baris perintah (CLI) konfigurasi router."
+      }
+    ]
+  },
+  {
+    "questionNumber": 47,
+    "question": "Tahapan konfigurasi switch yang bertujuan mengelompokkan port ke dalam segmen jaringan logis yang berbeda disebut...",
+    "answerOptions": [
+      {
+        "text": "VLAN configuration",
+        "isCorrect": true,
+        "rationale": "VLAN (Virtual LAN) memungkinkan switch mengelompokkan port-port tertentu menjadi segmen logis terpisah, sehingga perangkat di VLAN berbeda tidak dapat saling berkomunikasi langsung meskipun terhubung ke switch yang sama."
+      },
+      {
+        "text": "Port security",
+        "isCorrect": false,
+        "rationale": "Port security bertujuan membatasi akses perangkat ke suatu port berdasarkan MAC address."
+      },
+      {
+        "text": "Spanning tree",
+        "isCorrect": false,
+        "rationale": "Spanning Tree Protocol (STP) berfungsi mencegah terjadinya looping pada jaringan switch redundan."
+      },
+      {
+        "text": "Link aggregation",
+        "isCorrect": false,
+        "rationale": "Link aggregation (EtherChannel) menggabungkan beberapa tautan fisik menjadi satu tautan logis untuk meningkatkan bandwidth."
+      }
+    ]
+  },
+  {
+    "questionNumber": 48,
+    "question": "Suatu kantor cabang baru memiliki 15 komputer dan satu server lokal. Administrator jaringan memilih topologi star dengan satu switch 24-port. Setelah switch terpasang, langkah konfigurasi yang tepat untuk memisahkan lalu lintas data pengguna dan server adalah...",
+    "answerOptions": [
+      {
+        "text": "Mengaktifkan port security pada semua port switch",
+        "isCorrect": false,
+        "rationale": "Port security hanya mengunci akses port per perangkat, tidak memisahkan segmen lalu lintas antara pengguna dan server."
+      },
+      {
+        "text": "Menonaktifkan spanning tree protocol",
+        "isCorrect": false,
+        "rationale": "Menonaktifkan STP justru berisiko menimbulkan broadcast storm jika terjadi looping kabel."
+      },
+      {
+        "text": "Mengganti switch dengan router",
+        "isCorrect": false,
+        "rationale": "Switch 24-port sudah sangat memadai untuk menghubungkan 16 perangkat; menggantinya dengan router untuk semua port klien tidak efisien."
+      },
+      {
+        "text": "Membuat VLAN terpisah untuk pengguna dan server",
+        "isCorrect": true,
+        "rationale": "Dengan membuat dua VLAN berbeda, satu untuk pengguna dan satu untuk server, switch dapat memisahkan domain broadcast sehingga lalu lintas antar kedua kelompok tetap terisolasi dan keamanan meningkat."
+      }
+    ]
+  },
+  {
+    "questionNumber": 49,
+    "question": "Dalam rancangan jaringan sederhana, pemilihan topologi star lebih disukai dibanding topologi bus karena topologi star...",
+    "answerOptions": [
+      {
+        "text": "Memerlukan kabel yang lebih sedikit",
+        "isCorrect": false,
+        "rationale": "Topologi star justru membutuhkan lebih banyak kabel karena setiap perangkat ditarik langsung ke konsentrator pusat."
+      },
+      {
+        "text": "Tidak memerlukan perangkat tambahan seperti switch",
+        "isCorrect": false,
+        "rationale": "Topologi star mutlak membutuhkan perangkat pusat seperti switch atau hub."
+      },
+      {
+        "text": "Memiliki kecepatan transfer data paling tinggi",
+        "isCorrect": false,
+        "rationale": "Kecepatan transfer bergantung pada standar kabel dan port perangkat, bukan semata bentuk topologi."
+      },
+      {
+        "text": "Memudahkan isolasi gangguan tanpa memutus seluruh jaringan",
+        "isCorrect": true,
+        "rationale": "Pada topologi star, setiap perangkat terhubung langsung ke switch pusat, sehingga jika satu kabel atau perangkat bermasalah, hanya segmen itu yang terganggu tanpa mempengaruhi perangkat lain dalam jaringan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 50,
+    "question": "Setelah switch dikonfigurasi dengan beberapa VLAN, administrator juga perlu mengatur agar antar-VLAN dapat berkomunikasi. Perangkat yang paling tepat untuk menangani hal ini adalah...",
+    "answerOptions": [
+      {
+        "text": "Hub",
+        "isCorrect": false,
+        "rationale": "Hub adalah perangkat lapisan fisik yang tidak mengenali VLAN maupun alamat IP."
+      },
+      {
+        "text": "Router",
+        "isCorrect": true,
+        "rationale": "Komunikasi antar-VLAN memerlukan perangkat yang beroperasi di lapisan network, yaitu router, yang dapat merutekan paket antar subnet yang berbeda sesuai konfigurasi routing antar-VLAN."
+      },
+      {
+        "text": "Modem",
+        "isCorrect": false,
+        "rationale": "Modem hanya memodulasi sinyal untuk koneksi internet ISP, bukan melakukan inter-VLAN routing."
+      },
+      {
+        "text": "Access point",
+        "isCorrect": false,
+        "rationale": "Access point menyediakan koneksi nirkabel bagi perangkat klien."
+      }
+    ]
+  },
+  {
+    "questionNumber": 51,
+    "question": "Konfigurasi port security pada switch diterapkan dengan tujuan utama untuk...",
+    "answerOptions": [
+      {
+        "text": "Mengenkripsi data yang melewati port",
+        "isCorrect": false,
+        "rationale": "Switch layer 2 standar tidak melakukan enkripsi isi paket data pada port."
+      },
+      {
+        "text": "Meningkatkan kecepatan negosiasi port",
+        "isCorrect": false,
+        "rationale": "Kecepatan negosiasi diatur melalui parameter speed dan duplex, bukan port security."
+      },
+      {
+        "text": "Membatasi perangkat yang dapat terhubung ke port tertentu",
+        "isCorrect": true,
+        "rationale": "Port security membatasi akses ke port switch berdasarkan MAC address yang diizinkan, sehingga hanya perangkat yang telah terdaftar yang dapat terhubung, mencegah akses tidak sah ke jaringan."
+      },
+      {
+        "text": "Mengaktifkan fitur PoE pada port",
+        "isCorrect": false,
+        "rationale": "Power over Ethernet (PoE) adalah fitur penyaluran daya listrik melalui kabel jaringan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 52,
+    "question": "Dalam merancang jaringan untuk kantor kecil, setelah menentukan topologi star, langkah selanjutnya yang paling tepat adalah...",
+    "answerOptions": [
+      {
+        "text": "Membeli lisensi perangkat lunak aplikasi perkantoran",
+        "isCorrect": false,
+        "rationale": "Pengadaan aplikasi perkantoran termasuk kebutuhan perangkat lunak pengguna, bukan tahap perancangan jaringan."
+      },
+      {
+        "text": "Menginstal sistem operasi pada seluruh komputer klien",
+        "isCorrect": false,
+        "rationale": "Instalasi sistem operasi klien dilakukan pada tahap penyediaan perangkat akhir."
+      },
+      {
+        "text": "Mengonfigurasi firewall pada router gateway",
+        "isCorrect": false,
+        "rationale": "Konfigurasi aturan firewall dilakukan setelah skema pengalamatan IP dan segmen jaringan ditetapkan."
+      },
+      {
+        "text": "Menentukan skema pengalamatan IP untuk setiap perangkat",
+        "isCorrect": true,
+        "rationale": "Setelah topologi dipilih, perancangan jaringan berlanjut ke penentuan alamat IP agar setiap perangkat dapat diidentifikasi dan berkomunikasi dalam jaringan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 53,
+    "question": "Perangkat lunak yang kode sumbernya tersedia untuk dipelajari, dimodifikasi, dan disebarluaskan kembali oleh pengguna termasuk dalam kategori...",
+    "answerOptions": [
+      {
+        "text": "Sistem operasi",
+        "isCorrect": false,
+        "rationale": "Sistem operasi merujuk pada jenis fungsi perangkat lunak, yang bisa saja bersifat open source maupun proprietary."
+      },
+      {
+        "text": "Perangkat lunak aplikasi",
+        "isCorrect": false,
+        "rationale": "Perangkat lunak aplikasi adalah kategori berdasarkan fungsi penggunaan akhir, bukan keterbukaan lisensinya."
+      },
+      {
+        "text": "Perangkat lunak open source",
+        "isCorrect": true,
+        "rationale": "Karakteristik utama open source adalah kebebasan mengakses, memodifikasi, dan mendistribusikan kode sumber, yang membedakannya dari proprietary yang membatasi akses tersebut."
+      },
+      {
+        "text": "Perangkat lunak proprietary",
+        "isCorrect": false,
+        "rationale": "Perangkat lunak proprietary menutup akses kode sumber dan melarang modifikasi tanpa izin pemilik hak cipta."
+      }
+    ]
+  },
+  {
+    "questionNumber": 54,
+    "question": "Berikut ini yang bukan merupakan contoh perangkat lunak aplikasi adalah...",
+    "answerOptions": [
+      {
+        "text": "Spreadsheet",
+        "isCorrect": false,
+        "rationale": "Spreadsheet adalah perangkat lunak aplikasi untuk mengolah data angka dan tabel."
+      },
+      {
+        "text": "Pengolah kata",
+        "isCorrect": false,
+        "rationale": "Pengolah kata adalah perangkat lunak aplikasi untuk membuat dan menyunting dokumen teks."
+      },
+      {
+        "text": "Perangkat presentasi",
+        "isCorrect": false,
+        "rationale": "Perangkat presentasi adalah aplikasi untuk menyusun salindia tampilan visual."
+      },
+      {
+        "text": "Sistem operasi",
+        "isCorrect": true,
+        "rationale": "Sistem operasi bertugas mengelola perangkat keras dan menyediakan layanan dasar, sedangkan spreadsheet, pengolah kata, dan perangkat presentasi adalah aplikasi untuk tugas pengguna spesifik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 55,
+    "question": "Lisensi perangkat lunak yang melarang pengguna mengakses atau mengubah kode sumber program disebut lisensi...",
+    "answerOptions": [
+      {
+        "text": "Proprietary",
+        "isCorrect": true,
+        "rationale": "Lisensi proprietary menutup akses ke kode sumber dan membatasi modifikasi atau redistribusi, berbeda dengan open source yang memberikan kebebasan tersebut."
+      },
+      {
+        "text": "Open source",
+        "isCorrect": false,
+        "rationale": "Lisensi open source justru membuka akses terhadap kode sumber program."
+      },
+      {
+        "text": "Freeware",
+        "isCorrect": false,
+        "rationale": "Freeware merujuk pada distribusi tanpa biaya, bukan secara spesifik istilah untuk pelarangan akses kode sumber (yang merupakan ciri utama proprietary)."
+      },
+      {
+        "text": "Shareware",
+        "isCorrect": false,
+        "rationale": "Shareware adalah perangkat lunak uji coba gratis selama masa tertentu sebelum pengguna diminta membeli lisensinya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 56,
+    "question": "Berbeda dengan perangkat lunak aplikasi yang berorientasi pada tugas pengguna akhir, sistem operasi berperan sebagai...",
+    "answerOptions": [
+      {
+        "text": "Antarmuka antara perangkat keras dan program aplikasi yang berjalan di atasnya",
+        "isCorrect": true,
+        "rationale": "Sistem operasi berfungsi sebagai lapisan perantara yang mengelola sumber daya perangkat keras dan menyediakan layanan bagi perangkat lunak aplikasi. Sementara perangkat lunak aplikasi dirancang untuk membantu pengguna menyelesaikan pekerjaan spesifik, sistem operasi menjembatani aplikasi tersebut dengan komponen fisik komputer."
+      },
+      {
+        "text": "Alat bantu pengolah kata dan angka yang terinstal langsung di memori hanya-baca",
+        "isCorrect": false,
+        "rationale": "Pengolah kata dan angka adalah perangkat lunak aplikasi dan tidak disimpan di ROM."
+      },
+      {
+        "text": "Penyimpan permanen seluruh dokumen kerja yang dihasilkan oleh pengguna komputer",
+        "isCorrect": false,
+        "rationale": "Penyimpanan permanen dokumen dilakukan oleh media penyimpanan sekunder seperti SSD atau HDD."
+      },
+      {
+        "text": "Perangkat lunak khusus untuk mendesain grafis dan mengelola basis data perusahaan",
+        "isCorrect": false,
+        "rationale": "Desain grafis dan pengelolaan basis data merupakan fungsi perangkat lunak aplikasi spesifik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 57,
+    "question": "Jenis perangkat lunak yang memungkinkan pengguna mengolah data dalam bentuk tabel dan melakukan perhitungan otomatis tergolong sebagai...",
+    "answerOptions": [
+      {
+        "text": "Sistem operasi",
+        "isCorrect": false,
+        "rationale": "Sistem operasi mengelola sumber daya komputer secara keseluruhan."
+      },
+      {
+        "text": "Perangkat lunak presentasi",
+        "isCorrect": false,
+        "rationale": "Perangkat lunak presentasi digunakan untuk menyusun bahan tayangan visual."
+      },
+      {
+        "text": "Spreadsheet",
+        "isCorrect": true,
+        "rationale": "Spreadsheet dirancang khusus untuk mengelola data tabular dan melakukan kalkulasi, berbeda dengan pengolah kata untuk dokumen teks atau presentasi untuk tampilan visual."
+      },
+      {
+        "text": "Perangkat lunak pengolah kata",
+        "isCorrect": false,
+        "rationale": "Pengolah kata berfokus pada penulisan dan pemformatan dokumen berbasis teks."
+      }
+    ]
+  },
+  {
+    "questionNumber": 58,
+    "question": "Sebuah perusahaan menggunakan perangkat lunak yang kode sumbernya dapat diakses dan dimodifikasi, namun setiap modifikasi harus diserahkan kembali ke komunitas pengembang jika didistribusikan ulang. Jenis lisensi yang diterapkan adalah...",
+    "answerOptions": [
+      {
+        "text": "Lisensi copyleft",
+        "isCorrect": true,
+        "rationale": "Lisensi copyleft memberikan kebebasan untuk menggunakan, memodifikasi, dan mendistribusikan ulang perangkat lunak beserta kode sumbernya, dengan syarat bahwa versi modifikasi juga harus dilisensikan di bawah ketentuan yang sama jika didistribusikan."
+      },
+      {
+        "text": "Lisensi proprietary",
+        "isCorrect": false,
+        "rationale": "Lisensi proprietary melarang akses maupun modifikasi terhadap kode sumber."
+      },
+      {
+        "text": "Lisensi domain publik",
+        "isCorrect": false,
+        "rationale": "Lisensi domain publik melepaskan seluruh hak cipta tanpa syarat timbal balik pembagian kode turunan."
+      },
+      {
+        "text": "Lisensi freeware",
+        "isCorrect": false,
+        "rationale": "Lisensi freeware memberikan hak pakai gratis tanpa menyertakan kode sumber."
+      }
+    ]
+  },
+  {
+    "questionNumber": 59,
+    "question": "Suatu perangkat lunak dapat diunduh dan digunakan secara gratis, tetapi kode sumbernya tidak disertakan. Karakteristik ini paling sesuai dengan...",
+    "answerOptions": [
+      {
+        "text": "Open source",
+        "isCorrect": false,
+        "rationale": "Open source mewajibkan ketersediaan kode sumber bagi pengguna."
+      },
+      {
+        "text": "Freeware",
+        "isCorrect": false,
+        "rationale": "Meskipun freeware bersifat gratis, dalam konteks klasifikasi keterbukaan kode sumber pada materi modul, perangkat lunak yang menutup kode sumbernya dikategorikan sebagai proprietary."
+      },
+      {
+        "text": "Proprietary",
+        "isCorrect": true,
+        "rationale": "Gratis tidak sama dengan open source. Banyak proprietary software yang didistribusikan gratis tetapi tetap menutup akses ke kode sumbernya."
+      },
+      {
+        "text": "Shareware",
+        "isCorrect": false,
+        "rationale": "Shareware hanya gratis untuk masa percobaan terbatas dan tetap menutup kode sumbernya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 60,
+    "question": "Fungsi utama sistem operasi dalam sebuah komputer adalah...",
+    "answerOptions": [
+      {
+        "text": "Membuat dokumen dan presentasi",
+        "isCorrect": false,
+        "rationale": "Pembuatan dokumen dan presentasi adalah fungsi perangkat lunak aplikasi perkantoran."
+      },
+      {
+        "text": "Mendesain antarmuka pengguna grafis",
+        "isCorrect": false,
+        "rationale": "Desain antarmuka grafis dilakukan menggunakan perangkat lunak desain UI/UX."
+      },
+      {
+        "text": "Mengamankan jaringan dari serangan siber",
+        "isCorrect": false,
+        "rationale": "Pengamanan jaringan eksternal terutama ditangani oleh firewall, IDS/IPS, dan perangkat keamanan jaringan."
+      },
+      {
+        "text": "Mengelola perangkat keras dan menyediakan layanan bagi aplikasi",
+        "isCorrect": true,
+        "rationale": "Sistem operasi bertindak sebagai perantara antara perangkat keras dan aplikasi, mengelola alokasi sumber daya seperti memori, prosesor, dan penyimpanan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 61,
+    "question": "Model layanan cloud di mana pengguna menyewa sumber daya komputasi virtual seperti server dan penyimpanan melalui internet dikenal sebagai...",
+    "answerOptions": [
+      {
+        "text": "Infrastructure as a Service",
+        "isCorrect": true,
+        "rationale": "IaaS menyediakan infrastruktur TI virtual (mesin virtual, penyimpanan, jaringan) secara on-demand, sehingga pengguna tidak perlu membeli perangkat keras fisik."
+      },
+      {
+        "text": "Platform as a Service",
+        "isCorrect": false,
+        "rationale": "PaaS menyediakan lingkungan pengembangan dan deployment aplikasi siap pakai tanpa mengelola sistem operasi."
+      },
+      {
+        "text": "Software as a Service",
+        "isCorrect": false,
+        "rationale": "SaaS menyediakan aplikasi siap pakai secara langsung kepada pengguna akhir melalui web."
+      },
+      {
+        "text": "Desktop as a Service",
+        "isCorrect": false,
+        "rationale": "DaaS menyediakan lingkungan desktop virtual bagi pengguna akhir."
+      }
+    ]
+  },
+  {
+    "questionNumber": 62,
+    "question": "Perbedaan paling mendasar antara IaaS dan PaaS dalam cloud computing adalah...",
+    "answerOptions": [
+      {
+        "text": "IaaS menggunakan internet, PaaS menggunakan intranet",
+        "isCorrect": false,
+        "rationale": "Keduanya sama-sama dapat diakses melalui jaringan internet publik maupun private cloud."
+      },
+      {
+        "text": "IaaS menyediakan infrastruktur, PaaS menyediakan platform pengembangan aplikasi",
+        "isCorrect": true,
+        "rationale": "IaaS memberi kendali penuh atas sistem operasi dan infrastruktur virtual, sedangkan PaaS menyediakan lingkungan siap pakai bagi pengembang untuk membangun aplikasi tanpa mengelola infrastruktur di bawahnya."
+      },
+      {
+        "text": "IaaS hanya untuk penyimpanan, PaaS hanya untuk komputasi",
+        "isCorrect": false,
+        "rationale": "IaaS mencakup komputasi (VM), jaringan, dan penyimpanan sekaligus."
+      },
+      {
+        "text": "IaaS lebih murah dibandingkan PaaS",
+        "isCorrect": false,
+        "rationale": "Biaya bergantung pada kapasitas sumber daya dan spesifikasi layanan yang digunakan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 63,
+    "question": "Suatu perusahaan menggunakan aplikasi email dan kolaborasi berbasis web tanpa mengelola server atau pembaruan perangkat lunak sendiri. Model layanan ini termasuk...",
+    "answerOptions": [
+      {
+        "text": "Software as a Service",
+        "isCorrect": true,
+        "rationale": "SaaS memberikan aplikasi siap pakai yang diakses melalui internet, di mana penyedia layanan menangani seluruh infrastruktur dan pemeliharaan."
+      },
+      {
+        "text": "Platform as a Service",
+        "isCorrect": false,
+        "rationale": "PaaS ditujukan bagi pengembang perangkat lunak untuk membangun aplikasi kustom."
+      },
+      {
+        "text": "Infrastructure as a Service",
+        "isCorrect": false,
+        "rationale": "Pada IaaS pengguna masih harus menginstal dan memelihara sistem operasi serta aplikasi sendiri."
+      },
+      {
+        "text": "Network as a Service",
+        "isCorrect": false,
+        "rationale": "NaaS menyediakan layanan konektivitas dan infrastruktur jaringan virtual."
+      }
+    ]
+  },
+  {
+    "questionNumber": 64,
+    "question": "Berikut ini yang bukan merupakan karakteristik cloud computing adalah...",
+    "answerOptions": [
+      {
+        "text": "Akses sumber daya secara on-demand melalui internet",
+        "isCorrect": false,
+        "rationale": "On-demand self-service melalui jaringan luas adalah karakteristik utama cloud computing."
+      },
+      {
+        "text": "Pengguna harus memiliki server fisik sendiri",
+        "isCorrect": true,
+        "rationale": "Cloud computing justru menghilangkan kebutuhan pengguna untuk memiliki dan mengelola server fisik sendiri karena infrastruktur disediakan oleh penyedia layanan."
+      },
+      {
+        "text": "Skalabilitas sumber daya yang fleksibel",
+        "isCorrect": false,
+        "rationale": "Rapid elasticity (skalabilitas cepat) merupakan karakteristik utama layanan cloud."
+      },
+      {
+        "text": "Model pembayaran berdasarkan penggunaan",
+        "isCorrect": false,
+        "rationale": "Measured service (pay-as-you-go) merupakan ciri khas penagihan layanan cloud."
+      }
+    ]
+  },
+  {
+    "questionNumber": 65,
+    "question": "Layanan TI organisasi yang bertugas memberikan dukungan teknis, pemeliharaan sistem, dan penanganan insiden kepada pengguna internal disebut...",
+    "answerOptions": [
+      {
+        "text": "Cloud service desk",
+        "isCorrect": false,
+        "rationale": "Cloud service desk merujuk pada dukungan khusus layanan komputasi awan pihak ketiga."
+      },
+      {
+        "text": "Managed services",
+        "isCorrect": false,
+        "rationale": "Managed services adalah pengelolaan operasional TI yang dialihdayakan kepada penyedia eksternal."
+      },
+      {
+        "text": "Outsourcing TI",
+        "isCorrect": false,
+        "rationale": "Outsourcing TI adalah penyerahan fungsi atau proyek TI kepada vendor luar organisasi."
+      },
+      {
+        "text": "Help desk atau service desk TI",
+        "isCorrect": true,
+        "rationale": "Help desk atau service desk adalah fungsi internal yang menyediakan titik kontak tunggal bagi pengguna untuk mendapatkan bantuan teknis dan pemeliharaan operasional TI."
+      }
+    ]
+  },
+  {
+    "questionNumber": 66,
+    "question": "Sebuah startup menginginkan solusi TI yang memungkinkan mereka menambah kapasitas server dengan cepat saat terjadi lonjakan pengguna tanpa investasi perangkat keras di awal. Strategi layanan yang paling sesuai adalah...",
+    "answerOptions": [
+      {
+        "text": "Menggunakan layanan Infrastructure as a Service",
+        "isCorrect": true,
+        "rationale": "IaaS menyediakan skalabilitas elastis dan model bayar sesuai pemakaian, memungkinkan startup menambah atau mengurangi kapasitas server secara instan tanpa investasi modal besar di awal."
+      },
+      {
+        "text": "Membeli server fisik dan menempatkannya di kantor",
+        "isCorrect": false,
+        "rationale": "Membeli server fisik membutuhkan belanja modal besar di awal dan waktu pengadaan yang lama saat terjadi lonjakan trafik."
+      },
+      {
+        "text": "Menginstal semua aplikasi di komputer lokal",
+        "isCorrect": false,
+        "rationale": "Komputer lokal tidak dirancang untuk melayani akses pengguna publik dalam skala besar dan elastis."
+      },
+      {
+        "text": "Membangun data center pribadi",
+        "isCorrect": false,
+        "rationale": "Membangun data center pribadi membutuhkan biaya investasi yang sangat mahal bagi startup."
+      }
+    ]
+  },
+  {
+    "questionNumber": 67,
+    "question": "Dibandingkan dengan perangkat lunak on-premise, Software as a Service memiliki keunggulan utama dalam hal...",
+    "answerOptions": [
+      {
+        "text": "Kontrol penuh atas kode sumber",
+        "isCorrect": false,
+        "rationale": "Pada SaaS pengguna tidak memiliki akses terhadap kode sumber maupun infrastruktur server."
+      },
+      {
+        "text": "Tidak memerlukan koneksi internet",
+        "isCorrect": false,
+        "rationale": "SaaS justru membutuhkan koneksi internet untuk mengakses aplikasi yang di-hosting oleh penyedia."
+      },
+      {
+        "text": "Pemeliharaan dan pembaruan ditangani penyedia layanan",
+        "isCorrect": true,
+        "rationale": "Pada SaaS, penyedia bertanggung jawab atas pemeliharaan, pembaruan, dan keamanan aplikasi, sehingga organisasi pengguna terbebas dari beban tersebut."
+      },
+      {
+        "text": "Biaya lisensi yang selalu lebih murah",
+        "isCorrect": false,
+        "rationale": "Dalam jangka panjang dengan jumlah pengguna sangat besar, biaya langganan SaaS belum tentu selalu lebih murah dibanding lisensi permanen."
+      }
+    ]
+  },
+  {
+    "questionNumber": 68,
+    "question": "Layanan cloud yang menyediakan lingkungan lengkap bagi pengembang untuk membangun, menguji, dan menyebarkan aplikasi tanpa mengelola sistem operasi atau infrastruktur di bawahnya disebut...",
+    "answerOptions": [
+      {
+        "text": "Infrastructure as a Service",
+        "isCorrect": false,
+        "rationale": "Pada IaaS pengembang masih harus mengelola sistem operasi, runtime, dan middleware sendiri."
+      },
+      {
+        "text": "Platform as a Service",
+        "isCorrect": true,
+        "rationale": "PaaS memberikan platform pengembangan lengkap termasuk alat, pustaka, dan middleware, sehingga pengembang fokus pada kode aplikasi tanpa mengelola server atau pembaruan sistem operasi."
+      },
+      {
+        "text": "Software as a Service",
+        "isCorrect": false,
+        "rationale": "SaaS menyediakan aplikasi jadi untuk pengguna akhir, bukan lingkungan pengembangan."
+      },
+      {
+        "text": "Function as a Service",
+        "isCorrect": false,
+        "rationale": "FaaS (serverless) mengeksekusi potongan fungsi kode berbasis pemicu peristiwa tertentu."
+      }
+    ]
+  },
+  {
+    "questionNumber": 69,
+    "question": "Teknologi yang memungkinkan satu perangkat keras fisik menjalankan beberapa sistem operasi secara bersamaan melalui lapisan abstraksi disebut...",
+    "answerOptions": [
+      {
+        "text": "Emulasi",
+        "isCorrect": false,
+        "rationale": "Emulasi meniru arsitektur perangkat keras tertentu sepenuhnya melalui perangkat lunak dengan performa yang lebih lambat."
+      },
+      {
+        "text": "Virtualisasi",
+        "isCorrect": true,
+        "rationale": "Virtualisasi menggunakan hypervisor untuk mengabstraksi sumber daya fisik sehingga beberapa sistem operasi dapat berjalan bersamaan di atas perangkat keras yang sama."
+      },
+      {
+        "text": "Kontainerisasi",
+        "isCorrect": false,
+        "rationale": "Kontainerisasi berbagi kernel sistem operasi host yang sama untuk mengisolasi aplikasi, bukan menjalankan beberapa sistem operasi terpisah."
+      },
+      {
+        "text": "Simulasi",
+        "isCorrect": false,
+        "rationale": "Simulasi adalah pemodelan perilaku suatu sistem untuk tujuan pengujian atau analisis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 70,
+    "question": "Lapisan perangkat lunak atau firmware yang membuat dan mengelola mesin virtual dengan mengabstraksi sumber daya perangkat keras dikenal sebagai...",
+    "answerOptions": [
+      {
+        "text": "Hypervisor",
+        "isCorrect": true,
+        "rationale": "Hypervisor bertugas mengelola sumber daya fisik dan mendistribusikannya ke berbagai mesin virtual yang berjalan di atasnya."
+      },
+      {
+        "text": "Kernel",
+        "isCorrect": false,
+        "rationale": "Kernel adalah inti dari sistem operasi yang menjembatani aplikasi dengan perangkat keras."
+      },
+      {
+        "text": "BIOS",
+        "isCorrect": false,
+        "rationale": "BIOS adalah firmware dasar untuk inisialisasi perangkat keras saat komputer pertama kali dinyalakan."
+      },
+      {
+        "text": "Bootloader",
+        "isCorrect": false,
+        "rationale": "Bootloader adalah program kecil yang bertugas memuat sistem operasi ke dalam memori saat booting."
+      }
+    ]
+  },
+  {
+    "questionNumber": 71,
+    "question": "Lingkungan komputasi yang diemulasikan dan berperilaku seperti komputer fisik lengkap dengan sistem operasinya sendiri disebut...",
+    "answerOptions": [
+      {
+        "text": "Hypervisor",
+        "isCorrect": false,
+        "rationale": "Hypervisor adalah perangkat lunak pengelola yang menciptakan dan menjalankan lingkungan virtual tersebut."
+      },
+      {
+        "text": "Mesin virtual",
+        "isCorrect": true,
+        "rationale": "Mesin virtual menyediakan isolasi penuh sehingga setiap VM dapat menjalankan sistem operasi dan aplikasi secara independen."
+      },
+      {
+        "text": "Host",
+        "isCorrect": false,
+        "rationale": "Host adalah komputer fisik yang menyediakan sumber daya bagi mesin virtual."
+      },
+      {
+        "text": "Bare metal",
+        "isCorrect": false,
+        "rationale": "Bare metal merujuk pada perangkat keras fisik server tanpa lapisan sistem operasi host."
+      }
+    ]
+  },
+  {
+    "questionNumber": 72,
+    "question": "Berikut ini yang bukan merupakan karakteristik dari virtualisasi adalah...",
+    "answerOptions": [
+      {
+        "text": "Mengisolasi beberapa lingkungan dalam satu perangkat keras",
+        "isCorrect": false,
+        "rationale": "Isolasi antar lingkungan mesin virtual merupakan karakteristik utama virtualisasi."
+      },
+      {
+        "text": "Mengabstraksi sumber daya fisik melalui hypervisor",
+        "isCorrect": false,
+        "rationale": "Abstraksi perangkat keras oleh hypervisor merupakan mekanisme kerja virtualisasi."
+      },
+      {
+        "text": "Mengharuskan setiap mesin virtual memiliki perangkat keras fisik sendiri",
+        "isCorrect": true,
+        "rationale": "Justru esensi virtualisasi adalah beberapa mesin virtual berbagi satu perangkat keras fisik, bukan masing-masing memiliki perangkat keras sendiri."
+      },
+      {
+        "text": "Menjalankan beberapa sistem operasi secara bersamaan",
+        "isCorrect": false,
+        "rationale": "Kemampuan menjalankan berbagai sistem operasi secara simultan pada satu host adalah ciri khas virtualisasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 73,
+    "question": "Perbedaan utama antara hypervisor tipe 1 dan hypervisor tipe 2 terletak pada...",
+    "answerOptions": [
+      {
+        "text": "Jumlah mesin virtual yang dapat dijalankan",
+        "isCorrect": false,
+        "rationale": "Jumlah VM bergantung pada kapasitas sumber daya fisik (CPU/RAM), bukan definisi tipe hypervisor."
+      },
+      {
+        "text": "Keberadaan sistem operasi host di bawah hypervisor",
+        "isCorrect": true,
+        "rationale": "Hypervisor tipe 1 berjalan langsung di atas perangkat keras tanpa sistem operasi host, sedangkan tipe 2 berjalan di atas sistem operasi yang sudah ada."
+      },
+      {
+        "text": "Jenis sistem operasi tamu yang didukung",
+        "isCorrect": false,
+        "rationale": "Baik tipe 1 maupun tipe 2 mendukung berbagai sistem operasi tamu (guest OS)."
+      },
+      {
+        "text": "Kapasitas penyimpanan yang dialokasikan",
+        "isCorrect": false,
+        "rationale": "Alokasi kapasitas penyimpanan dapat dikonfigurasi secara fleksibel pada kedua tipe hypervisor."
+      }
+    ]
+  },
+  {
+    "questionNumber": 74,
+    "question": "Pada tahap awal praktik instalasi hypervisor, setelah memverifikasi dukungan virtualisasi di BIOS, langkah selanjutnya yang paling tepat adalah...",
+    "answerOptions": [
+      {
+        "text": "Menginstal mesin virtual pertama",
+        "isCorrect": false,
+        "rationale": "Mesin virtual baru dapat dibuat setelah platform hypervisor terpasang."
+      },
+      {
+        "text": "Memasang dan mengkonfigurasi platform hypervisor",
+        "isCorrect": true,
+        "rationale": "Setelah memastikan perangkat keras mendukung virtualisasi, langkah berikutnya adalah memasang platform hypervisor sebagai fondasi sebelum membuat mesin virtual."
+      },
+      {
+        "text": "Mengkonfigurasi jaringan virtual",
+        "isCorrect": false,
+        "rationale": "Konfigurasi virtual switch/jaringan dilakukan setelah perangkat lunak hypervisor terinstal."
+      },
+      {
+        "text": "Membuat snapshot sistem",
+        "isCorrect": false,
+        "rationale": "Snapshot dibuat setelah mesin virtual tercipta dan dikonfigurasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 75,
+    "question": "Sebuah laboratorium komputer memiliki satu server fisik bertenaga tinggi. Dosen ingin mahasiswa dapat bereksperimen dengan berbagai sistem operasi tanpa saling mengganggu. Solusi paling tepat berdasarkan konsep virtualisasi adalah...",
+    "answerOptions": [
+      {
+        "text": "Menginstal semua sistem operasi dalam mode dual-boot",
+        "isCorrect": false,
+        "rationale": "Dual-boot hanya dapat menjalankan satu sistem operasi dalam satu waktu sehingga tidak bisa digunakan secara bersamaan oleh banyak mahasiswa."
+      },
+      {
+        "text": "Menginstal satu sistem operasi dan menggunakan kompatibilitas mode",
+        "isCorrect": false,
+        "rationale": "Mode kompatibilitas hanya menjalankan aplikasi lama, bukan lingkungan sistem operasi yang berbeda secara utuh."
+      },
+      {
+        "text": "Mengganti server dengan beberapa komputer fisik kecil",
+        "isCorrect": false,
+        "rationale": "Membeli banyak komputer fisik memboroskan biaya dan tidak memanfaatkan kapasitas server bertenaga tinggi yang sudah tersedia."
+      },
+      {
+        "text": "Membuat beberapa mesin virtual di atas hypervisor pada server tersebut",
+        "isCorrect": true,
+        "rationale": "Dengan hypervisor, server fisik dapat menjalankan beberapa VM yang masing-masing memiliki sistem operasi berbeda dan terisolasi satu sama lain."
+      }
+    ]
+  },
+  {
+    "questionNumber": 76,
+    "question": "Ketika seorang administrator TI mengkloning mesin virtual untuk membuat salinan identik dari lingkungan pengujian, ia memanfaatkan kemampuan virtualisasi dalam hal...",
+    "answerOptions": [
+      {
+        "text": "Partisi sumber daya",
+        "isCorrect": false,
+        "rationale": "Partisi sumber daya adalah pembagian CPU, RAM, dan disk fisik ke masing-masing mesin virtual."
+      },
+      {
+        "text": "Emulasi perangkat keras",
+        "isCorrect": false,
+        "rationale": "Emulasi perangkat keras adalah penyediaan komponen virtual seperti NIC dan disk controller untuk guest OS."
+      },
+      {
+        "text": "Isolasi kegagalan",
+        "isCorrect": false,
+        "rationale": "Isolasi kegagalan memastikan crash pada satu VM tidak menjatuhkan VM lainnya."
+      },
+      {
+        "text": "Enkapsulasi dan portabilitas",
+        "isCorrect": true,
+        "rationale": "Mesin virtual dikemas sebagai file yang dapat disalin dan dipindahkan dengan mudah, memungkinkan kloning dan deployment cepat berkat sifat enkapsulasinya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 77,
+    "question": "Sistem operasi yang dioptimalkan untuk melayani permintaan dari banyak klien dalam jaringan dan mengelola layanan bersama seperti file, print, dan web disebut...",
+    "answerOptions": [
+      {
+        "text": "Sistem operasi real-time",
+        "isCorrect": false,
+        "rationale": "Sistem operasi real-time (RTOS) dirancang untuk memproses instruksi dengan batasan waktu sangat ketat pada sistem kontrol industri atau medis."
+      },
+      {
+        "text": "Sistem operasi embedded",
+        "isCorrect": false,
+        "rationale": "Sistem operasi embedded ditanamkan pada perangkat khusus seperti router, mesin ATM, atau peralatan rumah tangga pintar."
+      },
+      {
+        "text": "Sistem operasi server",
+        "isCorrect": true,
+        "rationale": "Sistem operasi server dirancang untuk menangani banyak koneksi simultan dan menyediakan layanan terpusat dalam arsitektur client-server."
+      },
+      {
+        "text": "Sistem operasi workstation",
+        "isCorrect": false,
+        "rationale": "Sistem operasi workstation (desktop) dioptimalkan untuk interaksi pengguna tunggal secara langsung."
+      }
+    ]
+  },
+  {
+    "questionNumber": 78,
+    "question": "Layanan direktori dalam sistem operasi server berfungsi untuk...",
+    "answerOptions": [
+      {
+        "text": "Mengelola identitas pengguna, autentikasi, dan otorisasi akses",
+        "isCorrect": true,
+        "rationale": "Layanan direktori seperti Active Directory atau LDAP menyediakan basis data terpusat untuk mengelola akun pengguna, hak akses, dan kebijakan keamanan."
+      },
+      {
+        "text": "Menyimpan file dan folder pengguna secara terpusat",
+        "isCorrect": false,
+        "rationale": "Penyimpanan berkas secara terpusat merupakan fungsi dari File Server."
+      },
+      {
+        "text": "Mendistribusikan alamat IP secara dinamis ke klien",
+        "isCorrect": false,
+        "rationale": "Distribusi alamat IP secara otomatis merupakan fungsi dari DHCP Server."
+      },
+      {
+        "text": "Menerjemahkan nama domain menjadi alamat IP",
+        "isCorrect": false,
+        "rationale": "Penerjemahan nama domain ke alamat IP merupakan fungsi dari DNS Server."
+      }
+    ]
+  },
+  {
+    "questionNumber": 79,
+    "question": "Berikut ini yang bukan merupakan perbedaan antara sistem operasi server dan sistem operasi workstation adalah...",
+    "answerOptions": [
+      {
+        "text": "Sistem operasi server dioptimalkan untuk menangani banyak koneksi klien",
+        "isCorrect": false,
+        "rationale": "Pernyataan ini benar merupakan perbedaan utama antara OS server dan OS workstation."
+      },
+      {
+        "text": "Sistem operasi workstation umumnya memiliki antarmuka grafis yang lebih kaya",
+        "isCorrect": false,
+        "rationale": "Pernyataan ini benar karena OS workstation fokus pada pengalaman visual pengguna akhir."
+      },
+      {
+        "text": "Sistem operasi workstation berfokus pada pengalaman pengguna tunggal interaktif",
+        "isCorrect": false,
+        "rationale": "Pernyataan ini benar membedakan orientasi kerja OS desktop dengan OS server."
+      },
+      {
+        "text": "Sistem operasi server tidak dapat digunakan untuk menjalankan aplikasi perkantoran",
+        "isCorrect": true,
+        "rationale": "Sistem operasi server tetap dapat menjalankan aplikasi perkantoran, hanya saja tidak dioptimalkan untuk itu; perbedaan utamanya pada fokus melayani banyak klien."
+      }
+    ]
+  },
+  {
+    "questionNumber": 80,
+    "question": "Pada prosedur instalasi sistem operasi server, setelah menentukan partisi dan memilih paket perangkat lunak, langkah berikutnya adalah...",
+    "answerOptions": [
+      {
+        "text": "Menyelesaikan instalasi dan melakukan konfigurasi awal",
+        "isCorrect": true,
+        "rationale": "Setelah pemilihan partisi dan paket, installer akan menyalin file dan menyelesaikan instalasi, dilanjutkan dengan konfigurasi awal seperti pengaturan hostname dan password administrator."
+      },
+      {
+        "text": "Membuat akun pengguna",
+        "isCorrect": false,
+        "rationale": "Pembuatan akun pengguna reguler dalam skala organisasi dilakukan setelah sistem terpasang dan layanan direktori dikonfigurasi."
+      },
+      {
+        "text": "Mengkonfigurasi firewall",
+        "isCorrect": false,
+        "rationale": "Pengaturan aturan firewall secara spesifik dilakukan pada tahap konfigurasi keamanan pascainstalasi."
+      },
+      {
+        "text": "Menghubungkan ke jaringan",
+        "isCorrect": false,
+        "rationale": "Penyambungan jaringan produksi dilakukan setelah sistem selesai diinstal dan dikonfigurasi keamanannya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 81,
+    "question": "Pengaturan IP statis, hostname, dan firewall dasar pada server termasuk dalam tahap...",
+    "answerOptions": [
+      {
+        "text": "Konfigurasi dasar server",
+        "isCorrect": true,
+        "rationale": "Konfigurasi dasar server mencakup pengaturan layanan inti agar server siap beroperasi dalam lingkungan produksi, termasuk identitas jaringan dan keamanan awal."
+      },
+      {
+        "text": "Instalasi sistem operasi",
+        "isCorrect": false,
+        "rationale": "Instalasi sistem operasi berfokus pada pemartisian disk dan penyalinan berkas sistem inti."
+      },
+      {
+        "text": "Pemeliharaan rutin",
+        "isCorrect": false,
+        "rationale": "Pemeliharaan rutin mencakup backup berkala, pemantauan log, dan pembaruan patch keamanan."
+      },
+      {
+        "text": "Troubleshooting",
+        "isCorrect": false,
+        "rationale": "Troubleshooting adalah proses diagnosis dan perbaikan saat terjadi kegagalan sistem."
+      }
+    ]
+  },
+  {
+    "questionNumber": 82,
+    "question": "Seorang administrator jaringan baru menyelesaikan instalasi Windows Server di sebuah organisasi. Ia perlu memastikan bahwa semua karyawan dapat login menggunakan kredensial yang sama di berbagai komputer kantor. Layanan yang harus dikonfigurasi adalah...",
+    "answerOptions": [
+      {
+        "text": "DNS Server",
+        "isCorrect": false,
+        "rationale": "DNS Server bertugas menerjemahkan nama domain menjadi alamat IP."
+      },
+      {
+        "text": "DHCP Server",
+        "isCorrect": false,
+        "rationale": "DHCP Server bertugas memberikan konfigurasi IP otomatis kepada klien jaringan."
+      },
+      {
+        "text": "File Server",
+        "isCorrect": false,
+        "rationale": "File Server berfungsi menyediakan ruang penyimpanan dan berbagi berkas terpusat."
+      },
+      {
+        "text": "Layanan direktori",
+        "isCorrect": true,
+        "rationale": "Layanan direktori seperti Active Directory memungkinkan manajemen identitas terpusat sehingga pengguna dapat login dengan kredensial yang sama dari berbagai komputer dalam domain."
+      }
+    ]
+  },
+  {
+    "questionNumber": 83,
+    "question": "Keunggulan Linux Server dibandingkan Windows Server dalam hal lisensi adalah...",
+    "answerOptions": [
+      {
+        "text": "Dukungan teknis lebih luas",
+        "isCorrect": false,
+        "rationale": "Kedua platform memiliki ekosistem dukungan komunitas maupun dukungan komersial berbayar."
+      },
+      {
+        "text": "Kompatibilitas dengan lebih banyak perangkat lunak komersial",
+        "isCorrect": false,
+        "rationale": "Banyak perangkat lunak komersial berbasis ekosistem Microsoft justru berjalan secara native di Windows Server."
+      },
+      {
+        "text": "Biaya lisensi yang lebih rendah atau gratis",
+        "isCorrect": true,
+        "rationale": "Linux sebagai sistem operasi open source umumnya tidak memerlukan biaya lisensi, sementara Windows Server memerlukan lisensi berbayar untuk setiap instalasi atau pengguna."
+      },
+      {
+        "text": "Antarmuka grafis yang lebih mudah digunakan",
+        "isCorrect": false,
+        "rationale": "Linux Server umumnya dioperasikan melalui antarmuka baris perintah (CLI) untuk efisiensi sumber daya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 84,
+    "question": "Dalam konfigurasi dasar server setelah instalasi, administrator menetapkan alamat IP 192.168.1.10/24, hostname SRV-FINANCE, dan mengaktifkan firewall dengan hanya membuka port 80 dan 443. Tujuan utama tindakan ini adalah...",
+    "answerOptions": [
+      {
+        "text": "Meningkatkan kecepatan pemrosesan server",
+        "isCorrect": false,
+        "rationale": "Pengaturan IP dan firewall tidak mengubah kecepatan clock prosesor server."
+      },
+      {
+        "text": "Menghemat konsumsi daya listrik",
+        "isCorrect": false,
+        "rationale": "Konfigurasi identitas jaringan dan port layanan tidak berkaitan dengan penghematan konsumsi daya."
+      },
+      {
+        "text": "Menyiapkan server agar aman dan dapat diakses sesuai perannya",
+        "isCorrect": true,
+        "rationale": "Konfigurasi IP, hostname, dan firewall adalah pengaturan dasar yang menentukan identitas jaringan server dan membatasi akses hanya ke layanan yang dibutuhkan, memastikan keamanan dan fungsionalitas."
+      },
+      {
+        "text": "Mempercepat proses booting server",
+        "isCorrect": false,
+        "rationale": "Kecepatan booting dipengaruhi oleh layanan startup dan kecepatan media penyimpanan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 85,
+    "question": "Struktur dan proses yang memastikan teknologi informasi mendukung strategi organisasi secara efektif, efisien, dan terkendali merupakan definisi dari...",
+    "answerOptions": [
+      {
+        "text": "Manajemen TI",
+        "isCorrect": false,
+        "rationale": "Manajemen TI berfokus pada perencanaan, pembangunan, dan pengoperasian aktivitas harian TI untuk mencapai target yang ditetapkan tata kelola."
+      },
+      {
+        "text": "Tata kelola TI",
+        "isCorrect": true,
+        "rationale": "Tata kelola TI adalah struktur dan proses untuk memastikan TI mendukung strategi organisasi secara efektif, efisien, dan terkendali, berbeda dari manajemen TI yang fokus pada operasional sehari-hari."
+      },
+      {
+        "text": "Arsitektur TI",
+        "isCorrect": false,
+        "rationale": "Arsitektur TI adalah cetak biru rancangan teknis sistem, data, dan infrastruktur organisasi."
+      },
+      {
+        "text": "Audit TI",
+        "isCorrect": false,
+        "rationale": "Audit TI adalah proses pemeriksaan independen terhadap kepatuhan dan pengendalian sistem informasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 86,
+    "question": "Berikut ini yang bukan merupakan tujuan utama penerapan tata kelola TI dalam organisasi adalah...",
+    "answerOptions": [
+      {
+        "text": "Menyelaraskan TI dengan strategi bisnis",
+        "isCorrect": false,
+        "rationale": "Strategic alignment (penyelarasan TI dan bisnis) merupakan pilar utama tata kelola TI."
+      },
+      {
+        "text": "Memastikan penggunaan sumber daya TI secara optimal",
+        "isCorrect": false,
+        "rationale": "Resource management (optimalisasi sumber daya TI) termasuk tujuan inti tata kelola TI."
+      },
+      {
+        "text": "Meningkatkan kecepatan prosesor perangkat keras",
+        "isCorrect": true,
+        "rationale": "Meningkatkan kecepatan prosesor adalah ranah teknis perangkat keras, bukan tujuan tata kelola TI yang berfokus pada penyelarasan strategis, optimalisasi sumber daya, dan manajemen risiko."
+      },
+      {
+        "text": "Mengelola risiko terkait teknologi informasi",
+        "isCorrect": false,
+        "rationale": "Risk management merupakan salah satu domain utama dalam tata kelola TI."
+      }
+    ]
+  },
+  {
+    "questionNumber": 87,
+    "question": "Kerangka kerja internasional yang menghubungkan kebutuhan bisnis dengan proses TI dalam konteks tata kelola dan manajemen TI adalah...",
+    "answerOptions": [
+      {
+        "text": "ITIL",
+        "isCorrect": false,
+        "rationale": "ITIL secara spesifik berfokus pada praktik terbaik manajemen layanan TI (IT Service Management)."
+      },
+      {
+        "text": "ISO 9001",
+        "isCorrect": false,
+        "rationale": "ISO 9001 adalah standar internasional untuk sistem manajemen mutu secara umum di berbagai industri."
+      },
+      {
+        "text": "COBIT",
+        "isCorrect": true,
+        "rationale": "COBIT adalah kerangka kerja yang menghubungkan kebutuhan bisnis dengan proses TI, sementara ITIL berfokus pada manajemen layanan TI."
+      },
+      {
+        "text": "Balanced Scorecard",
+        "isCorrect": false,
+        "rationale": "Balanced Scorecard adalah kerangka pengukuran kinerja strategis organisasi secara umum."
+      }
+    ]
+  },
+  {
+    "questionNumber": 88,
+    "question": "Perbedaan mendasar antara COBIT dan ITIL terletak pada...",
+    "answerOptions": [
+      {
+        "text": "COBIT untuk sektor publik sedangkan ITIL untuk sektor swasta",
+        "isCorrect": false,
+        "rationale": "Keduanya dapat diterapkan baik pada organisasi sektor publik maupun swasta."
+      },
+      {
+        "text": "COBIT mengatur perangkat keras sedangkan ITIL mengatur perangkat lunak",
+        "isCorrect": false,
+        "rationale": "Keduanya merupakan kerangka proses dan tata kelola, bukan standar teknis perangkat keras atau lunak."
+      },
+      {
+        "text": "COBIT hanya berlaku di Eropa sedangkan ITIL berlaku global",
+        "isCorrect": false,
+        "rationale": "COBIT dan ITIL sama-sama diakui dan digunakan secara global di seluruh dunia."
+      },
+      {
+        "text": "COBIT fokus pada tata kelola dan manajemen TI secara luas sedangkan ITIL fokus pada manajemen layanan TI",
+        "isCorrect": true,
+        "rationale": "COBIT mencakup tata kelola dan manajemen TI secara menyeluruh yang menghubungkan bisnis dan TI, sedangkan ITIL secara spesifik berfokus pada praktik terbaik manajemen layanan TI."
+      }
+    ]
+  },
+  {
+    "questionNumber": 89,
+    "question": "ITIL sebagai kerangka kerja praktik terbaik berfokus utama pada...",
+    "answerOptions": [
+      {
+        "text": "Pengembangan perangkat lunak secara gesit",
+        "isCorrect": false,
+        "rationale": "Pengembangan perangkat lunak secara gesit merupakan fokus dari metodologi Agile atau Scrum."
+      },
+      {
+        "text": "Pengadaan perangkat keras infrastruktur",
+        "isCorrect": false,
+        "rationale": "Pengadaan perangkat keras hanyalah bagian kecil dari manajemen aset, bukan fokus utama ITIL."
+      },
+      {
+        "text": "Manajemen layanan TI yang selaras dengan kebutuhan bisnis",
+        "isCorrect": true,
+        "rationale": "ITIL adalah kerangka kerja yang berfokus pada manajemen layanan TI dengan tujuan menyelaraskan layanan TI terhadap kebutuhan bisnis organisasi."
+      },
+      {
+        "text": "Keamanan jaringan perimeter",
+        "isCorrect": false,
+        "rationale": "Keamanan jaringan perimeter adalah ranah teknis keamanan informasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 90,
+    "question": "Tata kelola TI berbeda dari manajemen TI karena tata kelola TI lebih menekankan pada...",
+    "answerOptions": [
+      {
+        "text": "Pengambilan keputusan strategis dan penetapan arah kebijakan TI",
+        "isCorrect": true,
+        "rationale": "Tata kelola TI berfokus pada pengambilan keputusan strategis dan kebijakan di tingkat organisasi, sedangkan manajemen TI menangani operasional dan pelaksanaan teknis harian."
+      },
+      {
+        "text": "Penanganan insiden dan permintaan layanan pengguna",
+        "isCorrect": false,
+        "rationale": "Penanganan insiden dan permintaan layanan merupakan aktivitas operasional dalam manajemen TI."
+      },
+      {
+        "text": "Pelaksanaan operasional harian pusat data",
+        "isCorrect": false,
+        "rationale": "Operasional harian data center termasuk dalam ranah manajemen TI."
+      },
+      {
+        "text": "Instalasi dan konfigurasi perangkat jaringan",
+        "isCorrect": false,
+        "rationale": "Instalasi dan konfigurasi perangkat merupakan tugas teknis operasional."
+      }
+    ]
+  },
+  {
+    "questionNumber": 91,
+    "question": "Sebuah perusahaan multinasional ingin memastikan bahwa seluruh unit bisnisnya menerapkan standar tata kelola TI yang seragam dan terukur. Kerangka kerja yang paling tepat diadopsi adalah...",
+    "answerOptions": [
+      {
+        "text": "ITIL",
+        "isCorrect": false,
+        "rationale": "ITIL lebih berfokus pada pengelolaan operasional layanan TI dibanding tata kelola korporat menyeluruh."
+      },
+      {
+        "text": "COBIT",
+        "isCorrect": true,
+        "rationale": "COBIT dirancang untuk tata kelola dan manajemen TI di tingkat perusahaan secara menyeluruh dengan standar yang terukur, cocok untuk organisasi besar yang membutuhkan keseragaman lintas unit bisnis."
+      },
+      {
+        "text": "Six Sigma",
+        "isCorrect": false,
+        "rationale": "Six Sigma adalah metodologi peningkatan kualitas proses manufaktur/operasional dengan mengurangi cacat."
+      },
+      {
+        "text": "Agile",
+        "isCorrect": false,
+        "rationale": "Agile adalah pendekatan iteratif dalam manajemen proyek dan pengembangan perangkat lunak."
+      }
+    ]
+  },
+  {
+    "questionNumber": 92,
+    "question": "Dewan direksi sebuah organisasi ingin mengevaluasi apakah investasi TI yang telah dikeluarkan memberikan nilai optimal dan sesuai dengan arah strategis perusahaan. Peran tata kelola TI yang paling relevan dalam konteks ini adalah...",
+    "answerOptions": [
+      {
+        "text": "Mengelola konfigurasi perangkat lunak",
+        "isCorrect": false,
+        "rationale": "Pengelolaan konfigurasi perangkat lunak adalah tugas teknis manajemen layanan TI."
+      },
+      {
+        "text": "Memastikan TI menciptakan nilai bisnis dan mendukung pencapaian tujuan strategis",
+        "isCorrect": true,
+        "rationale": "Tata kelola TI memastikan bahwa TI memberikan nilai bisnis dan selaras dengan strategi organisasi, termasuk mengevaluasi dampak investasi TI terhadap pencapaian tujuan strategis."
+      },
+      {
+        "text": "Menangani permintaan perubahan layanan",
+        "isCorrect": false,
+        "rationale": "Penanganan permintaan perubahan (change management) merupakan proses operasional TI."
+      },
+      {
+        "text": "Memantau lalu lintas data pada jaringan internal",
+        "isCorrect": false,
+        "rationale": "Pemantauan lalu lintas jaringan adalah tugas operasional administrator jaringan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 93,
+    "question": "Prinsip keamanan informasi yang menjamin bahwa data hanya dapat diakses oleh pihak yang memiliki wewenang disebut...",
+    "answerOptions": [
+      {
+        "text": "Ketersediaan",
+        "isCorrect": false,
+        "rationale": "Ketersediaan menjamin informasi dapat diakses kapan pun dibutuhkan oleh pengguna yang sah."
+      },
+      {
+        "text": "Integritas",
+        "isCorrect": false,
+        "rationale": "Integritas menjamin keakuratan dan keutuhan data dari perubahan tidak sah."
+      },
+      {
+        "text": "Kerahasiaan",
+        "isCorrect": true,
+        "rationale": "Kerahasiaan adalah prinsip yang memastikan informasi hanya dapat diakses oleh pihak yang berwenang, mencegah akses tidak sah terhadap data sensitif."
+      },
+      {
+        "text": "Non-repudiasi",
+        "isCorrect": false,
+        "rationale": "Non-repudiasi mencegah pihak pengirim atau penerima menyangkal telah melakukan suatu transaksi atau komunikasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 94,
+    "question": "Prinsip integritas dalam keamanan informasi menekankan pada...",
+    "answerOptions": [
+      {
+        "text": "Kecepatan akses data oleh pengguna yang sah",
+        "isCorrect": false,
+        "rationale": "Kecepatan akses berkaitan dengan performa sistem dan ketersediaan layanan."
+      },
+      {
+        "text": "Keakuratan dan kelengkapan informasi serta metode pemrosesannya",
+        "isCorrect": true,
+        "rationale": "Integritas menjamin bahwa informasi tetap akurat, lengkap, dan tidak diubah secara tidak sah selama penyimpanan, pemrosesan, maupun transmisi."
+      },
+      {
+        "text": "Ketersediaan sistem saat terjadi bencana",
+        "isCorrect": false,
+        "rationale": "Ketersediaan sistem saat bencana merupakan bagian dari prinsip ketersediaan (availability) dan business continuity."
+      },
+      {
+        "text": "Kerahasiaan data dari pihak yang tidak berwenang",
+        "isCorrect": false,
+        "rationale": "Perlindungan dari akses pihak tak berwenang adalah definisi dari prinsip kerahasiaan (confidentiality)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 95,
+    "question": "Berikut ini yang bukan merupakan prinsip utama keamanan informasi dalam triad CIA adalah...",
+    "answerOptions": [
+      {
+        "text": "Kerahasiaan",
+        "isCorrect": false,
+        "rationale": "Kerahasiaan (Confidentiality) adalah huruf C dalam triad CIA."
+      },
+      {
+        "text": "Integritas",
+        "isCorrect": false,
+        "rationale": "Integritas (Integrity) adalah huruf I dalam triad CIA."
+      },
+      {
+        "text": "Ketersediaan",
+        "isCorrect": false,
+        "rationale": "Ketersediaan (Availability) adalah huruf A dalam triad CIA."
+      },
+      {
+        "text": "Akuntabilitas",
+        "isCorrect": true,
+        "rationale": "Triad CIA terdiri dari Confidentiality (kerahasiaan), Integrity (integritas), dan Availability (ketersediaan). Akuntabilitas bukan bagian dari triad CIA meskipun penting dalam keamanan informasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 96,
+    "question": "Serangan yang menyebabkan server tidak dapat diakses oleh pengguna yang sah merupakan pelanggaran terhadap prinsip...",
+    "answerOptions": [
+      {
+        "text": "Kerahasiaan",
+        "isCorrect": false,
+        "rationale": "Kerahasiaan dilanggar apabila data dicuri atau dibaca oleh pihak tidak berwenang."
+      },
+      {
+        "text": "Integritas",
+        "isCorrect": false,
+        "rationale": "Integritas dilanggar apabila data diubah atau dirusak isinya secara tidak sah."
+      },
+      {
+        "text": "Otentikasi",
+        "isCorrect": false,
+        "rationale": "Otentikasi berkaitan dengan proses verifikasi identitas pengguna."
+      },
+      {
+        "text": "Ketersediaan",
+        "isCorrect": true,
+        "rationale": "Ketersediaan menjamin bahwa informasi dan sumber daya dapat diakses saat diperlukan. Serangan yang membuat server tidak dapat diakses melanggar prinsip ketersediaan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 97,
+    "question": "Perbedaan antara ancaman dan kerentanan dalam konteks keamanan informasi adalah...",
+    "answerOptions": [
+      {
+        "text": "Ancaman adalah potensi penyebab insiden sedangkan kerentanan adalah kelemahan yang dapat dieksploitasi",
+        "isCorrect": true,
+        "rationale": "Ancaman adalah segala hal yang berpotensi menyebabkan kerugian atau insiden, sedangkan kerentanan adalah kelemahan pada sistem yang dapat dieksploitasi oleh ancaman."
+      },
+      {
+        "text": "Ancaman bersifat internal sedangkan kerentanan bersifat eksternal",
+        "isCorrect": false,
+        "rationale": "Ancaman dapat berasal dari dalam (internal) maupun luar (eksternal) organisasi."
+      },
+      {
+        "text": "Ancaman hanya terkait perangkat lunak sedangkan kerentanan terkait perangkat keras",
+        "isCorrect": false,
+        "rationale": "Kerentanan maupun ancaman dapat terjadi pada perangkat keras, perangkat lunak, jaringan, maupun manusia."
+      },
+      {
+        "text": "Ancaman selalu disengaja sedangkan kerentanan selalu tidak disengaja",
+        "isCorrect": false,
+        "rationale": "Ancaman juga dapat bersifat tidak disengaja seperti bencana alam atau kesalahan manusia."
+      }
+    ]
+  },
+  {
+    "questionNumber": 98,
+    "question": "Otentikasi berbeda dari otorisasi karena otentikasi berkaitan dengan...",
+    "answerOptions": [
+      {
+        "text": "Penentuan hak akses pengguna terhadap sumber daya",
+        "isCorrect": false,
+        "rationale": "Penentuan hak akses dan izin tindakan pengguna merupakan definisi dari otorisasi."
+      },
+      {
+        "text": "Penyandian data agar tidak terbaca pihak lain",
+        "isCorrect": false,
+        "rationale": "Penyandian data merupakan fungsi dari enkripsi."
+      },
+      {
+        "text": "Pencatatan aktivitas pengguna dalam log",
+        "isCorrect": false,
+        "rationale": "Pencatatan riwayat aktivitas pengguna merupakan fungsi auditing atau accounting."
+      },
+      {
+        "text": "Verifikasi identitas pengguna yang mengakses sistem",
+        "isCorrect": true,
+        "rationale": "Otentikasi adalah proses verifikasi identitas pengguna yang mengklaim suatu identitas tertentu, sedangkan otorisasi menentukan hak akses apa yang dimiliki pengguna setelah terotentikasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 99,
+    "question": "Seorang karyawan menerima email yang tampak berasal dari bank meminta ia memasukkan kredensial login melalui tautan yang disediakan. Karyawan tersebut menyadari bahwa ini adalah upaya pencurian data. Ancaman keamanan informasi yang dihadapi karyawan ini termasuk dalam kategori...",
+    "answerOptions": [
+      {
+        "text": "Phishing",
+        "isCorrect": true,
+        "rationale": "Phishing adalah upaya memperoleh informasi sensitif seperti kredensial dengan menyamar sebagai entitas tepercaya melalui komunikasi elektronik, biasanya email dengan tautan palsu."
+      },
+      {
+        "text": "Serangan brute force",
+        "isCorrect": false,
+        "rationale": "Brute force adalah upaya menebak kata sandi secara otomatis dengan mencoba berbagai kombinasi karakter."
+      },
+      {
+        "text": "Denial of Service",
+        "isCorrect": false,
+        "rationale": "Denial of Service bertujuan melumpuhkan layanan dengan membanjiri trafik jaringan."
+      },
+      {
+        "text": "SQL injection",
+        "isCorrect": false,
+        "rationale": "SQL injection adalah serangan penyisipan perintah basis data pada formulir input aplikasi web."
+      }
+    ]
+  },
+  {
+    "questionNumber": 100,
+    "question": "Seorang administrator sistem menerapkan kebijakan bahwa setiap karyawan hanya dapat mengakses folder sesuai dengan peran dan tanggung jawabnya di perusahaan. Prinsip keamanan informasi yang diterapkan adalah...",
+    "answerOptions": [
+      {
+        "text": "Kerahasiaan melalui kontrol akses berbasis peran",
+        "isCorrect": true,
+        "rationale": "Pembatasan akses terhadap folder berdasarkan peran memastikan bahwa data hanya dapat diakses oleh pihak yang berwenang, yang merupakan penerapan prinsip kerahasiaan melalui kontrol akses."
+      },
+      {
+        "text": "Ketersediaan melalui redundansi sistem",
+        "isCorrect": false,
+        "rationale": "Redundansi sistem bertujuan menjaga keberlangsungan layanan saat terjadi kegagalan perangkat."
+      },
+      {
+        "text": "Integritas melalui checksum",
+        "isCorrect": false,
+        "rationale": "Checksum digunakan untuk memverifikasi bahwa berkas tidak mengalami perubahan atau kerusakan saat ditransfer."
+      },
+      {
+        "text": "Non-repudiasi melalui tanda tangan digital",
+        "isCorrect": false,
+        "rationale": "Tanda tangan digital menjamin keaslian pengirim dan mencegah penyangkalan transaksi."
+      }
+    ]
+  }
+];
+
+  let totalBenar = 0;
+  let totalSalah = 0;
+  let answeredQuestions = new Set();
+
+  function acakArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function initSetup() {
+    const totalSoal = soalList.length;
+    document.getElementById('total-tersedia').textContent = totalSoal;
+
+    const buttons = document.querySelectorAll('.btn-jumlah[data-jumlah]');
+    buttons.forEach(btn => {
+      const jumlah = parseInt(btn.getAttribute('data-jumlah'), 10);
+      if (jumlah > totalSoal) {
+        btn.disabled = true;
+      }
+    });
+
+    const btnSemua = document.getElementById('btn-semua');
+    if (totalSoal === 0) {
+      btnSemua.disabled = true;
+    } else {
+      btnSemua.textContent = `Semua Soal (${totalSoal})`;
+    }
+  }
+
+  function mulaiUjian(jumlah) {
+    const isAcak = document.getElementById('checkbox-acak').checked;
+
+    document.getElementById('setup-container').style.display = 'none';
+    document.getElementById('container').style.display = 'block';
+    document.getElementById('counter').style.display = 'block';
+
+    let daftarSoal = isAcak ? acakArray(soalList) : [...soalList];
+    const soalTerpilih = jumlah === 'all' ? daftarSoal : daftarSoal.slice(0, jumlah);
+
+    renderSoal(soalTerpilih, isAcak);
+  }
+
+  function updateCounter() {
+    document.getElementById("benar").textContent = totalBenar;
+    document.getElementById("salah").textContent = totalSalah;
+  }
+
+  function checkAnswer(button, questionId, isCorrect) {
+    if (answeredQuestions.has(questionId)) {
+      return;
+    }
+
+    const soalElement = button.closest('.soal');
+    const buttons = soalElement.querySelectorAll('.jawaban button');
+    
+    buttons.forEach(btn => btn.disabled = true);
+
+    if (isCorrect) {
+      button.classList.add('benar');
+      totalBenar++;
+    } else {
+      button.classList.add('salah');
+      totalSalah++;
+      
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-iscorrect') === 'true') {
+          btn.classList.add('benar');
+        }
+      });
+    }
+
+    const allRationales = soalElement.querySelectorAll('.penjelasan-opsi');
+    allRationales.forEach(rationaleDiv => {
+      rationaleDiv.style.display = 'block';
+    });
+
+    answeredQuestions.add(questionId);
+    updateCounter();
+  }
+
+  function renderSoal(daftarSoal, isAcak) {
+    const container = document.getElementById('container');
+    container.innerHTML = '';
+
+    daftarSoal.forEach((soal, idx) => {
+      const nomorUrut = idx + 1;
+      const soalDiv = document.createElement('div');
+      soalDiv.className = 'soal';
+      soalDiv.setAttribute('data-qnum', nomorUrut);
+      
+      let soalHTML = `<h3>Soal ${nomorUrut}.</h3>`;
+      soalHTML += `<p>${soal.question}</p>`;
+      soalHTML += `<div class="jawaban">`;
+      
+      const opsiJawaban = isAcak ? acakArray(soal.answerOptions) : soal.answerOptions;
+
+      opsiJawaban.forEach((option, index) => {
+        const label = String.fromCharCode(65 + index); 
+        
+        soalHTML += `
+          <button 
+            onclick="checkAnswer(this, ${nomorUrut}, ${option.isCorrect})"
+            data-iscorrect="${option.isCorrect}"
+            data-label="${label}">
+            ${label}. ${option.text}
+          </button>
+          <div class="penjelasan-opsi">
+            <strong>Penjelasan Opsi ${label}:</strong> ${option.rationale}
+          </div>
+        `;
+      });
+      
+      soalHTML += `</div>`;
+      soalDiv.innerHTML = soalHTML;
+      container.appendChild(soalDiv);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initSetup);
+</script>
+
+</body>
+</html>

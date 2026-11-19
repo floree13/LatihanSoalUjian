@@ -1,0 +1,2924 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal Ujian</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7f6;
+      margin: 0;
+      padding: 20px 10px;
+    }
+    h1 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    h2 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    .setup-box {
+      background: #ffffff;
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      text-align: center;
+      border-top: 5px solid #1a237e;
+    }
+    .setup-box h2 {
+      margin-top: 0;
+      color: #1a237e;
+      font-size: 18px;
+    }
+    .setup-box p {
+      color: #555;
+      font-size: 14px;
+    }
+    .opsi-acak {
+      margin: 15px 0;
+      padding: 10px;
+      background: #f3e5f5;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #4a148c;
+      cursor: pointer;
+    }
+    .opsi-acak input {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    .pilihan-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 15px;
+    }
+    .btn-jumlah {
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 8px;
+      border: 1px solid #3f51b5;
+      background: #e8eaf6;
+      color: #1a237e;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-jumlah:hover:not(:disabled) {
+      background: #3f51b5;
+      color: #ffffff;
+    }
+    .btn-jumlah:disabled {
+      background: #e0e0e0;
+      border-color: #bdbdbd;
+      color: #9e9e9e;
+      cursor: not-allowed;
+    }
+    .soal {
+      background: #ffffff;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 5px solid #42a5f5;
+    }
+    h3 {
+      color: #3f51b5;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .jawaban button {
+      color: #2a2a2a;
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #c5cae9;
+      background: #e8eaf6;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .jawaban button:hover:not(:disabled) {
+      background: #c5cae9;
+    }
+    .jawaban button.benar {
+      background-color: #dcf9dc;
+      border-color: #388e3c;
+      font-weight: bold;
+    }
+    .jawaban button.salah {
+      background-color: #ffcdd2;
+      border-color: #d32f2f;
+      opacity: 0.7;
+    }
+    .penjelasan-opsi {
+      background: #f3e5f5;
+      color: #4a148c;
+      padding: 10px;
+      margin-top: -5px;
+      margin-bottom: 15px;
+      border-radius: 0 0 8px 8px;
+      border-top: none;
+      border-left: 5px solid #7b1fa2;
+      font-size: 14px;
+      display: none;
+    }
+    .counter {
+      position: sticky;
+      bottom: 0;
+      background: #1a237e;
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      display: none;
+    }
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 20px; }
+      .jawaban button { font-size: 14px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Latihan Soal UO UT</h1>
+<h2>Sistem informasi Perencanaan</h2>
+
+<div id="setup-container" class="setup-box">
+  <h2>Pilih Jumlah Soal</h2>
+  <p>Total soal tersedia: <strong id="total-tersedia">0</strong> soal</p>
+  
+  <label class="opsi-acak">
+    <input type="checkbox" id="checkbox-acak" checked />
+    Acak Urutan Soal & Opsi Jawaban
+  </label>
+
+  <div class="pilihan-grid" id="pilihan-jumlah">
+    <button class="btn-jumlah" data-jumlah="25" onclick="mulaiUjian(25)">25 Soal</button>
+    <button class="btn-jumlah" data-jumlah="35" onclick="mulaiUjian(35)">35 Soal</button>
+    <button class="btn-jumlah" data-jumlah="45" onclick="mulaiUjian(25)">45 Soal</button>
+    <button class="btn-jumlah" data-jumlah="50" onclick="mulaiUjian(50)">50 Soal</button>
+    <button class="btn-jumlah" data-jumlah="100" style="grid-column: span 2;" onclick="mulaiUjian('100')">100 Soal</button>
+  </div>
+</div>
+
+<div id="container" style="display: none;"></div>
+
+<div id="counter" class="counter">
+  ✅ Jawaban Benar: <span id="benar">0</span> |
+  ❌ Jawaban Salah: <span id="salah">0</span>
+</div>
+
+<script>
+const soalList = [
+  {
+    "questionNumber": 1,
+    "question": "Suatu sistem yang mengintegrasikan pengumpulan, pengolahan, penyimpanan, dan penyajian data untuk mendukung proses perencanaan disebut...",
+    "answerOptions": [
+      {
+        "text": "Sistem Informasi Manajemen",
+        "isCorrect": false,
+        "rationale": "Sistem Informasi Manajemen berfokus pada pengelolaan operasional dan manajerial perusahaan secara umum, bukan secara khusus untuk perencanaan wilayah dan kota."
+      },
+      {
+        "text": "Sistem Informasi Geografis",
+        "isCorrect": false,
+        "rationale": "Sistem Informasi Geografis (SIG) merupakan subsistem atau alat bantu yang berfokus pada pengolahan data bereferensi geografis."
+      },
+      {
+        "text": "Sistem Pendukung Keputusan",
+        "isCorrect": false,
+        "rationale": "Sistem Pendukung Keputusan berfokus pada pemodelan skenario untuk membantu pengambilan keputusan manajerial tertentu."
+      },
+      {
+        "text": "Sistem Informasi Perencanaan",
+        "isCorrect": true,
+        "rationale": "Sistem Informasi Perencanaan secara spesifik merupakan sistem terpadu yang dirancang untuk mendukung seluruh tahapan proses perencanaan, mulai dari pengumpulan data hingga penyajian informasi bagi perencana."
+      }
+    ]
+  },
+  {
+    "questionNumber": 2,
+    "question": "Elemen yang tidak termasuk dalam komponen penyusun sistem informasi perencanaan adalah...",
+    "answerOptions": [
+      {
+        "text": "Perangkat keras",
+        "isCorrect": false,
+        "rationale": "Perangkat keras (hardware) merupakan komponen fisik utama dalam sistem informasi."
+      },
+      {
+        "text": "Perangkat lunak",
+        "isCorrect": false,
+        "rationale": "Perangkat lunak (software) merupakan program pengolah data yang termasuk komponen inti sistem informasi."
+      },
+      {
+        "text": "Prosedur operasional",
+        "isCorrect": false,
+        "rationale": "Prosedur merupakan aturan dan tata cara pengoperasian yang menyusun sistem informasi."
+      },
+      {
+        "text": "Laporan keuangan tahunan",
+        "isCorrect": true,
+        "rationale": "Laporan keuangan tahunan merupakan salah satu output atau produk dari sistem informasi, bukan komponen penyusun sistem itu sendiri. Komponen sistem informasi meliputi perangkat keras, perangkat lunak, data, prosedur, dan manusia."
+      }
+    ]
+  },
+  {
+    "questionNumber": 3,
+    "question": "Mengapa data spasial dan data atribut sama-sama diperlukan dalam sistem informasi perencanaan...",
+    "answerOptions": [
+      {
+        "text": "Karena data spasial memberi referensi lokasi dan data atribut menjelaskan karakteristiknya",
+        "isCorrect": true,
+        "rationale": "Data spasial menyediakan kerangka lokasi geografis dari objek yang direncanakan, sementara data atribut memberikan deskripsi karakteristik objek tersebut, sehingga keduanya saling melengkapi untuk analisis perencanaan tata ruang yang komprehensif."
+      },
+      {
+        "text": "Karena sistem informasi perencanaan hanya bekerja dengan data berbasis komputer",
+        "isCorrect": false,
+        "rationale": "Alasan diperlukannya kedua jenis data tersebut adalah kelengkapan informasi lokasi dan sifat objek, bukan sekadar karena berbasis komputer."
+      },
+      {
+        "text": "Karena keduanya berasal dari sumber data primer yang sama",
+        "isCorrect": false,
+        "rationale": "Data spasial dan data atribut sering kali dikumpulkan dari sumber maupun metode yang berbeda (misalnya citra satelit dan tabel statistik)."
+      },
+      {
+        "text": "Karena tanpa data atribut, sistem tidak dapat menyimpan informasi dalam jumlah besar",
+        "isCorrect": false,
+        "rationale": "Kapasitas penyimpanan ditentukan oleh infrastruktur basis data, sedangkan data atribut berfungsi memberi makna deskriptif pada objek spasial."
+      }
+    ]
+  },
+  {
+    "questionNumber": 4,
+    "question": "Konsep perencanaan sebagai proses penentuan tujuan dan pemilihan tindakan di masa depan menekankan pentingnya...",
+    "answerOptions": [
+      {
+        "text": "Ketersediaan dana yang tidak terbatas",
+        "isCorrect": false,
+        "rationale": "Dalam perencanaan, sumber daya dan dana selalu bersifat terbatas sehingga memerlukan prioritas."
+      },
+      {
+        "text": "Penggunaan teknologi paling mutakhir",
+        "isCorrect": false,
+        "rationale": "Teknologi hanyalah alat bantu; ketepatan keputusan lebih bergantung pada kualitas informasi dan analisis."
+      },
+      {
+        "text": "Informasi yang akurat sebagai dasar pengambilan keputusan",
+        "isCorrect": true,
+        "rationale": "Perencanaan yang efektif bergantung pada ketersediaan informasi yang akurat dan relevan untuk menganalisis kondisi saat ini serta memproyeksikan kondisi masa depan guna memilih tindakan yang tepat mencapai tujuan."
+      },
+      {
+        "text": "Partisipasi seluruh penduduk tanpa terkecuali",
+        "isCorrect": false,
+        "rationale": "Partisipasi publik umumnya dilakukan melalui perwakilan atau mekanisme konsultasi publik yang terstruktur, bukan tanpa terkecuali."
+      }
+    ]
+  },
+  {
+    "questionNumber": 5,
+    "question": "Manusia sebagai salah satu komponen sistem informasi perencanaan berperan terutama dalam...",
+    "answerOptions": [
+      {
+        "text": "Menyimpan seluruh data dalam memori otak",
+        "isCorrect": false,
+        "rationale": "Penyimpanan data skala besar dilakukan oleh perangkat penyimpanan dan basis data komputer, bukan memori otak manusia."
+      },
+      {
+        "text": "Mengoperasikan, menginterpretasi, dan mengambil keputusan berdasarkan informasi yang dihasilkan",
+        "isCorrect": true,
+        "rationale": "Dalam komponen sistem informasi, manusia berfungsi sebagai pengelola dan pengguna sistem yang mengoperasikan perangkat, mengolah data menjadi informasi, serta menggunakan informasi tersebut untuk pengambilan keputusan perencanaan."
+      },
+      {
+        "text": "Menggantikan fungsi perangkat keras yang sudah usang",
+        "isCorrect": false,
+        "rationale": "Manusia tidak menggantikan perangkat keras, melainkan mengelola dan memelihara komponen teknis tersebut."
+      },
+      {
+        "text": "Mencetak laporan secara manual setiap hari",
+        "isCorrect": false,
+        "rationale": "Pencetakan laporan hanyalah aktivitas administratif rutin, bukan peran utama manusia dalam sistem informasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 6,
+    "question": "Pihak yang paling berkepentingan menggunakan sistem informasi perencanaan untuk menetapkan kebijakan publik adalah...",
+    "answerOptions": [
+      {
+        "text": "Masyarakat umum",
+        "isCorrect": false,
+        "rationale": "Masyarakat umum berperan sebagai penerima manfaat dan peserta konsultasi publik, bukan pihak yang menetapkan kebijakan."
+      },
+      {
+        "text": "Pengambil kebijakan",
+        "isCorrect": true,
+        "rationale": "Pengambil kebijakan di lembaga pemerintahan memerlukan sistem informasi perencanaan untuk menyusun kebijakan publik berbasis data yang komprehensif, mencakup aspek spasial, kependudukan, ekonomi, dan lingkungan."
+      },
+      {
+        "text": "Sektor swasta",
+        "isCorrect": false,
+        "rationale": "Sektor swasta menggunakan informasi perencanaan untuk pertimbangan investasi dan kepatuhan izin, bukan untuk menetapkan kebijakan publik."
+      },
+      {
+        "text": "Akademisi",
+        "isCorrect": false,
+        "rationale": "Akademisi berperan dalam kajian ilmiah dan pengembangan metodologi perencanaan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 7,
+    "question": "Kemampuan sistem informasi perencanaan menghubungkan subsistem kependudukan, ekonomi, dan keruangan untuk menghasilkan analisis yang utuh mencerminkan prinsip...",
+    "answerOptions": [
+      {
+        "text": "Integrasi sistem",
+        "isCorrect": true,
+        "rationale": "Integrasi sistem memungkinkan berbagai subsistem yang mengelola aspek berbeda saling terhubung sehingga menghasilkan analisis komprehensif yang mempertimbangkan keterkaitan antara aspek kependudukan, ekonomi, dan keruangan dalam perencanaan tata ruang."
+      },
+      {
+        "text": "Desentralisasi data",
+        "isCorrect": false,
+        "rationale": "Desentralisasi data merujuk pada penyebaran penyimpanan data di berbagai lokasi atau unit, bukan penyatuan analisis lintas subsistem."
+      },
+      {
+        "text": "Spesialisasi fungsi",
+        "isCorrect": false,
+        "rationale": "Spesialisasi fungsi berfokus pada pemisahan tugas secara spesifik, sedangkan soal menekankan penggabungan antar subsistem."
+      },
+      {
+        "text": "Redundansi informasi",
+        "isCorrect": false,
+        "rationale": "Redundansi informasi berarti pengulangan data yang sama secara berlebihan dan justru dihindari dalam sistem informasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 8,
+    "question": "Lingkup fungsional sistem informasi perencanaan mencakup seluruh aspek berikut, kecuali...",
+    "answerOptions": [
+      {
+        "text": "Aspek spasial",
+        "isCorrect": false,
+        "rationale": "Aspek spasial (keruangan) merupakan lingkup utama dalam perencanaan tata ruang."
+      },
+      {
+        "text": "Aspek perpajakan",
+        "isCorrect": true,
+        "rationale": "Aspek perpajakan bukan termasuk lingkup fungsional sistem informasi perencanaan tata ruang. Lingkup utamanya meliputi aspek spasial, kependudukan, ekonomi, dan lingkungan yang secara langsung mempengaruhi penggunaan ruang."
+      },
+      {
+        "text": "Aspek kependudukan",
+        "isCorrect": false,
+        "rationale": "Aspek kependudukan termasuk lingkup inti untuk memproyeksikan kebutuhan lahan dan fasilitas."
+      },
+      {
+        "text": "Aspek lingkungan",
+        "isCorrect": false,
+        "rationale": "Aspek lingkungan diperlukan untuk menilai daya dukung dan kesesuaian lahan dalam perencanaan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 9,
+    "question": "Kebutuhan data dalam perencanaan tata ruang yang mencakup peta dan deskripsi karakteristik wilayah menunjukkan bahwa data harus bersifat...",
+    "answerOptions": [
+      {
+        "text": "Numerik dan kategorikal",
+        "isCorrect": false,
+        "rationale": "Numerik dan kategorikal merujuk pada skala pengukuran statistik, bukan pasangan peta dan deskripsi wilayah."
+      },
+      {
+        "text": "Spasial dan atribut",
+        "isCorrect": true,
+        "rationale": "Peta merepresentasikan data spasial yang menunjukkan lokasi dan geometri objek, sedangkan deskripsi karakteristik wilayah merupakan data atribut yang menjelaskan properti dari objek spasial tersebut, keduanya esensial dalam perencanaan tata ruang."
+      },
+      {
+        "text": "Primer dan sekunder",
+        "isCorrect": false,
+        "rationale": "Primer dan sekunder adalah klasifikasi data berdasarkan cara atau sumber perolehannya."
+      },
+      {
+        "text": "Kuantitatif dan kualitatif",
+        "isCorrect": false,
+        "rationale": "Kuantitatif dan kualitatif membedakan data berdasarkan bentuk nilai angka atau deskripsi kata, bukan representasi peta."
+      }
+    ]
+  },
+  {
+    "questionNumber": 10,
+    "question": "Integrasi sistem dalam konteks perencanaan tata ruang bertujuan utama untuk...",
+    "answerOptions": [
+      {
+        "text": "Menghasilkan analisis yang menghubungkan berbagai aspek secara menyeluruh",
+        "isCorrect": true,
+        "rationale": "Integrasi sistem memungkinkan penggabungan data dari berbagai domain seperti kependudukan, ekonomi, dan keruangan sehingga analisis yang dihasilkan mampu menangkap keterkaitan antar aspek secara holistik dalam perencanaan tata ruang."
+      },
+      {
+        "text": "Mempercepat waktu pencetakan peta",
+        "isCorrect": false,
+        "rationale": "Kecepatan pencetakan peta bergantung pada perangkat keras printer/plotter, bukan tujuan strategis integrasi sistem."
+      },
+      {
+        "text": "Menambah kapasitas penyimpanan server",
+        "isCorrect": false,
+        "rationale": "Penambahan kapasitas server merupakan peningkatan infrastruktur perangkat keras."
+      },
+      {
+        "text": "Mengurangi jumlah pengguna sistem informasi",
+        "isCorrect": false,
+        "rationale": "Integrasi sistem justru mempermudah akses dan kolaborasi bagi lebih banyak pemangku kepentingan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 11,
+    "question": "Informasi yang dibutuhkan untuk memahami jumlah, struktur umur, jenis kelamin, dan persebaran penduduk dalam perencanaan tata ruang termasuk dalam kategori...",
+    "answerOptions": [
+      {
+        "text": "Data ekonomi",
+        "isCorrect": false,
+        "rationale": "Data ekonomi berkaitan dengan produksi, pendapatan, dan aktivitas usaha."
+      },
+      {
+        "text": "Data lingkungan",
+        "isCorrect": false,
+        "rationale": "Data lingkungan berkaitan dengan kondisi fisik alam seperti topografi, air, dan iklim."
+      },
+      {
+        "text": "Data kependudukan",
+        "isCorrect": true,
+        "rationale": "Data kependudukan mencakup informasi demografis seperti jumlah penduduk, komposisi umur, jenis kelamin, dan distribusi spasial penduduk yang menjadi dasar untuk memproyeksikan kebutuhan ruang permukiman dan fasilitas publik."
+      },
+      {
+        "text": "Data transportasi",
+        "isCorrect": false,
+        "rationale": "Data transportasi berkaitan dengan jaringan jalan, moda angkutan, dan volume pergerakan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 12,
+    "question": "Perbedaan utama antara data ekonomi dan data kependudukan dalam perencanaan tata ruang adalah...",
+    "answerOptions": [
+      {
+        "text": "Data ekonomi selalu kuantitatif sedangkan data kependudukan selalu kualitatif",
+        "isCorrect": false,
+        "rationale": "Baik data ekonomi maupun kependudukan sama-sama memiliki bentuk kuantitatif (angka) dan kualitatif (kategori)."
+      },
+      {
+        "text": "Data ekonomi hanya diperoleh dari sensus, sedangkan data kependudukan dari survei",
+        "isCorrect": false,
+        "rationale": "Keduanya dapat diperoleh melalui berbagai metode, baik sensus, survei, maupun kompilasi catatan administrasi."
+      },
+      {
+        "text": "Data ekonomi fokus pada aktivitas produksi dan pendapatan, sedangkan data kependudukan fokus pada karakteristik demografis",
+        "isCorrect": true,
+        "rationale": "Data ekonomi berkaitan dengan aktivitas ekonomi wilayah seperti produksi, konsumsi, dan pendapatan, sementara data kependudukan berfokus pada atribut demografis penduduk. Keduanya sama-sama penting dan dapat bersumber dari sensus maupun survei."
+      },
+      {
+        "text": "Data ekonomi tidak mempengaruhi tata ruang, sedangkan data kependudukan sangat mempengaruhi",
+        "isCorrect": false,
+        "rationale": "Aktivitas ekonomi sangat memengaruhi kebutuhan lahan untuk industri, perdagangan, dan jasa."
+      }
+    ]
+  },
+  {
+    "questionNumber": 13,
+    "question": "Aktivitas manusia yang membentuk hubungan fungsional antar ruang seperti permukiman, perdagangan, dan jasa dalam suatu wilayah disebut...",
+    "answerOptions": [
+      {
+        "text": "Struktur kependudukan",
+        "isCorrect": false,
+        "rationale": "Struktur kependudukan merujuk pada komposisi demografis seperti umur dan jenis kelamin."
+      },
+      {
+        "text": "Pola penggunaan lahan",
+        "isCorrect": false,
+        "rationale": "Pola penggunaan lahan menggambarkan sebaran fisik pemanfaatan lahan secara statis."
+      },
+      {
+        "text": "Jaringan transportasi",
+        "isCorrect": false,
+        "rationale": "Jaringan transportasi adalah prasarana penghubung antar ruang, bukan aktivitas manusianya."
+      },
+      {
+        "text": "Sistem kegiatan",
+        "isCorrect": true,
+        "rationale": "Sistem kegiatan merujuk pada pola aktivitas manusia yang saling terhubung dan membentuk keterkaitan fungsional antar ruang, yang menjadi dasar dalam merencanakan alokasi ruang dan infrastruktur pendukungnya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 14,
+    "question": "Angkatan kerja menjadi variabel penting dalam perencanaan tata ruang karena...",
+    "answerOptions": [
+      {
+        "text": "Menentukan harga lahan di wilayah perkotaan",
+        "isCorrect": false,
+        "rationale": "Harga lahan lebih dipengaruhi oleh aksesibilitas, lokasi strategis, dan mekanisme pasar properti."
+      },
+      {
+        "text": "Mempengaruhi iklim mikro suatu kawasan",
+        "isCorrect": false,
+        "rationale": "Iklim mikro dipengaruhi oleh vegetasi, tutupan lahan, dan kondisi geografis."
+      },
+      {
+        "text": "Menjadi dasar perencanaan kebutuhan ruang untuk kegiatan ekonomi dan permukiman",
+        "isCorrect": true,
+        "rationale": "Data angkatan kerja memberikan gambaran tentang jumlah penduduk produktif yang memerlukan ruang untuk bekerja dan bertempat tinggal, sehingga menjadi dasar dalam menghitung kebutuhan ruang untuk kawasan industri, perdagangan, dan permukiman."
+      },
+      {
+        "text": "Menggantikan fungsi data kependudukan secara keseluruhan",
+        "isCorrect": false,
+        "rationale": "Angkatan kerja merupakan salah satu bagian dari data kependudukan, bukan pengganti keseluruhan data demografi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 15,
+    "question": "Konsep yang menjelaskan keterkaitan dan aliran pergerakan antara pusat permukiman, perdagangan, dan jasa dalam suatu wilayah beserta pengaruhnya terhadap penggunaan lahan disebut...",
+    "answerOptions": [
+      {
+        "text": "Pola tata guna lahan",
+        "isCorrect": false,
+        "rationale": "Pola tata guna lahan hanya mendeskripsikan sebaran fisik jenis pemanfaatan lahan."
+      },
+      {
+        "text": "Sistem aktivitas perkotaan",
+        "isCorrect": true,
+        "rationale": "Keterkaitan dan aliran pergerakan antara pusat-pusat kegiatan seperti permukiman, perdagangan, dan jasa yang membentuk suatu kesatuan fungsional dalam wilayah merupakan inti dari sistem aktivitas perkotaan. Konsep ini menekankan hubungan dinamis antar kegiatan, bukan sekadar pola penggunaan lahan atau pemusatan kegiatan secara statis."
+      },
+      {
+        "text": "Aglomerasi kegiatan ekonomi",
+        "isCorrect": false,
+        "rationale": "Aglomerasi merujuk pada pemusatan atau pengelompokan aktivitas ekonomi di suatu lokasi tertentu."
+      },
+      {
+        "text": "Struktur ruang kota",
+        "isCorrect": false,
+        "rationale": "Struktur ruang kota merupakan susunan pusat-pusat permukiman dan sistem jaringan prasarana wilayah."
+      }
+    ]
+  },
+  {
+    "questionNumber": 16,
+    "question": "Informasi tentang aktivitas produksi, konsumsi, pendapatan, dan struktur ekonomi wilayah termasuk dalam kategori...",
+    "answerOptions": [
+      {
+        "text": "Data lingkungan",
+        "isCorrect": false,
+        "rationale": "Data lingkungan mencakup kondisi fisik dan ekologis alam."
+      },
+      {
+        "text": "Data transportasi",
+        "isCorrect": false,
+        "rationale": "Data transportasi mencakup prasarana jaringan dan pergerakan lalu lintas."
+      },
+      {
+        "text": "Data kependudukan",
+        "isCorrect": false,
+        "rationale": "Data kependudukan berfokus pada aspek demografi masyarakat."
+      },
+      {
+        "text": "Data ekonomi",
+        "isCorrect": true,
+        "rationale": "Data ekonomi mencakup seluruh informasi yang berkaitan dengan aktivitas perekonomian wilayah seperti produksi barang dan jasa, pola konsumsi masyarakat, tingkat pendapatan, dan komposisi sektor ekonomi yang mempengaruhi kebutuhan dan alokasi ruang."
+      }
+    ]
+  },
+  {
+    "questionNumber": 17,
+    "question": "Informasi mengenai kondisi topografi, hidrologi, geologi, dan klimatologi yang mempengaruhi kesesuaian lahan termasuk dalam kategori...",
+    "answerOptions": [
+      {
+        "text": "Data ekonomi",
+        "isCorrect": false,
+        "rationale": "Data ekonomi membahas aktivitas produksi, perdagangan, dan pendapatan."
+      },
+      {
+        "text": "Data lingkungan",
+        "isCorrect": true,
+        "rationale": "Data lingkungan mencakup informasi fisik alam seperti topografi, hidrologi, geologi, dan klimatologi yang menjadi dasar penilaian kesesuaian lahan."
+      },
+      {
+        "text": "Data kependudukan",
+        "isCorrect": false,
+        "rationale": "Data kependudukan membahas karakteristik penduduk suatu wilayah."
+      },
+      {
+        "text": "Data transportasi",
+        "isCorrect": false,
+        "rationale": "Data transportasi membahas jaringan jalan dan arus pergerakan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 18,
+    "question": "Kemampuan maksimum lingkungan untuk mendukung aktivitas manusia tanpa mengalami degradasi kualitas yang signifikan disebut...",
+    "answerOptions": [
+      {
+        "text": "Kesesuaian lahan",
+        "isCorrect": false,
+        "rationale": "Kesesuaian lahan mengukur tingkat kecocokan suatu bidang lahan untuk jenis peruntukan tertentu."
+      },
+      {
+        "text": "Daya tampung lingkungan",
+        "isCorrect": false,
+        "rationale": "Daya tampung berfokus pada kapasitas lingkungan dalam menyerap zat, energi, atau limbah yang masuk ke dalamnya."
+      },
+      {
+        "text": "Daya dukung lingkungan",
+        "isCorrect": true,
+        "rationale": "Daya dukung lingkungan merujuk pada batas maksimum kemampuan lingkungan menopang aktivitas manusia tanpa penurunan kualitas yang berarti."
+      },
+      {
+        "text": "Penggunaan lahan",
+        "isCorrect": false,
+        "rationale": "Penggunaan lahan adalah bentuk pemanfaatan aktual lahan oleh manusia."
+      }
+    ]
+  },
+  {
+    "questionNumber": 19,
+    "question": "Perbedaan mendasar antara daya dukung lingkungan dan daya tampung lingkungan terletak pada...",
+    "answerOptions": [
+      {
+        "text": "Jenis data yang digunakan dalam analisis",
+        "isCorrect": false,
+        "rationale": "Keduanya sama-sama menggunakan data fisik lingkungan sebagai dasar analisis."
+      },
+      {
+        "text": "Sumber data primer vs sekunder",
+        "isCorrect": false,
+        "rationale": "Perbedaannya terletak pada konsep ekologisnya, bukan pada sumber perolehan datanya."
+      },
+      {
+        "text": "Tingkat skala perencanaan wilayah",
+        "isCorrect": false,
+        "rationale": "Kedua konsep ini dapat diterapkan di berbagai tingkatan skala perencanaan."
+      },
+      {
+        "text": "Fokus pada kemampuan vs kapasitas ruang",
+        "isCorrect": true,
+        "rationale": "Daya dukung menekankan kemampuan lingkungan menyediakan sumber daya, sedangkan daya tampung berfokus pada kapasitas ruang menyerap limbah atau aktivitas."
+      }
+    ]
+  },
+  {
+    "questionNumber": 20,
+    "question": "Bentuk pemanfaatan lahan oleh manusia di permukaan bumi seperti pertanian, permukiman, dan industri disebut...",
+    "answerOptions": [
+      {
+        "text": "Penggunaan lahan",
+        "isCorrect": true,
+        "rationale": "Penggunaan lahan mengacu pada bentuk aktivitas manusia dalam memanfaatkan lahan untuk berbagai keperluan seperti pertanian, permukiman, dan industri."
+      },
+      {
+        "text": "Penutupan lahan",
+        "isCorrect": false,
+        "rationale": "Penutupan lahan (land cover) merujuk pada kenampakan biofisik aktual di permukaan bumi (misalnya vegetasi, badan air, bangunan)."
+      },
+      {
+        "text": "Kesesuaian lahan",
+        "isCorrect": false,
+        "rationale": "Kesesuaian lahan adalah tingkat kecocokan lahan berdasarkan parameter fisik untuk peruntukan tertentu."
+      },
+      {
+        "text": "Daya dukung lingkungan",
+        "isCorrect": false,
+        "rationale": "Daya dukung lingkungan adalah batas kemampuan lingkungan menopang kehidupan dan aktivitas."
+      }
+    ]
+  },
+  {
+    "questionNumber": 21,
+    "question": "Seorang perencana ingin mengetahui apakah suatu kawasan perbukitan cocok dikembangkan menjadi permukiman. Data utama yang dibutuhkan untuk menilai hal tersebut adalah...",
+    "answerOptions": [
+      {
+        "text": "Struktur umur dan jenis kelamin penduduk",
+        "isCorrect": false,
+        "rationale": "Data demografi tidak menentukan kelayakan fisik medan perbukitan untuk konstruksi bangunan."
+      },
+      {
+        "text": "Jaringan jalan dan angkutan umum",
+        "isCorrect": false,
+        "rationale": "Jaringan jalan mengukur aksesibilitas, bukan kelayakan fisik lahan perbukitan dari risiko longsor atau kemiringan."
+      },
+      {
+        "text": "Topografi, kemiringan lereng, dan jenis tanah",
+        "isCorrect": true,
+        "rationale": "Kesesuaian lahan untuk permukiman ditentukan oleh karakteristik fisik seperti topografi, kemiringan lereng, dan jenis tanah yang mempengaruhi stabilitas dan biaya pembangunan."
+      },
+      {
+        "text": "Pendapatan per kapita dan inflasi",
+        "isCorrect": false,
+        "rationale": "Data ekonomi makro tidak berkaitan dengan kelayakan fisik lingkungan kawasan perbukitan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 22,
+    "question": "Tingkat kecocokan sebidang lahan untuk penggunaan tertentu berdasarkan karakteristik fisik dan lingkungannya merupakan pengertian dari...",
+    "answerOptions": [
+      {
+        "text": "Daya dukung lingkungan",
+        "isCorrect": false,
+        "rationale": "Daya dukung mengukur batas maksimum populasi atau aktivitas yang dapat ditopang lingkungan."
+      },
+      {
+        "text": "Kesesuaian lahan",
+        "isCorrect": true,
+        "rationale": "Kesesuaian lahan menilai tingkat kecocokan lahan untuk penggunaan tertentu berdasarkan parameter fisik dan lingkungan seperti jenis tanah, iklim, dan topografi."
+      },
+      {
+        "text": "Penutupan lahan",
+        "isCorrect": false,
+        "rationale": "Penutupan lahan menggambarkan tutupan fisik permukaan bumi saat ini."
+      },
+      {
+        "text": "Penggunaan lahan",
+        "isCorrect": false,
+        "rationale": "Penggunaan lahan menggambarkan fungsi pemanfaatan lahan oleh manusia saat ini."
+      }
+    ]
+  },
+  {
+    "questionNumber": 23,
+    "question": "Kemudahan mencapai suatu lokasi dari lokasi lain melalui sistem transportasi yang ada disebut...",
+    "answerOptions": [
+      {
+        "text": "Mobilitas",
+        "isCorrect": false,
+        "rationale": "Mobilitas merujuk pada kemampuan atau kelancaran pergerakan orang dan barang."
+      },
+      {
+        "text": "Bangkitan pergerakan",
+        "isCorrect": false,
+        "rationale": "Bangkitan pergerakan adalah jumlah perjalanan yang berasal dari suatu zona tata guna lahan."
+      },
+      {
+        "text": "Konektivitas",
+        "isCorrect": false,
+        "rationale": "Konektivitas merujuk pada tingkat keterhubungan fisik antar simpul dalam suatu jaringan."
+      },
+      {
+        "text": "Aksesibilitas",
+        "isCorrect": true,
+        "rationale": "Aksesibilitas adalah ukuran kemudahan mencapai suatu lokasi dari lokasi lain melalui sistem transportasi, berbeda dengan mobilitas yang merupakan kemampuan bergerak."
+      }
+    ]
+  },
+  {
+    "questionNumber": 24,
+    "question": "Perbedaan utama antara aksesibilitas dan mobilitas dalam perencanaan transportasi adalah...",
+    "answerOptions": [
+      {
+        "text": "Aksesibilitas mengukur jarak fisik, mobilitas mengukur waktu tempuh",
+        "isCorrect": false,
+        "rationale": "Keduanya dapat diukur dengan berbagai parameter seperti waktu, biaya, maupun ketersediaan jaringan."
+      },
+      {
+        "text": "Aksesibilitas hanya berlaku untuk kendaraan pribadi, mobilitas untuk angkutan umum",
+        "isCorrect": false,
+        "rationale": "Baik aksesibilitas maupun mobilitas berlaku untuk semua jenis moda transportasi."
+      },
+      {
+        "text": "Aksesibilitas tentang kemudahan mencapai lokasi, mobilitas tentang kemampuan bergerak",
+        "isCorrect": true,
+        "rationale": "Aksesibilitas fokus pada kemudahan mencapai tujuan, sedangkan mobilitas menekankan pada kemampuan dan efisiensi pergerakan itu sendiri."
+      },
+      {
+        "text": "Aksesibilitas data kuantitatif, mobilitas data kualitatif",
+        "isCorrect": false,
+        "rationale": "Keduanya dapat dianalisis secara kuantitatif dalam pemodelan transportasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 25,
+    "question": "Struktur penghubung antar pusat kegiatan yang terdiri dari simpul dan ruas jalan dalam suatu wilayah disebut...",
+    "answerOptions": [
+      {
+        "text": "Utilitas perkotaan",
+        "isCorrect": false,
+        "rationale": "Utilitas perkotaan meliputi jaringan air bersih, listrik, sanitasi, dan telekomunikasi."
+      },
+      {
+        "text": "Sistem jaringan transportasi",
+        "isCorrect": true,
+        "rationale": "Sistem jaringan transportasi merupakan struktur penghubung antar pusat kegiatan yang terdiri dari simpul dan ruas jalan, menjadi kerangka dasar pergerakan dalam wilayah."
+      },
+      {
+        "text": "Bangkitan pergerakan",
+        "isCorrect": false,
+        "rationale": "Bangkitan pergerakan adalah volume perjalanan yang dihasilkan oleh suatu zona kegiatan."
+      },
+      {
+        "text": "Aksesibilitas wilayah",
+        "isCorrect": false,
+        "rationale": "Aksesibilitas adalah tingkat kemudahan pencapaian lokasi, bukan struktur fisik jaringan jalannya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 26,
+    "question": "Jumlah perjalanan yang dibangkitkan oleh tata guna lahan sebagai asal pergerakan atau ditarik sebagai tujuan pergerakan dikenal sebagai...",
+    "answerOptions": [
+      {
+        "text": "Bangkitan dan tarikan pergerakan",
+        "isCorrect": true,
+        "rationale": "Bangkitan dan tarikan pergerakan adalah jumlah perjalanan yang dihasilkan oleh tata guna lahan, baik sebagai asal maupun tujuan, menjadi dasar pemodelan transportasi."
+      },
+      {
+        "text": "Distribusi perjalanan",
+        "isCorrect": false,
+        "rationale": "Distribusi perjalanan memetakan sebaran pasangan asal-tujuan perjalanan antar zona."
+      },
+      {
+        "text": "Pemilihan moda transportasi",
+        "isCorrect": false,
+        "rationale": "Pemilihan moda (modal split) menganalisis proporsi pelaku perjalanan yang memilih jenis kendaraan tertentu."
+      },
+      {
+        "text": "Aksesibilitas wilayah",
+        "isCorrect": false,
+        "rationale": "Aksesibilitas mengukur tingkat kemudahan menjangkau suatu tempat."
+      }
+    ]
+  },
+  {
+    "questionNumber": 27,
+    "question": "Infrastruktur dasar penunjang kehidupan perkotaan yang meliputi jaringan air bersih, listrik, telekomunikasi, drainase, dan sanitasi termasuk dalam kategori...",
+    "answerOptions": [
+      {
+        "text": "Utilitas perkotaan",
+        "isCorrect": true,
+        "rationale": "Utilitas perkotaan mencakup seluruh infrastruktur dasar yang menunjang kehidupan perkotaan seperti air bersih, listrik, telekomunikasi, drainase, dan sanitasi."
+      },
+      {
+        "text": "Sistem jaringan transportasi",
+        "isCorrect": false,
+        "rationale": "Sistem jaringan transportasi mencakup prasarana pergerakan seperti jalan raya, rel, pelabuhan, dan terminal."
+      },
+      {
+        "text": "Sistem kegiatan",
+        "isCorrect": false,
+        "rationale": "Sistem kegiatan merujuk pada pola aktivitas sosial ekonomi penduduk di ruang kota."
+      },
+      {
+        "text": "Data lingkungan",
+        "isCorrect": false,
+        "rationale": "Data lingkungan merujuk pada kondisi fisik alamiah seperti iklim, geologi, dan hidrologi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 28,
+    "question": "Seorang perencana mengamati bahwa kawasan permukiman padat menghasilkan volume perjalanan tinggi menuju pusat kota setiap pagi, sedangkan kawasan industri menarik banyak perjalanan pada jam yang sama. Fenomena ini paling tepat dianalisis dengan konsep...",
+    "answerOptions": [
+      {
+        "text": "Aksesibilitas dan mobilitas",
+        "isCorrect": false,
+        "rationale": "Aksesibilitas dan mobilitas mengukur kemudahan pencapaian dan kelancaran pergerakan, bukan jumlah perjalanan yang dihasilkan/ditarik oleh fungsi lahan."
+      },
+      {
+        "text": "Bangkitan dan tarikan pergerakan",
+        "isCorrect": true,
+        "rationale": "Permukiman sebagai asal perjalanan membangkitkan pergerakan, sementara industri sebagai tujuan menarik pergerakan, persis menggambarkan konsep bangkitan dan tarikan pergerakan."
+      },
+      {
+        "text": "Sistem jaringan transportasi",
+        "isCorrect": false,
+        "rationale": "Sistem jaringan transportasi berfokus pada prasarana ruas dan simpul jalan yang dilalui."
+      },
+      {
+        "text": "Utilitas perkotaan",
+        "isCorrect": false,
+        "rationale": "Utilitas perkotaan berkaitan dengan layanan dasar seperti air bersih, listrik, dan sanitasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 29,
+    "question": "Data yang memenuhi syarat relevansi, akurasi, ketepatan waktu, konsistensi, dan kelengkapan untuk mendukung perencanaan tata ruang mencerminkan...",
+    "answerOptions": [
+      {
+        "text": "Metadata",
+        "isCorrect": false,
+        "rationale": "Metadata adalah informasi deskriptif mengenai asal-usul dan karakteristik teknis suatu data."
+      },
+      {
+        "text": "Sumber data primer",
+        "isCorrect": false,
+        "rationale": "Sumber data primer merujuk pada data yang dikumpulkan langsung di lapangan, terlepas dari evaluasi kelima syarat kualitas tersebut."
+      },
+      {
+        "text": "Matriks kebutuhan data",
+        "isCorrect": false,
+        "rationale": "Matriks kebutuhan data adalah tabel daftar jenis, skala, dan sumber data yang dibutuhkan pada tiap tahapan perencanaan."
+      },
+      {
+        "text": "Kriteria data perencanaan",
+        "isCorrect": true,
+        "rationale": "Kriteria data perencanaan mencakup lima syarat mutlak yaitu relevansi, akurasi, ketepatan waktu, konsistensi, dan kelengkapan agar data dapat diandalkan dalam perencanaan tata ruang."
+      }
+    ]
+  },
+  {
+    "questionNumber": 30,
+    "question": "Informasi terstruktur yang menjelaskan karakteristik, kualitas, dan asal-usul suatu data agar dapat digunakan dengan tepat disebut...",
+    "answerOptions": [
+      {
+        "text": "Metadata",
+        "isCorrect": true,
+        "rationale": "Metadata adalah informasi terstruktur yang mendeskripsikan karakteristik, kualitas, dan asal-usul data sehingga pengguna memahami konteks dan keterbatasan data tersebut."
+      },
+      {
+        "text": "Kriteria data perencanaan",
+        "isCorrect": false,
+        "rationale": "Kriteria data perencanaan adalah standar kelayakan kualitas data yang dibutuhkan perencana."
+      },
+      {
+        "text": "Matriks kebutuhan data",
+        "isCorrect": false,
+        "rationale": "Matriks kebutuhan data adalah daftar inventaris kebutuhan data untuk setiap tahapan penyusunan rencana."
+      },
+      {
+        "text": "Sumber data tersier",
+        "isCorrect": false,
+        "rationale": "Sumber data tersier adalah kompilasi dari sumber primer dan sekunder seperti atlas atau ensiklopedia."
+      }
+    ]
+  },
+  {
+    "questionNumber": 31,
+    "question": "Ukuran terkecil objek yang dapat dikenali dan direpresentasikan dalam data keruangan merupakan pengertian dari...",
+    "answerOptions": [
+      {
+        "text": "Resolusi spasial",
+        "isCorrect": true,
+        "rationale": "Resolusi spasial adalah ukuran terkecil objek yang dapat dikenali dalam data keruangan, sedangkan skala data adalah rasio perbandingan jarak pada peta dengan kondisi sebenarnya."
+      },
+      {
+        "text": "Skala data",
+        "isCorrect": false,
+        "rationale": "Skala adalah perbandingan jarak di peta dengan jarak horizontal sebenarnya di permukaan bumi."
+      },
+      {
+        "text": "Metadata",
+        "isCorrect": false,
+        "rationale": "Metadata adalah informasi yang menerangkan identitas, riwayat, dan kualitas suatu dataset."
+      },
+      {
+        "text": "Legenda peta",
+        "isCorrect": false,
+        "rationale": "Legenda peta adalah keterangan arti simbol-simbol yang digambarkan pada peta."
+      }
+    ]
+  },
+  {
+    "questionNumber": 32,
+    "question": "Data yang merupakan hasil kompilasi atau interpretasi dari data primer dan sekunder, seperti peta tematik dan atlas, termasuk dalam kategori...",
+    "answerOptions": [
+      {
+        "text": "Sumber data primer",
+        "isCorrect": false,
+        "rationale": "Data primer diperoleh secara langsung melalui observasi atau pengukuran di lapangan."
+      },
+      {
+        "text": "Sumber data sekunder",
+        "isCorrect": false,
+        "rationale": "Data sekunder adalah data mentah atau olahan dasar yang dikumpulkan oleh pihak lain (seperti tabel sensus BPS)."
+      },
+      {
+        "text": "Sumber data tersier",
+        "isCorrect": true,
+        "rationale": "Sumber data tersier adalah data hasil kompilasi atau interpretasi dari data primer dan sekunder, contohnya peta tematik dan atlas yang menggabungkan berbagai sumber."
+      },
+      {
+        "text": "Metadata",
+        "isCorrect": false,
+        "rationale": "Metadata adalah dokumentasi informasi tentang data, bukan produk kompilasi seperti atlas."
+      }
+    ]
+  },
+  {
+    "questionNumber": 33,
+    "question": "Tabel yang menjabarkan jenis data, skala, sumber, dan tingkat kedalaman yang diperlukan untuk setiap tahap perencanaan tata ruang disebut...",
+    "answerOptions": [
+      {
+        "text": "Metadata",
+        "isCorrect": false,
+        "rationale": "Metadata menjelaskan spesifikasi dataset yang sudah ada, bukan daftar kebutuhan tiap tahap perencanaan."
+      },
+      {
+        "text": "Kriteria data perencanaan",
+        "isCorrect": false,
+        "rationale": "Kriteria data perencanaan berisi parameter kualitas data seperti akurasi dan konsistensi."
+      },
+      {
+        "text": "Sumber data primer",
+        "isCorrect": false,
+        "rationale": "Sumber data primer merujuk pada asal perolehan data langsung dari lapangan."
+      },
+      {
+        "text": "Matriks kebutuhan data",
+        "isCorrect": true,
+        "rationale": "Matriks kebutuhan data adalah tabel sistematis yang merinci jenis data, skala, sumber, dan kedalaman data yang dibutuhkan pada setiap tahap perencanaan tata ruang."
+      }
+    ]
+  },
+  {
+    "questionNumber": 34,
+    "question": "Sekumpulan data yang telah diproses dan diberi konteks sehingga memiliki arti dan nilai bagi pengambilan keputusan dalam perencanaan tata ruang merepresentasikan konsep...",
+    "answerOptions": [
+      {
+        "text": "Data mentah",
+        "isCorrect": false,
+        "rationale": "Data mentah adalah fakta dasar yang belum diolah sehingga belum memiliki konteks keputusan."
+      },
+      {
+        "text": "Informasi",
+        "isCorrect": true,
+        "rationale": "Konsep yang dimaksud adalah informasi karena informasi merupakan data yang telah diolah, diorganisir, dan diberi konteks sehingga bermakna dan berguna bagi penerima, dalam hal ini untuk mendukung pengambilan keputusan perencanaan tata ruang."
+      },
+      {
+        "text": "Pengetahuan",
+        "isCorrect": false,
+        "rationale": "Pengetahuan merupakan perpaduan informasi dengan pengalaman, pemahaman, dan keahlian."
+      },
+      {
+        "text": "Kearifan",
+        "isCorrect": false,
+        "rationale": "Kearifan (wisdom) adalah tingkatan tertinggi dalam hierarki DIKW yang melibatkan pertimbangan etis dan penilaian mendalam."
+      }
+    ]
+  },
+  {
+    "questionNumber": 35,
+    "question": "Data yang diperoleh langsung dari sumber asli melalui pengukuran, observasi, wawancara, atau kuesioner di lapangan termasuk dalam kategori...",
+    "answerOptions": [
+      {
+        "text": "Data tersier",
+        "isCorrect": false,
+        "rationale": "Data tersier merupakan hasil kompilasi dari sumber primer dan sekunder."
+      },
+      {
+        "text": "Data sekunder",
+        "isCorrect": false,
+        "rationale": "Data sekunder diperoleh secara tidak langsung melalui publikasi atau arsip instansi lain."
+      },
+      {
+        "text": "Data primer",
+        "isCorrect": true,
+        "rationale": "Data primer dihasilkan dari pengamatan dan pengukuran langsung oleh peneliti di lapangan."
+      },
+      {
+        "text": "Metadata",
+        "isCorrect": false,
+        "rationale": "Metadata adalah informasi deskriptif mengenai suatu kumpulan data."
+      }
+    ]
+  },
+  {
+    "questionNumber": 36,
+    "question": "Seorang perencana menggunakan laporan statistik yang diterbitkan Badan Pusat Statistik untuk menyusun rencana tata ruang. Data tersebut termasuk jenis...",
+    "answerOptions": [
+      {
+        "text": "Data primer",
+        "isCorrect": false,
+        "rationale": "Data primer dikumpulkan sendiri secara langsung di lapangan oleh perencana."
+      },
+      {
+        "text": "Data tersier",
+        "isCorrect": false,
+        "rationale": "Data tersier berbentuk kompilasi rujukan seperti ensiklopedia atau atlas."
+      },
+      {
+        "text": "Data kualitatif",
+        "isCorrect": false,
+        "rationale": "Laporan statistik BPS umumnya didominasi oleh data angka (kuantitatif), dan dalam konteks sumber perolehannya tergolong data sekunder."
+      },
+      {
+        "text": "Data sekunder",
+        "isCorrect": true,
+        "rationale": "Data sekunder berasal dari sumber yang sudah ada sebelumnya, seperti publikasi resmi lembaga statistik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 37,
+    "question": "Klasifikasi penyajian informasi keruangan yang menonjolkan aspek tematik tertentu seperti kepadatan penduduk atau curah hujan dan mengabaikan ketelitian geometrik dan posisi absolut termasuk dalam kategori...",
+    "answerOptions": [
+      {
+        "text": "Peta umum",
+        "isCorrect": false,
+        "rationale": "Peta umum menampilkan kenampakan alam dan buatan dengan menekankan ketelitian geometrik."
+      },
+      {
+        "text": "Peta topografi",
+        "isCorrect": false,
+        "rationale": "Peta topografi berfokus pada gambaran rupa bumi dan kontur elevasi secara akurat."
+      },
+      {
+        "text": "Kartogram",
+        "isCorrect": true,
+        "rationale": "Kartogram adalah peta tematik yang menyajikan data statistik dengan mengubah ukuran atau proporsi wilayah geografis berdasarkan nilai data, bukan berdasarkan luas sebenarnya. Teknik ini mengabaikan ketelitian geometrik dan posisi absolut untuk menonjolkan distribusi tema seperti kepadatan penduduk."
+      },
+      {
+        "text": "Peta rupa bumi",
+        "isCorrect": false,
+        "rationale": "Peta rupa bumi merupakan jenis peta umum yang mempertahankan akurasi koordinat dan bentuk geometri wilayah."
+      }
+    ]
+  },
+  {
+    "questionNumber": 38,
+    "question": "Perbedaan paling mendasar antara data primer dan data sekunder terletak pada...",
+    "answerOptions": [
+      {
+        "text": "Tingkat akurasi dan kelengkapan data",
+        "isCorrect": false,
+        "rationale": "Baik data primer maupun sekunder bisa memiliki tingkat akurasi tinggi tergantung metodologi pengumpulannya."
+      },
+      {
+        "text": "Bentuk penyajian data berupa angka atau teks",
+        "isCorrect": false,
+        "rationale": "Keduanya dapat disajikan dalam bentuk angka, teks, maupun grafik."
+      },
+      {
+        "text": "Cara memperoleh data dari sumbernya",
+        "isCorrect": true,
+        "rationale": "Data primer diperoleh langsung dari sumber asli, sedangkan data sekunder diperoleh dari sumber yang sudah ada."
+      },
+      {
+        "text": "Jenis analisis yang dapat diterapkan pada data",
+        "isCorrect": false,
+        "rationale": "Teknik analisis statistik maupun spasial dapat diterapkan pada kedua jenis data tersebut."
+      }
+    ]
+  },
+  {
+    "questionNumber": 39,
+    "question": "Teknik penyimpanan data yang menggunakan simbol titik, garis, dan area untuk merepresentasikan objek geografis secara eksplisit dengan koordinat yang presisi disebut format...",
+    "answerOptions": [
+      {
+        "text": "Raster",
+        "isCorrect": false,
+        "rationale": "Format raster merepresentasikan data keruangan menggunakan grid sel atau piksel."
+      },
+      {
+        "text": "Vektor",
+        "isCorrect": true,
+        "rationale": "Format vektor merepresentasikan data keruangan menggunakan titik, garis, dan poligon yang dibangun dari koordinat. Hal ini berbeda dengan format raster yang menggunakan grid sel, format hierarkis yang merupakan struktur basis data, dan format relasional yang mengatur hubungan antar tabel dalam basis data."
+      },
+      {
+        "text": "Hierarkis",
+        "isCorrect": false,
+        "rationale": "Format hierarkis adalah model struktur basis data berbentuk pohon (induk-anak), bukan format geometri spasial."
+      },
+      {
+        "text": "Relasional",
+        "isCorrect": false,
+        "rationale": "Format relasional mengatur hubungan antartabel dalam basis data."
+      }
+    ]
+  },
+  {
+    "questionNumber": 40,
+    "question": "Wujud struktural dan pola pemanfaatan ruang yang mencakup struktur dan pola ruang di tingkat nasional, wilayah, dan lokal merupakan pengertian dari...",
+    "answerOptions": [
+      {
+        "text": "Tata ruang",
+        "isCorrect": true,
+        "rationale": "Tata ruang mewadahi keseluruhan wujud struktural dan pola pemanfaatan ruang pada berbagai tingkatan."
+      },
+      {
+        "text": "Sistem informasi geografis",
+        "isCorrect": false,
+        "rationale": "SIG adalah sistem perangkat lunak dan keras untuk mengelola data spasial."
+      },
+      {
+        "text": "Penggunaan lahan",
+        "isCorrect": false,
+        "rationale": "Penggunaan lahan hanya merujuk pada aktivitas pemanfaatan bidang lahan secara spesifik."
+      },
+      {
+        "text": "Sistem kegiatan",
+        "isCorrect": false,
+        "rationale": "Sistem kegiatan adalah pola interaksi aktivitas manusia di dalam ruang."
+      }
+    ]
+  },
+  {
+    "questionNumber": 41,
+    "question": "Rencana tata ruang yang menetapkan kebijakan dan strategi pemanfaatan ruang wilayah negara sebagai acuan perencanaan di bawahnya adalah...",
+    "answerOptions": [
+      {
+        "text": "Rencana Detail Tata Ruang",
+        "isCorrect": false,
+        "rationale": "RDTR merupakan rencana operasional rinci pada tingkat bagian wilayah kabupaten/kota."
+      },
+      {
+        "text": "Rencana Tata Ruang Wilayah Provinsi",
+        "isCorrect": false,
+        "rationale": "RTRW Provinsi mengatur penataan ruang di tingkat wilayah provinsi yang mengacu pada RTRW Nasional."
+      },
+      {
+        "text": "Rencana Tata Ruang Nasional",
+        "isCorrect": true,
+        "rationale": "Rencana Tata Ruang Nasional menjadi acuan tertinggi bagi rencana tata ruang di tingkat provinsi maupun kabupaten/kota."
+      },
+      {
+        "text": "Rencana Tata Ruang Kabupaten",
+        "isCorrect": false,
+        "rationale": "RTRW Kabupaten berada pada hierarki tingkat kabupaten yang mengacu pada RTRWN dan RTRWP."
+      }
+    ]
+  },
+  {
+    "questionNumber": 42,
+    "question": "Rencana operasional pada skala kawasan atau bagian wilayah kota yang mengatur zonasi dan ketentuan pemanfaatan ruang secara rinci disebut...",
+    "answerOptions": [
+      {
+        "text": "Rencana Tata Ruang Nasional",
+        "isCorrect": false,
+        "rationale": "RTRWN bersifat makro dan strategis pada skala seluruh wilayah negara."
+      },
+      {
+        "text": "Rencana Detail Tata Ruang",
+        "isCorrect": true,
+        "rationale": "Rencana Detail Tata Ruang bersifat operasional dengan tingkat kerincian hingga penetapan zonasi dan aturan pemanfaatan ruang."
+      },
+      {
+        "text": "Rencana Tata Ruang Wilayah",
+        "isCorrect": false,
+        "rationale": "RTRW mengatur struktur dan pola ruang wilayah secara umum pada skala provinsi atau kabupaten/kota."
+      },
+      {
+        "text": "Rencana Induk Kota",
+        "isCorrect": false,
+        "rationale": "Rencana Induk Kota adalah istilah lama yang dalam sistem penataan ruang modern telah digantikan oleh RTRW dan RDTR."
+      }
+    ]
+  },
+  {
+    "questionNumber": 43,
+    "question": "Perbedaan utama antara Rencana Tata Ruang Wilayah dan Rencana Detail Tata Ruang terletak pada...",
+    "answerOptions": [
+      {
+        "text": "Kedudukan hukum dan lembaga yang menetapkan",
+        "isCorrect": false,
+        "rationale": "Keduanya sama-sama memiliki kekuatan hukum mengikat dalam sistem penataan ruang daerah."
+      },
+      {
+        "text": "Cakupan wilayah dan tingkat kerincian pengaturan",
+        "isCorrect": true,
+        "rationale": "Rencana Tata Ruang Wilayah mencakup provinsi atau kabupaten/kota secara umum, sedangkan Rencana Detail mengatur kawasan tertentu secara rinci."
+      },
+      {
+        "text": "Jenis data yang digunakan dalam penyusunan",
+        "isCorrect": false,
+        "rationale": "Keduanya menggunakan jenis data yang serupa (spasial dan atribut), hanya berbeda pada skala ketelitian petanya."
+      },
+      {
+        "text": "Pihak yang terlibat dalam proses perencanaan",
+        "isCorrect": false,
+        "rationale": "Pihak yang terlibat tetap mencakup pemerintah daerah, perencana, dan masyarakat."
+      }
+    ]
+  },
+  {
+    "questionNumber": 44,
+    "question": "Berikut ini yang tidak termasuk dalam hierarki rencana tata ruang adalah...",
+    "answerOptions": [
+      {
+        "text": "Rencana Tata Ruang Nasional",
+        "isCorrect": false,
+        "rationale": "RTRWN adalah puncak hierarki rencana umum tata ruang."
+      },
+      {
+        "text": "Rencana Tata Ruang Wilayah",
+        "isCorrect": false,
+        "rationale": "RTRW (Provinsi dan Kabupaten/Kota) merupakan bagian dari hierarki rencana umum tata ruang."
+      },
+      {
+        "text": "Rencana Detail Tata Ruang",
+        "isCorrect": false,
+        "rationale": "RDTR merupakan bagian dari hierarki rencana rinci tata ruang."
+      },
+      {
+        "text": "Rencana Strategis Pembangunan Daerah",
+        "isCorrect": true,
+        "rationale": "Rencana Strategis Pembangunan Daerah termasuk dokumen perencanaan pembangunan, bukan hierarki rencana tata ruang."
+      }
+    ]
+  },
+  {
+    "questionNumber": 45,
+    "question": "Fase awal penyusunan rencana yang mencakup identifikasi masalah, penetapan tujuan, dan pengumpulan data dasar wilayah disebut...",
+    "answerOptions": [
+      {
+        "text": "Tahap analisis",
+        "isCorrect": false,
+        "rationale": "Tahap analisis dilakukan setelah data dasar terkumpul pada tahap persiapan."
+      },
+      {
+        "text": "Tahap perumusan rencana",
+        "isCorrect": false,
+        "rationale": "Tahap perumusan rencana dilakukan setelah hasil analisis dan proyeksi diperoleh."
+      },
+      {
+        "text": "Tahap pemantauan",
+        "isCorrect": false,
+        "rationale": "Tahap pemantauan dilakukan setelah rencana ditetapkan dan diimplementasikan."
+      },
+      {
+        "text": "Tahap persiapan",
+        "isCorrect": true,
+        "rationale": "Tahap persiapan merupakan fase paling awal yang menjadi landasan bagi seluruh proses perencanaan selanjutnya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 46,
+    "question": "Fase penyusunan konsep dan strategi alokasi ruang berdasarkan hasil analisis menjadi dokumen rencana tata ruang formal merupakan...",
+    "answerOptions": [
+      {
+        "text": "Tahap persiapan",
+        "isCorrect": false,
+        "rationale": "Tahap persiapan berfokus pada perumusan metodologi dan pengumpulan data awal."
+      },
+      {
+        "text": "Tahap perumusan rencana",
+        "isCorrect": true,
+        "rationale": "Pada tahap perumusan rencana, hasil analisis diterjemahkan ke dalam konsep dan strategi tata ruang yang formal."
+      },
+      {
+        "text": "Tahap pemantauan dan evaluasi",
+        "isCorrect": false,
+        "rationale": "Pemantauan dan evaluasi dilakukan untuk mengawasi pelaksanaan dokumen rencana yang sudah disahkan."
+      },
+      {
+        "text": "Tahap analisis",
+        "isCorrect": false,
+        "rationale": "Tahap analisis mengolah data untuk mengidentifikasi potensi dan masalah sebelum menyusun konsep rencana."
+      }
+    ]
+  },
+  {
+    "questionNumber": 47,
+    "question": "Proses pengawasan implementasi rencana tata ruang untuk menilai kesesuaian pemanfaatan ruang dengan rencana yang ditetapkan disebut...",
+    "answerOptions": [
+      {
+        "text": "Tahap analisis",
+        "isCorrect": false,
+        "rationale": "Tahap analisis terjadi sebelum penyusunan konsep rencana."
+      },
+      {
+        "text": "Tahap perumusan rencana",
+        "isCorrect": false,
+        "rationale": "Tahap perumusan rencana berfokus pada penyusunan dokumen rencana tata ruang."
+      },
+      {
+        "text": "Tahap persiapan",
+        "isCorrect": false,
+        "rationale": "Tahap persiapan adalah langkah awal pengumpulan data dan identifikasi isu."
+      },
+      {
+        "text": "Pemantauan dan evaluasi",
+        "isCorrect": true,
+        "rationale": "Pemantauan dan evaluasi memastikan bahwa pemanfaatan ruang di lapangan sesuai dengan rencana yang telah ditetapkan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 48,
+    "question": "Seorang perencana sedang mengolah dan menginterpretasi data untuk mengidentifikasi potensi, kendala, serta proyeksi perkembangan wilayah. Kegiatan ini termasuk dalam...",
+    "answerOptions": [
+      {
+        "text": "Tahap persiapan",
+        "isCorrect": false,
+        "rationale": "Tahap persiapan hanya sampai pada pengumpulan data dasar, belum masuk ke interpretasi dan proyeksi."
+      },
+      {
+        "text": "Tahap perumusan rencana",
+        "isCorrect": false,
+        "rationale": "Perumusan rencana menyusun solusi dan alokasi ruang berdasarkan hasil analisis."
+      },
+      {
+        "text": "Tahap analisis",
+        "isCorrect": true,
+        "rationale": "Tahap analisis berfokus pada pengolahan data guna menemukan potensi, kendala, dan proyeksi wilayah."
+      },
+      {
+        "text": "Tahap pemantauan",
+        "isCorrect": false,
+        "rationale": "Tahap pemantauan mengawasi kesesuaian pelaksanaan rencana di lapangan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 49,
+    "question": "Kegiatan yang tidak termasuk dalam tahap perumusan rencana tata ruang adalah...",
+    "answerOptions": [
+      {
+        "text": "Penyusunan konsep alokasi ruang",
+        "isCorrect": false,
+        "rationale": "Penyusunan konsep alokasi ruang merupakan inti dari tahap perumusan rencana."
+      },
+      {
+        "text": "Penetapan strategi pemanfaatan ruang",
+        "isCorrect": false,
+        "rationale": "Penetapan strategi pemanfaatan ruang dilakukan pada tahap perumusan rencana."
+      },
+      {
+        "text": "Penulisan dokumen rencana formal",
+        "isCorrect": false,
+        "rationale": "Penulisan dokumen rencana formal adalah keluaran dari tahap perumusan rencana."
+      },
+      {
+        "text": "Pengumpulan data dasar wilayah",
+        "isCorrect": true,
+        "rationale": "Pengumpulan data dasar merupakan bagian dari tahap persiapan, bukan perumusan rencana."
+      }
+    ]
+  },
+  {
+    "questionNumber": 50,
+    "question": "Teknik pengumpulan data dengan cara menghitung atau mengukur seluruh elemen populasi secara lengkap tanpa terkecuali disebut...",
+    "answerOptions": [
+      {
+        "text": "Metode sampling",
+        "isCorrect": false,
+        "rationale": "Metode sampling hanya mengambil sebagian kecil anggota populasi yang dianggap mewakili."
+      },
+      {
+        "text": "Metode sensus",
+        "isCorrect": true,
+        "rationale": "Sensus menjangkau seluruh populasi tanpa pengecualian, berbeda dengan sampling yang hanya mengambil sebagian."
+      },
+      {
+        "text": "Metode observasi",
+        "isCorrect": false,
+        "rationale": "Observasi adalah teknik pengamatan langsung terhadap objek atau fenomena di lapangan."
+      },
+      {
+        "text": "Metode kuesioner",
+        "isCorrect": false,
+        "rationale": "Kuesioner adalah instrumen daftar pertanyaan yang dapat digunakan baik dalam sensus maupun survei sampel."
+      }
+    ]
+  },
+  {
+    "questionNumber": 51,
+    "question": "Teknik pengumpulan data dengan mengambil sebagian dari populasi yang representatif untuk mewakili keseluruhan disebut...",
+    "answerOptions": [
+      {
+        "text": "Sensus",
+        "isCorrect": false,
+        "rationale": "Sensus mencatat seluruh elemen populasi tanpa terkecuali."
+      },
+      {
+        "text": "Sampling",
+        "isCorrect": true,
+        "rationale": "Sampling adalah metode pengumpulan data yang menggunakan sebagian populasi yang representatif untuk efisiensi waktu dan biaya, berbeda dengan sensus yang menghitung seluruh elemen populasi."
+      },
+      {
+        "text": "Validasi",
+        "isCorrect": false,
+        "rationale": "Validasi adalah proses pemeriksaan kebenaran dan keandalan data yang sudah terkumpul."
+      },
+      {
+        "text": "Registrasi",
+        "isCorrect": false,
+        "rationale": "Registrasi adalah pencatatan peristiwa penting (seperti kelahiran dan kematian) secara berkelanjutan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 52,
+    "question": "Data yang dikumpulkan dari waktu ke waktu secara berkala untuk mengamati perubahan dan kecenderungan variabel perencanaan termasuk jenis data...",
+    "answerOptions": [
+      {
+        "text": "Cross section",
+        "isCorrect": false,
+        "rationale": "Data cross section dikumpulkan dari banyak objek pada satu titik waktu tertentu saja."
+      },
+      {
+        "text": "Panel",
+        "isCorrect": false,
+        "rationale": "Data panel adalah gabungan antara data cross section dan data runtun waktu untuk subjek yang sama."
+      },
+      {
+        "text": "Longitudinal",
+        "isCorrect": false,
+        "rationale": "Data longitudinal mengamati subjek individu yang sama secara berulang dari waktu ke waktu."
+      },
+      {
+        "text": "Time series",
+        "isCorrect": true,
+        "rationale": "Data time series dikumpulkan secara berkala pada interval waktu tertentu untuk mengamati tren perubahan variabel, sedangkan data cross section dikumpulkan pada satu titik waktu tertentu."
+      }
+    ]
+  },
+  {
+    "questionNumber": 53,
+    "question": "Proses pemeriksaan dan konfirmasi kebenaran data hasil pengumpulan untuk memastikan kualitas dan keandalan informasi disebut...",
+    "answerOptions": [
+      {
+        "text": "Normalisasi",
+        "isCorrect": false,
+        "rationale": "Normalisasi adalah proses penataan struktur tabel basis data untuk mengurangi redudansi."
+      },
+      {
+        "text": "Verifikasi",
+        "isCorrect": false,
+        "rationale": "Verifikasi lebih menekankan pada pencocokan kesesuaian prosedur pengisian, sedangkan validasi memastikan kebenaran substansi dan keandalan data."
+      },
+      {
+        "text": "Validasi",
+        "isCorrect": true,
+        "rationale": "Validasi data merupakan proses pengecekan kebenaran, konsistensi, dan keandalan data yang telah dikumpulkan agar informasi yang dihasilkan dapat dipercaya."
+      },
+      {
+        "text": "Interpolasi",
+        "isCorrect": false,
+        "rationale": "Interpolasi adalah metode estimasi nilai di antara titik-titik data yang diketahui."
+      }
+    ]
+  },
+  {
+    "questionNumber": 54,
+    "question": "Seorang perencana melakukan penghitungan jumlah seluruh kepala keluarga di sebuah kecamatan untuk menyusun rencana tata ruang. Metode pengumpulan data yang ia gunakan adalah...",
+    "answerOptions": [
+      {
+        "text": "Sampling acak",
+        "isCorrect": false,
+        "rationale": "Sampling acak hanya memilih sebagian kepala keluarga secara acak sebagai sampel."
+      },
+      {
+        "text": "Sensus",
+        "isCorrect": true,
+        "rationale": "Menghitung seluruh elemen populasi tanpa terkecuali merupakan ciri khas metode sensus, yang memberikan data lengkap dan akurat untuk perencanaan."
+      },
+      {
+        "text": "Registrasi",
+        "isCorrect": false,
+        "rationale": "Registrasi adalah pencatatan rutin peristiwa kependudukan yang dilaporkan warga ke kantor administrasi."
+      },
+      {
+        "text": "Observasi",
+        "isCorrect": false,
+        "rationale": "Observasi adalah pengamatan langsung terhadap kondisi fisik atau perilaku di lapangan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 55,
+    "question": "Sistem penyimpanan data terstruktur yang memungkinkan pengelolaan, pembaruan, dan pengambilan kembali data secara efisien disebut...",
+    "answerOptions": [
+      {
+        "text": "Sistem manajemen basis data",
+        "isCorrect": false,
+        "rationale": "Sistem manajemen basis data (DBMS) adalah perangkat lunak pengelolanya, bukan wadah penyimpanannya."
+      },
+      {
+        "text": "Spreadsheet",
+        "isCorrect": false,
+        "rationale": "Spreadsheet adalah aplikasi lembar kerja sederhana yang kurang efisien untuk pengelolaan basis data relasional skala besar."
+      },
+      {
+        "text": "Data warehouse",
+        "isCorrect": false,
+        "rationale": "Data warehouse adalah repositori pusat khusus untuk data historis berskala besar guna keperluan analisis."
+      },
+      {
+        "text": "Basis data",
+        "isCorrect": true,
+        "rationale": "Basis data merupakan wadah penyimpanan data yang terorganisir, sedangkan sistem manajemen basis data adalah perangkat lunak yang mengelola basis data tersebut."
+      }
+    ]
+  },
+  {
+    "questionNumber": 56,
+    "question": "Proses pengorganisasian data dalam basis data relasional untuk mengurangi redudansi dan menjaga integritas data dikenal sebagai...",
+    "answerOptions": [
+      {
+        "text": "Normalisasi",
+        "isCorrect": true,
+        "rationale": "Normalisasi data adalah teknik dekomposisi tabel dalam basis data relasional untuk menghilangkan pengulangan data yang tidak perlu dan menjaga konsistensi data."
+      },
+      {
+        "text": "Standarisasi",
+        "isCorrect": false,
+        "rationale": "Standarisasi adalah penyeragaman format atau aturan penulisan data."
+      },
+      {
+        "text": "Kompresi",
+        "isCorrect": false,
+        "rationale": "Kompresi adalah teknik memperkecil ukuran berkas penyimpanan data."
+      },
+      {
+        "text": "Enkripsi",
+        "isCorrect": false,
+        "rationale": "Enkripsi adalah pengamanan data dengan mengubahnya menjadi kode rahasia."
+      }
+    ]
+  },
+  {
+    "questionNumber": 57,
+    "question": "Metode penyimpanan data keruangan yang merepresentasikan objek dalam bentuk grid sel atau piksel dengan nilai atribut tertentu disebut format...",
+    "answerOptions": [
+      {
+        "text": "Raster",
+        "isCorrect": true,
+        "rationale": "Data raster menyimpan informasi keruangan dalam bentuk matriks sel atau piksel, cocok untuk data kontinu seperti citra satelit dan ketinggian permukaan."
+      },
+      {
+        "text": "Vektor",
+        "isCorrect": false,
+        "rationale": "Format vektor merepresentasikan objek menggunakan titik, garis, dan poligon berbasis koordinat."
+      },
+      {
+        "text": "Tabular",
+        "isCorrect": false,
+        "rationale": "Format tabular menyimpan data atribut dalam bentuk baris dan kolom tabel."
+      },
+      {
+        "text": "Hierarkis",
+        "isCorrect": false,
+        "rationale": "Format hierarkis menyusun data dalam struktur bertingkat seperti pohon."
+      }
+    ]
+  },
+  {
+    "questionNumber": 58,
+    "question": "Berikut ini yang bukan merupakan keunggulan format data vektor dibandingkan format raster dalam penyimpanan data spasial adalah...",
+    "answerOptions": [
+      {
+        "text": "Representasi batas objek yang presisi",
+        "isCorrect": false,
+        "rationale": "Representasi batas yang presisi merupakan salah satu keunggulan utama format vektor."
+      },
+      {
+        "text": "Kemampuan merepresentasikan data kontinu secara alami",
+        "isCorrect": true,
+        "rationale": "Representasi data kontinu seperti ketinggian atau suhu secara alami merupakan keunggulan format raster berbasis grid, bukan format vektor yang lebih cocok untuk objek diskrit."
+      },
+      {
+        "text": "Ukuran file yang lebih kecil untuk data sederhana",
+        "isCorrect": false,
+        "rationale": "Format vektor memang membutuhkan kapasitas penyimpanan lebih kecil untuk fitur garis dan poligon sederhana."
+      },
+      {
+        "text": "Kemampuan analisis jaringan",
+        "isCorrect": false,
+        "rationale": "Analisis jaringan seperti pencarian rute terpendek sangat unggul dilakukan pada struktur data vektor."
+      }
+    ]
+  },
+  {
+    "questionNumber": 59,
+    "question": "Perangkat lunak yang mengatur pembuatan, penyimpanan, pengaksesan, dan pengamanan basis data disebut...",
+    "answerOptions": [
+      {
+        "text": "Sistem manajemen basis data",
+        "isCorrect": true,
+        "rationale": "Sistem manajemen basis data adalah perangkat lunak yang menjadi perantara antara pengguna dengan basis data, mengelola seluruh operasi pengolahan data secara efisien dan aman."
+      },
+      {
+        "text": "Data warehouse",
+        "isCorrect": false,
+        "rationale": "Data warehouse adalah sistem gudang penyimpanan data terintegrasi untuk analisis histori."
+      },
+      {
+        "text": "Basis data",
+        "isCorrect": false,
+        "rationale": "Basis data adalah kumpulan datanya itu sendiri, bukan perangkat lunak pengelolanya."
+      },
+      {
+        "text": "Sistem operasi",
+        "isCorrect": false,
+        "rationale": "Sistem operasi mengelola sumber daya perangkat keras komputer secara keseluruhan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 60,
+    "question": "Data yang belum memiliki makna spesifik bagi pengambil keputusan dan masih berupa representasi fakta mentah disebut...",
+    "answerOptions": [
+      {
+        "text": "Informasi",
+        "isCorrect": false,
+        "rationale": "Informasi adalah data yang sudah diproses sehingga memiliki arti dan konteks."
+      },
+      {
+        "text": "Pengetahuan",
+        "isCorrect": false,
+        "rationale": "Pengetahuan adalah informasi yang telah dipahami dan dipadukan dengan pengalaman."
+      },
+      {
+        "text": "Metadata",
+        "isCorrect": false,
+        "rationale": "Metadata adalah informasi yang menjelaskan karakteristik dari suatu data."
+      },
+      {
+        "text": "Data",
+        "isCorrect": true,
+        "rationale": "Data adalah fakta mentah yang belum diolah atau diinterpretasi sehingga belum memberikan makna langsung bagi penerimanya untuk mengambil keputusan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 61,
+    "question": "Perbedaan utama antara data dan informasi terletak pada...",
+    "answerOptions": [
+      {
+        "text": "Bentuk penyimpanannya",
+        "isCorrect": false,
+        "rationale": "Baik data maupun informasi dapat disimpan dalam media digital atau cetak yang sama."
+      },
+      {
+        "text": "Sumber perolehannya",
+        "isCorrect": false,
+        "rationale": "Sumber perolehan tidak membedakan status fakta mentah dengan hasil olahannya."
+      },
+      {
+        "text": "Jenis medianya",
+        "isCorrect": false,
+        "rationale": "Jenis media penyajian tidak menjadi pembeda konseptual antara data dan informasi."
+      },
+      {
+        "text": "Tingkat kebermaknaan dan konteksnya",
+        "isCorrect": true,
+        "rationale": "Data menjadi informasi setelah diolah, diinterpretasi, dan diberi konteks sehingga bermakna bagi penerima; perbedaan intinya ada pada tingkat kebermaknaan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 62,
+    "question": "Informasi yang dipadukan dengan pengalaman, konteks, dan pemahaman untuk mendukung pengambilan keputusan dan tindakan merupakan pengertian dari...",
+    "answerOptions": [
+      {
+        "text": "Pengetahuan",
+        "isCorrect": true,
+        "rationale": "Pengetahuan adalah tingkatan lebih tinggi dari informasi karena sudah dipadukan dengan pengalaman dan pemahaman manusia sehingga siap diterapkan dalam pengambilan keputusan."
+      },
+      {
+        "text": "Informasi",
+        "isCorrect": false,
+        "rationale": "Informasi adalah data yang telah diolah, belum sampai pada tahap sintesis dengan pengalaman manusia."
+      },
+      {
+        "text": "Data",
+        "isCorrect": false,
+        "rationale": "Data adalah fakta mentah sebelum diolah menjadi informasi."
+      },
+      {
+        "text": "Kearifan",
+        "isCorrect": false,
+        "rationale": "Kearifan (wisdom) adalah penerapan pengetahuan secara bijaksana dalam mengambil keputusan jangka panjang."
+      }
+    ]
+  },
+  {
+    "questionNumber": 63,
+    "question": "Tahapan pengelolaan informasi yang mencakup pengumpulan, penyimpanan, pengolahan, distribusi, hingga pemusnahan data dikenal sebagai...",
+    "answerOptions": [
+      {
+        "text": "Arsitektur informasi",
+        "isCorrect": false,
+        "rationale": "Arsitektur informasi berfokus pada perancangan struktur dan pengorganisasian sistem informasi."
+      },
+      {
+        "text": "Rantai nilai informasi",
+        "isCorrect": false,
+        "rationale": "Rantai nilai informasi berfokus pada peningkatan nilai tambah bisnis dari informasi."
+      },
+      {
+        "text": "Siklus hidup informasi",
+        "isCorrect": true,
+        "rationale": "Siklus hidup informasi menggambarkan perjalanan informasi sejak awal tercipta hingga akhirnya dimusnahkan, mencakup seluruh tahap pengelolaannya secara sistematis."
+      },
+      {
+        "text": "Tata kelola informasi",
+        "isCorrect": false,
+        "rationale": "Tata kelola informasi merujuk pada kebijakan dan kerangka pengendalian pengelolaan informasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 64,
+    "question": "Data yang dinyatakan dalam bentuk kategori, atribut, atau deskripsi non-angka yang menggambarkan sifat atau kualitas merupakan jenis data...",
+    "answerOptions": [
+      {
+        "text": "Kuantitatif",
+        "isCorrect": false,
+        "rationale": "Data kuantitatif berbentuk angka hasil pengukuran atau perhitungan."
+      },
+      {
+        "text": "Numerik",
+        "isCorrect": false,
+        "rationale": "Data numerik menyatakan besaran bilangan matematis."
+      },
+      {
+        "text": "Kualitatif",
+        "isCorrect": true,
+        "rationale": "Data kualitatif menyatakan kualitas atau sifat dalam bentuk kategori atau deskripsi, seperti jenis penggunaan lahan atau status kepemilikan, bukan dalam ukuran numerik."
+      },
+      {
+        "text": "Interval",
+        "isCorrect": false,
+        "rationale": "Interval adalah salah satu skala pengukuran dalam data kuantitatif."
+      }
+    ]
+  },
+  {
+    "questionNumber": 65,
+    "question": "Data yang memiliki referensi geografis atau lokasi tertentu di permukaan bumi dan dapat direpresentasikan dalam peta disebut...",
+    "answerOptions": [
+      {
+        "text": "Data atribut",
+        "isCorrect": false,
+        "rationale": "Data atribut adalah keterangan deskriptif non-keruangan yang melekat pada objek."
+      },
+      {
+        "text": "Data spasial",
+        "isCorrect": true,
+        "rationale": "Data spasial memiliki komponen lokasi geografis yang memungkinkan objek diposisikan di permukaan bumi dan direpresentasikan secara visual dalam peta."
+      },
+      {
+        "text": "Data tabular",
+        "isCorrect": false,
+        "rationale": "Data tabular adalah data yang disusun dalam bentuk baris dan kolom tabel."
+      },
+      {
+        "text": "Data temporal",
+        "isCorrect": false,
+        "rationale": "Data temporal adalah data yang berkaitan dengan dimensi waktu."
+      }
+    ]
+  },
+  {
+    "questionNumber": 66,
+    "question": "Karakteristik deskriptif yang menerangkan properti suatu objek spasial, seperti nama, luas, atau jenis penggunaan, termasuk dalam kategori...",
+    "answerOptions": [
+      {
+        "text": "Data vektor",
+        "isCorrect": false,
+        "rationale": "Data vektor merepresentasikan bentuk geometri titik, garis, atau poligon."
+      },
+      {
+        "text": "Data raster",
+        "isCorrect": false,
+        "rationale": "Data raster merepresentasikan objek keruangan menggunakan susunan sel piksel."
+      },
+      {
+        "text": "Data atribut",
+        "isCorrect": true,
+        "rationale": "Data atribut adalah data deskriptif yang melekat pada objek spasial untuk menjelaskan karakteristiknya, dan disimpan dalam tabel yang terhubung dengan data keruangannya."
+      },
+      {
+        "text": "Data spasial",
+        "isCorrect": false,
+        "rationale": "Data spasial berfokus pada posisi koordinat dan bentuk geometri objek di permukaan bumi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 67,
+    "question": "Berikut ini yang tidak termasuk dalam kategori data kuantitatif adalah...",
+    "answerOptions": [
+      {
+        "text": "Klasifikasi tata guna lahan",
+        "isCorrect": true,
+        "rationale": "Klasifikasi tata guna lahan merupakan data kualitatif karena menyatakan kategori atau jenis, bukan angka yang dapat diukur atau dihitung secara matematis."
+      },
+      {
+        "text": "Kepadatan penduduk per kilometer persegi",
+        "isCorrect": false,
+        "rationale": "Kepadatan penduduk dinyatakan dalam satuan angka (jiwa/km²) sehingga merupakan data kuantitatif."
+      },
+      {
+        "text": "Tingkat pendapatan per kapita",
+        "isCorrect": false,
+        "rationale": "Pendapatan per kapita dinyatakan dalam nilai nominal angka sehingga tergolong data kuantitatif."
+      },
+      {
+        "text": "Jumlah penduduk suatu kelurahan",
+        "isCorrect": false,
+        "rationale": "Jumlah penduduk merupakan hasil pencacahan angka sehingga merupakan data kuantitatif."
+      }
+    ]
+  },
+  {
+    "questionNumber": 68,
+    "question": "Informasi yang menjelaskan bahwa suatu poligon di peta merupakan kawasan hutan lindung termasuk dalam kategori...",
+    "answerOptions": [
+      {
+        "text": "Data numerik",
+        "isCorrect": false,
+        "rationale": "Keterangan 'kawasan hutan lindung' berbentuk kategori teks, bukan angka numerik."
+      },
+      {
+        "text": "Data vektor",
+        "isCorrect": false,
+        "rationale": "Poligonnya adalah bentuk geometri vektor, sedangkan keterangan 'kawasan hutan lindung' merupakan atributnya."
+      },
+      {
+        "text": "Data atribut",
+        "isCorrect": true,
+        "rationale": "Informasi deskriptif yang menerangkan karakteristik objek spasial, seperti jenis penggunaan lahan atau nama kawasan, termasuk dalam data atribut. Data ini melekat pada objek spasial dan menjelaskan apa, bukan di mana."
+      },
+      {
+        "text": "Data raster",
+        "isCorrect": false,
+        "rationale": "Data raster menggunakan struktur sel grid, bukan keterangan tekstual pada poligon."
+      }
+    ]
+  },
+  {
+    "questionNumber": 69,
+    "question": "Berikut ini yang tidak termasuk dalam kelompok data kualitatif adalah...",
+    "answerOptions": [
+      {
+        "text": "Tingkat pendidikan penduduk",
+        "isCorrect": false,
+        "rationale": "Tingkat pendidikan (SD, SMP, SMA, Sarjana) merupakan kategori ordinal yang termasuk data kualitatif."
+      },
+      {
+        "text": "Tingkat pendapatan per kapita",
+        "isCorrect": true,
+        "rationale": "Tingkat pendapatan per kapita dinyatakan dalam angka sehingga tergolong data kuantitatif. Tiga opsi lainnya merupakan data kualitatif karena menggambarkan kategori atau atribut non-angka."
+      },
+      {
+        "text": "Status kepemilikan rumah",
+        "isCorrect": false,
+        "rationale": "Status kepemilikan (milik sendiri, sewa, kontrak) merupakan data kualitatif nominal."
+      },
+      {
+        "text": "Jenis pekerjaan kepala keluarga",
+        "isCorrect": false,
+        "rationale": "Jenis pekerjaan adalah kategori deskriptif yang termasuk data kualitatif."
+      }
+    ]
+  },
+  {
+    "questionNumber": 70,
+    "question": "Perhitungan matematis untuk memperkirakan jumlah penduduk masa depan berdasarkan tren historis dan asumsi tertentu dikenal sebagai...",
+    "answerOptions": [
+      {
+        "text": "Sensus penduduk",
+        "isCorrect": false,
+        "rationale": "Sensus penduduk adalah penghitungan seluruh penduduk pada saat pelaksanaan sensus."
+      },
+      {
+        "text": "Registrasi penduduk",
+        "isCorrect": false,
+        "rationale": "Registrasi penduduk adalah pencatatan administrasi kejadian demografi yang sudah terjadi."
+      },
+      {
+        "text": "Proyeksi penduduk",
+        "isCorrect": true,
+        "rationale": "Proyeksi penduduk adalah estimasi jumlah penduduk masa depan menggunakan data historis dan asumsi. Sensus, registrasi, dan survei merupakan metode pengumpulan data aktual, bukan peramalan."
+      },
+      {
+        "text": "Survei penduduk",
+        "isCorrect": false,
+        "rationale": "Survei penduduk adalah pengumpulan data sampel penduduk pada kondisi berjalan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 71,
+    "question": "Metode proyeksi penduduk yang memperhitungkan perubahan tiap kelompok umur akibat kelahiran, kematian, dan migrasi disebut...",
+    "answerOptions": [
+      {
+        "text": "Model pertumbuhan linier",
+        "isCorrect": false,
+        "rationale": "Model linier hanya menghitung pertambahan jumlah total penduduk secara tetap per tahun tanpa rincian kelompok umur."
+      },
+      {
+        "text": "Model pertumbuhan eksponensial",
+        "isCorrect": false,
+        "rationale": "Model eksponensial menggunakan laju pertumbuhan agregat yang konstan tanpa memisahkan kelahiran, kematian, dan migrasi."
+      },
+      {
+        "text": "Model komponen kohor",
+        "isCorrect": true,
+        "rationale": "Model komponen kohor memperhitungkan dinamika penduduk berdasarkan tiga komponen demografi yaitu kelahiran, kematian, dan migrasi untuk setiap kelompok umur, sehingga menghasilkan proyeksi yang lebih rinci dibanding model matematis sederhana."
+      },
+      {
+        "text": "Model regresi berganda",
+        "isCorrect": false,
+        "rationale": "Model regresi berganda memprediksi variabel terikat berdasarkan beberapa variabel bebas secara statistik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 72,
+    "question": "Perbandingan antara penduduk usia tidak produktif dengan penduduk usia produktif yang menunjukkan beban ekonomi suatu wilayah disebut...",
+    "answerOptions": [
+      {
+        "text": "Rasio beban ketergantungan",
+        "isCorrect": true,
+        "rationale": "Rasio beban ketergantungan membandingkan penduduk usia non-produktif terhadap usia produktif, menjadi indikator seberapa besar beban ekonomi yang ditanggung penduduk produktif."
+      },
+      {
+        "text": "Tingkat partisipasi angkatan kerja",
+        "isCorrect": false,
+        "rationale": "TPAK adalah persentase jumlah angkatan kerja terhadap seluruh penduduk usia kerja."
+      },
+      {
+        "text": "Angka ketergantungan",
+        "isCorrect": false,
+        "rationale": "Istilah baku yang digunakan dalam analisis demografi perencanaan untuk rasio tersebut adalah rasio beban ketergantungan (dependency ratio)."
+      },
+      {
+        "text": "Indeks pembangunan manusia",
+        "isCorrect": false,
+        "rationale": "IPM mengukur capaian pembangunan manusia berdasarkan dimensi kesehatan, pendidikan, dan standar hidup layak."
+      }
+    ]
+  },
+  {
+    "questionNumber": 73,
+    "question": "Model pertumbuhan penduduk dengan laju konstan yang menghasilkan peningkatan jumlah secara geometrik disebut model pertumbuhan...",
+    "answerOptions": [
+      {
+        "text": "Aritmetika",
+        "isCorrect": false,
+        "rationale": "Model aritmetika mengasumsikan pertambahan jumlah absolut penduduk yang konstan setiap tahunnya."
+      },
+      {
+        "text": "Linier",
+        "isCorrect": false,
+        "rationale": "Model linier menghasilkan grafik garis lurus dengan pertambahan absolut yang tetap."
+      },
+      {
+        "text": "Logistik",
+        "isCorrect": false,
+        "rationale": "Model logistik menghasilkan kurva S karena mempertimbangkan batas daya dukung maksimum wilayah."
+      },
+      {
+        "text": "Eksponensial",
+        "isCorrect": true,
+        "rationale": "Pertumbuhan eksponensial menerapkan laju pertumbuhan konstan terhadap basis jumlah penduduk yang terus bertambah, sehingga menghasilkan pola geometrik. Pertumbuhan linier menambah jumlah tetap, bukan laju tetap."
+      }
+    ]
+  },
+  {
+    "questionNumber": 74,
+    "question": "Seorang perencana menggunakan data sensus untuk mengelompokkan penduduk ke dalam interval umur lima tahunan (0-4, 5-9, dst.) sebelum memproyeksikan jumlah penduduk di masa depan. Metode yang digunakan adalah...",
+    "answerOptions": [
+      {
+        "text": "Proyeksi aritmatika",
+        "isCorrect": false,
+        "rationale": "Proyeksi aritmatika menghitung pertumbuhan penduduk total secara linier tanpa pengelompokan interval umur."
+      },
+      {
+        "text": "Analisis kohor",
+        "isCorrect": true,
+        "rationale": "Pengelompokan penduduk berdasarkan interval umur tertentu untuk kemudian memproyeksikan perubahan pada setiap kelompok akibat kelahiran, kematian, dan migrasi merupakan inti dari metode analisis kohor. Metode ini memperhitungkan dinamika spesifik setiap kelompok umur, berbeda dengan proyeksi aritmatika yang mengasumsikan pertumbuhan linier, rasio ketergantungan yang membandingkan penduduk tidak produktif dengan produktif, atau ekstrapolasi tren yang hanya melanjutkan pola historis."
+      },
+      {
+        "text": "Rasio ketergantungan",
+        "isCorrect": false,
+        "rationale": "Rasio ketergantungan hanya menghitung perbandingan jumlah penduduk non-produktif dengan usia produktif."
+      },
+      {
+        "text": "Ekstrapolasi tren",
+        "isCorrect": false,
+        "rationale": "Ekstrapolasi tren hanya memperpanjang kurva pertumbuhan historis secara agregat."
+      }
+    ]
+  },
+  {
+    "questionNumber": 75,
+    "question": "Indikator yang menunjukkan jumlah nilai tambah bruto seluruh sektor ekonomi dalam suatu wilayah pada periode tertentu adalah...",
+    "answerOptions": [
+      {
+        "text": "Pendapatan per kapita",
+        "isCorrect": false,
+        "rationale": "Pendapatan per kapita adalah hasil pembagian total pendapatan regional dengan jumlah penduduk."
+      },
+      {
+        "text": "Tingkat inflasi regional",
+        "isCorrect": false,
+        "rationale": "Inflasi mengukur laju kenaikan harga barang dan jasa secara umum."
+      },
+      {
+        "text": "Indeks Gini",
+        "isCorrect": false,
+        "rationale": "Indeks Gini mengukur tingkat ketimpangan distribusi pendapatan penduduk."
+      },
+      {
+        "text": "Produk Domestik Regional Bruto",
+        "isCorrect": true,
+        "rationale": "Produk Domestik Regional Bruto mengukur total nilai tambah bruto seluruh aktivitas ekonomi di suatu wilayah pada periode tertentu, menjadi indikator utama kinerja ekonomi regional."
+      }
+    ]
+  },
+  {
+    "questionNumber": 76,
+    "question": "Teknik untuk mengidentifikasi sektor basis dan non-basis dalam perekonomian wilayah berdasarkan konsentrasi aktivitas dibandingkan wilayah acuan disebut...",
+    "answerOptions": [
+      {
+        "text": "Analisis Shift Share",
+        "isCorrect": false,
+        "rationale": "Shift Share menganalisis komponen perubahan dan pertumbuhan sektor ekonomi wilayah dari waktu ke waktu."
+      },
+      {
+        "text": "Analisis Input-Output",
+        "isCorrect": false,
+        "rationale": "Analisis Input-Output memetakan keterkaitan transaksi antar sektor ekonomi dalam suatu wilayah."
+      },
+      {
+        "text": "Analisis Location Quotient",
+        "isCorrect": true,
+        "rationale": "Analisis Location Quotient membandingkan konsentrasi suatu sektor di wilayah kajian terhadap wilayah acuan untuk menentukan apakah sektor tersebut bersifat basis atau non-basis."
+      },
+      {
+        "text": "Analisis Multiplier",
+        "isCorrect": false,
+        "rationale": "Analisis Multiplier mengukur efek pengganda dari peningkatan aktivitas sektor basis terhadap perekonomian lokal."
+      }
+    ]
+  },
+  {
+    "questionNumber": 77,
+    "question": "Seorang perencana menemukan bahwa pertumbuhan ekonomi Kabupaten X melampaui pertumbuhan nasional karena sektor pariwisatanya berkembang pesat, sementara sektor pertaniannya tumbuh lambat. Metode dekomposisi yang paling tepat untuk menganalisis fenomena ini adalah...",
+    "answerOptions": [
+      {
+        "text": "Analisis Location Quotient",
+        "isCorrect": false,
+        "rationale": "Location Quotient hanya mengidentifikasi keunggulan komparatif statis pada satu titik waktu, bukan mendekomposisi laju pertumbuhan."
+      },
+      {
+        "text": "Analisis Shift Share",
+        "isCorrect": true,
+        "rationale": "Analisis Shift Share mendekomposisi pertumbuhan wilayah menjadi tiga komponen yaitu pertumbuhan nasional, bauran industri, dan keunggulan kompetitif, tepat untuk mengurai mengapa sektor tertentu tumbuh lebih cepat atau lambat."
+      },
+      {
+        "text": "Analisis Multiplier",
+        "isCorrect": false,
+        "rationale": "Analisis Multiplier menghitung dampak berantai investasi terhadap output dan tenaga kerja."
+      },
+      {
+        "text": "Analisis Input-Output",
+        "isCorrect": false,
+        "rationale": "Analisis Input-Output mengkaji aliran barang dan jasa antar sektor produksi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 78,
+    "question": "Angka yang menunjukkan dampak berantai suatu investasi terhadap peningkatan total output dan lapangan kerja di wilayah disebut...",
+    "answerOptions": [
+      {
+        "text": "Koefisien Gini",
+        "isCorrect": false,
+        "rationale": "Koefisien Gini adalah ukuran ketimpangan distribusi pendapatan."
+      },
+      {
+        "text": "Elastisitas pendapatan",
+        "isCorrect": false,
+        "rationale": "Elastisitas pendapatan mengukur kepekaan perubahan permintaan barang terhadap perubahan pendapatan."
+      },
+      {
+        "text": "Location Quotient",
+        "isCorrect": false,
+        "rationale": "Location Quotient mengukur tingkat konsentrasi spesialisasi suatu sektor ekonomi wilayah."
+      },
+      {
+        "text": "Multiplier ekonomi",
+        "isCorrect": true,
+        "rationale": "Multiplier ekonomi mengukur efek pengganda dari suatu aktivitas ekonomi terhadap perekonomian wilayah secara keseluruhan, mencakup dampak langsung, tidak langsung, dan ikutan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 79,
+    "question": "Perbedaan utama antara sektor basis dan sektor non-basis dalam analisis ekonomi wilayah terletak pada...",
+    "answerOptions": [
+      {
+        "text": "Jumlah tenaga kerja yang diserap",
+        "isCorrect": false,
+        "rationale": "Sektor non-basis juga bisa menyerap banyak tenaga kerja lokal, sehingga jumlah pekerja bukan pembeda utamanya."
+      },
+      {
+        "text": "Orientasi pasar yang dilayani",
+        "isCorrect": true,
+        "rationale": "Sektor basis melayani pasar di luar wilayah dan menghasilkan pendapatan dari luar, sementara sektor non-basis melayani kebutuhan internal wilayah. Perbedaan mendasarnya adalah orientasi pasar, bukan skala atau teknologinya."
+      },
+      {
+        "text": "Besaran modal yang diinvestasikan",
+        "isCorrect": false,
+        "rationale": "Besaran modal tidak menentukan apakah suatu sektor menjadi penggerak ekspor wilayah atau sekadar konsumsi lokal."
+      },
+      {
+        "text": "Tingkat teknologi yang digunakan",
+        "isCorrect": false,
+        "rationale": "Sektor tradisional seperti pertanian maupun kerajinan dapat menjadi sektor basis apabila diekspor ke luar wilayah."
+      }
+    ]
+  },
+  {
+    "questionNumber": 80,
+    "question": "Metode transformasi matematis permukaan lengkung bumi ke bidang datar yang selalu mengandung distorsi geometri disebut...",
+    "answerOptions": [
+      {
+        "text": "Skala peta",
+        "isCorrect": false,
+        "rationale": "Skala peta adalah angka perbandingan jarak pada peta dengan jarak sebenarnya di lapangan."
+      },
+      {
+        "text": "Georeferencing",
+        "isCorrect": false,
+        "rationale": "Georeferencing adalah proses pemberian sistem koordinat geografis pada citra atau peta."
+      },
+      {
+        "text": "Legenda peta",
+        "isCorrect": false,
+        "rationale": "Legenda peta adalah keterangan simbol yang digunakan pada peta."
+      },
+      {
+        "text": "Proyeksi peta",
+        "isCorrect": true,
+        "rationale": "Proyeksi peta adalah teknik transformasi koordinat dari permukaan lengkung ke bidang datar yang selalu menghasilkan distorsi, baik pada jarak, luas, bentuk, maupun arah."
+      }
+    ]
+  },
+  {
+    "questionNumber": 81,
+    "question": "Kunci penjelasan simbol, warna, dan pola yang digunakan dalam peta untuk menerjemahkan makna representasi visual disebut...",
+    "answerOptions": [
+      {
+        "text": "Legenda peta",
+        "isCorrect": true,
+        "rationale": "Legenda peta berfungsi menerjemahkan simbol-simbol visual pada peta agar pembaca dapat memahami makna setiap representasi grafis yang disajikan."
+      },
+      {
+        "text": "Proyeksi peta",
+        "isCorrect": false,
+        "rationale": "Proyeksi peta adalah sistem matematis pemindahan koordinat bumi lengkung ke bidang datar."
+      },
+      {
+        "text": "Skala peta",
+        "isCorrect": false,
+        "rationale": "Skala peta menunjukkan rasio pengecilan ukuran objek pada peta dibanding ukuran sebenarnya."
+      },
+      {
+        "text": "Inset peta",
+        "isCorrect": false,
+        "rationale": "Inset peta adalah peta kecil tambahan untuk menunjukkan lokasi wilayah yang dipetakan terhadap wilayah yang lebih luas."
+      }
+    ]
+  },
+  {
+    "questionNumber": 82,
+    "question": "Seorang perencana menyajikan data kepadatan penduduk antar kecamatan dalam bentuk peta dengan ukuran wilayah yang diubah proporsional terhadap nilai datanya. Teknik penyajian ini disebut...",
+    "answerOptions": [
+      {
+        "text": "Peta tematik",
+        "isCorrect": false,
+        "rationale": "Peta tematik biasa tetap mempertahankan bentuk dan luas asli wilayah geografis."
+      },
+      {
+        "text": "Peta umum",
+        "isCorrect": false,
+        "rationale": "Peta umum menampilkan kenampakan permukaan bumi secara menyeluruh dengan geometri akurat."
+      },
+      {
+        "text": "Kartogram",
+        "isCorrect": true,
+        "rationale": "Kartogram mendistorsi ukuran wilayah secara proporsional terhadap nilai data, bukan berdasarkan luas sebenarnya, sehingga perbandingan antar wilayah dapat langsung terlihat secara visual."
+      },
+      {
+        "text": "Model tiga dimensi",
+        "isCorrect": false,
+        "rationale": "Model tiga dimensi menambahkan unsur ketinggian (sumbu Z) pada visualisasi permukaan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 83,
+    "question": "Representasi grafis permukaan bumi pada bidang datar dengan skala tertentu yang menyajikan informasi keruangan terpilih merupakan pengertian dari...",
+    "answerOptions": [
+      {
+        "text": "Globe",
+        "isCorrect": false,
+        "rationale": "Globe adalah model tiruan bola bumi dalam bentuk tiga dimensi (bidang lengkung)."
+      },
+      {
+        "text": "Peta",
+        "isCorrect": true,
+        "rationale": "Peta adalah representasi dua dimensi permukaan bumi pada bidang datar dengan skala tertentu yang menyajikan informasi spasial terpilih sesuai tujuan pembuatannya."
+      },
+      {
+        "text": "Atlas",
+        "isCorrect": false,
+        "rationale": "Atlas adalah kumpulan beberapa peta yang dibukukan atau disusun secara sistematis."
+      },
+      {
+        "text": "Diagram",
+        "isCorrect": false,
+        "rationale": "Diagram adalah grafik statistik non-geografis untuk menggambarkan hubungan antarvariabel."
+      }
+    ]
+  },
+  {
+    "questionNumber": 84,
+    "question": "Penyajian data keruangan yang menampilkan dimensi ketinggian untuk memberikan visualisasi relief permukaan bumi secara lebih realistis merupakan pengertian dari...",
+    "answerOptions": [
+      {
+        "text": "Proyeksi peta",
+        "isCorrect": false,
+        "rationale": "Proyeksi peta mengubah bidang lengkung menjadi bidang datar dua dimensi."
+      },
+      {
+        "text": "Peta tematik",
+        "isCorrect": false,
+        "rationale": "Peta tematik menyajikan tema tertentu secara dua dimensi pada bidang datar."
+      },
+      {
+        "text": "Kartogram",
+        "isCorrect": false,
+        "rationale": "Kartogram mengubah luas poligon wilayah sesuai besaran data statistik."
+      },
+      {
+        "text": "Model tiga dimensi",
+        "isCorrect": true,
+        "rationale": "Model tiga dimensi menyajikan data keruangan dengan menambahkan dimensi ketinggian, sehingga relief permukaan bumi dapat divisualisasikan secara lebih nyata dibanding peta dua dimensi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 85,
+    "question": "Peta yang menyajikan kenampakan alam dan buatan seperti rupa bumi, jalan, dan batas administrasi secara umum diklasifikasikan sebagai...",
+    "answerOptions": [
+      {
+        "text": "Peta tematik",
+        "isCorrect": false,
+        "rationale": "Peta tematik hanya menonjolkan satu tema khusus (misalnya peta jenis tanah atau peta rawan bencana)."
+      },
+      {
+        "text": "Kartogram",
+        "isCorrect": false,
+        "rationale": "Kartogram mendistorsi geometri wilayah berdasarkan nilai statistik tertentu."
+      },
+      {
+        "text": "Peta umum",
+        "isCorrect": true,
+        "rationale": "Peta umum menampilkan kenampakan alam dan buatan secara luas tanpa berfokus pada tema spesifik tertentu, berbeda dengan peta tematik yang menyoroti satu topik khusus."
+      },
+      {
+        "text": "Peta topografi",
+        "isCorrect": false,
+        "rationale": "Peta topografi merupakan salah satu bagian atau subjenis dari klasifikasi besar peta umum."
+      }
+    ]
+  },
+  {
+    "questionNumber": 86,
+    "question": "Perbedaan utama antara peta umum dan peta tematik dalam klasifikasi penyajian informasi keruangan terletak pada...",
+    "answerOptions": [
+      {
+        "text": "Ada tidaknya legenda peta",
+        "isCorrect": false,
+        "rationale": "Baik peta umum maupun peta tematik wajib dilengkapi legenda peta."
+      },
+      {
+        "text": "Jenis proyeksi yang digunakan",
+        "isCorrect": false,
+        "rationale": "Keduanya dapat menggunakan sistem proyeksi peta yang sama."
+      },
+      {
+        "text": "Fokus dan spesifikasi topik yang disajikan",
+        "isCorrect": true,
+        "rationale": "Peta umum menyajikan beragam kenampakan secara umum, sedangkan peta tematik berfokus pada satu tema spesifik seperti kepadatan penduduk atau curah hujan. Perbedaan mendasarnya terletak pada fokus dan spesifikasi topik."
+      },
+      {
+        "text": "Skala peta yang diterapkan",
+        "isCorrect": false,
+        "rationale": "Baik peta umum maupun peta tematik dapat dibuat dalam berbagai ukuran skala."
+      }
+    ]
+  },
+  {
+    "questionNumber": 87,
+    "question": "Ketika data penggunaan lahan direpresentasikan menggunakan struktur poligon yang setiap poligonnya menyimpan satu nilai klasifikasi tutupan lahan dengan batas yang tegas, representasi data spasial tersebut menggunakan format...",
+    "answerOptions": [
+      {
+        "text": "Raster dengan resolusi sel",
+        "isCorrect": false,
+        "rationale": "Format raster menggunakan susunan sel grid persegi, bukan struktur poligon."
+      },
+      {
+        "text": "Vektor dengan tipe area",
+        "isCorrect": true,
+        "rationale": "Representasi data penggunaan lahan yang menggunakan poligon dengan batas tegas dan menyimpan satu nilai klasifikasi per poligon merupakan karakteristik format data vektor tipe area. Berbeda dengan format raster yang menggunakan grid sel, struktur ini mendefinisikan objek spasial secara eksplisit melalui koordinat batas dan cocok untuk data tematik dengan batas jelas seperti klasifikasi tutupan lahan."
+      },
+      {
+        "text": "Grafis dengan atribut raster",
+        "isCorrect": false,
+        "rationale": "Istilah ini tidak merujuk pada struktur data poligon dalam Sistem Informasi Geografis."
+      },
+      {
+        "text": "Tabular dengan indeks spasial",
+        "isCorrect": false,
+        "rationale": "Format tabular hanya menyimpan data teks/angka dalam tabel tanpa geometri poligon."
+      }
+    ]
+  },
+  {
+    "questionNumber": 88,
+    "question": "Penyajian tema spesifik seperti sebaran curah hujan atau kepadatan penduduk dalam bentuk peta termasuk dalam klasifikasi...",
+    "answerOptions": [
+      {
+        "text": "Peta umum",
+        "isCorrect": false,
+        "rationale": "Peta umum menggambarkan kenampakan permukaan bumi secara menyeluruh tanpa tema khusus."
+      },
+      {
+        "text": "Kartogram",
+        "isCorrect": false,
+        "rationale": "Kartogram mengubah luas bentuk wilayah secara proporsional terhadap nilai data statistik."
+      },
+      {
+        "text": "Peta tematik",
+        "isCorrect": true,
+        "rationale": "Peta tematik dirancang khusus untuk menyajikan satu tema atau topik tertentu, seperti curah hujan, kepadatan penduduk, atau penggunaan lahan, sehingga informasi yang disampaikan lebih terfokus."
+      },
+      {
+        "text": "Model tiga dimensi",
+        "isCorrect": false,
+        "rationale": "Model tiga dimensi berfokus pada visualisasi relief ketinggian permukaan bumi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 89,
+    "question": "Berikut ini yang bukan termasuk klasifikasi penyajian informasi keruangan adalah...",
+    "answerOptions": [
+      {
+        "text": "Peta umum",
+        "isCorrect": false,
+        "rationale": "Peta umum merupakan salah satu bentuk penyajian informasi keruangan secara menyeluruh."
+      },
+      {
+        "text": "Metadata",
+        "isCorrect": true,
+        "rationale": "Metadata adalah informasi terstruktur yang menjelaskan karakteristik, kualitas, dan asal-usul suatu dataset, bukan merupakan bentuk visual penyajian informasi keruangan."
+      },
+      {
+        "text": "Model tiga dimensi",
+        "isCorrect": false,
+        "rationale": "Model tiga dimensi adalah bentuk penyajian informasi keruangan yang menampilkan relief ketinggian."
+      },
+      {
+        "text": "Kartogram",
+        "isCorrect": false,
+        "rationale": "Kartogram merupakan bentuk penyajian informasi keruangan yang menonjolkan nilai tematik melalui ukuran wilayah."
+      }
+    ]
+  },
+  {
+    "questionNumber": 90,
+    "question": "Sistem berbasis komputer yang digunakan untuk menangkap, menyimpan, menganalisis, dan menyajikan data yang bereferensi geografis merupakan pengertian dari...",
+    "answerOptions": [
+      {
+        "text": "Sistem Informasi Perencanaan",
+        "isCorrect": false,
+        "rationale": "Sistem Informasi Perencanaan adalah sistem menyeluruh untuk mendukung proses perencanaan yang mencakup SIG dan subsistem non-spasial lainnya."
+      },
+      {
+        "text": "Sistem Manajemen Basis Data",
+        "isCorrect": false,
+        "rationale": "DBMS mengelola basis data secara umum tanpa harus memiliki kemampuan analisis spasial."
+      },
+      {
+        "text": "Sistem Informasi Geografis",
+        "isCorrect": true,
+        "rationale": "Sistem Informasi Geografis (SIG) adalah sistem terkomputerisasi yang secara khusus menangani data dengan referensi geografis, mencakup fungsi penangkapan, penyimpanan, analisis, dan penyajian."
+      },
+      {
+        "text": "Sistem Informasi Manajemen",
+        "isCorrect": false,
+        "rationale": "Sistem Informasi Manajemen berfokus pada pelaporan manajerial organisasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 91,
+    "question": "Proses pemberian koordinat nyata pada data spasial sehingga memiliki referensi lokasi yang benar di permukaan bumi disebut...",
+    "answerOptions": [
+      {
+        "text": "Georeferencing",
+        "isCorrect": true,
+        "rationale": "Georeferencing adalah proses menempatkan data spasial pada sistem koordinat dunia nyata agar posisinya sesuai dengan lokasi sebenarnya di permukaan bumi."
+      },
+      {
+        "text": "Normalisasi data",
+        "isCorrect": false,
+        "rationale": "Normalisasi data adalah proses pengorganisasian tabel dalam basis data relasional."
+      },
+      {
+        "text": "Interpolasi spasial",
+        "isCorrect": false,
+        "rationale": "Interpolasi spasial adalah estimasi nilai pada titik tak tersampel berdasarkan titik sampel di sekitarnya."
+      },
+      {
+        "text": "Overlay peta",
+        "isCorrect": false,
+        "rationale": "Overlay peta adalah teknik tumpang susun beberapa lapisan peta tematik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 92,
+    "question": "Kesalahan yang mungkin timbul ketika merepresentasikan entitas garis atau area menggunakan struktur sel grid pada resolusi tertentu, yang mengakibatkan tepian objek tampak bergerigi, merupakan pengertian dari...",
+    "answerOptions": [
+      {
+        "text": "Kesalahan topologi",
+        "isCorrect": false,
+        "rationale": "Kesalahan topologi terjadi pada data vektor seperti poligon tumpang tindih atau garis tidak tersambung."
+      },
+      {
+        "text": "Kesalahan proyeksi",
+        "isCorrect": false,
+        "rationale": "Kesalahan proyeksi adalah distorsi jarak, luas, atau bentuk akibat transformasi permukaan lengkung ke bidang datar."
+      },
+      {
+        "text": "Efek tangga",
+        "isCorrect": true,
+        "rationale": "Representasi data keruangan menggunakan struktur sel grid, atau format raster, memiliki keterbatasan resolusi yang ditentukan oleh ukuran sel. Ketika entitas spasial seperti garis atau area direpresentasikan dengan sel-sel persegi, tepian yang seharusnya halus akan tampak seperti undakan tangga. Fenomena ini dikenal sebagai efek tangga, yang merupakan distorsi geometri khas pada format raster."
+      },
+      {
+        "text": "Presisi koordinat",
+        "isCorrect": false,
+        "rationale": "Presisi koordinat merujuk pada tingkat ketelitian angka posisi titik pada data vektor."
+      }
+    ]
+  },
+  {
+    "questionNumber": 93,
+    "question": "Perbedaan paling mendasar antara data vektor dan data raster dalam Sistem Informasi Geografis terletak pada...",
+    "answerOptions": [
+      {
+        "text": "Jenis perangkat lunak yang digunakan",
+        "isCorrect": false,
+        "rationale": "Perangkat lunak SIG modern mampu mengolah data vektor dan raster secara bersamaan."
+      },
+      {
+        "text": "Jumlah data yang dapat disimpan",
+        "isCorrect": false,
+        "rationale": "Kapasitas penyimpanan bergantung pada perangkat keras penyimpanan, bukan perbedaan mendasar struktur datanya."
+      },
+      {
+        "text": "Warna yang dihasilkan pada peta",
+        "isCorrect": false,
+        "rationale": "Pewarnaan peta ditentukan oleh simbologi kartografis pengguna."
+      },
+      {
+        "text": "Cara merepresentasikan objek spasial",
+        "isCorrect": true,
+        "rationale": "Data vektor merepresentasikan objek melalui koordinat yang membentuk titik, garis, atau poligon, sedangkan data raster menggunakan grid sel atau piksel. Cara representasi ini merupakan perbedaan paling fundamental antara keduanya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 94,
+    "question": "Salah satu keunggulan format data raster dibandingkan data vektor dalam penyajian informasi keruangan adalah...",
+    "answerOptions": [
+      {
+        "text": "Kemampuannya merepresentasikan fenomena spasial yang bersifat kontinu dan gradasi secara lebih natural",
+        "isCorrect": true,
+        "rationale": "Data raster merepresentasikan ruang sebagai matriks sel atau piksel yang berkesinambungan, sehingga sangat sesuai untuk memodelkan fenomena kontinu seperti suhu, ketinggian, atau curah hujan yang berubah secara gradual. Representasi presisi batas objek geometris, efisiensi ukuran file, dan kemudahan analisis topologi justru merupakan karakteristik atau keunggulan yang melekat pada format data vektor."
+      },
+      {
+        "text": "Struktur datanya yang lebih presisi dalam mendefinisikan batas-batas objek geometris",
+        "isCorrect": false,
+        "rationale": "Presisi batas objek geometris merupakan keunggulan utama format data vektor."
+      },
+      {
+        "text": "Ukuran file penyimpanannya yang selalu lebih kecil untuk area dan resolusi yang identik",
+        "isCorrect": false,
+        "rationale": "File raster beresolusi tinggi umumnya memiliki ukuran jauh lebih besar dibanding data vektor untuk area yang sama."
+      },
+      {
+        "text": "Kemudahannya dalam melakukan analisis topologi dan pemodelan jaringan secara eksplisit",
+        "isCorrect": false,
+        "rationale": "Analisis topologi dan jaringan secara eksplisit merupakan keunggulan struktur data vektor."
+      }
+    ]
+  },
+  {
+    "questionNumber": 95,
+    "question": "Teknik tumpang susun beberapa lapisan peta tematik untuk menghasilkan peta baru yang menunjukkan kombinasi kriteria tertentu dalam Sistem Informasi Geografis disebut...",
+    "answerOptions": [
+      {
+        "text": "Analisis buffer",
+        "isCorrect": false,
+        "rationale": "Analisis buffer membuat zona penyangga dengan radius jarak tertentu di sekitar objek."
+      },
+      {
+        "text": "Interpolasi spasial",
+        "isCorrect": false,
+        "rationale": "Interpolasi spasial memperkirakan nilai permukaan kontinu dari sekumpulan titik sampel."
+      },
+      {
+        "text": "Analisis jaringan",
+        "isCorrect": false,
+        "rationale": "Analisis jaringan menghitung rute atau jangkauan sepanjang ruas jalan/jaringan."
+      },
+      {
+        "text": "Overlay peta",
+        "isCorrect": true,
+        "rationale": "Overlay peta menggabungkan dua atau lebih lapisan peta tematik berdasarkan lokasi geografisnya, menghasilkan peta baru yang memuat kombinasi atribut dari seluruh lapisan yang ditumpangsusunkan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 96,
+    "question": "Seorang perencana ingin menentukan area yang berjarak 500 meter dari sempadan sungai untuk menetapkan zona perlindungan. Metode analisis spasial yang paling tepat digunakan adalah...",
+    "answerOptions": [
+      {
+        "text": "Analisis buffer",
+        "isCorrect": true,
+        "rationale": "Analisis buffer menciptakan zona penyangga dengan jarak tertentu di sekitar objek spasial. Dalam kasus ini, buffer 500 meter dari sempadan sungai akan menghasilkan area yang sesuai untuk zona perlindungan."
+      },
+      {
+        "text": "Overlay peta",
+        "isCorrect": false,
+        "rationale": "Overlay menggabungkan beberapa layer tematik yang sudah ada, bukan membuat zona jarak tertentu dari garis sungai."
+      },
+      {
+        "text": "Analisis jaringan",
+        "isCorrect": false,
+        "rationale": "Analisis jaringan bekerja pada jaringan transportasi/utilitas untuk menghitung rute terpendek."
+      },
+      {
+        "text": "Interpolasi spasial",
+        "isCorrect": false,
+        "rationale": "Interpolasi spasial memperkirakan nilai atribut pada lokasi yang tidak diukur."
+      }
+    ]
+  },
+  {
+    "questionNumber": 97,
+    "question": "Metode analisis yang berkaitan dengan penentuan rute terpendek dan area layanan sepanjang jaringan jalan dalam Sistem Informasi Geografis adalah...",
+    "answerOptions": [
+      {
+        "text": "Overlay peta",
+        "isCorrect": false,
+        "rationale": "Overlay peta menumpangsusunkan poligon/layer tematik untuk analisis kesesuaian kriteria."
+      },
+      {
+        "text": "Analisis jaringan",
+        "isCorrect": true,
+        "rationale": "Analisis jaringan berfokus pada pergerakan dan aliran sepanjang jaringan seperti jalan atau pipa, memungkinkan perhitungan rute terpendek, area layanan, dan optimalisasi alokasi sumber daya."
+      },
+      {
+        "text": "Analisis buffer",
+        "isCorrect": false,
+        "rationale": "Analisis buffer mengukur radius jarak lurus dari objek tanpa mengikuti jalur jalan."
+      },
+      {
+        "text": "Interpolasi spasial",
+        "isCorrect": false,
+        "rationale": "Interpolasi spasial mengestimasi nilai kontinu dari titik sampel."
+      }
+    ]
+  },
+  {
+    "questionNumber": 98,
+    "question": "Proses estimasi nilai pada lokasi yang tidak diketahui berdasarkan nilai-nilai yang diketahui dari titik-titik sampel di sekitarnya dalam analisis spasial disebut...",
+    "answerOptions": [
+      {
+        "text": "Interpolasi spasial",
+        "isCorrect": true,
+        "rationale": "Interpolasi spasial memperkirakan nilai di lokasi yang tidak tersampel menggunakan data dari titik-titik sampel terdekat, berguna untuk menghasilkan permukaan data kontinu dari data titik yang tersebar."
+      },
+      {
+        "text": "Analisis buffer",
+        "isCorrect": false,
+        "rationale": "Analisis buffer membentuk zona penyangga berjarak tetap di sekitar fitur geografis."
+      },
+      {
+        "text": "Analisis jaringan",
+        "isCorrect": false,
+        "rationale": "Analisis jaringan menganalisis rute dan konektivitas sepanjang ruas jaringan."
+      },
+      {
+        "text": "Overlay peta",
+        "isCorrect": false,
+        "rationale": "Overlay peta menggabungkan lapisan data spasial yang berbeda."
+      }
+    ]
+  },
+  {
+    "questionNumber": 99,
+    "question": "Berikut ini yang bukan termasuk model analisis spasial dalam Sistem Informasi Geografis adalah...",
+    "answerOptions": [
+      {
+        "text": "Overlay peta",
+        "isCorrect": false,
+        "rationale": "Overlay peta adalah model analisis spasial dasar untuk menggabungkan kriteria berbagai layer."
+      },
+      {
+        "text": "Normalisasi data",
+        "isCorrect": true,
+        "rationale": "Normalisasi data adalah proses pengorganisasian data dalam basis data relasional untuk mengurangi redudansi, bukan merupakan model analisis spasial dalam SIG. Overlay, buffer, dan interpolasi spasial merupakan contoh model analisis spasial."
+      },
+      {
+        "text": "Analisis buffer",
+        "isCorrect": false,
+        "rationale": "Analisis buffer merupakan model analisis spasial berbasis jarak kedekatan (proximity)."
+      },
+      {
+        "text": "Interpolasi spasial",
+        "isCorrect": false,
+        "rationale": "Interpolasi spasial merupakan model analisis spasial untuk menghasilkan permukaan kontinu."
+      }
+    ]
+  },
+  {
+    "questionNumber": 100,
+    "question": "Proses penyaringan dan pengubahan data mentah hasil survei lapangan menjadi format yang siap dianalisis dan disimpan dalam basis data sistem informasi perencanaan disebut...",
+    "answerOptions": [
+      {
+        "text": "Validasi data",
+        "isCorrect": false,
+        "rationale": "Validasi data berfokus pada pengecekan kebenaran dan keakuratan data."
+      },
+      {
+        "text": "Integrasi data",
+        "isCorrect": false,
+        "rationale": "Integrasi data adalah penggabungan data dari berbagai sumber yang berbeda."
+      },
+      {
+        "text": "Pengolahan data",
+        "isCorrect": true,
+        "rationale": "Pengolahan data adalah tahapan yang secara spesifik mengubah data mentah menjadi bentuk yang lebih terstruktur dan bermakna melalui proses seperti penyuntingan, pengkodean, dan tabulasi, sehingga data siap untuk dianalisis lebih lanjut. Validasi data berfokus pada pengecekan kebenaran, integrasi data pada penggabungan dari berbagai sumber, dan klasifikasi lapangan adalah istilah untuk pengelompokan tutupan lahan."
+      },
+      {
+        "text": "Klasifikasi lapangan",
+        "isCorrect": false,
+        "rationale": "Klasifikasi lapangan adalah istilah untuk pengelompokan kategori tutupan atau penggunaan lahan di lapangan."
+      }
+    ]
+  }
+];
+
+  let totalBenar = 0;
+  let totalSalah = 0;
+  let answeredQuestions = new Set();
+
+  function acakArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function initSetup() {
+    const totalSoal = soalList.length;
+    document.getElementById('total-tersedia').textContent = totalSoal;
+
+    const buttons = document.querySelectorAll('.btn-jumlah[data-jumlah]');
+    buttons.forEach(btn => {
+      const jumlah = parseInt(btn.getAttribute('data-jumlah'), 10);
+      if (jumlah > totalSoal) {
+        btn.disabled = true;
+      }
+    });
+
+    const btnSemua = document.getElementById('btn-semua');
+    if (totalSoal === 0) {
+      btnSemua.disabled = true;
+    } else {
+      btnSemua.textContent = `Semua Soal (${totalSoal})`;
+    }
+  }
+
+  function mulaiUjian(jumlah) {
+    const isAcak = document.getElementById('checkbox-acak').checked;
+
+    document.getElementById('setup-container').style.display = 'none';
+    document.getElementById('container').style.display = 'block';
+    document.getElementById('counter').style.display = 'block';
+
+    let daftarSoal = isAcak ? acakArray(soalList) : [...soalList];
+    const soalTerpilih = jumlah === 'all' ? daftarSoal : daftarSoal.slice(0, jumlah);
+
+    renderSoal(soalTerpilih, isAcak);
+  }
+
+  function updateCounter() {
+    document.getElementById("benar").textContent = totalBenar;
+    document.getElementById("salah").textContent = totalSalah;
+  }
+
+  function checkAnswer(button, questionId, isCorrect) {
+    if (answeredQuestions.has(questionId)) {
+      return;
+    }
+
+    const soalElement = button.closest('.soal');
+    const buttons = soalElement.querySelectorAll('.jawaban button');
+    
+    buttons.forEach(btn => btn.disabled = true);
+
+    if (isCorrect) {
+      button.classList.add('benar');
+      totalBenar++;
+    } else {
+      button.classList.add('salah');
+      totalSalah++;
+      
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-iscorrect') === 'true') {
+          btn.classList.add('benar');
+        }
+      });
+    }
+
+    const allRationales = soalElement.querySelectorAll('.penjelasan-opsi');
+    allRationales.forEach(rationaleDiv => {
+      rationaleDiv.style.display = 'block';
+    });
+
+    answeredQuestions.add(questionId);
+    updateCounter();
+  }
+
+  function renderSoal(daftarSoal, isAcak) {
+    const container = document.getElementById('container');
+    container.innerHTML = '';
+
+    daftarSoal.forEach((soal, idx) => {
+      const nomorUrut = idx + 1;
+      const soalDiv = document.createElement('div');
+      soalDiv.className = 'soal';
+      soalDiv.setAttribute('data-qnum', nomorUrut);
+      
+      let soalHTML = `<h3>Soal ${nomorUrut}.</h3>`;
+      soalHTML += `<p>${soal.question}</p>`;
+      soalHTML += `<div class="jawaban">`;
+      
+      const opsiJawaban = isAcak ? acakArray(soal.answerOptions) : soal.answerOptions;
+
+      opsiJawaban.forEach((option, index) => {
+        const label = String.fromCharCode(65 + index); 
+        
+        soalHTML += `
+          <button 
+            onclick="checkAnswer(this, ${nomorUrut}, ${option.isCorrect})"
+            data-iscorrect="${option.isCorrect}"
+            data-label="${label}">
+            ${label}. ${option.text}
+          </button>
+          <div class="penjelasan-opsi">
+            <strong>Penjelasan Opsi ${label}:</strong> ${option.rationale}
+          </div>
+        `;
+      });
+      
+      soalHTML += `</div>`;
+      soalDiv.innerHTML = soalHTML;
+      container.appendChild(soalDiv);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initSetup);
+</script>
+
+</body>
+</html>

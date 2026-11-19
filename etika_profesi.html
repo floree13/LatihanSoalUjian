@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal Ujian</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7f6;
+      margin: 0;
+      padding: 20px 10px;
+    }
+    h1 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    h2 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    .setup-box {
+      background: #ffffff;
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      text-align: center;
+      border-top: 5px solid #1a237e;
+    }
+    .setup-box h2 {
+      margin-top: 0;
+      color: #1a237e;
+      font-size: 18px;
+    }
+    .setup-box p {
+      color: #555;
+      font-size: 14px;
+    }
+    .opsi-acak {
+      margin: 15px 0;
+      padding: 10px;
+      background: #f3e5f5;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #4a148c;
+      cursor: pointer;
+    }
+    .opsi-acak input {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    .pilihan-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 15px;
+    }
+    .btn-jumlah {
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 8px;
+      border: 1px solid #3f51b5;
+      background: #e8eaf6;
+      color: #1a237e;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-jumlah:hover:not(:disabled) {
+      background: #3f51b5;
+      color: #ffffff;
+    }
+    .btn-jumlah:disabled {
+      background: #e0e0e0;
+      border-color: #bdbdbd;
+      color: #9e9e9e;
+      cursor: not-allowed;
+    }
+    .soal {
+      background: #ffffff;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 5px solid #42a5f5;
+    }
+    h3 {
+      color: #3f51b5;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .jawaban button {
+      color: #2a2a2a;
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #c5cae9;
+      background: #e8eaf6;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .jawaban button:hover:not(:disabled) {
+      background: #c5cae9;
+    }
+    .jawaban button.benar {
+      background-color: #dcf9dc;
+      border-color: #388e3c;
+      font-weight: bold;
+    }
+    .jawaban button.salah {
+      background-color: #ffcdd2;
+      border-color: #d32f2f;
+      opacity: 0.7;
+    }
+    .penjelasan-opsi {
+      background: #f3e5f5;
+      color: #4a148c;
+      padding: 10px;
+      margin-top: -5px;
+      margin-bottom: 15px;
+      border-radius: 0 0 8px 8px;
+      border-top: none;
+      border-left: 5px solid #7b1fa2;
+      font-size: 14px;
+      display: none;
+    }
+    .counter {
+      position: sticky;
+      bottom: 0;
+      background: #1a237e;
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      display: none;
+    }
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 20px; }
+      .jawaban button { font-size: 14px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Latihan Soal UO UT</h1>
+<h2>Etika Profesi</h2>
+
+<div id="setup-container" class="setup-box">
+  <h2>Pilih Jumlah Soal</h2>
+  <p>Total soal tersedia: <strong id="total-tersedia">0</strong> soal</p>
+  
+  <label class="opsi-acak">
+    <input type="checkbox" id="checkbox-acak" checked />
+    Acak Urutan Soal & Opsi Jawaban
+  </label>
+
+  <div class="pilihan-grid" id="pilihan-jumlah">
+    <button class="btn-jumlah" data-jumlah="25" onclick="mulaiUjian(25)">25 Soal</button>
+    <button class="btn-jumlah" data-jumlah="35" onclick="mulaiUjian(35)">35 Soal</button>
+    <button class="btn-jumlah" data-jumlah="45" onclick="mulaiUjian(25)">45 Soal</button>
+    <button class="btn-jumlah" data-jumlah="50" onclick="mulaiUjian(50)">50 Soal</button>
+    <button class="btn-jumlah" data-jumlah="100" style="grid-column: span 2;" onclick="mulaiUjian('100')">100 Soal</button>
+  </div>
+</div>
+
+<div id="container" style="display: none;"></div>
+
+<div id="counter" class="counter">
+  ✅ Jawaban Benar: <span id="benar">0</span> |
+  ❌ Jawaban Salah: <span id="salah">0</span>
+</div>
+
+<script>
+const soalList = [
+  {
+    "questionNumber": 1,
+    "question": "Etika berasal dari kata Yunani \"ethos\" yang secara harfiah berarti...",
+    "answerOptions": [
+      {
+        "text": "Aturan hukum yang mengikat perilaku manusia dalam masyarakat",
+        "isCorrect": false,
+        "rationale": "Aturan hukum ditetapkan oleh negara, bukan arti harfiah dari kata 'ethos'."
+      },
+      {
+        "text": "Kebiasaan, watak, atau karakter yang menjadi pedoman perilaku manusia",
+        "isCorrect": true,
+        "rationale": "Kata \"ethos\" dalam bahasa Yunani merujuk pada kebiasaan atau watak yang menjadi dasar bagi tindakan seseorang, dan dari sinilah konsep etika sebagai ilmu tentang perilaku bermoral berkembang."
+      },
+      {
+        "text": "Norma agama yang mengatur hubungan manusia dengan Tuhan",
+        "isCorrect": false,
+        "rationale": "Norma agama bersumber dari wahyu atau ajaran ketuhanan, berbeda dengan pengertian etimologis 'ethos'."
+      },
+      {
+        "text": "Kode perilaku resmi yang ditetapkan oleh organisasi profesi",
+        "isCorrect": false,
+        "rationale": "Kode perilaku resmi disebut kode etik profesi, bukan terjemahan langsung dari istilah Yunani 'ethos'."
+      }
+    ]
+  },
+  {
+    "questionNumber": 2,
+    "question": "Prinsip etika yang menyatakan bahwa seseorang harus memperlakukan orang lain sebagaimana ia ingin diperlakukan disebut prinsip...",
+    "answerOptions": [
+      {
+        "text": "Kaidah emas (golden rule)",
+        "isCorrect": true,
+        "rationale": "Kaidah emas adalah prinsip etika universal yang mengajarkan untuk memperlakukan orang lain sesuai dengan cara yang kita inginkan diperlakukan, menjadi dasar banyak sistem moral di berbagai budaya."
+      },
+      {
+        "text": "Utilitarisme",
+        "isCorrect": false,
+        "rationale": "Utilitarisme menilai tindakan berdasarkan manfaat terbesar bagi sebanyak mungkin orang."
+      },
+      {
+        "text": "Deontologi",
+        "isCorrect": false,
+        "rationale": "Deontologi menekankan pada kewajiban dan kepatuhan terhadap aturan moral mutlak."
+      },
+      {
+        "text": "Relativisme moral",
+        "isCorrect": false,
+        "rationale": "Relativisme moral berpandangan bahwa nilai baik dan buruk bersifat relatif tergantung pada budaya atau individu."
+      }
+    ]
+  },
+  {
+    "questionNumber": 3,
+    "question": "Perbedaan utama antara etika dan hukum terletak pada...",
+    "answerOptions": [
+      {
+        "text": "Etika hanya berlaku bagi kalangan profesional, sedangkan hukum berlaku untuk semua orang",
+        "isCorrect": false,
+        "rationale": "Etika umum berlaku bagi seluruh manusia dalam bermasyarakat, tidak hanya bagi kalangan profesional."
+      },
+      {
+        "text": "Etika dibuat oleh pemerintah, sedangkan hukum dibuat oleh organisasi profesi",
+        "isCorrect": false,
+        "rationale": "Pernyataan ini terbalik; hukum dibuat oleh pemerintah/negara, sedangkan kode etik profesi dibuat oleh organisasi profesi."
+      },
+      {
+        "text": "Etika bersifat internal dan tidak memiliki sanksi formal, sedangkan hukum memiliki sanksi yang ditetapkan negara",
+        "isCorrect": true,
+        "rationale": "Etika mengatur perilaku berdasarkan nilai moral yang bersumber dari nurani dan komunitas, sementara hukum memiliki sanksi formal yang ditegakkan oleh otoritas negara."
+      },
+      {
+        "text": "Etika bersifat tertulis dan resmi, sedangkan hukum bersifat tidak tertulis",
+        "isCorrect": false,
+        "rationale": "Hukum positif bersifat tertulis dan resmi dalam perundang-undangan, sedangkan etika umumnya berupa nilai moral yang tidak selalu tertulis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 4,
+    "question": "Teori etika yang menilai baik buruknya suatu tindakan berdasarkan akibat atau hasil yang ditimbulkan dari tindakan tersebut disebut teori...",
+    "answerOptions": [
+      {
+        "text": "Deontologi",
+        "isCorrect": false,
+        "rationale": "Deontologi menilai tindakan berdasarkan kewajiban dan niat, terlepas dari hasil akhirnya."
+      },
+      {
+        "text": "Virtue ethics",
+        "isCorrect": false,
+        "rationale": "Virtue ethics (etika kebajikan) berfokus pada karakter moral pelaku tindakan, bukan pada akibat tindakan."
+      },
+      {
+        "text": "Kontraktualisme",
+        "isCorrect": false,
+        "rationale": "Kontraktualisme mendasarkan moralitas pada kesepakatan atau kontrak sosial antarindividu."
+      },
+      {
+        "text": "Konsekuensialisme",
+        "isCorrect": true,
+        "rationale": "Konsekuensialisme, termasuk utilitarisme sebagai bentuknya yang paling dikenal, menilai moralitas suatu tindakan dari dampak atau konsekuensi yang dihasilkan, bukan dari niat atau aturan yang mendasarinya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 5,
+    "question": "Seorang dokter menolak memberikan informasi kondisi pasien kepada pihak ketiga meskipun diminta, karena merasa hal tersebut melanggar sumpah profesinya. Sikap dokter ini mencerminkan penerapan etika profesi dalam aspek...",
+    "answerOptions": [
+      {
+        "text": "Tanggung jawab kepada masyarakat luas",
+        "isCorrect": false,
+        "rationale": "Kasus ini secara spesifik berkaitan dengan perlindungan data pribadi pasien individu, bukan isu kesehatan masyarakat umum."
+      },
+      {
+        "text": "Kerahasiaan dan kepercayaan antara profesional dan klien",
+        "isCorrect": true,
+        "rationale": "Salah satu prinsip etika profesi yang paling fundamental adalah menjaga kerahasiaan informasi klien, yang merupakan fondasi kepercayaan dalam hubungan profesional."
+      },
+      {
+        "text": "Kepatuhan terhadap peraturan pemerintah",
+        "isCorrect": false,
+        "rationale": "Alasan utama penolakan dokter dalam ilustrasi tersebut adalah sumpah profesi dan prinsip kerahasiaan klien."
+      },
+      {
+        "text": "Persaingan yang sehat antar sesama profesi",
+        "isCorrect": false,
+        "rationale": "Persaingan antar rekan sejawat tidak berkaitan dengan permintaan informasi medis oleh pihak ketiga."
+      }
+    ]
+  },
+  {
+    "questionNumber": 6,
+    "question": "Karakteristik utama yang membedakan profesi dari pekerjaan biasa adalah...",
+    "answerOptions": [
+      {
+        "text": "Memiliki keahlian khusus yang diperoleh melalui pendidikan formal dan pelatihan terstruktur",
+        "isCorrect": true,
+        "rationale": "Profesi dicirikan oleh penguasaan keahlian khusus yang diperoleh melalui proses pendidikan dan pelatihan yang sistematis, berbeda dari pekerjaan biasa yang tidak memerlukan tingkat keahlian yang sama."
+      },
+      {
+        "text": "Menghasilkan pendapatan yang lebih tinggi dibandingkan pekerjaan lainnya",
+        "isCorrect": false,
+        "rationale": "Besaran pendapatan bukanlah kriteria definisi yang membedakan profesi dari pekerjaan biasa."
+      },
+      {
+        "text": "Diakui oleh pemerintah melalui sertifikat resmi yang wajib diperbaharui setiap tahun",
+        "isCorrect": false,
+        "rationale": "Tidak semua profesi mengharuskan pembaruan sertifikat pemerintah setiap tahun."
+      },
+      {
+        "text": "Hanya dapat dilakukan oleh mereka yang telah berusia di atas 25 tahun",
+        "isCorrect": false,
+        "rationale": "Batasan usia tertentu bukan merupakan syarat atau karakteristik dari sebuah profesi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 7,
+    "question": "Profesionalisme dalam bidang teknologi informasi antara lain ditunjukkan oleh...",
+    "answerOptions": [
+      {
+        "text": "Kemampuan menyelesaikan pekerjaan dalam waktu yang sangat singkat tanpa memperhatikan kualitas",
+        "isCorrect": false,
+        "rationale": "Mengabaikan kualitas demi kecepatan bertentangan dengan standar profesionalisme TI."
+      },
+      {
+        "text": "Kesediaan bekerja lembur tanpa kompensasi demi kepuasan atasan",
+        "isCorrect": false,
+        "rationale": "Profesionalisme berkaitan dengan mutu dan etika kerja, bukan bekerja lembur tanpa kompensasi."
+      },
+      {
+        "text": "Komitmen untuk terus memperbarui kompetensi dan menjaga standar kualitas pekerjaan",
+        "isCorrect": true,
+        "rationale": "Profesionalisme mencakup komitmen terhadap pengembangan diri secara berkelanjutan dan pemeliharaan standar kerja yang tinggi sebagai wujud tanggung jawab kepada klien dan masyarakat."
+      },
+      {
+        "text": "Keengganan berbagi pengetahuan agar tetap menjadi satu-satunya ahli di bidangnya",
+        "isCorrect": false,
+        "rationale": "Menimbun pengetahuan demi kepentingan pribadi menghambat kolaborasi dan pengembangan profesi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 8,
+    "question": "Nilai dasar yang harus dimiliki seorang profesional TI dalam menjalankan tugasnya adalah integritas, yang berarti...",
+    "answerOptions": [
+      {
+        "text": "Kemampuan teknis yang sangat tinggi dalam bidang TI",
+        "isCorrect": false,
+        "rationale": "Kemampuan teknis merujuk pada kompetensi keahlian, bukan nilai moral integritas."
+      },
+      {
+        "text": "Kecepatan dalam menyelesaikan setiap proyek yang diberikan klien",
+        "isCorrect": false,
+        "rationale": "Kecepatan penyelesaian proyek adalah aspek efisiensi kerja, bukan definisi integritas."
+      },
+      {
+        "text": "Kepatuhan pada semua instruksi yang diberikan oleh atasan",
+        "isCorrect": false,
+        "rationale": "Kepatuhan buta pada atasan (termasuk instruksi yang tidak etis) justru bertentangan dengan integritas."
+      },
+      {
+        "text": "Kejujuran dan konsistensi antara ucapan, tindakan, dan nilai moral yang dianut",
+        "isCorrect": true,
+        "rationale": "Integritas adalah fondasi kepercayaan profesional yang mencakup kejujuran dan konsistensi moral, bukan sekadar kemampuan teknis atau kepatuhan formal semata."
+      }
+    ]
+  },
+  {
+    "questionNumber": 9,
+    "question": "Tonggak penting dalam sejarah perkembangan teknologi informasi yang menandai awal komputasi modern adalah ditemukannya...",
+    "answerOptions": [
+      {
+        "text": "Mesin cetak oleh Gutenberg pada abad ke-15",
+        "isCorrect": false,
+        "rationale": "Mesin cetak merupakan tonggak teknologi penerbitan dan penyebaran informasi cetak, bukan komputasi modern."
+      },
+      {
+        "text": "Komputer elektronik generasi pertama yang menggunakan tabung vakum pada pertengahan abad ke-20",
+        "isCorrect": true,
+        "rationale": "Komputer elektronik generasi pertama seperti ENIAC merupakan tonggak utama dalam sejarah TI yang menandai dimulainya era komputasi modern dan pengolahan data secara elektronik."
+      },
+      {
+        "text": "Telegraf oleh Samuel Morse pada abad ke-19",
+        "isCorrect": false,
+        "rationale": "Telegraf merupakan tonggak sejarah telekomunikasi jarak jauh, bukan awal komputasi modern."
+      },
+      {
+        "text": "Telepon oleh Alexander Graham Bell pada tahun 1876",
+        "isCorrect": false,
+        "rationale": "Telepon merupakan penemuan penting di bidang komunikasi suara, bukan perangkat komputasi elektronik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 10,
+    "question": "Perkembangan teknologi internet yang memungkinkan pengguna tidak hanya mengonsumsi konten tetapi juga membuat dan berbagi konten secara aktif dikenal sebagai era...",
+    "answerOptions": [
+      {
+        "text": "Web 1.0",
+        "isCorrect": false,
+        "rationale": "Web 1.0 adalah generasi awal web yang bersifat statis dan satu arah (read-only)."
+      },
+      {
+        "text": "Internet of Things",
+        "isCorrect": false,
+        "rationale": "Internet of Things merujuk pada konektivitas perangkat fisik dan sensor melalui internet."
+      },
+      {
+        "text": "Web 2.0",
+        "isCorrect": true,
+        "rationale": "Web 2.0 menandai peralihan dari internet yang bersifat satu arah (read-only) ke internet yang interaktif dan partisipatif, di mana pengguna dapat membuat, mengunggah, dan berbagi konten secara aktif."
+      },
+      {
+        "text": "Komputasi awan",
+        "isCorrect": false,
+        "rationale": "Komputasi awan adalah model penyediaan sumber daya komputasi dan penyimpanan melalui internet."
+      }
+    ]
+  },
+  {
+    "questionNumber": 11,
+    "question": "Kode etik profesi TI berfungsi sebagai...",
+    "answerOptions": [
+      {
+        "text": "Panduan perilaku yang membantu profesional mengambil keputusan etis dalam situasi yang kompleks",
+        "isCorrect": true,
+        "rationale": "Kode etik profesi berperan sebagai acuan moral bagi para profesional dalam menghadapi dilema etika sehari-hari, bukan sebagai instrumen hukum atau persyaratan administratif semata."
+      },
+      {
+        "text": "Peraturan hukum yang memiliki kekuatan mengikat setara dengan undang-undang negara",
+        "isCorrect": false,
+        "rationale": "Kode etik ditetapkan oleh organisasi profesi dan sanksinya bersifat moral/organisatoris, bukan hukum negara."
+      },
+      {
+        "text": "Daftar larangan yang hanya berlaku selama jam kerja resmi",
+        "isCorrect": false,
+        "rationale": "Prinsip kode etik melekat pada identitas profesional kapan saja, tidak terbatas pada jam kerja."
+      },
+      {
+        "text": "Persyaratan administrasi yang harus dipenuhi untuk mendapatkan sertifikasi profesi",
+        "isCorrect": false,
+        "rationale": "Kode etik bukan sekadar berkas administratif untuk memperoleh sertifikat."
+      }
+    ]
+  },
+  {
+    "questionNumber": 12,
+    "question": "Seorang pengembang perangkat lunak mengetahui adanya kerentanan keamanan dalam sistem yang sedang dikembangkan, namun atasannya memerintahkan untuk tetap meluncurkan produk sesuai jadwal. Berdasarkan prinsip kode etik profesi TI, tindakan yang paling tepat adalah...",
+    "answerOptions": [
+      {
+        "text": "Mengikuti perintah atasan karena hierarki organisasi harus dihormati",
+        "isCorrect": false,
+        "rationale": "Keselamatan dan kepentingan publik dalam kode etik TI harus diutamakan di atas kepatuhan hierarki yang berisiko merugikan pengguna."
+      },
+      {
+        "text": "Diam dan menunggu hingga ada komplain dari pengguna",
+        "isCorrect": false,
+        "rationale": "Membiarkan kerentanan yang sudah diketahui tanpa tindakan pencegahan melanggar tanggung jawab profesional."
+      },
+      {
+        "text": "Melaporkan masalah ini langsung ke media massa agar mendapat perhatian publik",
+        "isCorrect": false,
+        "rationale": "Pelaporan eksternal ke publik hanya dilakukan jika jalur pelaporan internal telah ditempuh dan diabaikan."
+      },
+      {
+        "text": "Melaporkan kerentanan tersebut secara tertulis kepada manajemen dan meminta penundaan peluncuran",
+        "isCorrect": true,
+        "rationale": "Profesional TI bertanggung jawab untuk melindungi kepentingan pengguna dan masyarakat. Melaporkan masalah secara resmi melalui jalur internal adalah cara etis yang tepat sebelum mengambil langkah lain."
+      }
+    ]
+  },
+  {
+    "questionNumber": 13,
+    "question": "Salah satu isu etika utama dalam bidang TI yang berkaitan dengan pengumpulan dan penggunaan data pribadi pengguna oleh perusahaan teknologi adalah isu...",
+    "answerOptions": [
+      {
+        "text": "Hak cipta perangkat lunak",
+        "isCorrect": false,
+        "rationale": "Hak cipta berkaitan dengan kepemilikan intelektual kode program, bukan data pribadi pengguna."
+      },
+      {
+        "text": "Privasi dan perlindungan data",
+        "isCorrect": true,
+        "rationale": "Privasi dan perlindungan data merupakan isu etika sentral dalam TI, terutama seiring meningkatnya kemampuan perusahaan untuk mengumpulkan, memproses, dan memonetisasi data pribadi pengguna."
+      },
+      {
+        "text": "Standarisasi protokol jaringan",
+        "isCorrect": false,
+        "rationale": "Standarisasi protokol jaringan merupakan isu teknis interoperabilitas perangkat."
+      },
+      {
+        "text": "Lisensi perangkat keras komputer",
+        "isCorrect": false,
+        "rationale": "Lisensi perangkat keras berkaitan dengan hak penggunaan komponen fisik, bukan pengelolaan data pengguna."
+      }
+    ]
+  },
+  {
+    "questionNumber": 14,
+    "question": "Organisasi profesional TI internasional yang dikenal dengan kode etiknya yang komprehensif dan menjadi acuan global bagi profesional TI adalah...",
+    "answerOptions": [
+      {
+        "text": "ISO (International Organization for Standardization)",
+        "isCorrect": false,
+        "rationale": "ISO adalah badan penetap standar internasional lintas industri, bukan asosiasi keanggotaan profesi TI."
+      },
+      {
+        "text": "ITU (International Telecommunication Union)",
+        "isCorrect": false,
+        "rationale": "ITU adalah badan khusus PBB untuk bidang telekomunikasi dan informasi global."
+      },
+      {
+        "text": "ACM (Association for Computing Machinery)",
+        "isCorrect": true,
+        "rationale": "ACM adalah salah satu organisasi profesional TI terkemuka di dunia yang memiliki kode etik komprehensif yang menjadi acuan standar perilaku bagi para profesional di bidang komputasi secara global."
+      },
+      {
+        "text": "W3C (World Wide Web Consortium)",
+        "isCorrect": false,
+        "rationale": "W3C berfokus pada pengembangan standar teknis untuk World Wide Web."
+      }
+    ]
+  },
+  {
+    "questionNumber": 15,
+    "question": "Di Indonesia, organisasi profesi yang secara khusus menaungi para profesional di bidang teknologi informasi adalah...",
+    "answerOptions": [
+      {
+        "text": "IPKIN (Ikatan Profesi Komputer dan Informatika Indonesia)",
+        "isCorrect": true,
+        "rationale": "IPKIN adalah organisasi profesi TI utama di Indonesia yang berperan dalam pengembangan standar kompetensi dan kode etik bagi para profesional komputer dan informatika di tanah air."
+      },
+      {
+        "text": "KADIN (Kamar Dagang dan Industri Indonesia)",
+        "isCorrect": false,
+        "rationale": "KADIN adalah wadah organisasi bagi para pengusaha di berbagai sektor ekonomi."
+      },
+      {
+        "text": "LIPI (Lembaga Ilmu Pengetahuan Indonesia)",
+        "isCorrect": false,
+        "rationale": "LIPI (yang kini terintegrasi ke dalam BRIN) adalah lembaga riset pemerintah, bukan asosiasi profesi TI."
+      },
+      {
+        "text": "BPPT (Badan Pengkajian dan Penerapan Teknologi)",
+        "isCorrect": false,
+        "rationale": "BPPT adalah lembaga pemerintah di bidang pengkajian teknologi, bukan organisasi keanggotaan profesi TI."
+      }
+    ]
+  },
+  {
+    "questionNumber": 16,
+    "question": "Sertifikasi profesi TI dianggap penting karena...",
+    "answerOptions": [
+      {
+        "text": "Menjamin bahwa pemegang sertifikat akan mendapatkan gaji yang lebih tinggi dari rekan sejawatnya",
+        "isCorrect": false,
+        "rationale": "Sertifikasi tidak secara otomatis menjamin besaran gaji tertentu."
+      },
+      {
+        "text": "Memberikan kewenangan hukum untuk mengelola jaringan komputer pemerintah",
+        "isCorrect": false,
+        "rationale": "Sertifikasi membuktikan keahlian teknis, bukan memberikan otoritas hukum mengelola aset negara."
+      },
+      {
+        "text": "Membebaskan pemegang sertifikat dari kewajiban mengikuti kode etik organisasi",
+        "isCorrect": false,
+        "rationale": "Pemegang sertifikasi justru terikat lebih kuat untuk mematuhi kode etik profesinya."
+      },
+      {
+        "text": "Membuktikan kompetensi yang terstandar dan meningkatkan kepercayaan klien atau pemberi kerja",
+        "isCorrect": true,
+        "rationale": "Sertifikasi profesi berfungsi sebagai bukti formal bahwa seseorang telah memenuhi standar kompetensi tertentu, sehingga meningkatkan kredibilitas dan kepercayaan dari pihak yang menggunakan jasanya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 17,
+    "question": "Undang-Undang Informasi dan Transaksi Elektronik (UU ITE) di Indonesia pertama kali disahkan pada tahun...",
+    "answerOptions": [
+      {
+        "text": "2000",
+        "isCorrect": false,
+        "rationale": "Pada tahun 2000 Indonesia belum memiliki undang-undang khusus yang mengatur informasi dan transaksi elektronik."
+      },
+      {
+        "text": "2008",
+        "isCorrect": true,
+        "rationale": "UU ITE No. 11 Tahun 2008 adalah regulasi utama yang mengatur transaksi elektronik dan informasi digital di Indonesia, yang kemudian mengalami revisi pada tahun 2016."
+      },
+      {
+        "text": "2010",
+        "isCorrect": false,
+        "rationale": "UU ITE sudah disahkan dua tahun sebelumnya melalui UU Nomor 11 Tahun 2008."
+      },
+      {
+        "text": "2016",
+        "isCorrect": false,
+        "rationale": "Tahun 2016 adalah tahun pengesahan revisi pertama UU ITE (UU No. 19 Tahun 2016), bukan pengesahan pertamanya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 18,
+    "question": "Berdasarkan UU ITE, yang dimaksud dengan dokumen elektronik adalah...",
+    "answerOptions": [
+      {
+        "text": "Hanya file yang disimpan dalam format PDF dan telah ditandatangani secara digital",
+        "isCorrect": false,
+        "rationale": "Definisi dokumen elektronik dalam UU ITE tidak dibatasi pada format file tertentu seperti PDF."
+      },
+      {
+        "text": "Dokumen cetak yang telah dipindai dan disimpan dalam perangkat komputer",
+        "isCorrect": false,
+        "rationale": "Dokumen yang sejak awal dibuat secara digital juga termasuk dokumen elektronik, tidak harus hasil pemindaian."
+      },
+      {
+        "text": "Setiap informasi elektronik yang dibuat, diteruskan, dikirimkan, diterima, atau disimpan dalam bentuk analog, digital, atau sejenisnya",
+        "isCorrect": true,
+        "rationale": "UU ITE mendefinisikan dokumen elektronik secara luas mencakup semua bentuk informasi yang diproses, disimpan, atau dikirim secara elektronik, tanpa terbatas pada format atau media tertentu."
+      },
+      {
+        "text": "Dokumen yang diakui keabsahannya hanya jika dicetak dan ditandatangani pejabat berwenang",
+        "isCorrect": false,
+        "rationale": "UU ITE justru mengakui informasi dan dokumen elektronik sebagai alat bukti hukum yang sah tanpa harus dicetak."
+      }
+    ]
+  },
+  {
+    "questionNumber": 19,
+    "question": "Hak Kekayaan Intelektual (HAKI) yang melindungi karya cipta perangkat lunak komputer termasuk dalam kategori...",
+    "answerOptions": [
+      {
+        "text": "Hak cipta (copyright)",
+        "isCorrect": true,
+        "rationale": "Perangkat lunak komputer dilindungi oleh hak cipta karena merupakan karya intelektual yang bersifat kreatif. Perlindungan ini memberikan hak eksklusif kepada penciptanya untuk memperbanyak, mendistribusikan, dan memodifikasi karya tersebut."
+      },
+      {
+        "text": "Merek dagang (trademark)",
+        "isCorrect": false,
+        "rationale": "Merek dagang melindungi tanda, nama, atau logo pembeda produk, bukan kode programnya."
+      },
+      {
+        "text": "Rahasia dagang (trade secret)",
+        "isCorrect": false,
+        "rationale": "Rahasia dagang melindungi informasi bisnis/teknologi yang dirahasiakan secara internal, sedangkan perlindungan hukum utama program komputer adalah hak cipta."
+      },
+      {
+        "text": "Desain industri",
+        "isCorrect": false,
+        "rationale": "Desain industri melindungi kreasi bentuk, konfigurasi, atau komposisi garis/warna pada barang fisik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 20,
+    "question": "Paten dalam konteks teknologi informasi memberikan perlindungan hukum terhadap...",
+    "answerOptions": [
+      {
+        "text": "Nama dan logo produk perangkat lunak agar tidak ditiru pesaing",
+        "isCorrect": false,
+        "rationale": "Nama dan logo dilindungi oleh merek dagang (trademark)."
+      },
+      {
+        "text": "Kode sumber program yang ditulis oleh pengembang perangkat lunak",
+        "isCorrect": false,
+        "rationale": "Kode sumber (source code) dilindungi melalui hak cipta (copyright)."
+      },
+      {
+        "text": "Tampilan antarmuka pengguna (user interface) sebuah aplikasi",
+        "isCorrect": false,
+        "rationale": "Tampilan visual antarmuka umumnya dilindungi oleh hak cipta atau desain industri."
+      },
+      {
+        "text": "Invensi atau penemuan baru yang bersifat inovatif, termasuk metode atau proses dalam TI",
+        "isCorrect": true,
+        "rationale": "Paten melindungi invensi baru yang memiliki langkah inventif dan dapat diterapkan dalam industri, termasuk metode komputasi, algoritma tertentu, dan proses teknologi yang inovatif."
+      }
+    ]
+  },
+  {
+    "questionNumber": 21,
+    "question": "Seorang pengguna mengunduh dan menggunakan perangkat lunak berbayar tanpa membeli lisensinya. Tindakan ini melanggar ketentuan...",
+    "answerOptions": [
+      {
+        "text": "Undang-undang tentang perlindungan konsumen",
+        "isCorrect": false,
+        "rationale": "UU Perlindungan Konsumen mengatur hak dan kewajiban pelaku usaha serta pembeli yang sah, bukan pembajakan karya."
+      },
+      {
+        "text": "Undang-undang hak cipta karena menggunakan karya tanpa izin pemegang hak",
+        "isCorrect": true,
+        "rationale": "Penggunaan perangkat lunak tanpa lisensi yang sah adalah pelanggaran hak cipta karena pemegang hak memiliki hak eksklusif untuk mengizinkan atau melarang penggunaan karya ciptaannya."
+      },
+      {
+        "text": "Undang-undang tentang merek dagang dan nama dagang",
+        "isCorrect": false,
+        "rationale": "Pelanggaran merek dagang terjadi jika seseorang memalsukan nama atau logo produk, bukan sekadar menggunakan aplikasi tanpa lisensi."
+      },
+      {
+        "text": "Regulasi ketenagakerjaan di bidang teknologi informasi",
+        "isCorrect": false,
+        "rationale": "Regulasi ketenagakerjaan mengatur hubungan kerja antara pemberi kerja dan pekerja."
+      }
+    ]
+  },
+  {
+    "questionNumber": 22,
+    "question": "Masa berlaku perlindungan hak cipta di Indonesia berdasarkan Undang-Undang Hak Cipta adalah selama hidup pencipta ditambah...",
+    "answerOptions": [
+      {
+        "text": "25 tahun setelah pencipta meninggal dunia",
+        "isCorrect": false,
+        "rationale": "25 tahun merupakan masa berlaku hak ekonomi bagi karya fotografi atau potret tertentu, bukan hak cipta umum."
+      },
+      {
+        "text": "50 tahun setelah pencipta meninggal dunia",
+        "isCorrect": false,
+        "rationale": "50 tahun adalah ketentuan dalam UU Hak Cipta yang lama (UU No. 19 Tahun 2002) dan masa berlaku khusus untuk program komputer sejak dipublikasikan."
+      },
+      {
+        "text": "70 tahun setelah pencipta meninggal dunia",
+        "isCorrect": true,
+        "rationale": "Berdasarkan UU Hak Cipta No. 28 Tahun 2014, perlindungan hak cipta berlaku selama hidup pencipta dan terus berlaku selama 70 tahun setelah pencipta meninggal dunia."
+      },
+      {
+        "text": "100 tahun setelah pencipta meninggal dunia",
+        "isCorrect": false,
+        "rationale": "UU Hak Cipta Indonesia tidak menetapkan masa perlindungan hingga 100 tahun setelah pencipta meninggal."
+      }
+    ]
+  },
+  {
+    "questionNumber": 23,
+    "question": "Kejahatan siber (cybercrime) yang dilakukan dengan cara memasuki sistem komputer atau jaringan orang lain tanpa izin disebut...",
+    "answerOptions": [
+      {
+        "text": "Hacking atau unauthorized access",
+        "isCorrect": true,
+        "rationale": "Hacking dalam konteks kejahatan siber mengacu pada tindakan memasuki sistem komputer atau jaringan secara tidak sah tanpa sepengetahuan atau izin pemiliknya."
+      },
+      {
+        "text": "Phishing",
+        "isCorrect": false,
+        "rationale": "Phishing adalah penipuan untuk mencuri data sensitif melalui pesan atau situs palsu."
+      },
+      {
+        "text": "Spamming",
+        "isCorrect": false,
+        "rationale": "Spamming adalah pengiriman pesan elektronik massal yang tidak diminta oleh penerima."
+      },
+      {
+        "text": "Carding",
+        "isCorrect": false,
+        "rationale": "Carding adalah penyalahgunaan informasi kartu kredit curian untuk bertransaksi secara ilegal."
+      }
+    ]
+  },
+  {
+    "questionNumber": 24,
+    "question": "Modus kejahatan siber yang menggunakan pesan atau situs web palsu untuk mengelabui pengguna agar memberikan informasi pribadi seperti kata sandi atau nomor kartu kredit disebut...",
+    "answerOptions": [
+      {
+        "text": "Spoofing",
+        "isCorrect": false,
+        "rationale": "Spoofing adalah teknik pemalsuan identitas jaringan (seperti alamat IP atau email) untuk menyamarkan sumber serangan."
+      },
+      {
+        "text": "Sniffing",
+        "isCorrect": false,
+        "rationale": "Sniffing adalah penyadapan dan pemantauan paket data yang melintas di jaringan."
+      },
+      {
+        "text": "Keylogging",
+        "isCorrect": false,
+        "rationale": "Keylogging adalah perekaman ketukan tombol keyboard pengguna menggunakan perangkat lunak atau keras tersembunyi."
+      },
+      {
+        "text": "Phishing",
+        "isCorrect": true,
+        "rationale": "Phishing adalah teknik social engineering di mana pelaku menyamar sebagai entitas yang dipercaya melalui pesan atau situs palsu untuk mencuri informasi sensitif dari korban."
+      }
+    ]
+  },
+  {
+    "questionNumber": 25,
+    "question": "Serangan siber yang bertujuan membuat suatu layanan atau situs web tidak dapat diakses oleh pengguna yang sah dengan cara membanjirinya menggunakan lalu lintas data yang berlebihan disebut serangan...",
+    "answerOptions": [
+      {
+        "text": "Man-in-the-middle",
+        "isCorrect": false,
+        "rationale": "Man-in-the-middle adalah serangan penyadapan atau manipulasi komunikasi di tengah jalur antara dua pihak."
+      },
+      {
+        "text": "Denial of Service (DoS)",
+        "isCorrect": true,
+        "rationale": "Serangan DoS bertujuan untuk melumpuhkan layanan dengan cara membanjiri server dengan permintaan yang sangat banyak sehingga sumber daya sistem habis dan layanan tidak dapat diakses pengguna yang sah."
+      },
+      {
+        "text": "SQL injection",
+        "isCorrect": false,
+        "rationale": "SQL injection adalah penyisipan perintah kueri berbahaya ke dalam input aplikasi untuk memanipulasi basis data."
+      },
+      {
+        "text": "Brute force",
+        "isCorrect": false,
+        "rationale": "Brute force adalah metode menebak kata sandi atau kunci enkripsi dengan mencoba seluruh kombinasi yang mungkin."
+      }
+    ]
+  },
+  {
+    "questionNumber": 26,
+    "question": "Rekomendasi ITU-T X.800 mendefinisikan kerangka keamanan jaringan yang mencakup layanan keamanan dan mekanismenya. Layanan keamanan yang memastikan informasi tidak dimodifikasi selama proses transmisi disebut layanan...",
+    "answerOptions": [
+      {
+        "text": "Kerahasiaan (confidentiality)",
+        "isCorrect": false,
+        "rationale": "Kerahasiaan melindungi informasi agar tidak dibaca oleh pihak yang tidak berwenang."
+      },
+      {
+        "text": "Autentikasi (authentication)",
+        "isCorrect": false,
+        "rationale": "Autentikasi memastikan keaslian identitas pihak yang berkomunikasi."
+      },
+      {
+        "text": "Integritas data (data integrity)",
+        "isCorrect": true,
+        "rationale": "Layanan integritas data dalam kerangka ITU-T X.800 memastikan bahwa data yang dikirim tidak mengalami perubahan, penambahan, atau penghapusan yang tidak sah selama proses transmisi."
+      },
+      {
+        "text": "Non-penyangkalan (non-repudiation)",
+        "isCorrect": false,
+        "rationale": "Non-penyangkalan mencegah pengirim atau penerima menyangkal keterlibatannya dalam komunikasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 27,
+    "question": "Dalam konteks keamanan informasi berdasarkan ITU-T X.800, layanan yang mencegah pihak pengirim atau penerima menyangkal telah melakukan transaksi atau komunikasi elektronik disebut layanan...",
+    "answerOptions": [
+      {
+        "text": "Non-penyangkalan (non-repudiation)",
+        "isCorrect": true,
+        "rationale": "Non-penyangkalan adalah layanan keamanan yang memberikan bukti asal dan pengiriman data sehingga tidak ada pihak yang dapat menyangkal telah mengirim atau menerima pesan tertentu."
+      },
+      {
+        "text": "Ketersediaan (availability)",
+        "isCorrect": false,
+        "rationale": "Ketersediaan memastikan sistem dan data selalu siap diakses oleh pengguna yang berhak saat dibutuhkan."
+      },
+      {
+        "text": "Pengendalian akses (access control)",
+        "isCorrect": false,
+        "rationale": "Pengendalian akses membatasi dan mengatur siapa saja yang diizinkan menggunakan sumber daya sistem."
+      },
+      {
+        "text": "Enkripsi (encryption)",
+        "isCorrect": false,
+        "rationale": "Enkripsi adalah mekanisme teknis untuk mengamankan data, bukan nama layanan pencegah penyangkalan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 28,
+    "question": "Sebuah perusahaan e-commerce mengalami kebocoran data pelanggan akibat kelemahan sistem keamanannya. Analisis berdasarkan prinsip keamanan informasi menunjukkan bahwa aspek yang paling terdampak adalah...",
+    "answerOptions": [
+      {
+        "text": "Ketersediaan sistem (availability)",
+        "isCorrect": false,
+        "rationale": "Ketersediaan terdampak apabila sistem mati atau tidak dapat diakses, bukan karena kebocoran informasi."
+      },
+      {
+        "text": "Integritas data (data integrity)",
+        "isCorrect": false,
+        "rationale": "Integritas terdampak apabila data diubah atau dirusak tanpa izin."
+      },
+      {
+        "text": "Autentikasi pengguna (authentication)",
+        "isCorrect": false,
+        "rationale": "Autentikasi berkaitan dengan proses verifikasi identitas saat masuk ke sistem."
+      },
+      {
+        "text": "Kerahasiaan informasi (confidentiality)",
+        "isCorrect": true,
+        "rationale": "Kebocoran data pelanggan berarti informasi yang seharusnya bersifat rahasia telah diakses oleh pihak yang tidak berwenang, sehingga aspek kerahasiaan (confidentiality) adalah yang paling terdampak."
+      }
+    ]
+  },
+  {
+    "questionNumber": 29,
+    "question": "Jenis malware yang menyamar sebagai program yang berguna namun diam-diam menjalankan fungsi berbahaya di latar belakang disebut...",
+    "answerOptions": [
+      {
+        "text": "Worm",
+        "isCorrect": false,
+        "rationale": "Worm adalah malware yang menggandakan dirinya sendiri dan menyebar secara mandiri melalui jaringan tanpa perlu menyamar sebagai program lain."
+      },
+      {
+        "text": "Trojan horse",
+        "isCorrect": true,
+        "rationale": "Trojan horse adalah jenis malware yang bersembunyi di dalam program yang tampak berguna atau tidak berbahaya, namun secara diam-diam melakukan aktivitas jahat seperti mencuri data atau membuka akses bagi peretas."
+      },
+      {
+        "text": "Ransomware",
+        "isCorrect": false,
+        "rationale": "Ransomware mengenkripsi berkas korban dan meminta uang tebusan untuk memulihkan aksesnya."
+      },
+      {
+        "text": "Adware",
+        "isCorrect": false,
+        "rationale": "Adware adalah perangkat lunak yang menampilkan iklan secara otomatis dan mengganggu pengguna."
+      }
+    ]
+  },
+  {
+    "questionNumber": 30,
+    "question": "Mekanisme keamanan yang mengubah data asli menjadi bentuk yang tidak dapat dibaca tanpa kunci tertentu, sehingga melindungi informasi selama pengiriman, disebut...",
+    "answerOptions": [
+      {
+        "text": "Firewall",
+        "isCorrect": false,
+        "rationale": "Firewall berfungsi menyaring dan mengawasi lalu lintas jaringan masuk dan keluar berdasarkan aturan keamanan."
+      },
+      {
+        "text": "Autentikasi dua faktor",
+        "isCorrect": false,
+        "rationale": "Autentikasi dua faktor adalah metode verifikasi identitas pengguna dengan dua bukti berbeda."
+      },
+      {
+        "text": "Enkripsi",
+        "isCorrect": true,
+        "rationale": "Enkripsi adalah proses transformasi data menjadi ciphertext yang hanya dapat dibaca kembali oleh pihak yang memiliki kunci dekripsi yang tepat, sehingga menjaga kerahasiaan informasi selama transmisi."
+      },
+      {
+        "text": "Sistem deteksi intrusi",
+        "isCorrect": false,
+        "rationale": "Sistem deteksi intrusi (IDS) memantau aktivitas mencurigakan di jaringan atau sistem dan memberikan peringatan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 31,
+    "question": "Tindakan seorang peretas yang melakukan pencurian data kartu kredit melalui internet paling tepat dikategorikan sebagai kejahatan siber jenis...",
+    "answerOptions": [
+      {
+        "text": "Carding",
+        "isCorrect": true,
+        "rationale": "Carding adalah kejahatan siber yang berkaitan dengan penggunaan informasi kartu kredit atau debit yang dicuri secara ilegal untuk melakukan transaksi finansial yang tidak sah."
+      },
+      {
+        "text": "Cracking",
+        "isCorrect": false,
+        "rationale": "Cracking merujuk pada pembobolan sistem keamanan perangkat lunak atau jaringan secara umum."
+      },
+      {
+        "text": "Defacing",
+        "isCorrect": false,
+        "rationale": "Defacing adalah tindakan mengubah tampilan halaman muka suatu situs web secara tidak sah."
+      },
+      {
+        "text": "Spamming",
+        "isCorrect": false,
+        "rationale": "Spamming adalah pengiriman pesan sampah secara massal melalui email atau media elektronik lainnya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 32,
+    "question": "Dalam konteks ITU-T X.805, keamanan jaringan TI dibagi menjadi beberapa lapisan (layer). Lapisan yang berhubungan langsung dengan perlindungan pengguna akhir dalam mengakses layanan disebut lapisan...",
+    "answerOptions": [
+      {
+        "text": "Lapisan infrastruktur",
+        "isCorrect": false,
+        "rationale": "Lapisan infrastruktur mencakup perangkat keras jaringan, server, dan tautan transmisi dasar."
+      },
+      {
+        "text": "Lapisan transport",
+        "isCorrect": false,
+        "rationale": "Dalam ITU-T X.805 tidak menggunakan istilah lapisan transport sebagai lapisan yang berinteraksi langsung dengan layanan pengguna akhir (lapisan ITU-T X.805 terdiri dari Infrastructure, Services, dan Applications)."
+      },
+      {
+        "text": "Lapisan manajemen",
+        "isCorrect": false,
+        "rationale": "Manajemen merupakan salah satu bidang keamanan (security plane), bukan lapisan arsitektur."
+      },
+      {
+        "text": "Lapisan layanan (service layer)",
+        "isCorrect": true,
+        "rationale": "Rekomendasi ITU-T X.805 mendefinisikan lapisan layanan sebagai lapisan yang bertanggung jawab atas keamanan layanan yang secara langsung berinteraksi dengan pengguna akhir dalam mengakses aplikasi dan layanan jaringan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 33,
+    "question": "Kewirausahaan dalam bidang teknologi informasi memiliki karakteristik yang membedakannya dari kewirausahaan konvensional, yaitu...",
+    "answerOptions": [
+      {
+        "text": "Memerlukan modal awal yang jauh lebih besar karena membutuhkan infrastruktur fisik yang luas",
+        "isCorrect": false,
+        "rationale": "Bisnis TI justru sering kali dapat dimulai dengan modal infrastruktur fisik yang jauh lebih ramping dibandingkan bisnis manufaktur atau ritel konvensional."
+      },
+      {
+        "text": "Produk atau layanannya berbasis pengetahuan dan dapat diskalakan dengan cepat melalui teknologi digital",
+        "isCorrect": true,
+        "rationale": "Kewirausahaan TI dicirikan oleh skalabilitas tinggi, di mana produk berbasis digital dapat diperluas jangkauannya secara masif dengan biaya marjinal yang relatif rendah dibandingkan bisnis konvensional."
+      },
+      {
+        "text": "Tidak memerlukan strategi pemasaran karena produk TI menjual dirinya sendiri",
+        "isCorrect": false,
+        "rationale": "Produk TI tetap memerlukan strategi pemasaran digital dan akuisisi pengguna yang terencana agar dikenal pasar."
+      },
+      {
+        "text": "Hanya dapat dimulai oleh mereka yang memiliki latar belakang pendidikan teknik informatika",
+        "isCorrect": false,
+        "rationale": "Siapa pun dari berbagai latar belakang dapat membangun usaha TI dengan berkolaborasi bersama tim teknis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 34,
+    "question": "Tahap awal yang harus dilakukan seseorang sebelum mendirikan usaha berbasis teknologi informasi adalah...",
+    "answerOptions": [
+      {
+        "text": "Langsung mendaftar perusahaan di kantor notaris untuk menghemat waktu",
+        "isCorrect": false,
+        "rationale": "Pendirian badan hukum dilakukan setelah ide bisnis dan validasi pasar memiliki kejelasan arah."
+      },
+      {
+        "text": "Merekrut tim teknis sebanyak mungkin sebelum produk selesai dikembangkan",
+        "isCorrect": false,
+        "rationale": "Merekrut banyak karyawan sebelum ada validasi produk hanya akan membebani biaya operasional."
+      },
+      {
+        "text": "Mengidentifikasi masalah atau kebutuhan pasar yang dapat dipecahkan dengan solusi berbasis TI",
+        "isCorrect": true,
+        "rationale": "Identifikasi masalah dan peluang pasar adalah fondasi kewirausahaan yang baik. Tanpa pemahaman yang jelas tentang kebutuhan yang akan dipecahkan, sebuah usaha TI tidak akan memiliki proposisi nilai yang kuat."
+      },
+      {
+        "text": "Mengamankan pendanaan dari investor sebelum memiliki konsep bisnis yang jelas",
+        "isCorrect": false,
+        "rationale": "Investor tidak akan mendanai usaha yang belum memiliki konsep masalah dan solusi yang jelas."
+      }
+    ]
+  },
+  {
+    "questionNumber": 35,
+    "question": "Bentuk badan usaha yang paling sederhana dan mudah didirikan untuk memulai usaha berbasis TI secara perseorangan di Indonesia adalah...",
+    "answerOptions": [
+      {
+        "text": "Usaha perseorangan (sole proprietorship)",
+        "isCorrect": true,
+        "rationale": "Usaha perseorangan adalah bentuk badan usaha yang paling sederhana dengan prosedur pendirian minimal, cocok bagi wirausahawan TI pemula yang ingin memulai usaha secara mandiri dengan cepat."
+      },
+      {
+        "text": "Perseroan Terbatas (PT)",
+        "isCorrect": false,
+        "rationale": "PT memiliki struktur hukum yang lebih formal, kompleks, dan membutuhkan modal serta akta pendirian khusus."
+      },
+      {
+        "text": "Koperasi",
+        "isCorrect": false,
+        "rationale": "Koperasi adalah badan usaha yang didirikan secara kolektif oleh sekelompok anggota dengan asas kekeluargaan."
+      },
+      {
+        "text": "Persekutuan Komanditer (CV)",
+        "isCorrect": false,
+        "rationale": "CV memerlukan minimal dua orang pendiri (sekutu aktif dan sekutu pasif), sehingga bukan usaha perseorangan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 36,
+    "question": "Startup teknologi informasi berbeda dari perusahaan TI yang sudah mapan karena startup...",
+    "answerOptions": [
+      {
+        "text": "Tidak memerlukan model bisnis yang jelas karena masih dalam fase eksplorasi",
+        "isCorrect": false,
+        "rationale": "Startup justru aktif merancang dan menguji hipotesis model bisnis agar dapat menghasilkan pendapatan secara berkelanjutan."
+      },
+      {
+        "text": "Hanya beroperasi di sektor hiburan dan media sosial",
+        "isCorrect": false,
+        "rationale": "Startup TI beroperasi di berbagai sektor seperti finansial, pendidikan, kesehatan, logistik, dan pertanian."
+      },
+      {
+        "text": "Dijalankan sepenuhnya oleh mahasiswa atau pelajar",
+        "isCorrect": false,
+        "rationale": "Startup dapat didirikan oleh siapa saja dari berbagai kalangan usia dan pengalaman profesional."
+      },
+      {
+        "text": "Dirancang untuk tumbuh dengan sangat cepat dan mencari model bisnis yang skalabel dan dapat direplikasi",
+        "isCorrect": true,
+        "rationale": "Startup adalah organisasi yang diciptakan untuk menemukan model bisnis yang berulang dan skalabel, dengan tujuan pertumbuhan yang cepat dan signifikan, berbeda dari bisnis konvensional yang beroperasi dalam model yang sudah terbukti."
+      }
+    ]
+  },
+  {
+    "questionNumber": 37,
+    "question": "Tahapan pendanaan startup yang merupakan putaran investasi pertama yang signifikan setelah tahap awal (seed funding), biasanya dari pemodal ventura, dikenal sebagai...",
+    "answerOptions": [
+      {
+        "text": "IPO (Initial Public Offering)",
+        "isCorrect": false,
+        "rationale": "IPO adalah penawaran saham perdana ke publik di bursa efek saat perusahaan sudah sangat matang."
+      },
+      {
+        "text": "Series A funding",
+        "isCorrect": true,
+        "rationale": "Series A adalah putaran pendanaan formal pertama dari pemodal ventura yang biasanya terjadi setelah startup memiliki produk dan traksi pengguna awal, digunakan untuk mengoptimalkan produk dan memperluas pasar."
+      },
+      {
+        "text": "Angel investment",
+        "isCorrect": false,
+        "rationale": "Angel investment adalah pendanaan tahap sangat awal dari investor individu sebelum masuk ke putaran modal ventura institusional."
+      },
+      {
+        "text": "Crowdfunding",
+        "isCorrect": false,
+        "rationale": "Crowdfunding adalah penggalangan dana secara kolektif dari masyarakat luas melalui platform daring."
+      }
+    ]
+  },
+  {
+    "questionNumber": 38,
+    "question": "Seorang wirausahawan TI sedang mempertimbangkan apakah akan mendirikan PT atau CV untuk usahanya. Keunggulan utama bentuk PT dibandingkan CV adalah...",
+    "answerOptions": [
+      {
+        "text": "PT lebih mudah dan murah untuk didirikan dibandingkan CV",
+        "isCorrect": false,
+        "rationale": "Secara umum biaya dan persyaratan pendirian CV lebih sederhana dibandingkan PT biasa."
+      },
+      {
+        "text": "PT tidak memerlukan akta notaris dalam proses pendiriannya",
+        "isCorrect": false,
+        "rationale": "Pendirian PT secara hukum tetap wajib menggunakan akta notaris."
+      },
+      {
+        "text": "Pemegang saham PT memiliki tanggung jawab terbatas hanya sebesar nilai saham yang dimiliki",
+        "isCorrect": true,
+        "rationale": "Prinsip tanggung jawab terbatas (limited liability) adalah keunggulan utama PT, di mana aset pribadi pemegang saham terlindungi dari kewajiban perusahaan, berbeda dengan CV yang menempatkan sekutu komplementer pada risiko tanggung jawab tidak terbatas."
+      },
+      {
+        "text": "PT dapat didirikan hanya oleh satu orang tanpa memerlukan mitra",
+        "isCorrect": false,
+        "rationale": "Secara tradisional PT didirikan oleh minimal dua orang (kecuali skema khusus PT Perorangan untuk kriteria UMK), dan keunggulan fundamental PT dibanding CV adalah pemisahan kekayaan serta tanggung jawab terbatas."
+      }
+    ]
+  },
+  {
+    "questionNumber": 39,
+    "question": "Model bisnis freemium yang banyak diterapkan oleh startup TI berarti...",
+    "answerOptions": [
+      {
+        "text": "Layanan dasar diberikan secara gratis, sementara fitur premium atau lanjutan dikenakan biaya berlangganan",
+        "isCorrect": true,
+        "rationale": "Freemium adalah strategi monetisasi di mana versi dasar produk ditawarkan gratis untuk menarik pengguna dalam jumlah besar, kemudian sebagian pengguna dikonversi menjadi pelanggan berbayar untuk fitur yang lebih canggih."
+      },
+      {
+        "text": "Seluruh layanan gratis selamanya dan pendapatan hanya berasal dari iklan",
+        "isCorrect": false,
+        "rationale": "Model yang seluruhnya gratis dan mengandalkan iklan disebut ad-supported model, bukan freemium."
+      },
+      {
+        "text": "Pengguna membayar harga penuh di awal dan mendapatkan semua fitur sekaligus",
+        "isCorrect": false,
+        "rationale": "Pembayaran penuh di awal merupakan model pembelian lisensi satu kali (one-time purchase)."
+      },
+      {
+        "text": "Layanan hanya tersedia bagi pengguna yang telah membayar uang muka terlebih dahulu",
+        "isCorrect": false,
+        "rationale": "Freemium tidak mewajibkan uang muka untuk mengakses versi dasar aplikasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 40,
+    "question": "Konsep Minimum Viable Product (MVP) dalam pengembangan startup TI berarti...",
+    "answerOptions": [
+      {
+        "text": "Produk akhir yang telah disempurnakan dengan semua fitur sebelum diluncurkan ke pasar",
+        "isCorrect": false,
+        "rationale": "Menunggu semua fitur sempurna sebelum rilis justru bertentangan dengan prinsip MVP dan lean startup."
+      },
+      {
+        "text": "Produk yang dibuat dengan anggaran seminimal mungkin tanpa memperhatikan fungsinya",
+        "isCorrect": false,
+        "rationale": "MVP tetap harus fungsional (viable) dan mampu memberikan nilai solusi utama bagi pengguna."
+      },
+      {
+        "text": "Produk yang hanya ditujukan untuk segmen pasar yang paling kecil",
+        "isCorrect": false,
+        "rationale": "MVP berfokus pada kelengkapan fitur inti untuk validasi, bukan pembatasan ukuran pasar permanen."
+      },
+      {
+        "text": "Versi awal produk dengan fitur minimal yang cukup untuk diuji kepada pengguna nyata dan mendapatkan umpan balik",
+        "isCorrect": true,
+        "rationale": "MVP adalah strategi pengembangan produk yang memungkinkan tim startup untuk belajar dari pengguna nyata dengan cepat dan efisien sebelum menginvestasikan lebih banyak sumber daya dalam pengembangan penuh."
+      }
+    ]
+  },
+  {
+    "questionNumber": 41,
+    "question": "Konflik kepentingan (conflict of interest) dalam etika profesi TI terjadi ketika...",
+    "answerOptions": [
+      {
+        "text": "Dua klien meminta layanan yang serupa dari profesional yang sama",
+        "isCorrect": false,
+        "rationale": "Melayani dua klien dengan kebutuhan serupa tidak selalu menimbulkan konflik kepentingan selama kerahasiaan masing-masing terjaga."
+      },
+      {
+        "text": "Kepentingan pribadi profesional berpotensi mempengaruhi objektivitas dalam melayani kepentingan klien",
+        "isCorrect": true,
+        "rationale": "Konflik kepentingan muncul ketika kepentingan pribadi atau finansial seorang profesional berpotensi mengorbankan kewajibannya untuk memberikan nasihat atau layanan yang objektif kepada klien."
+      },
+      {
+        "text": "Profesional tidak setuju dengan pendapat teknis rekan sejawatnya",
+        "isCorrect": false,
+        "rationale": "Perbedaan pendapat teknis adalah dinamika diskusi profesional yang wajar, bukan konflik kepentingan."
+      },
+      {
+        "text": "Klien meminta layanan di luar bidang keahlian utama profesional tersebut",
+        "isCorrect": false,
+        "rationale": "Permintaan di luar keahlian berkaitan dengan batas kompetensi profesional, bukan konflik kepentingan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 42,
+    "question": "Whistleblowing dalam konteks etika profesi TI merujuk pada tindakan...",
+    "answerOptions": [
+      {
+        "text": "Mengajukan pengunduran diri ketika tidak setuju dengan kebijakan perusahaan",
+        "isCorrect": false,
+        "rationale": "Mengundurkan diri adalah keputusan berhenti bekerja, bukan tindakan pengungkapan pelanggaran kepada pihak berwenang."
+      },
+      {
+        "text": "Menyebarkan informasi teknis perusahaan kepada kompetitor untuk keuntungan finansial",
+        "isCorrect": false,
+        "rationale": "Membocorkan rahasia dagang ke kompetitor demi uang adalah tindakan spionase industri yang melanggar hukum."
+      },
+      {
+        "text": "Mengungkapkan praktik tidak etis atau ilegal dalam organisasi kepada pihak yang berwenang",
+        "isCorrect": true,
+        "rationale": "Whistleblowing adalah tindakan melaporkan pelanggaran etika atau hukum dalam organisasi kepada regulator, media, atau pihak berwenang lainnya, sebagai bentuk tanggung jawab moral kepada kepentingan publik."
+      },
+      {
+        "text": "Menolak mengerjakan proyek yang dianggap tidak sesuai dengan keahlian",
+        "isCorrect": false,
+        "rationale": "Menolak pekerjaan di luar kompetensi adalah sikap kejujuran profesional, bukan whistleblowing."
+      }
+    ]
+  },
+  {
+    "questionNumber": 43,
+    "question": "Profesional TI yang menggunakan akses istimewanya terhadap sistem perusahaan untuk mengambil data rahasia demi keuntungan pribadi melanggar prinsip etika profesi, khususnya prinsip...",
+    "answerOptions": [
+      {
+        "text": "Kejujuran dan kepercayaan (honesty and trust)",
+        "isCorrect": true,
+        "rationale": "Penyalahgunaan akses untuk kepentingan pribadi merupakan pelanggaran serius terhadap prinsip kejujuran dan kepercayaan yang menjadi fondasi hubungan antara profesional TI dengan organisasi yang memberikan kepercayaan kepadanya."
+      },
+      {
+        "text": "Kompetensi teknis yang berkelanjutan",
+        "isCorrect": false,
+        "rationale": "Kompetensi teknis berkaitan dengan kemampuan keahlian, bukan pencurian data."
+      },
+      {
+        "text": "Pengembangan profesi secara kolektif",
+        "isCorrect": false,
+        "rationale": "Pengembangan profesi kolektif berkaitan dengan kontribusi memajukan komunitas profesi."
+      },
+      {
+        "text": "Ketaatan pada standar teknis industri",
+        "isCorrect": false,
+        "rationale": "Standar teknis industri mengatur kualitas rekayasa sistem, sedangkan pencurian data melanggar kejujuran dan amanah."
+      }
+    ]
+  },
+  {
+    "questionNumber": 44,
+    "question": "Dalam menangani kasus cybercrime, aparat penegak hukum di Indonesia memiliki dasar hukum utama berupa...",
+    "answerOptions": [
+      {
+        "text": "Kitab Undang-Undang Hukum Pidana (KUHP) saja",
+        "isCorrect": false,
+        "rationale": "KUHP konvensional memiliki keterbatasan dalam menjangkau karakteristik kejahatan digital sehingga diperlukan regulasi khusus."
+      },
+      {
+        "text": "Undang-Undang tentang Perlindungan Konsumen",
+        "isCorrect": false,
+        "rationale": "UU Perlindungan Konsumen berfokus pada sengketa transaksi barang/jasa konsumen secara umum."
+      },
+      {
+        "text": "Peraturan Bank Indonesia tentang transaksi elektronik",
+        "isCorrect": false,
+        "rationale": "Peraturan Bank Indonesia hanya mengatur penyelenggaraan sistem pembayaran dan perbankan, bukan hukum pidana siber secara umum."
+      },
+      {
+        "text": "Undang-Undang Informasi dan Transaksi Elektronik (UU ITE)",
+        "isCorrect": true,
+        "rationale": "UU ITE merupakan instrumen hukum utama di Indonesia yang secara spesifik mengatur kejahatan di ruang siber, termasuk akses ilegal, penyebaran konten berbahaya, dan penipuan elektronik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 45,
+    "question": "Dalam perbandingan antara profesi TI di berbagai negara, standar kompetensi yang berlaku secara internasional umumnya diatur melalui...",
+    "answerOptions": [
+      {
+        "text": "Kebijakan perusahaan teknologi besar seperti Google dan Microsoft",
+        "isCorrect": false,
+        "rationale": "Sertifikasi vendor swasta bersifat spesifik pada produk perusahaan tersebut, bukan standar kompetensi profesi antarnegara."
+      },
+      {
+        "text": "Kerangka kualifikasi yang diakui secara regional atau internasional seperti SKKNI dan ASEAN Engineer Register",
+        "isCorrect": true,
+        "rationale": "Standar kompetensi profesi TI internasional mengacu pada kerangka kualifikasi yang diakui secara regional dan global, memungkinkan pengakuan silang kompetensi antar negara dan memfasilitasi mobilitas tenaga kerja TI."
+      },
+      {
+        "text": "Persyaratan yang ditetapkan secara sepihak oleh perusahaan pengembang perangkat lunak terbesar",
+        "isCorrect": false,
+        "rationale": "Standar profesi disusun melalui konsensus lembaga pemerintah, akademisi, dan asosiasi profesi, bukan sepihak oleh satu perusahaan."
+      },
+      {
+        "text": "Sistem pendidikan masing-masing negara tanpa koordinasi internasional",
+        "isCorrect": false,
+        "rationale": "Justru diperlukan kesetaraan kerangka kualifikasi lintas negara agar kompetensi dapat diakui secara internasional."
+      }
+    ]
+  },
+  {
+    "questionNumber": 46,
+    "question": "Penggunaan kecerdasan buatan (artificial intelligence) dalam sistem pengambilan keputusan seperti penilaian kredit dan rekrutmen karyawan menimbulkan isu etika terkait...",
+    "answerOptions": [
+      {
+        "text": "Hak cipta atas algoritma yang digunakan dalam sistem tersebut",
+        "isCorrect": false,
+        "rationale": "Isu utama dalam dampak keputusan otomatis terhadap manusia adalah keadilan dan bias, bukan kepemilikan hak cipta."
+      },
+      {
+        "text": "Biaya lisensi perangkat lunak kecerdasan buatan yang terlalu tinggi",
+        "isCorrect": false,
+        "rationale": "Biaya lisensi merupakan pertimbangan bisnis/anggaran, bukan dilema etika terhadap keadilan pengguna."
+      },
+      {
+        "text": "Bias algoritmik dan potensi diskriminasi terhadap kelompok tertentu",
+        "isCorrect": true,
+        "rationale": "Sistem AI yang dilatih pada data yang bias dapat menghasilkan keputusan yang diskriminatif, sehingga menimbulkan isu etika serius tentang keadilan, transparansi, dan akuntabilitas dalam pengambilan keputusan otomatis."
+      },
+      {
+        "text": "Kurangnya kapasitas komputasi untuk menjalankan algoritma yang kompleks",
+        "isCorrect": false,
+        "rationale": "Kapasitas komputasi merupakan kendala teknis infrastruktur, bukan persoalan etika."
+      }
+    ]
+  },
+  {
+    "questionNumber": 47,
+    "question": "Tanggung jawab sosial perusahaan TI terhadap masyarakat antara lain diwujudkan melalui...",
+    "answerOptions": [
+      {
+        "text": "Program literasi digital untuk masyarakat yang belum memiliki akses teknologi",
+        "isCorrect": true,
+        "rationale": "Tanggung jawab sosial perusahaan TI mencakup kontribusi nyata kepada masyarakat, salah satunya melalui program peningkatan literasi digital yang membantu mempersempit kesenjangan digital (digital divide)."
+      },
+      {
+        "text": "Kebijakan untuk memaksimalkan keuntungan bagi pemegang saham",
+        "isCorrect": false,
+        "rationale": "Memaksimalkan laba pemegang saham adalah tujuan finansial korporasi, bukan bentuk tanggung jawab sosial kepada masyarakat luas."
+      },
+      {
+        "text": "Pengembangan produk eksklusif yang hanya dapat diakses kalangan premium",
+        "isCorrect": false,
+        "rationale": "Produk eksklusif berharga tinggi justru berpotensi memperlebar kesenjangan akses teknologi."
+      },
+      {
+        "text": "Penetapan harga layanan setinggi mungkin untuk memaksimalkan nilai merek",
+        "isCorrect": false,
+        "rationale": "Strategi penetapan harga premium adalah taktik pemasaran, bukan wujud kepedulian sosial."
+      }
+    ]
+  },
+  {
+    "questionNumber": 48,
+    "question": "Dalam menganalisis situasi di mana dua profesional memiliki pandangan berbeda tentang cara terbaik menangani kerentanan sistem yang ditemukan, langkah pertama yang sesuai dengan etika profesi adalah...",
+    "answerOptions": [
+      {
+        "text": "Melaporkan ketidaksepakatan tersebut langsung ke media sosial agar mendapat dukungan publik",
+        "isCorrect": false,
+        "rationale": "Membawa perdebatan teknis internal ke media sosial tidak etis dan dapat membahayakan keamanan sistem."
+      },
+      {
+        "text": "Memilih solusi yang menguntungkan pihak yang memiliki jabatan lebih tinggi",
+        "isCorrect": false,
+        "rationale": "Keputusan teknis keamanan harus didasarkan pada efektivitas mitigasi risiko, bukan hierarki jabatan."
+      },
+      {
+        "text": "Mengabaikan kerentanan tersebut sampai ada konsensus yang dicapai",
+        "isCorrect": false,
+        "rationale": "Mengabaikan kerentanan membahayakan sistem dan pengguna."
+      },
+      {
+        "text": "Mendiskusikan perbedaan pendapat secara profesional berdasarkan data teknis dan standar keamanan yang berlaku",
+        "isCorrect": true,
+        "rationale": "Etika profesi mengharuskan penyelesaian perbedaan pendapat melalui dialog berbasis fakta teknis dan standar profesional yang berlaku, bukan melalui hierarki jabatan atau tekanan publik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 49,
+    "question": "Perusahaan teknologi yang mengklaim produknya aman namun secara sengaja menyembunyikan kerentanan yang diketahui dari pengguna melanggar prinsip etika bisnis berupa...",
+    "answerOptions": [
+      {
+        "text": "Tanggung jawab terhadap pemegang saham (shareholder responsibility)",
+        "isCorrect": false,
+        "rationale": "Menyembunyikan kerentanan justru membahayakan reputasi dan nilai jangka panjang perusahaan bagi pemegang saham."
+      },
+      {
+        "text": "Efisiensi operasional dalam pengembangan produk",
+        "isCorrect": false,
+        "rationale": "Efisiensi operasional berkaitan dengan penghematan biaya dan waktu produksi, bukan kejujuran informasi produk."
+      },
+      {
+        "text": "Transparansi dan kejujuran kepada konsumen (transparency and honesty)",
+        "isCorrect": true,
+        "rationale": "Menyembunyikan kerentanan yang diketahui dari pengguna adalah pelanggaran serius terhadap prinsip transparansi dan kejujuran dalam etika bisnis, karena merugikan konsumen yang bergantung pada informasi yang akurat untuk melindungi diri mereka."
+      },
+      {
+        "text": "Kepatuhan terhadap standar teknis internasional ISO",
+        "isCorrect": false,
+        "rationale": "Tindakan menipu konsumen dengan klaim palsu secara mendasar merupakan pelanggaran etika transparansi dan kejujuran."
+      }
+    ]
+  },
+  {
+    "questionNumber": 50,
+    "question": "Dalam ekosistem startup TI, peran inkubator bisnis berbeda dari akselerator karena inkubator lebih berfokus pada...",
+    "answerOptions": [
+      {
+        "text": "Memberikan pendanaan besar dalam pertukaran untuk kepemilikan saham yang signifikan",
+        "isCorrect": false,
+        "rationale": "Pendanaan besar dengan imbalan saham signifikan umumnya merupakan peran perusahaan modal ventura (venture capital)."
+      },
+      {
+        "text": "Membantu startup tahap sangat awal dalam mengembangkan ide bisnis dan membangun fondasi perusahaan",
+        "isCorrect": true,
+        "rationale": "Inkubator bisnis berperan dalam tahap nurturing (pengasuhan) startup yang masih sangat awal dengan menyediakan mentoring, ruang kerja, dan dukungan pengembangan bisnis, sementara akselerator bekerja dengan startup yang sudah memiliki produk untuk mempercepat pertumbuhannya."
+      },
+      {
+        "text": "Menghubungkan startup yang sudah tumbuh dengan bursa saham untuk IPO",
+        "isCorrect": false,
+        "rationale": "Proses menuju IPO ditangani oleh penjamin emisi efek (underwriter) dan bank investasi saat perusahaan sudah mapan."
+      },
+      {
+        "text": "Menyediakan layanan pemasaran dan distribusi untuk startup yang sudah memiliki produk matang",
+        "isCorrect": false,
+        "rationale": "Inkubator fokus pada validasi ide dan pembentukan fondasi awal, bukan distribusi produk yang sudah matang."
+      }
+    ]
+  }
+];
+
+  let totalBenar = 0;
+  let totalSalah = 0;
+  let answeredQuestions = new Set();
+
+  function acakArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function initSetup() {
+    const totalSoal = soalList.length;
+    document.getElementById('total-tersedia').textContent = totalSoal;
+
+    const buttons = document.querySelectorAll('.btn-jumlah[data-jumlah]');
+    buttons.forEach(btn => {
+      const jumlah = parseInt(btn.getAttribute('data-jumlah'), 10);
+      if (jumlah > totalSoal) {
+        btn.disabled = true;
+      }
+    });
+
+    const btnSemua = document.getElementById('btn-semua');
+    if (totalSoal === 0) {
+      btnSemua.disabled = true;
+    } else {
+      btnSemua.textContent = `Semua Soal (${totalSoal})`;
+    }
+  }
+
+  function mulaiUjian(jumlah) {
+    const isAcak = document.getElementById('checkbox-acak').checked;
+
+    document.getElementById('setup-container').style.display = 'none';
+    document.getElementById('container').style.display = 'block';
+    document.getElementById('counter').style.display = 'block';
+
+    let daftarSoal = isAcak ? acakArray(soalList) : [...soalList];
+    const soalTerpilih = jumlah === 'all' ? daftarSoal : daftarSoal.slice(0, jumlah);
+
+    renderSoal(soalTerpilih, isAcak);
+  }
+
+  function updateCounter() {
+    document.getElementById("benar").textContent = totalBenar;
+    document.getElementById("salah").textContent = totalSalah;
+  }
+
+  function checkAnswer(button, questionId, isCorrect) {
+    if (answeredQuestions.has(questionId)) {
+      return;
+    }
+
+    const soalElement = button.closest('.soal');
+    const buttons = soalElement.querySelectorAll('.jawaban button');
+    
+    buttons.forEach(btn => btn.disabled = true);
+
+    if (isCorrect) {
+      button.classList.add('benar');
+      totalBenar++;
+    } else {
+      button.classList.add('salah');
+      totalSalah++;
+      
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-iscorrect') === 'true') {
+          btn.classList.add('benar');
+        }
+      });
+    }
+
+    const allRationales = soalElement.querySelectorAll('.penjelasan-opsi');
+    allRationales.forEach(rationaleDiv => {
+      rationaleDiv.style.display = 'block';
+    });
+
+    answeredQuestions.add(questionId);
+    updateCounter();
+  }
+
+  function renderSoal(daftarSoal, isAcak) {
+    const container = document.getElementById('container');
+    container.innerHTML = '';
+
+    daftarSoal.forEach((soal, idx) => {
+      const nomorUrut = idx + 1;
+      const soalDiv = document.createElement('div');
+      soalDiv.className = 'soal';
+      soalDiv.setAttribute('data-qnum', nomorUrut);
+      
+      let soalHTML = `<h3>Soal ${nomorUrut}.</h3>`;
+      soalHTML += `<p>${soal.question}</p>`;
+      soalHTML += `<div class="jawaban">`;
+      
+      const opsiJawaban = isAcak ? acakArray(soal.answerOptions) : soal.answerOptions;
+
+      opsiJawaban.forEach((option, index) => {
+        const label = String.fromCharCode(65 + index); 
+        
+        soalHTML += `
+          <button 
+            onclick="checkAnswer(this, ${nomorUrut}, ${option.isCorrect})"
+            data-iscorrect="${option.isCorrect}"
+            data-label="${label}">
+            ${label}. ${option.text}
+          </button>
+          <div class="penjelasan-opsi">
+            <strong>Penjelasan Opsi ${label}:</strong> ${option.rationale}
+          </div>
+        `;
+      });
+      
+      soalHTML += `</div>`;
+      soalDiv.innerHTML = soalHTML;
+      container.appendChild(soalDiv);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initSetup);
+</script>
+
+</body>
+</html>

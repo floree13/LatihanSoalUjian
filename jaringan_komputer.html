@@ -1,0 +1,2924 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal Ujian</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7f6;
+      margin: 0;
+      padding: 20px 10px;
+    }
+    h1 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    h2 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    .setup-box {
+      background: #ffffff;
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      text-align: center;
+      border-top: 5px solid #1a237e;
+    }
+    .setup-box h2 {
+      margin-top: 0;
+      color: #1a237e;
+      font-size: 18px;
+    }
+    .setup-box p {
+      color: #555;
+      font-size: 14px;
+    }
+    .opsi-acak {
+      margin: 15px 0;
+      padding: 10px;
+      background: #f3e5f5;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #4a148c;
+      cursor: pointer;
+    }
+    .opsi-acak input {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    .pilihan-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 15px;
+    }
+    .btn-jumlah {
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 8px;
+      border: 1px solid #3f51b5;
+      background: #e8eaf6;
+      color: #1a237e;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-jumlah:hover:not(:disabled) {
+      background: #3f51b5;
+      color: #ffffff;
+    }
+    .btn-jumlah:disabled {
+      background: #e0e0e0;
+      border-color: #bdbdbd;
+      color: #9e9e9e;
+      cursor: not-allowed;
+    }
+    .soal {
+      background: #ffffff;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 5px solid #42a5f5;
+    }
+    h3 {
+      color: #3f51b5;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .jawaban button {
+      color: #2a2a2a;
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #c5cae9;
+      background: #e8eaf6;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .jawaban button:hover:not(:disabled) {
+      background: #c5cae9;
+    }
+    .jawaban button.benar {
+      background-color: #dcf9dc;
+      border-color: #388e3c;
+      font-weight: bold;
+    }
+    .jawaban button.salah {
+      background-color: #ffcdd2;
+      border-color: #d32f2f;
+      opacity: 0.7;
+    }
+    .penjelasan-opsi {
+      background: #f3e5f5;
+      color: #4a148c;
+      padding: 10px;
+      margin-top: -5px;
+      margin-bottom: 15px;
+      border-radius: 0 0 8px 8px;
+      border-top: none;
+      border-left: 5px solid #7b1fa2;
+      font-size: 14px;
+      display: none;
+    }
+    .counter {
+      position: sticky;
+      bottom: 0;
+      background: #1a237e;
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      display: none;
+    }
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 20px; }
+      .jawaban button { font-size: 14px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Latihan Soal UO UT</h1>
+<h2>Jaringan Komputer</h2>
+
+<div id="setup-container" class="setup-box">
+  <h2>Pilih Jumlah Soal</h2>
+  <p>Total soal tersedia: <strong id="total-tersedia">0</strong> soal</p>
+  
+  <label class="opsi-acak">
+    <input type="checkbox" id="checkbox-acak" checked />
+    Acak Urutan Soal & Opsi Jawaban
+  </label>
+
+  <div class="pilihan-grid" id="pilihan-jumlah">
+    <button class="btn-jumlah" data-jumlah="25" onclick="mulaiUjian(25)">25 Soal</button>
+    <button class="btn-jumlah" data-jumlah="35" onclick="mulaiUjian(35)">35 Soal</button>
+    <button class="btn-jumlah" data-jumlah="45" onclick="mulaiUjian(25)">45 Soal</button>
+    <button class="btn-jumlah" data-jumlah="50" onclick="mulaiUjian(50)">50 Soal</button>
+    <button class="btn-jumlah" data-jumlah="100" style="grid-column: span 2;" onclick="mulaiUjian('100')">100 Soal</button>
+  </div>
+</div>
+
+<div id="container" style="display: none;"></div>
+
+<div id="counter" class="counter">
+  ✅ Jawaban Benar: <span id="benar">0</span> |
+  ❌ Jawaban Salah: <span id="salah">0</span>
+</div>
+
+<script>
+    const soalList = [
+    {
+        "questionNumber": 1,
+        "question": "Dalam arsitektur jaringan komputer, model yang terdiri dari kumpulan lapisan yang saling terkait dan setiap lapisan memiliki fungsi tertentu disebut dengan...",
+        "answerOptions": [
+        {
+            "text": "Struktur jaringan",
+            "isCorrect": false,
+            "rationale": "Struktur jaringan adalah istilah umum untuk susunan komponen jaringan, bukan konsep pengelompokan fungsi ke dalam lapisan."
+        },
+        {
+            "text": "Protokol jaringan",
+            "isCorrect": false,
+            "rationale": "Protokol jaringan adalah aturan komunikasi antarperangkat dalam jaringan."
+        },
+        {
+            "text": "Arsitektur berlapis",
+            "isCorrect": true,
+            "rationale": "Arsitektur berlapis adalah model yang mengelompokkan fungsi jaringan ke dalam beberapa lapisan, seperti model OSI dan TCP/IP."
+        },
+        {
+            "text": "Topologi jaringan",
+            "isCorrect": false,
+            "rationale": "Topologi jaringan adalah tata letak fisik atau logis dari koneksi perangkat dalam jaringan."
+        }
+        ]
+    },
+    {
+        "questionNumber": 2,
+        "question": "Tokoh yang dikenal sebagai bapak jaringan komputer dan berperan dalam pengembangan ARPANET adalah...",
+        "answerOptions": [
+        {
+            "text": "Tim Berners-Lee",
+            "isCorrect": false,
+            "rationale": "Tim Berners-Lee dikenal sebagai penemu World Wide Web (WWW)."
+        },
+        {
+            "text": "Vint Cerf",
+            "isCorrect": true,
+            "rationale": "Vint Cerf bersama Bob Kahn dikenal sebagai bapak internet karena kontribusinya dalam protokol TCP/IP yang menjadi dasar ARPANET."
+        },
+        {
+            "text": "Robert Metcalfe",
+            "isCorrect": false,
+            "rationale": "Robert Metcalfe dikenal sebagai penemu teknologi Ethernet."
+        },
+        {
+            "text": "J.C.R. Licklider",
+            "isCorrect": false,
+            "rationale": "J.C.R. Licklider adalah penggagas awal konsep jaringan komputer (Intergalactic Computer Network), namun Vint Cerf yang dikenal sebagai bapak internet/TCP/IP."
+        }
+        ]
+    },
+    {
+        "questionNumber": 3,
+        "question": "Standar internasional yang mengatur spesifikasi teknis dalam komunikasi data agar perangkat dari berbagai vendor dapat saling terhubung disebut...",
+        "answerOptions": [
+        {
+            "text": "Protokol",
+            "isCorrect": false,
+            "rationale": "Protokol adalah aturan spesifik untuk pertukaran data, sedangkan proses penetapan aturan lintas vendor disebut standarisasi."
+        },
+        {
+            "text": "Standarisasi",
+            "isCorrect": true,
+            "rationale": "Standarisasi adalah proses penetapan spesifikasi teknis agar perangkat jaringan dari vendor berbeda dapat saling berkomunikasi secara interoperabel."
+        },
+        {
+            "text": "Arsitektur",
+            "isCorrect": false,
+            "rationale": "Arsitektur merujuk pada rancangan keseluruhan struktur dan lapisan jaringan."
+        },
+        {
+            "text": "Topologi",
+            "isCorrect": false,
+            "rationale": "Topologi menggambarkan bentuk hubungan geometris antarperangkat jaringan."
+        }
+        ]
+    },
+    {
+        "questionNumber": 4,
+        "question": "Tren jaringan komputer yang memungkinkan perangkat saling terhubung melalui internet dengan konsep layanan berbasis cloud disebut...",
+        "answerOptions": [
+        {
+            "text": "Internet of Things",
+            "isCorrect": false,
+            "rationale": "IoT berfokus pada konektivitas objek fisik dan sensor ke internet."
+        },
+        {
+            "text": "Software-Defined Networking",
+            "isCorrect": false,
+            "rationale": "SDN berfokus pada pemisahan control plane dan data plane dalam manajemen jaringan."
+        },
+        {
+            "text": "Edge computing",
+            "isCorrect": false,
+            "rationale": "Edge computing memproses data lebih dekat ke sumber data (perangkat tepi), bukan terpusat di cloud."
+        },
+        {
+            "text": "Cloud computing",
+            "isCorrect": true,
+            "rationale": "Cloud computing adalah tren jaringan yang menyediakan layanan komputasi, penyimpanan, dan aplikasi melalui internet tanpa pengelolaan langsung perangkat keras."
+        }
+        ]
+    },
+    {
+        "questionNumber": 5,
+        "question": "ARPANET pertama kali dikembangkan pada tahun...",
+        "answerOptions": [
+        {
+            "text": "1960",
+            "isCorrect": false,
+            "rationale": "Pada tahun 1960 konsep packet switching baru mulai diteliti, belum menjadi proyek ARPANET."
+        },
+        {
+            "text": "1969",
+            "isCorrect": true,
+            "rationale": "ARPANET mulai dikembangkan pada tahun 1969 oleh Advanced Research Projects Agency (ARPA) sebagai proyek riset untuk menghubungkan beberapa universitas."
+        },
+        {
+            "text": "1972",
+            "isCorrect": false,
+            "rationale": "Pada tahun 1972 ARPANET mulai diperkenalkan ke publik secara luas dan email mulai dikembangkan."
+        },
+        {
+            "text": "1983",
+            "isCorrect": false,
+            "rationale": "Tahun 1983 adalah tahun di mana ARPANET secara resmi mengadopsi protokol TCP/IP."
+        }
+        ]
+    },
+    {
+        "questionNumber": 6,
+        "question": "Organisasi yang bertanggung jawab dalam pengembangan standar jaringan komputer, termasuk TCP/IP, adalah...",
+        "answerOptions": [
+        {
+            "text": "IEEE",
+            "isCorrect": false,
+            "rationale": "IEEE berfokus pada standar perangkat keras dan lapisan fisik/data link seperti Ethernet (802.3) dan Wi-Fi (802.11)."
+        },
+        {
+            "text": "ISO",
+            "isCorrect": false,
+            "rationale": "ISO mengembangkan model referensi OSI dan berbagai standar internasional umum lainnya."
+        },
+        {
+            "text": "IETF",
+            "isCorrect": true,
+            "rationale": "IETF (Internet Engineering Task Force) adalah organisasi yang mengembangkan standar untuk protokol internet, termasuk TCP/IP."
+        },
+        {
+            "text": "ITU",
+            "isCorrect": false,
+            "rationale": "ITU berfokus pada standarisasi telekomunikasi global dan spektrum radio."
+        }
+        ]
+    },
+    {
+        "questionNumber": 7,
+        "question": "Konsep jaringan yang memisahkan fungsi kontrol dan data plane untuk meningkatkan fleksibilitas manajemen jaringan disebut...",
+        "answerOptions": [
+        {
+            "text": "Software-Defined Networking",
+            "isCorrect": true,
+            "rationale": "SDN memisahkan control plane dan data plane sehingga administrator dapat mengelola lalu lintas jaringan secara terpusat melalui software."
+        },
+        {
+            "text": "Network Functions Virtualization",
+            "isCorrect": false,
+            "rationale": "NFV adalah konsep virtualisasi fungsi perangkat jaringan (seperti firewall atau router) ke dalam server standar."
+        },
+        {
+            "text": "Internet of Things",
+            "isCorrect": false,
+            "rationale": "IoT adalah jaringan perangkat fisik yang tertanam sensor dan terhubung ke internet."
+        },
+        {
+            "text": "Cloud Computing",
+            "isCorrect": false,
+            "rationale": "Cloud computing adalah penyediaan sumber daya komputasi sesuai permintaan melalui internet."
+        }
+        ]
+    },
+    {
+        "questionNumber": 8,
+        "question": "Dalam model referensi OSI, lapisan yang bertanggung jawab untuk pengalamatan logis dan routing paket data adalah...",
+        "answerOptions": [
+        {
+            "text": "Layer Network",
+            "isCorrect": true,
+            "rationale": "Layer Network (lapisan ke-3) pada model OSI menangani pengalamatan logis, routing, dan forwarding paket antar jaringan."
+        },
+        {
+            "text": "Layer Transport",
+            "isCorrect": false,
+            "rationale": "Layer Transport bertanggung jawab pada pengiriman data end-to-end, segmentasi, dan kontrol aliran."
+        },
+        {
+            "text": "Layer Data Link",
+            "isCorrect": false,
+            "rationale": "Layer Data Link menangani pengalamatan fisik (MAC) dan pengiriman frame dalam satu segmen jaringan."
+        },
+        {
+            "text": "Layer Physical",
+            "isCorrect": false,
+            "rationale": "Layer Physical menangani transmisi bit mentah melalui media fisik."
+        }
+        ]
+    },
+    {
+        "questionNumber": 9,
+        "question": "Fungsi dari layer Session dalam model OSI adalah...",
+        "answerOptions": [
+        {
+            "text": "Memastikan kehandalan koneksi data",
+            "isCorrect": false,
+            "rationale": "Kehandalan koneksi data merupakan tugas utama Layer Transport."
+        },
+        {
+            "text": "Mengatur kontrol aliran dan error",
+            "isCorrect": false,
+            "rationale": "Kontrol aliran dan deteksi error dilakukan oleh Layer Data Link dan Layer Transport."
+        },
+        {
+            "text": "Menyediakan antarmuka untuk aplikasi pengguna",
+            "isCorrect": false,
+            "rationale": "Antarmuka untuk aplikasi pengguna disediakan oleh Layer Application."
+        },
+        {
+            "text": "Membangun, memelihara, dan mengakhiri sesi komunikasi",
+            "isCorrect": true,
+            "rationale": "Layer Session mengatur dialog antar host, termasuk pembentukan, pemeliharaan, dan pengakhiran sesi komunikasi."
+        }
+        ]
+    },
+    {
+        "questionNumber": 10,
+        "question": "Lapisan terendah dalam model OSI yang berhubungan dengan transmisi bit melalui media fisik adalah...",
+        "answerOptions": [
+        {
+            "text": "Layer Data Link",
+            "isCorrect": false,
+            "rationale": "Layer Data Link adalah lapisan ke-2 yang memproses data dalam bentuk frame."
+        },
+        {
+            "text": "Layer Network",
+            "isCorrect": false,
+            "rationale": "Layer Network adalah lapisan ke-3 yang menangani paket dan routing."
+        },
+        {
+            "text": "Layer Physical",
+            "isCorrect": true,
+            "rationale": "Layer Physical menangani transmisi bit secara elektrik, optik, atau radio melalui media fisik seperti kabel atau udara."
+        },
+        {
+            "text": "Layer Transport",
+            "isCorrect": false,
+            "rationale": "Layer Transport adalah lapisan ke-4 yang menangani segmen data."
+        }
+        ]
+    },
+    {
+        "questionNumber": 11,
+        "question": "Protokol TCP bekerja pada layer OSI mana...",
+        "answerOptions": [
+        {
+            "text": "Layer Application",
+            "isCorrect": false,
+            "rationale": "Layer Application menjalankan protokol seperti HTTP, FTP, dan SMTP."
+        },
+        {
+            "text": "Layer Data Link",
+            "isCorrect": false,
+            "rationale": "Layer Data Link menggunakan protokol seperti Ethernet dan PPP."
+        },
+        {
+            "text": "Layer Network",
+            "isCorrect": false,
+            "rationale": "Layer Network menggunakan protokol seperti IP dan ICMP."
+        },
+        {
+            "text": "Layer Transport",
+            "isCorrect": true,
+            "rationale": "TCP (Transmission Control Protocol) adalah protokol transport yang menyediakan layanan koneksi andal dan berorientasi koneksi."
+        }
+        ]
+    },
+    {
+        "questionNumber": 12,
+        "question": "Dalam model OSI, layer yang menyediakan layanan seperti enkripsi dan kompresi data adalah...",
+        "answerOptions": [
+        {
+            "text": "Layer Application",
+            "isCorrect": false,
+            "rationale": "Layer Application berinteraksi langsung dengan aplikasi perangkat lunak pengguna."
+        },
+        {
+            "text": "Layer Session",
+            "isCorrect": false,
+            "rationale": "Layer Session mengelola sesi komunikasi antarperangkat."
+        },
+        {
+            "text": "Layer Presentation",
+            "isCorrect": true,
+            "rationale": "Layer Presentation bertanggung jawab untuk transformasi data seperti enkripsi, kompresi, dan konversi format agar dapat dipahami oleh aplikasi."
+        },
+        {
+            "text": "Layer Transport",
+            "isCorrect": false,
+            "rationale": "Layer Transport mengelola pengiriman segmen data end-to-end."
+        }
+        ]
+    },
+    {
+        "questionNumber": 13,
+        "question": "Perangkat yang berfungsi untuk menghubungkan dua jaringan dengan tipe yang sama dan bekerja pada layer 2 OSI adalah...",
+        "answerOptions": [
+        {
+            "text": "Switch",
+            "isCorrect": true,
+            "rationale": "Switch bekerja di layer Data Link (layer 2) untuk meneruskan frame berdasarkan alamat MAC dan menghubungkan perangkat dalam jaringan lokal."
+        },
+        {
+            "text": "Router",
+            "isCorrect": false,
+            "rationale": "Router bekerja pada layer 3 (Network) untuk menghubungkan jaringan yang berbeda."
+        },
+        {
+            "text": "Hub",
+            "isCorrect": false,
+            "rationale": "Hub bekerja pada layer 1 (Physical) dan hanya meneruskan sinyal listrik."
+        },
+        {
+            "text": "Bridge",
+            "isCorrect": false,
+            "rationale": "Meskipun Bridge bekerja di layer 2, dalam konteks perangkat modern multi-port yang menghubungkan jaringan lokal sejenis adalah Switch."
+        }
+        ]
+    },
+    {
+        "questionNumber": 14,
+        "question": "Alat yang bekerja pada layer Physical dan hanya meneruskan sinyal listrik tanpa memeriksa alamat adalah...",
+        "answerOptions": [
+        {
+            "text": "Switch",
+            "isCorrect": false,
+            "rationale": "Switch bekerja di layer 2 dan memeriksa alamat MAC sebelum meneruskan frame."
+        },
+        {
+            "text": "Hub",
+            "isCorrect": true,
+            "rationale": "Hub adalah perangkat layer Physical yang hanya menerima dan meneruskan sinyal listrik ke semua port tanpa pemrosesan data."
+        },
+        {
+            "text": "Router",
+            "isCorrect": false,
+            "rationale": "Router bekerja di layer 3 dan memeriksa alamat IP tujuan paket."
+        },
+        {
+            "text": "Bridge",
+            "isCorrect": false,
+            "rationale": "Bridge bekerja di layer 2 dan menyaring lalu lintas berdasarkan alamat MAC."
+        }
+        ]
+    },
+    {
+        "questionNumber": 15,
+        "question": "Router bekerja pada layer OSI ke berapa...",
+        "answerOptions": [
+        {
+            "text": "Layer 3",
+            "isCorrect": true,
+            "rationale": "Router beroperasi di layer Network (layer 3) dan menggunakan alamat IP untuk menentukan jalur terbaik dalam mengirimkan paket."
+        },
+        {
+            "text": "Layer 2",
+            "isCorrect": false,
+            "rationale": "Layer 2 adalah wilayah kerja perangkat seperti Switch dan Bridge."
+        },
+        {
+            "text": "Layer 4",
+            "isCorrect": false,
+            "rationale": "Layer 4 adalah layer Transport yang menangani protokol seperti TCP dan UDP."
+        },
+        {
+            "text": "Layer 1",
+            "isCorrect": false,
+            "rationale": "Layer 1 adalah wilayah kerja perangkat seperti Hub dan Repeater."
+        }
+        ]
+    },
+    {
+        "questionNumber": 16,
+        "question": "Perangkat yang menggabungkan fungsi switch dan router dalam satu unit disebut...",
+        "answerOptions": [
+        {
+            "text": "Bridge",
+            "isCorrect": false,
+            "rationale": "Bridge hanya bekerja di layer 2 untuk menghubungkan dua segmen LAN."
+        },
+        {
+            "text": "Gateway",
+            "isCorrect": false,
+            "rationale": "Gateway menerjemahkan protokol yang berbeda antarjaringan."
+        },
+        {
+            "text": "Hub",
+            "isCorrect": false,
+            "rationale": "Hub hanyalah pengulang sinyal multi-port di layer 1."
+        },
+        {
+            "text": "Layer 3 switch",
+            "isCorrect": true,
+            "rationale": "Layer 3 switch memiliki kemampuan switching di layer 2 dan routing di layer 3, sehingga dapat menghubungkan VLAN dengan efisien."
+        }
+        ]
+    },
+    {
+        "questionNumber": 17,
+        "question": "Fungsi utama dari NIC (Network Interface Card) adalah...",
+        "answerOptions": [
+        {
+            "text": "Menyediakan antarmuka fisik antara komputer dan media jaringan",
+            "isCorrect": true,
+            "rationale": "NIC adalah perangkat keras yang dipasang di komputer untuk menyediakan koneksi fisik ke jaringan melalui kabel atau nirkabel."
+        },
+        {
+            "text": "Mengatur lalu lintas data antar jaringan",
+            "isCorrect": false,
+            "rationale": "Mengatur lalu lintas data antar jaringan adalah fungsi utama dari Router."
+        },
+        {
+            "text": "Menghubungkan jaringan WAN",
+            "isCorrect": false,
+            "rationale": "Penghubung jaringan WAN biasanya dilakukan oleh router atau modem khusus WAN."
+        },
+        {
+            "text": "Memperkuat sinyal dalam jaringan",
+            "isCorrect": false,
+            "rationale": "Memperkuat sinyal adalah fungsi dari Repeater."
+        }
+        ]
+    },
+    {
+        "questionNumber": 18,
+        "question": "Perangkat jaringan yang berfungsi untuk menghubungkan dua segmen jaringan yang berbeda dan meneruskan paket data berdasarkan alamat MAC adalah...",
+        "answerOptions": [
+        {
+            "text": "Router",
+            "isCorrect": false,
+            "rationale": "Router meneruskan paket berdasarkan alamat IP (layer 3), bukan alamat MAC."
+        },
+        {
+            "text": "Bridge",
+            "isCorrect": true,
+            "rationale": "Bridge bekerja pada layer 2 (Data Link) dan menggunakan alamat MAC untuk menghubungkan dua segmen jaringan."
+        },
+        {
+            "text": "Hub",
+            "isCorrect": false,
+            "rationale": "Hub tidak mengenali alamat MAC dan hanya meneruskan sinyal ke semua port."
+        },
+        {
+            "text": "Switch",
+            "isCorrect": false,
+            "rationale": "Switch umumnya digunakan untuk menghubungkan banyak perangkat dalam satu LAN, sedangkan Bridge secara spesifik dirancang menjembatani dua segmen jaringan."
+        }
+        ]
+    },
+    {
+        "questionNumber": 19,
+        "question": "Alat yang digunakan untuk memperkuat sinyal pada jaringan kabel agar dapat menjangkau jarak yang lebih jauh disebut...",
+        "answerOptions": [
+        {
+            "text": "Repeater",
+            "isCorrect": true,
+            "rationale": "Repeater berfungsi memperkuat dan meregenerasi sinyal yang lemah sehingga jarak jangkauan jaringan lebih panjang."
+        },
+        {
+            "text": "Gateway",
+            "isCorrect": false,
+            "rationale": "Gateway berfungsi menghubungkan jaringan dengan arsitektur atau protokol yang berbeda."
+        },
+        {
+            "text": "Modem",
+            "isCorrect": false,
+            "rationale": "Modem berfungsi memodulasi dan mendemodulasi sinyal digital ke analog atau sebaliknya."
+        },
+        {
+            "text": "Access Point",
+            "isCorrect": false,
+            "rationale": "Access Point menghubungkan perangkat nirkabel (Wi-Fi) ke jaringan kabel."
+        }
+        ]
+    },
+    {
+        "questionNumber": 20,
+        "question": "Perangkat yang bekerja pada layer 3 (Network) dan menggunakan alamat IP untuk menentukan jalur terbaik dalam mengirimkan data adalah...",
+        "answerOptions": [
+        {
+            "text": "Switch",
+            "isCorrect": false,
+            "rationale": "Switch standar bekerja pada layer 2 menggunakan alamat MAC."
+        },
+        {
+            "text": "Bridge",
+            "isCorrect": false,
+            "rationale": "Bridge bekerja pada layer 2 menggunakan alamat MAC."
+        },
+        {
+            "text": "Router",
+            "isCorrect": true,
+            "rationale": "Router beroperasi di layer 3 dan menggunakan alamat IP untuk melakukan routing paket data antar jaringan."
+        },
+        {
+            "text": "Hub",
+            "isCorrect": false,
+            "rationale": "Hub bekerja pada layer 1 tanpa memahami alamat IP maupun MAC."
+        }
+        ]
+    },
+    {
+        "questionNumber": 21,
+        "question": "Jika sebuah switch memiliki 8 port dan setiap port dapat beroperasi secara full duplex, maka total throughput maksimal yang dapat dicapai adalah...",
+        "answerOptions": [
+        {
+            "text": "8 kali kecepatan port",
+            "isCorrect": false,
+            "rationale": "8 kali kecepatan port berlaku jika switch beroperasi dalam mode half duplex."
+        },
+        {
+            "text": "16 kali kecepatan port",
+            "isCorrect": true,
+            "rationale": "Full duplex memungkinkan pengiriman dan penerimaan data secara simultan di setiap port, sehingga throughput total menjadi 2 kali jumlah port yaitu 2 x 8 = 16 kali kecepatan port."
+        },
+        {
+            "text": "4 kali kecepatan port",
+            "isCorrect": false,
+            "rationale": "Perhitungan 4 kali tidak sesuai dengan kapasitas 8 port full duplex."
+        },
+        {
+            "text": "32 kali kecepatan port",
+            "isCorrect": false,
+            "rationale": "32 kali kecepatan port akan tercapai jika switch memiliki 16 port full duplex."
+        }
+        ]
+    },
+    {
+        "questionNumber": 22,
+        "question": "Protokol Internet yang digunakan untuk memberikan alamat IP secara otomatis kepada perangkat dalam jaringan adalah...",
+        "answerOptions": [
+        {
+            "text": "DNS",
+            "isCorrect": false,
+            "rationale": "DNS menerjemahkan nama domain menjadi alamat IP."
+        },
+        {
+            "text": "DHCP",
+            "isCorrect": true,
+            "rationale": "DHCP (Dynamic Host Configuration Protocol) berfungsi memberikan konfigurasi alamat IP secara otomatis kepada klien di jaringan."
+        },
+        {
+            "text": "HTTP",
+            "isCorrect": false,
+            "rationale": "HTTP adalah protokol untuk mentransfer halaman web."
+        },
+        {
+            "text": "FTP",
+            "isCorrect": false,
+            "rationale": "FTP adalah protokol untuk mentransfer berkas antar komputer."
+        }
+        ]
+    },
+    {
+        "questionNumber": 23,
+        "question": "Format alamat IPv4 yang benar adalah...",
+        "answerOptions": [
+        {
+            "text": "192.168.1.1",
+            "isCorrect": true,
+            "rationale": "IPv4 menggunakan format desimal bertitik dengan 4 oktet, misalnya 192.168.1.1, sedangkan opsi B adalah IPv6 dan opsi C adalah alamat MAC."
+        },
+        {
+            "text": "2001:db8::1",
+            "isCorrect": false,
+            "rationale": "2001:db8::1 adalah contoh format alamat IPv6 yang menggunakan heksadesimal."
+        },
+        {
+            "text": "00:1A:2B:3C:4D:5E",
+            "isCorrect": false,
+            "rationale": "00:1A:2B:3C:4D:5E adalah format alamat fisik (MAC Address)."
+        },
+        {
+            "text": "192.168.1.1.1",
+            "isCorrect": false,
+            "rationale": "Format ini salah karena memiliki 5 oktet, sedangkan IPv4 hanya terdiri dari 4 oktet."
+        }
+        ]
+    },
+    {
+        "questionNumber": 24,
+        "question": "Fungsi dari subnet mask pada jaringan IP adalah...",
+        "answerOptions": [
+        {
+            "text": "Mengidentifikasi host dalam jaringan",
+            "isCorrect": false,
+            "rationale": "Identifikasi host dilakukan oleh bagian host ID dari alamat IP itu sendiri, sedangkan subnet mask memisahkannya."
+        },
+        {
+            "text": "Menentukan bagian network dan host dari alamat IP",
+            "isCorrect": true,
+            "rationale": "Subnet mask digunakan untuk membedakan bagian network ID dan host ID dalam alamat IP."
+        },
+        {
+            "text": "Mengenkripsi data yang dikirim",
+            "isCorrect": false,
+            "rationale": "Subnet mask tidak memiliki fungsi keamanan atau enkripsi data."
+        },
+        {
+            "text": "Menentukan protokol transport yang digunakan",
+            "isCorrect": false,
+            "rationale": "Protokol transport ditentukan oleh field protocol pada header IP, bukan subnet mask."
+        }
+        ]
+    },
+    {
+        "questionNumber": 25,
+        "question": "Alamat IP privat yang umum digunakan pada jaringan lokal adalah...",
+        "answerOptions": [
+        {
+            "text": "8.8.8.8",
+            "isCorrect": false,
+            "rationale": "8.8.8.8 adalah alamat IP publik milik layanan DNS Google."
+        },
+        {
+            "text": "172.16.0.1",
+            "isCorrect": false,
+            "rationale": "Meskipun termasuk blok privat kelas B (172.16.0.0/12), 192.168.0.1 adalah yang paling umum digunakan di jaringan lokal standar/rumahan."
+        },
+        {
+            "text": "192.168.0.1",
+            "isCorrect": true,
+            "rationale": "192.168.0.1 termasuk dalam rentang alamat privat (192.168.0.0/16) yang sering digunakan di jaringan lokal."
+        },
+        {
+            "text": "10.0.0.1",
+            "isCorrect": false,
+            "rationale": "10.0.0.1 adalah alamat IP privat kelas A yang biasanya dipakai di jaringan enterprise berskala besar."
+        }
+        ]
+    },
+    {
+        "questionNumber": 26,
+        "question": "Protokol TCP/IP yang bertanggung jawab untuk mengubah alamat IP menjadi alamat fisik (MAC) adalah...",
+        "answerOptions": [
+        {
+            "text": "RARP",
+            "isCorrect": false,
+            "rationale": "RARP berfungsi kebalikannya, yaitu mencari alamat IP berdasarkan alamat MAC yang diketahui."
+        },
+        {
+            "text": "ICMP",
+            "isCorrect": false,
+            "rationale": "ICMP digunakan untuk pesan diagnostik dan kesalahan jaringan (seperti perintah ping)."
+        },
+        {
+            "text": "IGMP",
+            "isCorrect": false,
+            "rationale": "IGMP digunakan untuk mengelola keanggotaan grup multicast."
+        },
+        {
+            "text": "ARP",
+            "isCorrect": true,
+            "rationale": "ARP (Address Resolution Protocol) digunakan untuk memetakan alamat IP ke alamat MAC pada jaringan lokal."
+        }
+        ]
+    },
+    {
+        "questionNumber": 27,
+        "question": "Header paket IPv4 memiliki field yang menunjukkan protokol lapisan atas yang digunakan. Nilai 6 pada field protocol menunjukkan protokol...",
+        "answerOptions": [
+        {
+            "text": "TCP",
+            "isCorrect": true,
+            "rationale": "Nilai 6 pada field protocol header IPv4 mengindikasikan bahwa protokol lapisan atas adalah TCP."
+        },
+        {
+            "text": "ICMP",
+            "isCorrect": false,
+            "rationale": "Protokol ICMP direpresentasikan oleh nilai 1 pada header IPv4."
+        },
+        {
+            "text": "UDP",
+            "isCorrect": false,
+            "rationale": "Protokol UDP direpresentasikan oleh nilai 17 pada header IPv4."
+        },
+        {
+            "text": "IGMP",
+            "isCorrect": false,
+            "rationale": "Protokol IGMP direpresentasikan oleh nilai 2 pada header IPv4."
+        }
+        ]
+    },
+    {
+        "questionNumber": 28,
+        "question": "Dalam pengiriman paket data menggunakan metode unicast, paket dikirim ke...",
+        "answerOptions": [
+        {
+            "text": "Satu penerima tertentu",
+            "isCorrect": true,
+            "rationale": "Unicast adalah pengiriman data dari satu pengirim ke satu penerima secara point-to-point."
+        },
+        {
+            "text": "Semua perangkat dalam jaringan",
+            "isCorrect": false,
+            "rationale": "Pengiriman ke semua perangkat dalam jaringan disebut broadcast."
+        },
+        {
+            "text": "Sekelompok perangkat yang tergabung dalam grup",
+            "isCorrect": false,
+            "rationale": "Pengiriman ke sekelompok perangkat tertentu dalam grup disebut multicast."
+        },
+        {
+            "text": "Tidak ada penerima",
+            "isCorrect": false,
+            "rationale": "Unicast selalu memiliki satu alamat tujuan penerima yang spesifik."
+        }
+        ]
+    },
+    {
+        "questionNumber": 29,
+        "question": "Perangkat yang menghubungkan dua jaringan dengan protokol yang berbeda dan melakukan konversi data disebut...",
+        "answerOptions": [
+        {
+            "text": "Bridge",
+            "isCorrect": false,
+            "rationale": "Bridge menghubungkan dua segmen jaringan yang menggunakan protokol lapisan 2 yang sama."
+        },
+        {
+            "text": "Router",
+            "isCorrect": false,
+            "rationale": "Router merutekan paket antarjaringan yang umumnya menggunakan protokol jaringan yang sama (seperti IP)."
+        },
+        {
+            "text": "Switch",
+            "isCorrect": false,
+            "rationale": "Switch meneruskan frame di dalam jaringan lokal tanpa melakukan konversi protokol."
+        },
+        {
+            "text": "Gateway",
+            "isCorrect": true,
+            "rationale": "Gateway berfungsi menghubungkan jaringan yang menggunakan protokol berbeda dan dapat melakukan translasi protokol."
+        }
+        ]
+    },
+    {
+        "questionNumber": 30,
+        "question": "Teknik yang digunakan untuk menggabungkan beberapa jaringan LAN menjadi satu jaringan logis yang lebih besar disebut...",
+        "answerOptions": [
+        {
+            "text": "Subnetting",
+            "isCorrect": false,
+            "rationale": "Subnetting adalah teknik memecah satu jaringan besar menjadi beberapa sub-jaringan yang lebih kecil."
+        },
+        {
+            "text": "Multicasting",
+            "isCorrect": false,
+            "rationale": "Multicasting adalah metode pengiriman paket ke grup penerima tertentu."
+        },
+        {
+            "text": "Broadcasting",
+            "isCorrect": false,
+            "rationale": "Broadcasting adalah pengiriman paket ke seluruh node dalam satu domain broadcast."
+        },
+        {
+            "text": "Internetworking",
+            "isCorrect": true,
+            "rationale": "Internetworking adalah proses menghubungkan beberapa jaringan LAN atau WAN menjadi satu jaringan yang terintegrasi."
+        }
+        ]
+    },
+    {
+        "questionNumber": 31,
+        "question": "Router yang menggunakan protokol routing dinamis seperti OSPF akan memperbarui tabel routing secara...",
+        "answerOptions": [
+        {
+            "text": "Manual oleh administrator",
+            "isCorrect": false,
+            "rationale": "Pembaruan manual oleh administrator adalah karakteristik dari static routing."
+        },
+        {
+            "text": "Setiap 24 jam",
+            "isCorrect": false,
+            "rationale": "OSPF tidak menunggu 24 jam, melainkan bereaksi cepat terhadap perubahan topologi jaringan."
+        },
+        {
+            "text": "Otomatis berdasarkan perubahan jaringan",
+            "isCorrect": true,
+            "rationale": "Protokol routing dinamis memungkinkan router saling bertukar informasi dan memperbarui tabel routing secara otomatis saat terjadi perubahan topologi."
+        },
+        {
+            "text": "Tidak pernah berubah",
+            "isCorrect": false,
+            "rationale": "Tabel routing pada routing dinamis selalu menyesuaikan kondisi jaringan terkini."
+        }
+        ]
+    },
+    {
+        "questionNumber": 32,
+        "question": "Alamat IP 10.0.0.0/8 termasuk dalam kelas...",
+        "answerOptions": [
+        {
+            "text": "Kelas D",
+            "isCorrect": false,
+            "rationale": "Kelas D digunakan untuk alamat multicast (224.0.0.0 hingga 239.255.255.255)."
+        },
+        {
+            "text": "Kelas B",
+            "isCorrect": false,
+            "rationale": "Kelas B mencakup rentang oktet pertama 128 hingga 191 dengan default prefix /16."
+        },
+        {
+            "text": "Kelas C",
+            "isCorrect": false,
+            "rationale": "Kelas C mencakup rentang oktet pertama 192 hingga 223 dengan default prefix /24."
+        },
+        {
+            "text": "Kelas A",
+            "isCorrect": true,
+            "rationale": "Alamat IP kelas A memiliki prefix /8 (netmask 255.0.0.0) dengan oktet pertama antara 1 hingga 126, dan 10.0.0.0 termasuk di dalamnya."
+        }
+        ]
+    },
+    {
+        "questionNumber": 33,
+        "question": "Jika sebuah router memiliki rute ke jaringan 192.168.1.0/24 melalui interface eth0 dan juga rute default ke 0.0.0.0/0 melalui eth1, maka paket dengan tujuan 192.168.1.10 akan dikirim melalui...",
+        "answerOptions": [
+        {
+            "text": "eth1",
+            "isCorrect": false,
+            "rationale": "eth1 adalah rute default yang hanya digunakan jika tidak ada rute spesifik yang cocok."
+        },
+        {
+            "text": "Keduanya",
+            "isCorrect": false,
+            "rationale": "Router hanya memilih satu jalur terbaik berdasarkan longest prefix match."
+        },
+        {
+            "text": "eth0",
+            "isCorrect": true,
+            "rationale": "Router akan menggunakan rute yang paling spesifik (prefix panjang) yaitu 192.168.1.0/24 sehingga paket dikirim melalui eth0."
+        },
+        {
+            "text": "Tidak ada",
+            "isCorrect": false,
+            "rationale": "Paket tetap diteruskan karena kedua rute valid, dan rute spesifik akan dipilih."
+        }
+        ]
+    },
+    {
+        "questionNumber": 34,
+        "question": "Dalam model TCP/IP, fungsi internetworking terutama dilakukan di layer...",
+        "answerOptions": [
+        {
+            "text": "Internet",
+            "isCorrect": true,
+            "rationale": "Layer Internet pada model TCP/IP setara dengan layer Network pada OSI dan bertanggung jawab untuk routing dan pengiriman paket antar jaringan."
+        },
+        {
+            "text": "Transport",
+            "isCorrect": false,
+            "rationale": "Layer Transport menangani komunikasi end-to-end antaraplikasi melalui TCP atau UDP."
+        },
+        {
+            "text": "Application",
+            "isCorrect": false,
+            "rationale": "Layer Application menyediakan protokol layanan bagi aplikasi pengguna."
+        },
+        {
+            "text": "Network Access",
+            "isCorrect": false,
+            "rationale": "Layer Network Access menangani detail fisik dan pengiriman frame di jaringan lokal."
+        }
+        ]
+    },
+    {
+        "questionNumber": 35,
+        "question": "Dalam internetworking, perangkat yang digunakan untuk menghubungkan dua jaringan dengan protokol yang berbeda adalah...",
+        "answerOptions": [
+        {
+            "text": "Bridge",
+            "isCorrect": false,
+            "rationale": "Bridge menghubungkan segmen jaringan yang memiliki arsitektur dan protokol yang sama."
+        },
+        {
+            "text": "Repeater",
+            "isCorrect": false,
+            "rationale": "Repeater hanya berfungsi menguatkan sinyal fisik tanpa memproses protokol."
+        },
+        {
+            "text": "Router",
+            "isCorrect": false,
+            "rationale": "Router menghubungkan jaringan yang menggunakan protokol jaringan yang sama."
+        },
+        {
+            "text": "Gateway",
+            "isCorrect": true,
+            "rationale": "Gateway berfungsi menghubungkan jaringan dengan protokol yang berbeda, termasuk melakukan konversi protokol."
+        }
+        ]
+    },
+    {
+        "questionNumber": 36,
+        "question": "Protokol routing yang menggunakan algoritma Distance Vector adalah...",
+        "answerOptions": [
+        {
+            "text": "OSPF",
+            "isCorrect": false,
+            "rationale": "OSPF menggunakan algoritma Link-State."
+        },
+        {
+            "text": "RIP",
+            "isCorrect": true,
+            "rationale": "RIP (Routing Information Protocol) menggunakan algoritma Distance Vector untuk menentukan jalur terbaik."
+        },
+        {
+            "text": "IS-IS",
+            "isCorrect": false,
+            "rationale": "IS-IS menggunakan algoritma Link-State."
+        },
+        {
+            "text": "BGP",
+            "isCorrect": false,
+            "rationale": "BGP menggunakan algoritma Path Vector."
+        }
+        ]
+    },
+    {
+        "questionNumber": 37,
+        "question": "Metrik yang digunakan oleh protokol routing OSPF dalam menentukan jalur terbaik adalah...",
+        "answerOptions": [
+        {
+            "text": "Hop count",
+            "isCorrect": false,
+            "rationale": "Hop count (jumlah lompatan router) adalah metrik yang digunakan oleh RIP."
+        },
+        {
+            "text": "Bandwidth",
+            "isCorrect": true,
+            "rationale": "OSPF menggunakan cost berdasarkan bandwidth sebagai metrik utama, berbeda dengan RIP yang menggunakan hop count."
+        },
+        {
+            "text": "Delay",
+            "isCorrect": false,
+            "rationale": "Delay digunakan sebagai salah satu komponen metrik pada EIGRP, bukan metrik utama OSPF."
+        },
+        {
+            "text": "Load",
+            "isCorrect": false,
+            "rationale": "Load bukan merupakan metrik standar yang digunakan oleh OSPF."
+        }
+        ]
+    },
+    {
+        "questionNumber": 38,
+        "question": "Protokol routing eksterior yang digunakan untuk menghubungkan sistem otonom di internet adalah...",
+        "answerOptions": [
+        {
+            "text": "RIP",
+            "isCorrect": false,
+            "rationale": "RIP adalah Interior Gateway Protocol (IGP) yang bekerja di dalam satu sistem otonom."
+        },
+        {
+            "text": "OSPF",
+            "isCorrect": false,
+            "rationale": "OSPF adalah Interior Gateway Protocol (IGP) untuk routing internal jaringan."
+        },
+        {
+            "text": "IGRP",
+            "isCorrect": false,
+            "rationale": "IGRP adalah protokol routing interior milik Cisco."
+        },
+        {
+            "text": "BGP",
+            "isCorrect": true,
+            "rationale": "BGP (Border Gateway Protocol) adalah protokol routing eksterior yang menghubungkan sistem otonom di internet."
+        }
+        ]
+    },
+    {
+        "questionNumber": 39,
+        "question": "Keuntungan utama routing statis dibandingkan routing dinamis adalah...",
+        "answerOptions": [
+        {
+            "text": "Mudah beradaptasi dengan perubahan jaringan",
+            "isCorrect": false,
+            "rationale": "Kemampuan beradaptasi otomatis terhadap perubahan jaringan adalah keunggulan routing dinamis."
+        },
+        {
+            "text": "Mengurangi penggunaan bandwidth",
+            "isCorrect": true,
+            "rationale": "Routing statis tidak perlu mengirimkan informasi routing, sehingga mengurangi penggunaan bandwidth dibandingkan routing dinamis."
+        },
+        {
+            "text": "Dapat memperbaiki kesalahan routing secara otomatis",
+            "isCorrect": false,
+            "rationale": "Routing statis tidak dapat mengubah rute secara otomatis jika terjadi kegagalan jalur."
+        },
+        {
+            "text": "Menyediakan jalur backup secara real-time",
+            "isCorrect": false,
+            "rationale": "Pemilihan jalur cadangan secara otomatis dan real-time adalah keunggulan routing dinamis."
+        }
+        ]
+    },
+    {
+        "questionNumber": 40,
+        "question": "Dalam routing dinamis, masalah yang terjadi ketika router menerima informasi yang salah dari router lain disebut...",
+        "answerOptions": [
+        {
+            "text": "Loop routing",
+            "isCorrect": true,
+            "rationale": "Loop routing adalah masalah di mana router menerima informasi routing yang salah, menyebabkan paket berputar tanpa mencapai tujuan."
+        },
+        {
+            "text": "Black hole",
+            "isCorrect": false,
+            "rationale": "Black hole adalah kondisi di mana paket dibuang secara diam-diam tanpa memberi tahu pengirim."
+        },
+        {
+            "text": "Routing poison",
+            "isCorrect": false,
+            "rationale": "Route poisoning adalah teknik pencegahan loop dengan menandai rute yang rusak dengan metrik tak terhingga."
+        },
+        {
+            "text": "Route flapping",
+            "isCorrect": false,
+            "rationale": "Route flapping terjadi ketika status sebuah rute terus-menerus berubah antara aktif dan tidak aktif."
+        }
+        ]
+    },
+    {
+        "questionNumber": 41,
+        "question": "Protokol routing mana yang termasuk dalam kategori Interior Gateway Protocol (IGP) berbasis link-state?",
+        "answerOptions": [
+        {
+            "text": "RIP",
+            "isCorrect": false,
+            "rationale": "RIP termasuk IGP, tetapi berbasis algoritma distance-vector."
+        },
+        {
+            "text": "EIGRP",
+            "isCorrect": false,
+            "rationale": "EIGRP adalah protokol hybrid (advanced distance-vector)."
+        },
+        {
+            "text": "OSPF",
+            "isCorrect": true,
+            "rationale": "OSPF (Open Shortest Path First) adalah protokol IGP yang menggunakan algoritma link-state untuk menemukan jalur terpendek."
+        },
+        {
+            "text": "BGP",
+            "isCorrect": false,
+            "rationale": "BGP adalah Exterior Gateway Protocol (EGP) berbasis path-vector."
+        }
+        ]
+    },
+    {
+        "questionNumber": 42,
+        "question": "Fungsi utama dari layer transport dalam model OSI adalah...",
+        "answerOptions": [
+        {
+            "text": "Routing paket antar jaringan",
+            "isCorrect": false,
+            "rationale": "Routing paket antar jaringan adalah fungsi utama Layer Network."
+        },
+        {
+            "text": "Memberikan alamat logis",
+            "isCorrect": false,
+            "rationale": "Pemberian alamat logis (seperti IP) dilakukan oleh Layer Network."
+        },
+        {
+            "text": "Mengontrol aliran data dan keandalan pengiriman",
+            "isCorrect": true,
+            "rationale": "Layer transport bertanggung jawab atas kontrol aliran, segmentasi, dan keandalan pengiriman data antar aplikasi."
+        },
+        {
+            "text": "Mengkodekan data untuk transmisi",
+            "isCorrect": false,
+            "rationale": "Pengkodean format data dilakukan oleh Layer Presentation dan pengkodean sinyal di Layer Physical."
+        }
+        ]
+    },
+    {
+        "questionNumber": 43,
+        "question": "Protokol di layer transport yang menyediakan pengiriman data yang andal adalah...",
+        "answerOptions": [
+        {
+            "text": "TCP",
+            "isCorrect": true,
+            "rationale": "TCP (Transmission Control Protocol) menyediakan pengiriman yang andal dengan mekanisme handshake dan aknowledgement."
+        },
+        {
+            "text": "UDP",
+            "isCorrect": false,
+            "rationale": "UDP bersifat connectionless dan tidak menjamin keandalan pengiriman data."
+        },
+        {
+            "text": "IP",
+            "isCorrect": false,
+            "rationale": "IP bekerja di layer Network dan bersifat best-effort (tidak andal)."
+        },
+        {
+            "text": "ARP",
+            "isCorrect": false,
+            "rationale": "ARP bertugas memetakan alamat IP ke alamat MAC."
+        }
+        ]
+    },
+    {
+        "questionNumber": 44,
+        "question": "Dalam protokol TCP, mekanisme untuk mengatur laju pengiriman data agar sesuai dengan kemampuan penerima disebut...",
+        "answerOptions": [
+        {
+            "text": "Flow control",
+            "isCorrect": true,
+            "rationale": "Flow control pada TCP menggunakan mekanisme jendela geser untuk menyesuaikan laju pengiriman dengan kapasitas buffer penerima."
+        },
+        {
+            "text": "Congestion control",
+            "isCorrect": false,
+            "rationale": "Congestion control bertujuan mencegah kemacetan lalu lintas di jaringan secara keseluruhan."
+        },
+        {
+            "text": "Error control",
+            "isCorrect": false,
+            "rationale": "Error control bertugas mendeteksi dan mengirim ulang segmen data yang rusak atau hilang."
+        },
+        {
+            "text": "Fragmentation",
+            "isCorrect": false,
+            "rationale": "Fragmentation adalah pemecahan paket IP agar sesuai dengan ukuran MTU jaringan."
+        }
+        ]
+    },
+    {
+        "questionNumber": 45,
+        "question": "Protokol UDP biasanya digunakan pada aplikasi yang memerlukan...",
+        "answerOptions": [
+        {
+            "text": "Keandalan tinggi dan transmisi data bertahap",
+            "isCorrect": false,
+            "rationale": "Keandalan tinggi merupakan kebutuhan aplikasi yang menggunakan TCP."
+        },
+        {
+            "text": "Kecepatan tinggi tanpa koneksi terlebih dahulu",
+            "isCorrect": true,
+            "rationale": "UDP bersifat connectionless dan cepat, cocok untuk aplikasi seperti streaming video atau VoIP yang mentolerir sedikit kehilangan data."
+        },
+        {
+            "text": "Pengiriman data dengan urutan yang pasti",
+            "isCorrect": false,
+            "rationale": "UDP tidak menjamin urutan kedatangan datagram."
+        },
+        {
+            "text": "Kontrol aliran yang ketat",
+            "isCorrect": false,
+            "rationale": "UDP tidak memiliki fitur flow control."
+        }
+        ]
+    },
+    {
+        "questionNumber": 46,
+        "question": "Pada TCP, fitur yang memastikan data yang diterima dalam urutan yang benar adalah...",
+        "answerOptions": [
+        {
+            "text": "Checksum",
+            "isCorrect": false,
+            "rationale": "Checksum digunakan untuk memeriksa integritas data agar tidak korup saat transmisi."
+        },
+        {
+            "text": "Sequence number",
+            "isCorrect": true,
+            "rationale": "Sequence number digunakan oleh TCP untuk mengurutkan segmen data agar dapat diatur ulang di sisi penerima."
+        },
+        {
+            "text": "Acknowledgment number",
+            "isCorrect": false,
+            "rationale": "Acknowledgment number digunakan untuk mengonfirmasi penerimaan segmen kepada pengirim."
+        },
+        {
+            "text": "Window size",
+            "isCorrect": false,
+            "rationale": "Window size menentukan jumlah byte yang dapat diterima sebelum mengirim ACK."
+        }
+        ]
+    },
+    {
+        "questionNumber": 47,
+        "question": "Fungsi dari port number dalam protokol transport adalah...",
+        "answerOptions": [
+        {
+            "text": "Mengidentifikasi jaringan tujuan",
+            "isCorrect": false,
+            "rationale": "Identifikasi jaringan tujuan dilakukan oleh Network ID pada alamat IP."
+        },
+        {
+            "text": "Menandai host asal dan tujuan",
+            "isCorrect": false,
+            "rationale": "Penandaan host asal dan tujuan dilakukan oleh alamat IP sumber dan tujuan."
+        },
+        {
+            "text": "Membedakan aplikasi atau layanan yang berjalan di host",
+            "isCorrect": true,
+            "rationale": "Port number membedakan antara aplikasi atau layanan (seperti HTTP atau FTP) di dalam satu host pada layer transport."
+        },
+        {
+            "text": "Mengenkripsi data saat transmisi",
+            "isCorrect": false,
+            "rationale": "Port number hanyalah nomor pengenal layanan, bukan mekanisme enkripsi."
+        }
+        ]
+    },
+    {
+        "questionNumber": 48,
+        "question": "Proses pembukaan koneksi TCP yang melibatkan tiga langkah pertukaran paket disebut...",
+        "answerOptions": [
+        {
+            "text": "Three-way handshake",
+            "isCorrect": true,
+            "rationale": "Three-way handshake adalah proses SYN, SYN-ACK, ACK yang dilakukan untuk membuka koneksi TCP secara andal."
+        },
+        {
+            "text": "Sliding window",
+            "isCorrect": false,
+            "rationale": "Sliding window adalah mekanisme flow control selama transfer data berlangsung."
+        },
+        {
+            "text": "Congestion avoidance",
+            "isCorrect": false,
+            "rationale": "Congestion avoidance adalah algoritma untuk menghindari kemacetan jaringan."
+        },
+        {
+            "text": "Connection termination",
+            "isCorrect": false,
+            "rationale": "Connection termination adalah proses penutupan koneksi TCP (biasanya empat langkah FIN/ACK)."
+        }
+        ]
+    },
+    {
+        "questionNumber": 49,
+        "question": "Pemrograman pada layer aplikasi yang umum menggunakan protokol HTTP biasanya melibatkan...",
+        "answerOptions": [
+        {
+            "text": "Pengelolaan soket TCP/IP",
+            "isCorrect": true,
+            "rationale": "Pemrograman aplikasi web menggunakan soket TCP/IP untuk berkomunikasi melalui protokol HTTP, yang memerlukan pengelolaan soket."
+        },
+        {
+            "text": "Routing paket secara manual",
+            "isCorrect": false,
+            "rationale": "Routing paket ditangani di layer Network oleh sistem operasi atau router, bukan di pemrograman aplikasi."
+        },
+        {
+            "text": "Manipulasi tabel ARP",
+            "isCorrect": false,
+            "rationale": "Tabel ARP bekerja di lapisan bawah untuk resolusi alamat MAC."
+        },
+        {
+            "text": "Konfigurasi antarmuka jaringan",
+            "isCorrect": false,
+            "rationale": "Konfigurasi antarmuka adalah tugas administrasi jaringan tingkat sistem operasi."
+        }
+        ]
+    },
+    {
+        "questionNumber": 50,
+        "question": "Dalam pemrograman layer aplikasi, model arsitektur di mana klien meminta layanan dan server menyediakan respons disebut...",
+        "answerOptions": [
+        {
+            "text": "Peer-to-peer",
+            "isCorrect": false,
+            "rationale": "Pada model peer-to-peer, setiap node dapat bertindak sebagai klien maupun server secara bersamaan."
+        },
+        {
+            "text": "Client-server",
+            "isCorrect": true,
+            "rationale": "Model client-server adalah arsitektur di mana klien mengirim permintaan ke server, lalu server memproses dan mengirim respons."
+        },
+        {
+            "text": "Multi-tier",
+            "isCorrect": false,
+            "rationale": "Multi-tier adalah pembagian lapisan pemrosesan aplikasi (presentasi, logika, data) secara terpisah."
+        },
+        {
+            "text": "Grid computing",
+            "isCorrect": false,
+            "rationale": "Grid computing menggabungkan banyak komputer terdistribusi untuk menyelesaikan tugas komputasi besar."
+        }
+        ]
+    },
+    {
+        "questionNumber": 51,
+        "question": "Salah satu contoh protokol aplikasi yang menggunakan model request-response adalah...",
+        "answerOptions": [
+        {
+            "text": "TCP",
+            "isCorrect": false,
+            "rationale": "TCP adalah protokol pada layer Transport."
+        },
+        {
+            "text": "IP",
+            "isCorrect": false,
+            "rationale": "IP adalah protokol pada layer Network."
+        },
+        {
+            "text": "HTTP",
+            "isCorrect": true,
+            "rationale": "HTTP adalah protokol aplikasi yang mengikuti model request-response, di mana klien mengirim permintaan dan server mengembalikan respons."
+        },
+        {
+            "text": "Ethernet",
+            "isCorrect": false,
+            "rationale": "Ethernet adalah protokol pada layer Data Link dan Physical."
+        }
+        ]
+    },
+    {
+        "questionNumber": 52,
+        "question": "Dalam pemrograman untuk layer aplikasi, protokol yang umum digunakan untuk komunikasi antara server dan klien adalah...",
+        "answerOptions": [
+        {
+            "text": "IP",
+            "isCorrect": false,
+            "rationale": "IP berada di layer Network untuk pengalamatan dan routing."
+        },
+        {
+            "text": "TCP",
+            "isCorrect": false,
+            "rationale": "TCP berada di layer Transport sebagai protokol pendukung."
+        },
+        {
+            "text": "HTTP",
+            "isCorrect": true,
+            "rationale": "HTTP adalah protokol layer aplikasi yang digunakan dalam komunikasi web antara klien dan server."
+        },
+        {
+            "text": "ARP",
+            "isCorrect": false,
+            "rationale": "ARP berada di lapisan bawah untuk menerjemahkan IP ke MAC."
+        }
+        ]
+    },
+    {
+        "questionNumber": 53,
+        "question": "Salah satu metode pemrograman untuk layer aplikasi yang memungkinkan aplikasi berjalan di berbagai platform adalah menggunakan...",
+        "answerOptions": [
+        {
+            "text": "Driver perangkat",
+            "isCorrect": false,
+            "rationale": "Driver perangkat sangat bergantung pada sistem operasi dan perangkat keras tertentu."
+        },
+        {
+            "text": "Socket API",
+            "isCorrect": true,
+            "rationale": "Socket API memungkinkan pemrograman aplikasi jaringan yang bersifat lintas platform pada layer aplikasi."
+        },
+        {
+            "text": "Firmware",
+            "isCorrect": false,
+            "rationale": "Firmware adalah perangkat lunak tingkat rendah yang tertanam langsung di perangkat keras."
+        },
+        {
+            "text": "BIOS",
+            "isCorrect": false,
+            "rationale": "BIOS adalah perangkat lunak untuk inisialisasi perangkat keras saat komputer dinyalakan."
+        }
+        ]
+    },
+    {
+        "questionNumber": 54,
+        "question": "Dalam pengembangan aplikasi jaringan di layer aplikasi, fungsi utama dari socket adalah sebagai...",
+        "answerOptions": [
+        {
+            "text": "Protokol routing",
+            "isCorrect": false,
+            "rationale": "Socket bukan protokol routing, melainkan titik akhir komunikasi."
+        },
+        {
+            "text": "Media penyimpanan data",
+            "isCorrect": false,
+            "rationale": "Socket tidak berfungsi sebagai tempat penyimpanan data permanen."
+        },
+        {
+            "text": "Alamat fisik perangkat",
+            "isCorrect": false,
+            "rationale": "Alamat fisik perangkat adalah MAC Address."
+        },
+        {
+            "text": "Antarmuka antara aplikasi dan protokol transport",
+            "isCorrect": true,
+            "rationale": "Socket menyediakan antarmuka bagi aplikasi untuk berkomunikasi melalui protokol transport seperti TCP atau UDP."
+        }
+        ]
+    },
+    {
+        "questionNumber": 55,
+        "question": "Protokol yang sering digunakan dalam pemrograman aplikasi untuk mengirim data secara real-time adalah...",
+        "answerOptions": [
+        {
+            "text": "UDP",
+            "isCorrect": true,
+            "rationale": "UDP adalah protokol transport yang mendukung pengiriman data cepat dan cocok untuk aplikasi real-time."
+        },
+        {
+            "text": "FTP",
+            "isCorrect": false,
+            "rationale": "FTP digunakan untuk transfer file berbasis TCP yang mengutamakan keutuhan data, bukan real-time streaming."
+        },
+        {
+            "text": "SMTP",
+            "isCorrect": false,
+            "rationale": "SMTP digunakan untuk pengiriman email."
+        },
+        {
+            "text": "HTTP",
+            "isCorrect": false,
+            "rationale": "HTTP standar menggunakan TCP dan dirancang untuk pertukaran dokumen web."
+        }
+        ]
+    },
+    {
+        "questionNumber": 56,
+        "question": "Salah satu langkah dalam pemrograman socket pada sisi server adalah...",
+        "answerOptions": [
+        {
+            "text": "Recvfrom",
+            "isCorrect": false,
+            "rationale": "Recvfrom digunakan untuk menerima datagram pada socket UDP yang sudah siap."
+        },
+        {
+            "text": "Connect",
+            "isCorrect": false,
+            "rationale": "Connect dipanggil oleh sisi klien untuk memulai koneksi ke server."
+        },
+        {
+            "text": "Sendto",
+            "isCorrect": false,
+            "rationale": "Sendto digunakan untuk mengirim data pada socket tanpa koneksi."
+        },
+        {
+            "text": "Bind",
+            "isCorrect": true,
+            "rationale": "Bind digunakan server untuk mengikat socket ke alamat dan port tertentu sebelum menerima koneksi."
+        }
+        ]
+    },
+    {
+        "questionNumber": 57,
+        "question": "Dalam protokol penamaan direktori, sistem yang digunakan untuk memetakan nama host ke alamat IP adalah...",
+        "answerOptions": [
+        {
+            "text": "DNS",
+            "isCorrect": true,
+            "rationale": "DNS atau Domain Name System berfungsi untuk menerjemahkan nama domain menjadi alamat IP."
+        },
+        {
+            "text": "DHCP",
+            "isCorrect": false,
+            "rationale": "DHCP berfungsi mengalokasikan alamat IP secara dinamis."
+        },
+        {
+            "text": "ARP",
+            "isCorrect": false,
+            "rationale": "ARP memetakan alamat IP ke alamat MAC."
+        },
+        {
+            "text": "ICMP",
+            "isCorrect": false,
+            "rationale": "ICMP mengirimkan pesan kontrol dan kesalahan jaringan."
+        }
+        ]
+    },
+    {
+        "questionNumber": 58,
+        "question": "Data yang disimpan dalam server DNS untuk sebuah domain biasanya berupa...",
+        "answerOptions": [
+        {
+            "text": "Paket TCP",
+            "isCorrect": false,
+            "rationale": "Paket TCP adalah unit transmisi data pada layer transport, bukan catatan zona DNS."
+        },
+        {
+            "text": "File HTML",
+            "isCorrect": false,
+            "rationale": "File HTML disimpan di web server, bukan di server DNS."
+        },
+        {
+            "text": "Record A, CNAME, MX",
+            "isCorrect": true,
+            "rationale": "Record A, CNAME, dan MX adalah jenis data dalam DNS yang menyimpan informasi tentang alamat IP, alias, dan mail server."
+        },
+        {
+            "text": "Alamat MAC",
+            "isCorrect": false,
+            "rationale": "Server DNS tidak menyimpan pemetaan alamat MAC perangkat."
+        }
+        ]
+    },
+    {
+        "questionNumber": 59,
+        "question": "Proses yang dilakukan oleh klien untuk menemukan alamat IP dari suatu nama domain disebut...",
+        "answerOptions": [
+        {
+            "text": "Routing",
+            "isCorrect": false,
+            "rationale": "Routing adalah proses penentuan jalur pengiriman paket antarjaringan."
+        },
+        {
+            "text": "Resolusi DNS",
+            "isCorrect": true,
+            "rationale": "Resolusi DNS adalah proses permintaan dan respons antara klien dan server DNS untuk mendapatkan alamat IP."
+        },
+        {
+            "text": "Encapsulation",
+            "isCorrect": false,
+            "rationale": "Encapsulation adalah pembungkusan data dengan header protokol di setiap lapisan."
+        },
+        {
+            "text": "Handshaking",
+            "isCorrect": false,
+            "rationale": "Handshaking adalah proses negosiasi awal sebelum komunikasi data dimulai."
+        }
+        ]
+    },
+    {
+        "questionNumber": 60,
+        "question": "Dalam hierarki DNS, server yang memiliki wewenang untuk suatu zona disebut...",
+        "answerOptions": [
+        {
+            "text": "Forwarder",
+            "isCorrect": false,
+            "rationale": "Forwarder adalah server DNS yang meneruskan kueri ke server DNS lain."
+        },
+        {
+            "text": "Root server",
+            "isCorrect": false,
+            "rationale": "Root server berada di puncak hierarki DNS dan mengarahkan ke server Top-Level Domain (TLD)."
+        },
+        {
+            "text": "Cache server",
+            "isCorrect": false,
+            "rationale": "Cache server hanya menyimpan hasil kueri sementara untuk mempercepat pencarian berulang."
+        },
+        {
+            "text": "Authoritative nameserver",
+            "isCorrect": true,
+            "rationale": "Authoritative nameserver menyediakan jawaban definitif untuk permintaan dalam zona tertentu."
+        }
+        ]
+    },
+    {
+        "questionNumber": 61,
+        "question": "Protokol penamaan direktori yang digunakan dalam jaringan Microsoft Windows adalah...",
+        "answerOptions": [
+        {
+            "text": "Active Directory",
+            "isCorrect": false,
+            "rationale": "Active Directory adalah implementasi layanan direktori Microsoft, sedangkan protokol akses yang digunakannya adalah LDAP."
+        },
+        {
+            "text": "WINS",
+            "isCorrect": false,
+            "rationale": "WINS adalah layanan lama untuk resolusi nama NetBIOS ke alamat IP."
+        },
+        {
+            "text": "NIS",
+            "isCorrect": false,
+            "rationale": "NIS (Network Information Service) adalah layanan direktori yang dikembangkan untuk sistem Unix."
+        },
+        {
+            "text": "LDAP",
+            "isCorrect": true,
+            "rationale": "Active Directory adalah layanan direktori milik Microsoft yang mengelola sumber daya jaringan menggunakan protokol LDAP."
+        }
+        ]
+    },
+    {
+        "questionNumber": 62,
+        "question": "LDAP merupakan singkatan dari...",
+        "answerOptions": [
+        {
+            "text": "Lightweight Directory Access Protocol",
+            "isCorrect": true,
+            "rationale": "LDAP adalah protokol untuk mengakses dan mengelola informasi direktori secara ringan."
+        },
+        {
+            "text": "Local Directory Application Protocol",
+            "isCorrect": false,
+            "rationale": "Kepanjangan ini tidak tepat; huruf L pada LDAP berarti Lightweight."
+        },
+        {
+            "text": "Layer Directory Access Point",
+            "isCorrect": false,
+            "rationale": "Kepanjangan ini salah; huruf P pada LDAP berarti Protocol."
+        },
+        {
+            "text": "Large Directory Allocation Protocol",
+            "isCorrect": false,
+            "rationale": "Kepanjangan ini salah; LDAP dirancang sebagai versi ringan (lightweight) dari DAP."
+        }
+        ]
+    },
+    {
+        "questionNumber": 63,
+        "question": "Protokol penamaan direktori yang memungkinkan pencarian informasi terpusat dalam jaringan adalah...",
+        "answerOptions": [
+        {
+            "text": "DNS",
+            "isCorrect": false,
+            "rationale": "DNS berfokus pada pemetaan nama domain ke alamat IP."
+        },
+        {
+            "text": "LDAP",
+            "isCorrect": true,
+            "rationale": "LDAP menyediakan akses terpusat ke direktori yang berisi informasi seperti pengguna dan sumber daya."
+        },
+        {
+            "text": "FTP",
+            "isCorrect": false,
+            "rationale": "FTP adalah protokol untuk mentransfer berkas."
+        },
+        {
+            "text": "SMTP",
+            "isCorrect": false,
+            "rationale": "SMTP adalah protokol untuk pengiriman surat elektronik."
+        }
+        ]
+    },
+    {
+        "questionNumber": 64,
+        "question": "Dalam eksekusi jarak jauh, protokol yang memungkinkan pengguna menjalankan perintah pada komputer remote adalah...",
+        "answerOptions": [
+        {
+            "text": "FTP",
+            "isCorrect": false,
+            "rationale": "FTP hanya digunakan untuk transfer file, bukan eksekusi perintah sistem jarak jauh."
+        },
+        {
+            "text": "SSH",
+            "isCorrect": true,
+            "rationale": "SSH memungkinkan eksekusi perintah secara aman pada komputer jarak jauh."
+        },
+        {
+            "text": "HTTP",
+            "isCorrect": false,
+            "rationale": "HTTP digunakan untuk mengambil sumber daya halaman web."
+        },
+        {
+            "text": "SMTP",
+            "isCorrect": false,
+            "rationale": "SMTP digunakan untuk mengirim pesan email."
+        }
+        ]
+    },
+    {
+        "questionNumber": 65,
+        "question": "Fungsi utama dari eksekusi jarak jauh adalah...",
+        "answerOptions": [
+        {
+            "text": "Mengontrol komputer lain dari jarak jauh",
+            "isCorrect": true,
+            "rationale": "Eksekusi jarak jauh berfokus pada pengendalian dan pengoperasian komputer remote."
+        },
+        {
+            "text": "Mentransfer file antar komputer",
+            "isCorrect": false,
+            "rationale": "Mentransfer file adalah fungsi utama dari protokol transfer berkas seperti FTP."
+        },
+        {
+            "text": "Mengirim email",
+            "isCorrect": false,
+            "rationale": "Mengirim email adalah fungsi layanan surat elektronik."
+        },
+        {
+            "text": "Menjelajahi web",
+            "isCorrect": false,
+            "rationale": "Menjelajahi web adalah fungsi peramban menggunakan HTTP/HTTPS."
+        }
+        ]
+    },
+    {
+        "questionNumber": 66,
+        "question": "Protokol yang digunakan untuk eksekusi jarak jauh pada sistem Unix/Linux secara aman adalah...",
+        "answerOptions": [
+        {
+            "text": "RDP",
+            "isCorrect": false,
+            "rationale": "RDP (Remote Desktop Protocol) adalah protokol antarmuka grafis milik Microsoft Windows."
+        },
+        {
+            "text": "Telnet",
+            "isCorrect": false,
+            "rationale": "Telnet tidak aman karena mengirimkan data dan kata sandi dalam bentuk teks polos (plain text)."
+        },
+        {
+            "text": "SSH",
+            "isCorrect": true,
+            "rationale": "SSH menyediakan koneksi terenkripsi untuk eksekusi perintah jarak jauh pada sistem Unix/Linux."
+        },
+        {
+            "text": "VNC",
+            "isCorrect": false,
+            "rationale": "VNC digunakan untuk berbagi tampilan desktop secara grafis."
+        }
+        ]
+    },
+    {
+        "questionNumber": 67,
+        "question": "Salah satu kelebihan SSH dibandingkan Telnet adalah...",
+        "answerOptions": [
+        {
+            "text": "Enkripsi data",
+            "isCorrect": true,
+            "rationale": "SSH mengenkripsi data sehingga lebih aman dibandingkan Telnet yang mengirim data dalam teks biasa."
+        },
+        {
+            "text": "Kecepatan transfer",
+            "isCorrect": false,
+            "rationale": "Keunggulan utama SSH bukanlah kecepatan, melainkan keamanan melalui kriptografi."
+        },
+        {
+            "text": "Mendukung file besar",
+            "isCorrect": false,
+            "rationale": "Baik SSH maupun Telnet utamanya adalah protokol sesi terminal, bukan berfokus pada batas ukuran file."
+        },
+        {
+            "text": "Antarmuka grafis",
+            "isCorrect": false,
+            "rationale": "Keduanya berbasis antarmuka baris perintah (CLI) secara bawaan."
+        }
+        ]
+    },
+    {
+        "questionNumber": 68,
+        "question": "Dalam eksekusi jarak jauh, perintah yang digunakan untuk login ke server remote di sistem Linux adalah...",
+        "answerOptions": [
+        {
+            "text": "telnet user@host",
+            "isCorrect": false,
+            "rationale": "Perintah telnet menggunakan protokol tidak terenkripsi dan sintaks standarnya adalah telnet host."
+        },
+        {
+            "text": "ftp user@host",
+            "isCorrect": false,
+            "rationale": "Perintah ftp digunakan untuk sesi transfer file, bukan eksekusi shell jarak jauh."
+        },
+        {
+            "text": "ssh user@host",
+            "isCorrect": true,
+            "rationale": "Perintah ssh user@host digunakan untuk login dan eksekusi jarak jauh pada server remote."
+        },
+        {
+            "text": "rlogin user@host",
+            "isCorrect": false,
+            "rationale": "rlogin adalah utilitas lama yang tidak aman dan sudah digantikan oleh SSH."
+        }
+        ]
+    },
+    {
+        "questionNumber": 69,
+        "question": "Protokol yang memungkinkan pengguna untuk mengakses dan mengontrol komputer dari jarak jauh melalui jaringan adalah...",
+        "answerOptions": [
+        {
+            "text": "Telnet",
+            "isCorrect": true,
+            "rationale": "Telnet memungkinkan remote login dengan mengakses terminal komputer jarak jauh."
+        },
+        {
+            "text": "FTP",
+            "isCorrect": false,
+            "rationale": "FTP hanya menyediakan akses ke sistem berkas untuk unggah dan unduh."
+        },
+        {
+            "text": "HTTP",
+            "isCorrect": false,
+            "rationale": "HTTP digunakan untuk komunikasi web."
+        },
+        {
+            "text": "SMTP",
+            "isCorrect": false,
+            "rationale": "SMTP digunakan untuk pengiriman email."
+        }
+        ]
+    },
+    {
+        "questionNumber": 70,
+        "question": "Pada eksekusi jarak jauh, protokol yang sering digunakan untuk mengelola sesi terminal aman secara terenkripsi adalah...",
+        "answerOptions": [
+        {
+            "text": "Rlogin",
+            "isCorrect": false,
+            "rationale": "Rlogin tidak menggunakan enkripsi."
+        },
+        {
+            "text": "SSH",
+            "isCorrect": true,
+            "rationale": "SSH atau Secure Shell menyediakan koneksi terenkripsi untuk remote login yang aman."
+        },
+        {
+            "text": "Telnet",
+            "isCorrect": false,
+            "rationale": "Telnet mengirimkan seluruh sesi dalam teks biasa tanpa enkripsi."
+        },
+        {
+            "text": "RDP",
+            "isCorrect": false,
+            "rationale": "RDP digunakan untuk sesi desktop grafis jarak jauh, bukan sesi terminal teks."
+        }
+        ]
+    },
+    {
+        "questionNumber": 71,
+        "question": "Protokol FTP menggunakan dua koneksi terpisah untuk transfer data. Koneksi yang digunakan untuk mengirim perintah dan menerima respons adalah koneksi...",
+        "answerOptions": [
+        {
+            "text": "Data",
+            "isCorrect": false,
+            "rationale": "Koneksi data digunakan khusus untuk mentransfer isi berkas atau daftar direktori."
+        },
+        {
+            "text": "Kontrol",
+            "isCorrect": true,
+            "rationale": "FTP menggunakan koneksi kontrol pada port 21 untuk perintah dan koneksi data pada port 20 untuk transfer."
+        },
+        {
+            "text": "UDP",
+            "isCorrect": false,
+            "rationale": "FTP berjalan di atas protokol TCP, bukan UDP."
+        },
+        {
+            "text": "ICMP",
+            "isCorrect": false,
+            "rationale": "ICMP adalah protokol pesan kontrol pada layer Network."
+        }
+        ]
+    },
+    {
+        "questionNumber": 72,
+        "question": "Pada protokol FTP, mode transfer di mana klien membuka port acak dan server menghubungkan balik ke port tersebut disebut mode...",
+        "answerOptions": [
+        {
+            "text": "Aktif",
+            "isCorrect": true,
+            "rationale": "Mode aktif FTP: klien membuka port acak dan server menghubungkan dari port 20 ke port klien."
+        },
+        {
+            "text": "Pasif",
+            "isCorrect": false,
+            "rationale": "Pada mode pasif, server yang membuka port acak dan klien yang menginisiasi koneksi ke port tersebut."
+        },
+        {
+            "text": "Terjemahan",
+            "isCorrect": false,
+            "rationale": "Bukan merupakan istilah mode koneksi pada protokol FTP."
+        },
+        {
+            "text": "Stream",
+            "isCorrect": false,
+            "rationale": "Stream adalah mode transmisi data FTP, bukan cara pembentukan koneksi port."
+        }
+        ]
+    },
+    {
+        "questionNumber": 73,
+        "question": "Agar FTP dapat melewati firewall dengan mudah, umumnya digunakan mode transfer yang inisiasi koneksi data dilakukan oleh klien, yaitu mode...",
+        "answerOptions": [
+        {
+            "text": "Aktif",
+            "isCorrect": false,
+            "rationale": "Mode aktif sering diblokir firewall klien karena server mencoba membuat koneksi masuk ke klien."
+        },
+        {
+            "text": "Pasif",
+            "isCorrect": true,
+            "rationale": "Mode pasif FTP: klien mengirim perintah PASV, server membuka port acak, lalu klien menghubungi port tersebut."
+        },
+        {
+            "text": "Normal",
+            "isCorrect": false,
+            "rationale": "FTP hanya mengenal mode aktif dan pasif untuk pembentukan koneksi data."
+        },
+        {
+            "text": "Anonymous",
+            "isCorrect": false,
+            "rationale": "Anonymous adalah metode autentikasi login FTP tanpa akun khusus."
+        }
+        ]
+    },
+    {
+        "questionNumber": 74,
+        "question": "Perintah FTP yang digunakan untuk mengunduh file dari server ke klien adalah...",
+        "answerOptions": [
+        {
+            "text": "PUT",
+            "isCorrect": false,
+            "rationale": "PUT digunakan untuk mengunggah file dari klien ke server."
+        },
+        {
+            "text": "GET",
+            "isCorrect": true,
+            "rationale": "Perintah GET pada FTP digunakan untuk mengambil file dari server ke mesin klien."
+        },
+        {
+            "text": "SEND",
+            "isCorrect": false,
+            "rationale": "SEND digunakan untuk mengirim file ke server pada beberapa klien FTP."
+        },
+        {
+            "text": "RECV",
+            "isCorrect": false,
+            "rationale": "RECV adalah perintah antarmuka socket tingkat rendah, bukan perintah standar klien FTP."
+        }
+        ]
+    },
+    {
+        "questionNumber": 75,
+        "question": "Untuk mengunggah file dari klien ke server FTP, perintah yang tepat adalah...",
+        "answerOptions": [
+        {
+            "text": "GET",
+            "isCorrect": false,
+            "rationale": "GET digunakan untuk mengunduh file dari server."
+        },
+        {
+            "text": "RETR",
+            "isCorrect": false,
+            "rationale": "RETR (Retrieve) adalah perintah internal protokol FTP untuk mengunduh file."
+        },
+        {
+            "text": "PUT",
+            "isCorrect": true,
+            "rationale": "Perintah PUT atau STOR pada FTP digunakan untuk mengirim file dari klien ke server."
+        },
+        {
+            "text": "STORE",
+            "isCorrect": false,
+            "rationale": "Perintah internal protokol FTP yang benar adalah STOR, sedangkan perintah pengguna di klien adalah PUT."
+        }
+        ]
+    },
+    {
+        "questionNumber": 76,
+        "question": "FTP memungkinkan transfer file secara anonim dengan login menggunakan username...",
+        "answerOptions": [
+        {
+            "text": "guest",
+            "isCorrect": false,
+            "rationale": "Username standar untuk FTP anonim adalah anonymous, bukan guest."
+        },
+        {
+            "text": "ftp",
+            "isCorrect": false,
+            "rationale": "Meskipun beberapa server menerima 'ftp', standar resmi login anonim adalah 'anonymous'."
+        },
+        {
+            "text": "anonymous",
+            "isCorrect": true,
+            "rationale": "FTP anonim menggunakan username 'anonymous' dan biasanya password berupa alamat email."
+        },
+        {
+            "text": "public",
+            "isCorrect": false,
+            "rationale": "Public bukan username standar untuk akses FTP anonim."
+        }
+        ]
+    },
+    {
+        "questionNumber": 77,
+        "question": "Protokol yang digunakan untuk mengirim email dari klien ke server atau antar server email adalah...",
+        "answerOptions": [
+        {
+            "text": "POP3",
+            "isCorrect": false,
+            "rationale": "POP3 digunakan untuk mengambil/mengunduh email dari server ke klien."
+        },
+        {
+            "text": "IMAP",
+            "isCorrect": false,
+            "rationale": "IMAP digunakan untuk mengakses dan menyinkronkan email yang tersimpan di server."
+        },
+        {
+            "text": "SMTP",
+            "isCorrect": true,
+            "rationale": "SMTP (Simple Mail Transfer Protocol) bertugas mengirimkan email dari klien ke server dan antar server."
+        },
+        {
+            "text": "HTTP",
+            "isCorrect": false,
+            "rationale": "HTTP digunakan untuk mengakses layanan webmail melalui browser, bukan protokol pengiriman email antarserver."
+        }
+        ]
+    },
+    {
+        "questionNumber": 78,
+        "question": "Protokol yang digunakan untuk mengambil email dari server ke klien dan menyimpannya secara lokal adalah...",
+        "answerOptions": [
+        {
+            "text": "SMTP",
+            "isCorrect": false,
+            "rationale": "SMTP bertugas mengirim email keluar, bukan mengambil email masuk."
+        },
+        {
+            "text": "POP3",
+            "isCorrect": true,
+            "rationale": "POP3 (Post Office Protocol version 3) mengunduh email dari server ke klien dan menyimpannya di perangkat lokal."
+        },
+        {
+            "text": "FTP",
+            "isCorrect": false,
+            "rationale": "FTP digunakan untuk transfer berkas umum."
+        },
+        {
+            "text": "SNMP",
+            "isCorrect": false,
+            "rationale": "SNMP digunakan untuk pemantauan dan manajemen perangkat jaringan."
+        }
+        ]
+    },
+    {
+        "questionNumber": 79,
+        "question": "Protokol IMAP memungkinkan pengguna untuk mengelola email di server tanpa harus mengunduhnya. Kelebihan utama IMAP dibanding POP3 adalah...",
+        "answerOptions": [
+        {
+            "text": "Lebih cepat",
+            "isCorrect": false,
+            "rationale": "Kecepatan akses bergantung pada koneksi, keunggulan utama IMAP adalah sinkronisasi status pesan di server."
+        },
+        {
+            "text": "Menyimpan email di server",
+            "isCorrect": true,
+            "rationale": "IMAP menyediakan akses ke email yang tetap berada di server dan dapat diakses dari banyak perangkat."
+        },
+        {
+            "text": "Menggunakan port 110",
+            "isCorrect": false,
+            "rationale": "Port 110 adalah port standar milik POP3, sedangkan IMAP menggunakan port 143."
+        },
+        {
+            "text": "Tidak membutuhkan koneksi",
+            "isCorrect": false,
+            "rationale": "IMAP justru membutuhkan koneksi ke server untuk menyinkronkan folder dan pesan."
+        }
+        ]
+    },
+    {
+        "questionNumber": 80,
+        "question": "Port standar yang digunakan oleh SMTP untuk komunikasi email adalah...",
+        "answerOptions": [
+        {
+            "text": "25",
+            "isCorrect": true,
+            "rationale": "SMTP menggunakan port 25 untuk mengirim email antara server dan klien."
+        },
+        {
+            "text": "110",
+            "isCorrect": false,
+            "rationale": "Port 110 digunakan oleh protokol POP3."
+        },
+        {
+            "text": "143",
+            "isCorrect": false,
+            "rationale": "Port 143 digunakan oleh protokol IMAP."
+        },
+        {
+            "text": "80",
+            "isCorrect": false,
+            "rationale": "Port 80 digunakan oleh protokol HTTP."
+        }
+        ]
+    },
+    {
+        "questionNumber": 81,
+        "question": "Pada aplikasi surat (mail), protokol yang menggunakan port 143 adalah...",
+        "answerOptions": [
+        {
+            "text": "POP3",
+            "isCorrect": false,
+            "rationale": "POP3 menggunakan port default 110."
+        },
+        {
+            "text": "SMTP",
+            "isCorrect": false,
+            "rationale": "SMTP menggunakan port default 25."
+        },
+        {
+            "text": "IMAP",
+            "isCorrect": true,
+            "rationale": "IMAP umumnya menggunakan port 143 untuk komunikasi antara klien dan server email."
+        },
+        {
+            "text": "HTTP",
+            "isCorrect": false,
+            "rationale": "HTTP menggunakan port default 80 dan bukan protokol khusus surat elektronik."
+        }
+        ]
+    },
+    {
+        "questionNumber": 82,
+        "question": "World Wide Web (WWW) berbasis pada konsep hypertext yang memungkinkan dokumen saling terhubung. Protokol utama yang digunakan untuk mengakses WWW adalah...",
+        "answerOptions": [
+        {
+            "text": "FTP",
+            "isCorrect": false,
+            "rationale": "FTP digunakan untuk transfer berkas."
+        },
+        {
+            "text": "SMTP",
+            "isCorrect": false,
+            "rationale": "SMTP digunakan untuk mengirim surat elektronik."
+        },
+        {
+            "text": "HTTP",
+            "isCorrect": true,
+            "rationale": "HTTP (Hypertext Transfer Protocol) adalah protokol utama untuk mentransfer dokumen hypertext di web."
+        },
+        {
+            "text": "Telnet",
+            "isCorrect": false,
+            "rationale": "Telnet digunakan untuk akses terminal jarak jauh."
+        }
+        ]
+    },
+    {
+        "questionNumber": 83,
+        "question": "Komponen utama dari URL yang menunjukkan protokol yang digunakan adalah...",
+        "answerOptions": [
+        {
+            "text": "Path",
+            "isCorrect": false,
+            "rationale": "Path menunjukkan lokasi spesifik berkas atau halaman di dalam server."
+        },
+        {
+            "text": "Domain",
+            "isCorrect": false,
+            "rationale": "Domain menunjukkan nama alamat server tujuan."
+        },
+        {
+            "text": "Port",
+            "isCorrect": false,
+            "rationale": "Port menunjukkan nomor pintu layanan pada server."
+        },
+        {
+            "text": "Scheme",
+            "isCorrect": true,
+            "rationale": "Scheme pada URL seperti 'http://' atau 'https://' menunjukkan protokol yang digunakan untuk mengakses sumber daya."
+        }
+        ]
+    },
+    {
+        "questionNumber": 84,
+        "question": "Dalam konteks World Wide Web, server web melayani permintaan dari klien menggunakan protokol HTTP. Kode status HTTP 404 menunjukkan...",
+        "answerOptions": [
+        {
+            "text": "OK",
+            "isCorrect": false,
+            "rationale": "Status OK ditunjukkan oleh kode HTTP 200."
+        },
+        {
+            "text": "Internal Server Error",
+            "isCorrect": false,
+            "rationale": "Internal Server Error ditunjukkan oleh kode HTTP 500."
+        },
+        {
+            "text": "Not Found",
+            "isCorrect": true,
+            "rationale": "Kode status HTTP 404 berarti sumber daya yang diminta tidak ditemukan di server."
+        },
+        {
+            "text": "Forbidden",
+            "isCorrect": false,
+            "rationale": "Forbidden (akses ditolak) ditunjukkan oleh kode HTTP 403."
+        }
+        ]
+    },
+    {
+        "questionNumber": 85,
+        "question": "Protokol yang digunakan pada World Wide Web untuk mentransfer halaman web dari server ke browser adalah...",
+        "answerOptions": [
+        {
+            "text": "FTP",
+            "isCorrect": false,
+            "rationale": "FTP digunakan untuk transfer berkas antar sistem."
+        },
+        {
+            "text": "SMTP",
+            "isCorrect": false,
+            "rationale": "SMTP digunakan untuk pengiriman email."
+        },
+        {
+            "text": "HTTP",
+            "isCorrect": true,
+            "rationale": "HTTP adalah protokol yang mendasari transfer halaman web pada World Wide Web."
+        },
+        {
+            "text": "SNMP",
+            "isCorrect": false,
+            "rationale": "SNMP digunakan untuk manajemen perangkat jaringan."
+        }
+        ]
+    },
+    {
+        "questionNumber": 86,
+        "question": "Fungsi utama dari web server adalah...",
+        "answerOptions": [
+        {
+            "text": "Menyediakan layanan direktori",
+            "isCorrect": false,
+            "rationale": "Layanan direktori disediakan oleh server LDAP atau Active Directory."
+        },
+        {
+            "text": "Mengelola alamat IP pada jaringan",
+            "isCorrect": false,
+            "rationale": "Pengelolaan alamat IP otomatis dilakukan oleh DHCP server."
+        },
+        {
+            "text": "Mengirim email antar pengguna",
+            "isCorrect": false,
+            "rationale": "Pengiriman email dilakukan oleh mail server."
+        },
+        {
+            "text": "Menyimpan dan mengirimkan halaman web kepada klien",
+            "isCorrect": true,
+            "rationale": "Web server berfungsi untuk menyimpan konten web dan merespons permintaan dari browser dengan mengirimkan halaman web."
+        }
+        ]
+    },
+    {
+        "questionNumber": 87,
+        "question": "Bahasa markup yang digunakan untuk membuat struktur halaman web adalah...",
+        "answerOptions": [
+        {
+            "text": "PHP",
+            "isCorrect": false,
+            "rationale": "PHP adalah bahasa pemrograman server-side."
+        },
+        {
+            "text": "HTML",
+            "isCorrect": true,
+            "rationale": "HTML adalah bahasa markup standar untuk membuat struktur dan konten halaman web."
+        },
+        {
+            "text": "CSS",
+            "isCorrect": false,
+            "rationale": "CSS adalah bahasa lembar gaya (stylesheet) untuk mengatur tampilan visual halaman web."
+        },
+        {
+            "text": "JavaScript",
+            "isCorrect": false,
+            "rationale": "JavaScript adalah bahasa pemrograman untuk membuat halaman web menjadi interaktif."
+        }
+        ]
+    },
+    {
+        "questionNumber": 88,
+        "question": "Hyperlink pada World Wide Web memungkinkan pengguna untuk...",
+        "answerOptions": [
+        {
+            "text": "Mengubah alamat IP",
+            "isCorrect": false,
+            "rationale": "Hyperlink tidak mengubah konfigurasi alamat IP perangkat pengguna."
+        },
+        {
+            "text": "Membuka aplikasi email",
+            "isCorrect": false,
+            "rationale": "Meskipun tautan mailto bisa membuka email, fungsi umum hyperlink adalah menavigasi antardokumen web."
+        },
+        {
+            "text": "Terhubung ke halaman web lain dengan mengklik tautan",
+            "isCorrect": true,
+            "rationale": "Hyperlink adalah referensi yang dapat diklik untuk menavigasi ke halaman web lain atau sumber daya lainnya."
+        },
+        {
+            "text": "Menonaktifkan koneksi internet",
+            "isCorrect": false,
+            "rationale": "Hyperlink membutuhkan koneksi jaringan untuk memuat sumber daya tujuan."
+        }
+        ]
+    },
+    {
+        "questionNumber": 89,
+        "question": "Protokol SNMP digunakan dalam manajemen jaringan untuk tujuan utama yaitu...",
+        "answerOptions": [
+        {
+            "text": "Mengirim email notifikasi",
+            "isCorrect": false,
+            "rationale": "Pengiriman email dilakukan oleh SMTP, bukan fungsi utama SNMP."
+        },
+        {
+            "text": "Mentransfer file antar server",
+            "isCorrect": false,
+            "rationale": "Transfer file antar server menggunakan FTP atau SCP."
+        },
+        {
+            "text": "Memantau dan mengelola perangkat jaringan",
+            "isCorrect": true,
+            "rationale": "SNMP adalah protokol yang memungkinkan administrator jaringan untuk memantau dan mengelola perangkat seperti router dan switch."
+        },
+        {
+            "text": "Menyediakan layanan web",
+            "isCorrect": false,
+            "rationale": "Layanan web disediakan oleh protokol HTTP/HTTPS."
+        }
+        ]
+    },
+    {
+        "questionNumber": 90,
+        "question": "Sistem Manajemen Jaringan (NMS) berfungsi untuk...",
+        "answerOptions": [
+        {
+            "text": "Mengirim data dari klien ke server",
+            "isCorrect": false,
+            "rationale": "NMS bukan protokol transfer data aplikasi klien-server umum."
+        },
+        {
+            "text": "Mengelola dan memonitor perangkat jaringan secara terpusat",
+            "isCorrect": true,
+            "rationale": "NMS adalah platform yang digunakan untuk memonitor, mengontrol, dan mengelola perangkat jaringan dari satu lokasi pusat."
+        },
+        {
+            "text": "Menyediakan layanan DHCP",
+            "isCorrect": false,
+            "rationale": "Layanan DHCP disediakan oleh DHCP server."
+        },
+        {
+            "text": "Mengatur routing paket data",
+            "isCorrect": false,
+            "rationale": "Routing paket data dilakukan secara langsung oleh router."
+        }
+        ]
+    },
+    {
+        "questionNumber": 91,
+        "question": "Agen SNMP pada perangkat jaringan bertugas untuk...",
+        "answerOptions": [
+        {
+            "text": "Menyediakan layanan DNS",
+            "isCorrect": false,
+            "rationale": "Agen SNMP tidak bertugas menerjemahkan nama domain."
+        },
+        {
+            "text": "Menjadi server web utama",
+            "isCorrect": false,
+            "rationale": "Agen SNMP adalah modul manajemen kecil di perangkat, bukan web server utama."
+        },
+        {
+            "text": "Mengirimkan data manajemen ke NMS saat diminta",
+            "isCorrect": true,
+            "rationale": "Agen SNMP adalah komponen pada perangkat yang mengumpulkan informasi dan mengirimkannya ke NMS berdasarkan permintaan."
+        },
+        {
+            "text": "Mengelola lalu lintas jaringan",
+            "isCorrect": false,
+            "rationale": "Agen SNMP hanya melaporkan status dan statistik perangkat, tidak mengarahkan lalu lintas paket."
+        }
+        ]
+    },
+    {
+        "questionNumber": 92,
+        "question": "Salah satu komponen utama dalam manajemen jaringan adalah MIB. MIB adalah...",
+        "answerOptions": [
+        {
+            "text": "Protokol untuk transfer file",
+            "isCorrect": false,
+            "rationale": "MIB bukan protokol transfer file, melainkan struktur basis data informasi manajemen."
+        },
+        {
+            "text": "Database yang berisi informasi tentang perangkat yang dikelola",
+            "isCorrect": true,
+            "rationale": "MIB adalah database hierarkis yang mendefinisikan variabel yang dapat dipantau dan dikelola pada perangkat jaringan."
+        },
+        {
+            "text": "Alamat IP khusus",
+            "isCorrect": false,
+            "rationale": "MIB menggunakan Object Identifier (OID), bukan alamat IP."
+        },
+        {
+            "text": "Perangkat keras router",
+            "isCorrect": false,
+            "rationale": "MIB adalah komponen perangkat lunak/basis data, bukan perangkat keras."
+        }
+        ]
+    },
+    {
+        "questionNumber": 93,
+        "question": "Tujuan dari manajemen kesalahan dalam manajemen jaringan adalah...",
+        "answerOptions": [
+        {
+            "text": "Mendeteksi dan memperbaiki masalah pada jaringan",
+            "isCorrect": true,
+            "rationale": "Manajemen kesalahan fokus pada identifikasi, isolasi, dan perbaikan masalah jaringan untuk menjaga keandalan."
+        },
+        {
+            "text": "Mengatur pengguna jaringan",
+            "isCorrect": false,
+            "rationale": "Pengaturan hak akses pengguna termasuk dalam manajemen keamanan (security management)."
+        },
+        {
+            "text": "Menyediakan layanan email",
+            "isCorrect": false,
+            "rationale": "Penyediaan layanan email adalah fungsi aplikasi server, bukan area manajemen jaringan FCAPS."
+        },
+        {
+            "text": "Meningkatkan kecepatan internet",
+            "isCorrect": false,
+            "rationale": "Optimalisasi kecepatan dan kapasitas termasuk dalam manajemen performa (performance management)."
+        }
+        ]
+    },
+    {
+        "questionNumber": 94,
+        "question": "Manajemen konfigurasi dalam jaringan melibatkan...",
+        "answerOptions": [
+        {
+            "text": "Mengelola kata sandi pengguna",
+            "isCorrect": false,
+            "rationale": "Pengelolaan kata sandi dan otorisasi termasuk dalam bagian manajemen keamanan."
+        },
+        {
+            "text": "Memantau suhu perangkat",
+            "isCorrect": false,
+            "rationale": "Pemantauan kondisi fisik dan metrik operasional termasuk dalam manajemen performa atau kesalahan."
+        },
+        {
+            "text": "Mengirim data sensor",
+            "isCorrect": false,
+            "rationale": "Pengiriman data sensor adalah bagian dari sistem telemetri atau IoT."
+        },
+        {
+            "text": "Mencatat dan mengubah pengaturan perangkat jaringan",
+            "isCorrect": true,
+            "rationale": "Manajemen konfigurasi mengelola perubahan pengaturan perangkat untuk memastikan konsistensi dan stabilitas jaringan."
+        }
+        ]
+    },
+    {
+        "questionNumber": 95,
+        "question": "Standar IEEE 802.11 mendefinisikan spesifikasi untuk...",
+        "answerOptions": [
+        {
+            "text": "Jaringan kabel Ethernet",
+            "isCorrect": false,
+            "rationale": "Jaringan kabel Ethernet didefinisikan oleh standar IEEE 802.3."
+        },
+        {
+            "text": "Jaringan nirkabel lokal atau WLAN",
+            "isCorrect": true,
+            "rationale": "IEEE 802.11 adalah standar internasional untuk implementasi jaringan nirkabel lokal (Wi-Fi)."
+        },
+        {
+            "text": "Protokol routing dinamis",
+            "isCorrect": false,
+            "rationale": "Protokol routing dinamis distandarisasi oleh IETF melalui dokumen RFC."
+        },
+        {
+            "text": "Manajemen alamat IP",
+            "isCorrect": false,
+            "rationale": "Manajemen alamat IP diatur oleh IANA dan IETF."
+        }
+        ]
+    },
+    {
+        "questionNumber": 96,
+        "question": "Perangkat yang berfungsi sebagai titik akses dalam Wireless LAN adalah...",
+        "answerOptions": [
+        {
+            "text": "Router",
+            "isCorrect": false,
+            "rationale": "Router berfungsi menghubungkan jaringan yang berbeda, meskipun router rumahan sering memiliki fitur AP bawaan."
+        },
+        {
+            "text": "Modem",
+            "isCorrect": false,
+            "rationale": "Modem berfungsi mengubah sinyal digital menjadi sinyal analog atau optik dari penyedia layanan internet."
+        },
+        {
+            "text": "Switch",
+            "isCorrect": false,
+            "rationale": "Switch menghubungkan perangkat menggunakan kabel jaringan."
+        },
+        {
+            "text": "Access Point",
+            "isCorrect": true,
+            "rationale": "Access Point adalah perangkat yang menghubungkan perangkat nirkabel ke jaringan kabel dan mengatur komunikasi data."
+        }
+        ]
+    },
+    {
+        "questionNumber": 97,
+        "question": "Frekuensi yang umum digunakan oleh Wireless LAN IEEE 802.11 adalah...",
+        "answerOptions": [
+        {
+            "text": "900 MHz",
+            "isCorrect": false,
+            "rationale": "Frekuensi 900 MHz umumnya digunakan untuk telepon nirkabel lama atau komunikasi IoT jarak jauh (LoRa)."
+        },
+        {
+            "text": "60 GHz",
+            "isCorrect": false,
+            "rationale": "60 GHz hanya digunakan untuk standar khusus jarak sangat dekat seperti IEEE 802.11ad (WiGig), bukan penggunaan umum."
+        },
+        {
+            "text": "10 GHz",
+            "isCorrect": false,
+            "rationale": "10 GHz bukan pita frekuensi standar untuk jaringan Wi-Fi IEEE 802.11."
+        },
+        {
+            "text": "2,4 GHz dan 5 GHz",
+            "isCorrect": true,
+            "rationale": "Wireless LAN banyak beroperasi pada pita frekuensi 2,4 GHz dan 5 GHz untuk memberikan jangkauan dan kecepatan yang optimal."
+        }
+        ]
+    },
+    {
+        "questionNumber": 98,
+        "question": "Mode infrastruktur pada Wireless LAN memerlukan...",
+        "answerOptions": [
+        {
+            "text": "Penggunaan access point sebagai pusat komunikasi",
+            "isCorrect": true,
+            "rationale": "Mode infrastruktur menggunakan access point untuk mengelola dan menghubungkan perangkat nirkabel ke jaringan."
+        },
+        {
+            "text": "Koneksi langsung antar perangkat tanpa perantara",
+            "isCorrect": false,
+            "rationale": "Koneksi langsung antar perangkat tanpa access point disebut mode Ad-Hoc."
+        },
+        {
+            "text": "Kabel tembaga untuk transmisi",
+            "isCorrect": false,
+            "rationale": "Klien pada Wireless LAN berkomunikasi menggunakan gelombang radio, bukan kabel tembaga."
+        },
+        {
+            "text": "Satelit sebagai penghubung",
+            "isCorrect": false,
+            "rationale": "WLAN mencakup area lokal dan tidak menggunakan satelit."
+        }
+        ]
+    },
+    {
+        "questionNumber": 99,
+        "question": "CSMA/CA digunakan dalam Wireless LAN untuk...",
+        "answerOptions": [
+        {
+            "text": "Menghindari tabrakan data saat transmisi",
+            "isCorrect": true,
+            "rationale": "CSMA/CA adalah mekanisme yang digunakan untuk mengurangi kemungkinan tabrakan dengan mendeteksi saluran sebelum mengirim data."
+        },
+        {
+            "text": "Mengelola prioritas data",
+            "isCorrect": false,
+            "rationale": "Pengelolaan prioritas lalu lintas data adalah fungsi dari Quality of Service (QoS)."
+        },
+        {
+            "text": "Meningkatkan kecepatan transfer",
+            "isCorrect": false,
+            "rationale": "CSMA/CA justru menambah jeda waktu tunggu (backoff) demi keamanan transmisi agar tidak bertabrakan."
+        },
+        {
+            "text": "Menyediakan enkripsi data",
+            "isCorrect": false,
+            "rationale": "Enkripsi data pada WLAN disediakan oleh protokol keamanan seperti WPA2 atau WPA3."
+        }
+        ]
+    },
+    {
+        "questionNumber": 100,
+        "question": "SSID pada Wireless LAN berfungsi sebagai...",
+        "answerOptions": [
+        {
+            "text": "Nama jaringan yang membedakan satu WLAN dari yang lain",
+            "isCorrect": true,
+            "rationale": "SSID adalah identifikasi unik untuk jaringan nirkabel yang memungkinkan perangkat untuk menemukan dan terhubung ke jaringan yang tepat."
+        },
+        {
+            "text": "Kata sandi akses jaringan",
+            "isCorrect": false,
+            "rationale": "Kata sandi akses disebut Pre-Shared Key (PSK) atau passphrase, bukan SSID."
+        },
+        {
+            "text": "Alamat MAC perangkat",
+            "isCorrect": false,
+            "rationale": "Alamat MAC dari Access Point dalam WLAN dikenal sebagai BSSID."
+        },
+        {
+            "text": "Kode enkripsi data",
+            "isCorrect": false,
+            "rationale": "Kode enkripsi data menggunakan algoritma seperti AES atau TKIP."
+        }
+        ]
+    }
+    ];
+
+  let totalBenar = 0;
+  let totalSalah = 0;
+  let answeredQuestions = new Set();
+
+  function acakArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function initSetup() {
+    const totalSoal = soalList.length;
+    document.getElementById('total-tersedia').textContent = totalSoal;
+
+    const buttons = document.querySelectorAll('.btn-jumlah[data-jumlah]');
+    buttons.forEach(btn => {
+      const jumlah = parseInt(btn.getAttribute('data-jumlah'), 10);
+      if (jumlah > totalSoal) {
+        btn.disabled = true;
+      }
+    });
+
+    const btnSemua = document.getElementById('btn-semua');
+    if (totalSoal === 0) {
+      btnSemua.disabled = true;
+    } else {
+      btnSemua.textContent = `Semua Soal (${totalSoal})`;
+    }
+  }
+
+  function mulaiUjian(jumlah) {
+    const isAcak = document.getElementById('checkbox-acak').checked;
+
+    document.getElementById('setup-container').style.display = 'none';
+    document.getElementById('container').style.display = 'block';
+    document.getElementById('counter').style.display = 'block';
+
+    let daftarSoal = isAcak ? acakArray(soalList) : [...soalList];
+    const soalTerpilih = jumlah === 'all' ? daftarSoal : daftarSoal.slice(0, jumlah);
+
+    renderSoal(soalTerpilih, isAcak);
+  }
+
+  function updateCounter() {
+    document.getElementById("benar").textContent = totalBenar;
+    document.getElementById("salah").textContent = totalSalah;
+  }
+
+  function checkAnswer(button, questionId, isCorrect) {
+    if (answeredQuestions.has(questionId)) {
+      return;
+    }
+
+    const soalElement = button.closest('.soal');
+    const buttons = soalElement.querySelectorAll('.jawaban button');
+    
+    buttons.forEach(btn => btn.disabled = true);
+
+    if (isCorrect) {
+      button.classList.add('benar');
+      totalBenar++;
+    } else {
+      button.classList.add('salah');
+      totalSalah++;
+      
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-iscorrect') === 'true') {
+          btn.classList.add('benar');
+        }
+      });
+    }
+
+    const allRationales = soalElement.querySelectorAll('.penjelasan-opsi');
+    allRationales.forEach(rationaleDiv => {
+      rationaleDiv.style.display = 'block';
+    });
+
+    answeredQuestions.add(questionId);
+    updateCounter();
+  }
+
+  function renderSoal(daftarSoal, isAcak) {
+    const container = document.getElementById('container');
+    container.innerHTML = '';
+
+    daftarSoal.forEach((soal, idx) => {
+      const nomorUrut = idx + 1;
+      const soalDiv = document.createElement('div');
+      soalDiv.className = 'soal';
+      soalDiv.setAttribute('data-qnum', nomorUrut);
+      
+      let soalHTML = `<h3>Soal ${nomorUrut}.</h3>`;
+      soalHTML += `<p>${soal.question}</p>`;
+      soalHTML += `<div class="jawaban">`;
+      
+      const opsiJawaban = isAcak ? acakArray(soal.answerOptions) : soal.answerOptions;
+
+      opsiJawaban.forEach((option, index) => {
+        const label = String.fromCharCode(65 + index); 
+        
+        soalHTML += `
+          <button 
+            onclick="checkAnswer(this, ${nomorUrut}, ${option.isCorrect})"
+            data-iscorrect="${option.isCorrect}"
+            data-label="${label}">
+            ${label}. ${option.text}
+          </button>
+          <div class="penjelasan-opsi">
+            <strong>Penjelasan Opsi ${label}:</strong> ${option.rationale}
+          </div>
+        `;
+      });
+      
+      soalHTML += `</div>`;
+      soalDiv.innerHTML = soalHTML;
+      container.appendChild(soalDiv);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initSetup);
+</script>
+
+</body>
+</html>
