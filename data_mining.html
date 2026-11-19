@@ -308,6 +308,21 @@
             gap: 8px;
         }
 
+        .rumus-vertikal {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 18px;
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 16px;
+        }
+
+        .rumus-vertikal .langkah {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         /* Inner sections for DFD or multiple answers */
         .answer-section {
             margin-bottom: 1.25rem;
@@ -500,8 +515,7 @@
             </div>
         </div>
         
-        <p>Jadi, persamaan regresinya adalah:</p>
-        <p><strong>Y = 2,94 + 14,97X</strong></p>
+        <p>Jadi, persamaan regresinya adalah: <strong>Y = 2,94 + 14,97X</strong></p>
 
         <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
 
@@ -897,8 +911,10 @@
             <h4>Jawaban:</h4>
             <p><strong>1. Menentukan Centroid Awal &amp; Rumus Jarak (Euclidean Distance)</strong></p>
             <ul>
-                <li><strong>Centroid 1 (C<sub>1</sub> &mdash; Mekar Jaya):</strong> (8,5 ; 6,5 ; 8)</li>
-                <li><strong>Centroid 2 (C<sub>2</sub> &mdash; Harum Sari):</strong> (5 ; 7 ; 6)</li>
+                <li><strong>Centroid 1</li>
+                    <p>(C<sub>1</sub> &mdash; Mekar Jaya):</strong> (8,5 ; 6,5 ; 8)</p>
+                <li><strong>Centroid 2</li>
+                    <p>(C<sub>2</sub> &mdash; Harum Sari):</strong> (5 ; 7 ; 6)</p>
             </ul>
             <div class="rumus-baris">
                 <span>d(x, c) =</span>
@@ -908,43 +924,65 @@
                 </span>
             </div>
             <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
-            <p><strong>2. Iterasi 1: Menghitung Jarak Setiap Desa ke C<sub>1</sub> dan C<sub>2</sub></strong></p>
+            <p><strong>2. Iterasi 1:</p>
+            <p>Menghitung Jarak Setiap Desa ke C<sub>1</sub> dan C<sub>2</sub></strong></p>
             <p><em>Contoh perhitungan Data 1 &mdash; Desa Ramai (8,5 ; 9 ; 7):</em></p>
-            <div class="rumus-baris">
-                <span>d(1, C<sub>1</sub>) =</span>
-                <span class="akar">
-                    <span class="akar-simbol">&radic;</span>
-                    <span class="akar-isi">(8,5 &minus; 8,5)<sup>2</sup> + (9 &minus; 6,5)<sup>2</sup> + (7 &minus; 8)<sup>2</sup></span>
-                </span>
-                <span>=</span>
-                <span class="akar">
-                    <span class="akar-simbol">&radic;</span>
-                    <span class="akar-isi">0 + 6,25 + 1</span>
-                </span>
-                <span>=</span>
-                <span class="akar">
-                    <span class="akar-simbol">&radic;</span>
-                    <span class="akar-isi">7,25</span>
-                </span>
-                <span>= <strong>2,69</strong></span>
+            <div class="rumus-vertikal">
+                <div><strong>d(1, C<sub>1</sub>)</strong></div>
+                <div class="langkah">
+                    <span>=</span>
+                    <span class="akar">
+                        <span class="akar-simbol">&radic;</span>
+                        <span class="akar-isi">(8,5 &minus; 8,5)<sup>2</sup> + (9 &minus; 6,5)<sup>2</sup> + (7 &minus; 8)<sup>2</sup></span>
+                    </span>
+                </div>
+                <div class="langkah">
+                    <span>=</span>
+                    <span class="akar">
+                        <span class="akar-simbol">&radic;</span>
+                        <span class="akar-isi">0 + 6,25 + 1</span>
+                    </span>
+                </div>
+                <div class="langkah">
+                    <span>=</span>
+                    <span class="akar">
+                        <span class="akar-simbol">&radic;</span>
+                        <span class="akar-isi">7,25</span>
+                    </span>
+                </div>
+                <div class="langkah">
+                    <span>=</span>
+                    <strong>2,69</strong>
+                </div>
             </div>
-            <div class="rumus-baris">
-                <span>d(1, C<sub>2</sub>) =</span>
-                <span class="akar">
-                    <span class="akar-simbol">&radic;</span>
-                    <span class="akar-isi">(8,5 &minus; 5)<sup>2</sup> + (9 &minus; 7)<sup>2</sup> + (7 &minus; 6)<sup>2</sup></span>
-                </span>
-                <span>=</span>
-                <span class="akar">
-                    <span class="akar-simbol">&radic;</span>
-                    <span class="akar-isi">12,25 + 4 + 1</span>
-                </span>
-                <span>=</span>
-                <span class="akar">
-                    <span class="akar-simbol">&radic;</span>
-                    <span class="akar-isi">17,25</span>
-                </span>
-                <span>= <strong>4,15</strong></span>
+
+            <div class="rumus-vertikal">
+                <div><strong>d(1, C<sub>2</sub>)</strong></div>
+                <div class="langkah">
+                    <span>=</span>
+                    <span class="akar">
+                        <span class="akar-simbol">&radic;</span>
+                        <span class="akar-isi">(8,5 &minus; 5)<sup>2</sup> + (9 &minus; 7)<sup>2</sup> + (7 &minus; 6)<sup>2</sup></span>
+                    </span>
+                </div>
+                <div class="langkah">
+                    <span>=</span>
+                    <span class="akar">
+                        <span class="akar-simbol">&radic;</span>
+                        <span class="akar-isi">12,25 + 4 + 1</span>
+                    </span>
+                </div>
+                <div class="langkah">
+                    <span>=</span>
+                    <span class="akar">
+                        <span class="akar-simbol">&radic;</span>
+                        <span class="akar-isi">17,25</span>
+                    </span>
+                </div>
+                <div class="langkah">
+                    <span>=</span>
+                    <strong>4,15</strong>
+                </div>
             </div>
             <div class="table-wrapper" style="overflow-x: auto;">
             <table style="width: 100%; border-collapse: collapse;">
@@ -1196,7 +1234,8 @@
             </div>
             <p>&rarr; <strong>C<sub>2</sub> baru = (5,75 ; 6,13 ; 5,50)</strong></p>
             <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
-            <p><strong>4. Iterasi 2: Menghitung Ulang Jarak dengan Centroid Baru</strong></p>
+            <p><strong>4. Iterasi 2:</p>
+            <p>Menghitung Ulang Jarak dengan Centroid Baru</strong></p>
             <div class="table-wrapper" style="overflow-x: auto;">
             <table style="width: 100%; border-collapse: collapse;">
                 <thead>
